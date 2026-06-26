@@ -46,8 +46,8 @@ const services = [
                 <path d="M13 10.5l2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
         ),
-        title: "Consulting & Staffing",
-        description: "Domain-aligned engineers in HMI, SDV, and validation, deployed exactly how your team needs them — flexibly and at scale.",
+        title: "Engagement Models",
+        description: "Explore our flexible models structured to align with your program timeline and organizational needs.",
         items: ["Build-Operate-Transfer (BOT)", "Centers of Excellence (CoE)", "Managed engineering teams"],
     },
 ];
@@ -67,13 +67,13 @@ export default function ServicesPreview() {
                     viewport={{ once: true, margin: "-80px" }}
                 >
                     <motion.div variants={fadeUp(shouldReduce, 0)}>
-                        <span className="badge">Services</span>
+                        <span className="badge">Engineering Offerings</span>
                     </motion.div>
                     <motion.h2 id="services-heading" variants={fadeUp(shouldReduce, 0.1)} style={{ marginTop: "16px", marginBottom: "14px" }}>
                         Full-stack vehicle software engineering
                     </motion.h2>
                     <motion.p className="lead" variants={fadeUp(shouldReduce, 0.2)}>
-                        Three disciplines, one specialization — embedded, digital, and consulting, all exclusively in automotive.
+                        Three disciplines, one specialization — embedded, digital, and engagement models, all exclusively in automotive.
                     </motion.p>
                 </motion.div>
 
@@ -112,7 +112,7 @@ export default function ServicesPreview() {
                 >
                     <motion.div whileHover={shouldReduce ? {} : { scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                         <Link href="/services" className="btn btn-outline" id="services-preview-link">
-                            View all services
+                            View Engineering Offerings
                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                                 <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>

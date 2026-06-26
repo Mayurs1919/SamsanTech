@@ -59,7 +59,7 @@ const solutions = [
 
 const stats = [
     { value: "50+", label: "Products Delivered" },
-    { value: "20+", label: "OEM Partnerships" },
+    { value: "Global", label: "OEM/Tier-1 Engagements" },
     { value: "8+", label: "Industry Verticals" },
     { value: "100%", label: "On-Time Delivery" }
 ];
@@ -78,7 +78,7 @@ export default function SolutionsPage() {
                         animate="visible"
                     >
                         <motion.div variants={fadeUpVariants(shouldReduce)}>
-                            <span className="badge" style={{ marginBottom: "24px" }}>Solutions & Products</span>
+                            <span className="badge" style={{ marginBottom: "24px" }}>Products &amp; Accelerators</span>
                         </motion.div>
                         <motion.h1 id="solutions-heading" variants={fadeUpVariants(shouldReduce)} style={{ marginBottom: "20px" }}>
                             SAMSAN Rings of Solutions
@@ -229,8 +229,8 @@ export default function SolutionsPage() {
                         <h2>Need a custom solution?</h2>
                         <p>Our engineering teams can design, build, and deploy tailored systems for your specific requirements.</p>
                         <div className="cta-actions">
-                            <Link href="/contact" className="btn btn-primary">Request a Consultation →</Link>
-                            <Link href="/services" className="btn btn-outline">View Our Services</Link>
+                            <Link href="/contact" className="btn btn-primary">Evaluate SAMSAN Accelerators</Link>
+                            <Link href="/services" className="btn btn-outline">View Engineering Offerings</Link>
                         </div>
                     </div>
                 </div>

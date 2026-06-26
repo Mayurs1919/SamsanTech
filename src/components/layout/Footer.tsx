@@ -5,18 +5,17 @@ import Link from "next/link";
 export default function Footer() {
     const year = new Date().getFullYear();
 
-    const quickLinks = [
-        { label: "Home",       href: "/" },
-        { label: "About",      href: "/about" },
-        { label: "Services",   href: "/services" },
-        { label: "Solutions",  href: "/solutions" },
-    ];
-
-    const moreLinks = [
-        { label: "Careers",    href: "/careers" },
-        { label: "Gallery",    href: "/gallery" },
-        { label: "Investors",  href: "/investors" },
-        { label: "Contact",    href: "/contact" },
+    const navigateLinks = [
+        { label: "Home",                     href: "/" },
+        { label: "Engineering Offerings",     href: "/services" },
+        { label: "Products & Accelerators",   href: "/solutions" },
+        { label: "Case Studies",             href: "/case-studies" },
+        { label: "Labs & Delivery",           href: "/labs-and-delivery" },
+        { label: "Engagement Models",         href: "/engagement-models" },
+        { label: "About",                    href: "/about" },
+        { label: "Investors / Partners",     href: "/investors" },
+        { label: "Careers",                  href: "/careers" },
+        { label: "Contact",                  href: "/contact" },
     ];
 
     return (
@@ -25,17 +24,12 @@ export default function Footer() {
                 <div className="footer-grid">
                     {/* Brand column */}
                     <div className="footer-brand">
-                        <Link href="/" className="brand" aria-label="Samsan Labs — Home">
-                            <div className="brand-mark" aria-hidden="true">
-                                <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M3 5.5C3 4.12 4.12 3 5.5 3h7C13.88 3 15 4.12 15 5.5v7C15 13.88 13.88 15 12.5 15h-7C4.12 15 3 13.88 3 12.5v-7Z" stroke="white" strokeWidth="1.4"/>
-                                    <circle cx="9" cy="9" r="2.2" fill="white"/>
-                                    <path d="M9 3v2M9 13v2M3 9h2M13 9h2" stroke="white" strokeWidth="1.4" strokeLinecap="round"/>
-                                </svg>
-                            </div>
-                            <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "1.05rem" }}>
-                                Samsan Labs
-                            </span>
+                        <Link href="/" className="brand" aria-label="Samsan — Home">
+                            <img
+                                src="/images/samsan_logo_wordmark.png"
+                                alt="Samsan"
+                                style={{ height: "26px", width: "auto", display: "block", objectFit: "contain" }}
+                            />
                         </Link>
                         <p style={{ marginTop: "16px", fontSize: "0.875rem", lineHeight: "1.8", maxWidth: "280px", color: "var(--text-secondary)" }}>
                             A specialized design house for Software Defined Vehicles, connected mobility, and AI-driven automotive innovation.
@@ -46,31 +40,23 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    {/* Quick Links column */}
+                    {/* Navigate column */}
                     <div className="footer-col">
-                        <h5>Quick Links</h5>
-                        {quickLinks.map((item) => (
+                        <h5>Navigate</h5>
+                        {navigateLinks.map((item) => (
                             <Link key={item.href} href={item.href}>{item.label}</Link>
                         ))}
                     </div>
 
-                    {/* More Links column */}
-                    <div className="footer-col">
-                        <h5>The Platform</h5>
-                        {moreLinks.map((item) => (
-                            <Link key={item.href} href={item.href}>{item.label}</Link>
-                        ))}
-                    </div>
+                    {/* Empty spacer column to keep grid layout intact */}
+                    <div></div>
 
                     {/* Contact column */}
                     <div className="footer-col">
                         <h5>The Company</h5>
-                        <p style={{ marginBottom: "6px" }}>info@samsanlabs.com</p>
-                        <p style={{ marginBottom: "6px" }}>+91 00000 00000</p>
-                        <p style={{ marginBottom: "6px" }}>Pune, India</p>
-                        <p style={{ marginBottom: "6px" }}>Europe</p>
-                        <p style={{ marginBottom: "6px" }}>United States</p>
-                        <p style={{ marginBottom: "6px" }}>Japan · South Korea</p>
+                        <p style={{ marginBottom: "6px" }}>india@samsanlabs.com</p>
+                        <p style={{ marginBottom: "6px" }}>+91 89569 27909</p>
+                        <p style={{ marginBottom: "6px", lineHeight: "1.5" }}>STPI New Building, Rajiv Gandhi Infotech Park, Phase I, Hinjawadi, Pune 411057, India</p>
                     </div>
                 </div>
 
@@ -85,7 +71,7 @@ export default function Footer() {
                     flexWrap: "wrap",
                     gap: "12px"
                 }}>
-                    <span>© {year} Samsan Labs. All rights reserved.</span>
+                    <span>© {year} SAMSAN Technische Labs Pvt. Ltd. All rights reserved.</span>
                     <span style={{ display: "flex", gap: "24px" }}>
                         <span>DPIIT Recognized Startup</span>
                         <span>ISO 27001 Certified</span>

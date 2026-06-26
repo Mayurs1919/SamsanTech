@@ -2,20 +2,23 @@
 
 import { motion } from "framer-motion";
 
-const partnerLogos = [
-    { name: "AUTOSAR", subtitle: "Premium Partner" },
-    { name: "QNX", subtitle: "Real-time OS" },
-    { name: "VECTOR", subtitle: "Embedded Testing" },
-    { name: "ELEKTROBIT", subtitle: "Software Products" },
-    { name: "GREEN HILLS", subtitle: "Safety Certified" },
-    { name: "WIND RIVER", subtitle: "Edge Computing" }
+const technologies = [
+    "AUTOSAR",
+    "QNX",
+    "Vector Tools",
+    "Elektrobit",
+    "Green Hills",
+    "Wind River",
+    "Android Automotive",
+    "Linux",
+    "Cloud-Native Stacks"
 ];
 
 export default function Partners() {
     return (
         <section className="section compact" style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", background: "rgba(10, 15, 28, 0.2)" }}>
             <div className="container">
-                <div style={{ textAlign: "center", marginBottom: "32px" }}>
+                <div style={{ textAlign: "center", marginBottom: "32px", maxWidth: "800px", margin: "0 auto 32px auto" }}>
                     <span style={{
                         fontFamily: "var(--font-mono)",
                         fontSize: "10px",
@@ -23,56 +26,52 @@ export default function Partners() {
                         color: "var(--text-muted)",
                         textTransform: "uppercase"
                     }}>
-                        Collaborating with industry standards
+                        Ecosystem Expertise
                     </span>
-                    <h3 style={{ fontSize: "1.1rem", color: "var(--text-secondary)", marginTop: "8px", fontWeight: 500 }}>
-                        Our Partners & Customers
+                    <h3 style={{ fontSize: "1.75rem", color: "#ffffff", marginTop: "8px", marginBottom: "16px", fontWeight: 600, fontFamily: "var(--font-display)" }}>
+                        Platforms & Tools Our Teams Work With
                     </h3>
+                    <p style={{
+                        color: "var(--text-secondary)",
+                        fontSize: "0.95rem",
+                        lineHeight: "1.8",
+                        margin: 0
+                    }}>
+                        Our engineers work across leading automotive platforms, tools, operating systems, and middleware ecosystems including AUTOSAR, QNX, Vector tools, Elektrobit, Green Hills, Wind River, Android Automotive, Linux, and cloud-native stacks.
+                    </p>
                 </div>
 
                 <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-                    gap: "24px",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "12px",
                     alignItems: "center",
-                    justifyContent: "center"
+                    justifyContent: "center",
+                    maxWidth: "900px",
+                    margin: "0 auto"
                 }}>
-                    {partnerLogos.map((logo) => (
+                    {technologies.map((tech) => (
                         <motion.div
-                            key={logo.name}
-                            whileHover={{ scale: 1.05, borderColor: "rgba(255,255,255,0.15)" }}
+                            key={tech}
+                            whileHover={{ scale: 1.03, borderColor: "rgba(255,255,255,0.12)", backgroundColor: "rgba(255, 255, 255, 0.04)" }}
                             style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                padding: "20px 16px",
+                                padding: "10px 20px",
                                 background: "rgba(255, 255, 255, 0.02)",
-                                border: "1px solid rgba(255, 255, 255, 0.05)",
-                                borderRadius: "var(--radius-sm)",
-                                transition: "all 0.25s ease",
+                                border: "1px solid rgba(255, 255, 255, 0.06)",
+                                borderRadius: "100px",
+                                transition: "all 0.2s ease",
                                 textAlign: "center",
                                 cursor: "default"
                             }}
                         >
                             <span style={{
-                                fontFamily: "var(--font-display)",
-                                fontSize: "1.15rem",
-                                fontWeight: 700,
+                                fontFamily: "var(--font-body)",
+                                fontSize: "0.85rem",
+                                fontWeight: 500,
                                 color: "#ffffff",
-                                letterSpacing: "-0.02em"
+                                letterSpacing: "0.02em"
                             }}>
-                                {logo.name}
-                            </span>
-                            <span style={{
-                                fontFamily: "var(--font-mono)",
-                                fontSize: "8.5px",
-                                color: "var(--text-muted)",
-                                marginTop: "4px",
-                                textTransform: "uppercase",
-                                letterSpacing: "0.05em"
-                            }}>
-                                {logo.subtitle}
+                                {tech}
                             </span>
                         </motion.div>
                     ))}

@@ -120,7 +120,7 @@ export default function AutoEmbeddedSolutionsPage() {
                     <motion.div variants={staggerContainerVariants} initial="hidden" animate="visible">
                         <motion.div variants={fadeUpVariants(shouldReduce)} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}>
                             <Link href="/solutions" style={{ color: "var(--violet-mid)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
-                                Solutions
+                                Products &amp; Accelerators
                             </Link>
                             <span style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}>/</span>
                             <span className="badge">Auto Embedded Solutions</span>

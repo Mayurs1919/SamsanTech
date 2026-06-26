@@ -1,25 +1,27 @@
 import type { SiteConfig } from "@/types/site";
 
 export const siteConfig: SiteConfig = {
-    name: "Samsan Labs",
-    description: "A Technology Reimagined Systems Company. Focused on Automotive, Embedded Engineering & Digital Transformation.",
+    name: "SAMSAN Technische Labs Pvt. Ltd.",
+    description: "AI-led Automotive Engineering for Software-Defined Mobility. Focused on Automotive, Cockpit Engineering & Digital Transformation.",
     navItems: [
-        { label: "Home",        href: "/" },
-        { label: "About",       href: "/about" },
-        { label: "Services",    href: "/services" },
-        { label: "Solutions",   href: "/solutions" },
-        { label: "Careers",     href: "/careers" },
-        { label: "Gallery",     href: "/gallery" },
-        { label: "Investors",   href: "/investors" },
-        { label: "Contact",     href: "/contact" },
+        { label: "Home",                     href: "/" },
+        { label: "Engineering Offerings",     href: "/services" },
+        { label: "Products & Accelerators",   href: "/solutions" },
+        { label: "Case Studies",             href: "/case-studies" },
+        { label: "Labs & Delivery",           href: "/labs-and-delivery" },
+        { label: "Engagement Models",         href: "/engagement-models" },
+        { label: "About",                    href: "/about" },
+        { label: "Investors / Partners",     href: "/investors" },
+        { label: "Careers",                  href: "/careers" },
+        { label: "Contact",                  href: "/contact" },
     ],
     socialLinks: [
         { label: "LinkedIn", href: "#" },
         { label: "GitHub",   href: "#" },
     ],
     contact: {
-        email: "info@samsanlabs.com",
-        phone: "+91 00000 00000",
-        address: "Pune, Maharashtra, India",
+        email: "india@samsanlabs.com",
+        phone: "+91 89569 27909",
+        address: "STPI New Building, Rajiv Gandhi Infotech Park, Phase I, Hinjawadi, Pune 411057, India",
     },
 };

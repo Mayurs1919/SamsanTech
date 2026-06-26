@@ -135,9 +135,10 @@ const digitalProducts = [
 
 export default function DigitalSolutionsPage() {
     const shouldReduce = useReducedMotion();
+    const accents = ["var(--rose)", "var(--violet-mid)", "var(--mint)"];
 
     return (
-        <div style={{ backgroundColor: "#ffffff", color: "#0f172a", minHeight: "100vh" }}>
+        <div style={{ backgroundColor: "var(--midnight)", color: "var(--text-primary)", minHeight: "100vh" }}>
             {/* ── Page Hero with Dark Banner ── */}
             <section 
                 style={{ 
@@ -153,8 +154,8 @@ export default function DigitalSolutionsPage() {
                 <div className="container">
                     <motion.div variants={staggerContainerVariants} initial="hidden" animate="visible">
                         <motion.div variants={fadeUpVariants(shouldReduce)} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}>
-                            <Link href="/solutions" style={{ color: "#f26522", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
-                                Solutions
+                            <Link href="/solutions" style={{ color: "var(--violet-mid)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
+                                Products &amp; Accelerators
                             </Link>
                             <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.8rem" }}>/</span>
                             <span style={{ color: "#ffffff", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "100px", padding: "4px 12px", fontSize: "0.75rem", fontWeight: 600 }}>Detail Solution</span>
@@ -167,19 +168,20 @@ export default function DigitalSolutionsPage() {
             </section>
 
             {/* ── Subtitle Block ── */}
-            <section style={{ padding: "64px 0 32px 0", textAlign: "center", backgroundColor: "#ffffff" }}>
+            <section style={{ padding: "64px 0 32px 0", textAlign: "center", backgroundColor: "var(--midnight)" }}>
                 <div className="container">
-                    <span style={{ color: "#f26522", textTransform: "uppercase", letterSpacing: "0.15em", fontSize: "0.8rem", fontWeight: 700, display: "block", marginBottom: "8px" }}>Our Solution</span>
-                    <h2 style={{ fontSize: "2.2rem", fontWeight: 800, color: "#0f172a" }}>Digital Solutions & Products</h2>
-                    <div style={{ width: "60px", height: "3px", backgroundColor: "#f26522", margin: "16px auto 0 auto", borderRadius: "100px" }}></div>
+                    <span style={{ color: "var(--violet-mid)", textTransform: "uppercase", letterSpacing: "0.15em", fontSize: "0.8rem", fontWeight: 700, display: "block", marginBottom: "8px" }}>Our Solution</span>
+                    <h2 style={{ fontSize: "2.2rem", fontWeight: 800, color: "#ffffff" }}>Digital Solutions & Products</h2>
+                    <div style={{ width: "60px", height: "3px", backgroundColor: "var(--violet-mid)", margin: "16px auto 0 auto", borderRadius: "100px" }}></div>
                 </div>
             </section>
 
             {/* ── Products Listings ── */}
-            <section style={{ padding: "32px 0 80px 0", backgroundColor: "#ffffff" }}>
+            <section style={{ padding: "32px 0 80px 0", backgroundColor: "var(--midnight)" }}>
                 <div className="container" style={{ display: "flex", flexDirection: "column", gap: "96px" }}>
                     {digitalProducts.map((prod, index) => {
                         const isEven = index % 2 === 0;
+                        const accent = accents[index % accents.length];
                         return (
                             <motion.div
                                 key={prod.id}
@@ -194,9 +196,11 @@ export default function DigitalSolutionsPage() {
                                     alignItems: "center",
                                     padding: "48px",
                                     borderRadius: "24px",
-                                    backgroundColor: isEven ? "#f8fafc" : "#ffffff",
-                                    border: isEven ? "1px solid rgba(0, 0, 0, 0.04)" : "none",
-                                    boxShadow: isEven ? "0 10px 30px rgba(0, 0, 0, 0.02)" : "none"
+                                    backgroundColor: isEven ? "rgba(13, 19, 35, 0.45)" : "rgba(22, 30, 53, 0.3)",
+                                    border: "1px solid var(--border)",
+                                    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
+                                    backdropFilter: "blur(12px)",
+                                    WebkitBackdropFilter: "blur(12px)"
                                 }}
                             >
                                 {/* Image Column */}
@@ -204,8 +208,8 @@ export default function DigitalSolutionsPage() {
                                     order: isEven ? 0 : 1,
                                     borderRadius: "16px",
                                     overflow: "hidden",
-                                    border: "1px solid rgba(0, 0, 0, 0.08)",
-                                    boxShadow: "0 12px 28px rgba(0, 0, 0, 0.05)",
+                                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                                    boxShadow: "0 12px 28px rgba(0, 0, 0, 0.3)",
                                     height: "360px",
                                     position: "relative"
                                 }}>
@@ -222,7 +226,7 @@ export default function DigitalSolutionsPage() {
                                     {/* Overlay Gradient for tech feel */}
                                     <div style={{
                                         position: "absolute", inset: 0,
-                                        background: "linear-gradient(to top, rgba(242,101,34,0.08), transparent)"
+                                        background: `linear-gradient(to top, ${accent}15, transparent)`
                                     }}/>
                                 </div>
 
@@ -232,13 +236,13 @@ export default function DigitalSolutionsPage() {
                                         <div style={{
                                             display: "flex", alignItems: "center", justifyContent: "center",
                                             width: "44px", height: "44px", borderRadius: "12px",
-                                            backgroundColor: "rgba(242, 101, 34, 0.1)", color: "#f26522",
-                                            border: "1px solid rgba(242, 101, 34, 0.15)"
+                                            backgroundColor: `${accent}15`, color: accent,
+                                            border: `1px solid ${accent}25`
                                         }}>
                                             {prod.icon}
                                         </div>
                                         <span style={{ 
-                                            color: "#f26522", 
+                                            color: accent, 
                                             fontWeight: 700, 
                                             fontSize: "0.8rem", 
                                             textTransform: "uppercase", 
@@ -250,14 +254,14 @@ export default function DigitalSolutionsPage() {
                                     <h3 style={{ 
                                         fontSize: "1.8rem", 
                                         fontWeight: 800, 
-                                        color: "#0f172a",
+                                        color: "#ffffff",
                                         lineHeight: "1.3" 
                                     }}>
                                         {prod.title}
                                     </h3>
                                     <p style={{ 
                                         fontSize: "0.95rem", 
-                                        color: "#475569", 
+                                        color: "var(--text-secondary)", 
                                         lineHeight: "1.7",
                                         margin: 0
                                     }}>
@@ -271,19 +275,8 @@ export default function DigitalSolutionsPage() {
                                     >
                                         <Link 
                                             href="/contact" 
-                                            style={{ 
-                                                display: "inline-block",
-                                                backgroundColor: "#f26522",
-                                                color: "#ffffff",
-                                                padding: "14px 28px",
-                                                borderRadius: "100px",
-                                                fontWeight: 600,
-                                                fontSize: "0.9rem",
-                                                textDecoration: "none",
-                                                boxShadow: "0 4px 14px rgba(242, 101, 34, 0.25)",
-                                                transition: "background-color 0.2s, box-shadow 0.2s"
-                                            }}
-                                            className="hover:bg-[#d84e12] hover:shadow-lg"
+                                            className="btn btn-outline"
+                                            style={{ borderColor: `${accent}50`, color: "#ffffff" }}
                                         >
                                             Contact For More..
                                         </Link>
@@ -296,48 +289,24 @@ export default function DigitalSolutionsPage() {
             </section>
 
             {/* ── High-Conversion Outcome CTA ── */}
-            <section style={{ backgroundColor: "#f8fafc", padding: "80px 0", borderTop: "1px solid rgba(0, 0, 0, 0.05)" }}>
+            <section style={{ backgroundColor: "rgba(10, 15, 28, 0.2)", padding: "80px 0", borderTop: "1px solid var(--border)" }}>
                 <div className="container" style={{ textAlign: "center", maxWidth: "680px" }}>
-                    <h2 style={{ fontSize: "2rem", fontWeight: 800, color: "#0f172a", marginBottom: "16px" }}>Ready to deploy digital solutions?</h2>
-                    <p style={{ color: "#475569", fontSize: "1rem", lineHeight: "1.6", marginBottom: "32px" }}>
-                        Partner with Samsan Labs to customize, scale, and manage your IoT, AI, and digital platforms.
+                    <h2 style={{ fontSize: "2rem", fontWeight: 800, color: "#ffffff", marginBottom: "16px" }}>Ready to deploy digital solutions?</h2>
+                    <p style={{ color: "var(--text-secondary)", fontSize: "1rem", lineHeight: "1.6", marginBottom: "32px" }}>
+                        Partner with SAMSAN Technische Labs Pvt. Ltd. to customize, scale, and manage your IoT, AI, and digital platforms.
                     </p>
                     <div style={{ display: "flex", justifyContent: "center", gap: "16px", flexWrap: "wrap" }}>
                         <Link 
                             href="/contact" 
-                            style={{ 
-                                display: "inline-block",
-                                backgroundColor: "#f26522",
-                                color: "#ffffff",
-                                padding: "14px 32px",
-                                borderRadius: "100px",
-                                fontWeight: 600,
-                                fontSize: "0.95rem",
-                                textDecoration: "none",
-                                boxShadow: "0 4px 14px rgba(242, 101, 34, 0.25)",
-                                transition: "all 0.2s"
-                            }}
-                            className="hover:bg-[#d84e12] hover:shadow-lg"
+                            className="btn btn-primary"
                         >
                             Request Product Sandbox Access
                         </Link>
                         <Link 
                             href="/solutions" 
-                            style={{ 
-                                display: "inline-block",
-                                border: "1px solid rgba(15, 23, 42, 0.15)",
-                                color: "#0f172a",
-                                padding: "14px 32px",
-                                borderRadius: "100px",
-                                fontWeight: 600,
-                                fontSize: "0.95rem",
-                                textDecoration: "none",
-                                backgroundColor: "#ffffff",
-                                transition: "all 0.2s"
-                            }}
-                            className="hover:bg-slate-50"
+                            className="btn btn-outline"
                         >
-                            View Other Solutions
+                            View Other Products &amp; Accelerators
                         </Link>
                     </div>
                 </div>

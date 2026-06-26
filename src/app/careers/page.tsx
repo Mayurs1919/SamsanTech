@@ -11,7 +11,7 @@ interface Job {
     country: string;
     city: string;
     experience: string;
-    category: "Engineer" | "Non-Engineer";
+    category: "Cockpit & IVI" | "Connected Vehicle" | "Embedded & Safety" | "AI & Cloud" | "Management";
     type: string;
     description: string;
 }
@@ -19,43 +19,123 @@ interface Job {
 const initialJobs: Job[] = [
     {
         id: "1",
-        title: "Non-Engineer",
-        country: "India, US",
-        city: "Mumbai, Pune",
-        experience: "0-1 year, 7 year",
-        category: "Non-Engineer",
-        type: "Full Time, Intern, Part Time",
-        description: "Join our operations, digital marketing, or business management teams to support scaling Samsan's global footprints."
+        title: "Android Automotive / AOSP Engineer",
+        country: "India",
+        city: "Pune",
+        experience: "3-7 years",
+        category: "Cockpit & IVI",
+        type: "Full Time",
+        description: "Develop and integrate Android Automotive OS (AAOS) / AOSP for next-generation in-vehicle infotainment systems. Work on app frameworks, HALs, and system services for automotive platforms."
     },
     {
         id: "2",
-        title: "Engineer",
+        title: "Infotainment Middleware Engineer",
         country: "India",
         city: "Pune",
-        experience: "2 year",
-        category: "Engineer",
+        experience: "3-8 years",
+        category: "Cockpit & IVI",
         type: "Full Time",
-        description: "Core developer responsible for automotive software stacks, AUTOSAR implementations, and micro-controller programming."
+        description: "Design and implement middleware layers for IVI platforms — audio routing, Bluetooth/Wi-Fi stacks, media frameworks, and inter-process communication on QNX or Linux."
     },
     {
         id: "3",
-        title: "Senior Embedded Controls Developer",
+        title: "Cluster / HMI Developer",
         country: "India",
         city: "Pune",
-        experience: "5+ year",
-        category: "Engineer",
+        experience: "2-6 years",
+        category: "Cockpit & IVI",
         type: "Full Time",
-        description: "Lead RTOS development, CAN/LIN vehicle communications, and direct sensor fusion software integration."
+        description: "Build digital instrument cluster and HMI applications using Qt/QML or HTML5-based frameworks. Integrate with vehicle signal buses and validate display rendering performance."
     },
     {
         id: "4",
-        title: "Digital Platform Consultant",
-        country: "US",
-        city: "Remote",
-        experience: "4+ year",
-        category: "Non-Engineer",
-        type: "Contract",
-        description: "Engage with corporate clients to outline cloud strategy, IoT device management architectures, and analytical pipelines."
+        title: "Telematics / TCU Engineer",
+        country: "India",
+        city: "Pune",
+        experience: "3-7 years",
+        category: "Connected Vehicle",
+        type: "Full Time",
+        description: "Develop firmware and software for Telematics Control Units (TCU) — cellular connectivity, GNSS, OTA update pipelines, and remote diagnostics integration with cloud backends."
+    },
+    {
+        id: "5",
+        title: "AUTOSAR Engineer",
+        country: "India",
+        city: "Pune",
+        experience: "3-8 years",
+        category: "Embedded & Safety",
+        type: "Full Time",
+        description: "Configure and implement Classic or Adaptive AUTOSAR stacks. Work on BSWs, RTE generation, COM stack tuning, and ECU integration across multi-supplier projects."
+    },
+    {
+        id: "6",
+        title: "Functional Safety Engineer",
+        country: "India",
+        city: "Pune",
+        experience: "4-10 years",
+        category: "Embedded & Safety",
+        type: "Full Time",
+        description: "Drive ISO 26262 compliance activities — HARA, safety concept development, FMEA/FTA, safety case creation, and coordination with system and software teams for ASIL-rated products."
+    },
+    {
+        id: "7",
+        title: "Cybersecurity Engineer",
+        country: "India",
+        city: "Pune",
+        experience: "3-8 years",
+        category: "Embedded & Safety",
+        type: "Full Time",
+        description: "Implement automotive cybersecurity per UN R155/ISO 21434 — TARA, secure boot, key management, intrusion detection, and vulnerability assessment across ECUs and network layers."
+    },
+    {
+        id: "8",
+        title: "Embedded Linux / BSP Engineer",
+        country: "India",
+        city: "Pune",
+        experience: "3-7 years",
+        category: "Embedded & Safety",
+        type: "Full Time",
+        description: "Port and customize Linux BSPs for automotive SoCs (NXP, TI, Renesas, Qualcomm). Driver development, kernel configuration, Yocto/buildroot integration, and bring-up validation."
+    },
+    {
+        id: "9",
+        title: "Validation Automation Engineer",
+        country: "India",
+        city: "Pune",
+        experience: "2-6 years",
+        category: "Embedded & Safety",
+        type: "Full Time",
+        description: "Design and execute automated test frameworks for automotive ECUs and software stacks — HIL/SIL environments, test script development (Python/CAPL), traceability, and CI integration."
+    },
+    {
+        id: "10",
+        title: "GenAI / AI Engineering Automation Developer",
+        country: "India",
+        city: "Pune",
+        experience: "2-6 years",
+        category: "AI & Cloud",
+        type: "Full Time",
+        description: "Build GenAI-powered tools for engineering acceleration — requirements generation, test case synthesis, code review automation, and traceability using LLMs and RAG pipelines."
+    },
+    {
+        id: "11",
+        title: "Cloud / IoT Platform Engineer",
+        country: "India",
+        city: "Pune",
+        experience: "3-7 years",
+        category: "AI & Cloud",
+        type: "Full Time",
+        description: "Architect and develop cloud-connected vehicle platforms — telemetry ingestion, OTA management, IoT gateway integration, and real-time data pipelines on AWS / Azure / GCP."
+    },
+    {
+        id: "12",
+        title: "Technical Program Manager — Automotive",
+        country: "India",
+        city: "Pune",
+        experience: "7-15 years",
+        category: "Management",
+        type: "Full Time",
+        description: "Lead multi-track automotive software programs from requirements to SOP — stakeholder management, delivery governance, risk tracking, and cross-functional team coordination across OEM and Tier-1 programs."
     }
 ];
 
@@ -71,11 +151,11 @@ export default function CareersPage() {
     const [selectedType, setSelectedType] = useState("All");
 
     // Dynamic Filter Option Lists
-    const countries = ["All", "India", "US"];
-    const cities = ["All", "Pune", "Mumbai", "Remote"];
-    const experiences = ["All", "0-1 year", "2 year", "5+ year"];
-    const categories = ["All", "Engineer", "Non-Engineer"];
-    const types = ["All", "Full Time", "Intern", "Part Time", "Contract"];
+    const countries = ["All", "India"];
+    const cities = ["All", "Pune"];
+    const experiences = ["All", "2-6 years", "3-7 years", "3-8 years", "4-10 years", "7-15 years"];
+    const categories = ["All", "Cockpit & IVI", "Connected Vehicle", "Embedded & Safety", "AI & Cloud", "Management"];
+    const types = ["All", "Full Time"];
 
     // Filter Logic
     const filteredJobs = useMemo(() => {
@@ -195,7 +275,7 @@ export default function CareersPage() {
                                 }}
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
-                                    <div style={{ color: "#f26522", backgroundColor: "rgba(242, 101, 34, 0.15)", padding: "8px", borderRadius: "50%" }}>
+                                    <div style={{ color: "var(--violet-mid)", backgroundColor: "var(--violet-soft)", padding: "8px", borderRadius: "50%" }}>
                                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M2 21h19v-2H2v2zM20 8h-2V5h2v3zm-4 0h-2V3h2v5zM12 8h-2V1h2v7zm-4 0H6v-3h2v3zm-4 0H2v5h2v-5zM2 13h19v-2H2v2zm0 4h19v-2H2v2z"/>
                                         </svg>
@@ -224,7 +304,7 @@ export default function CareersPage() {
                                 }}
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
-                                    <div style={{ color: "#f26522", backgroundColor: "rgba(242, 101, 34, 0.15)", padding: "8px", borderRadius: "50%" }}>
+                                    <div style={{ color: "var(--violet-mid)", backgroundColor: "var(--violet-soft)", padding: "8px", borderRadius: "50%" }}>
                                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
                                         </svg>
@@ -321,7 +401,7 @@ export default function CareersPage() {
                                             backdropFilter: "blur(8px)"
                                         }}
                                     >
-                                        <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#f26522" }}>03</div>
+                                        <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--rose)" }}>03</div>
                                         <div>
                                             <h5 style={{ margin: 0, color: "#ffffff", fontSize: "0.95rem" }}>RESPECT</h5>
                                             <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--text-muted)" }}>Respect is earned. Honesty is expected.</p>
@@ -348,7 +428,7 @@ export default function CareersPage() {
                                 }}
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
-                                    <div style={{ color: "#f26522", backgroundColor: "rgba(242, 101, 34, 0.15)", padding: "8px", borderRadius: "50%" }}>
+                                    <div style={{ color: "var(--violet-mid)", backgroundColor: "var(--violet-soft)", padding: "8px", borderRadius: "50%" }}>
                                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 13l-9-4.91V15l9 4.91 9-4.91v-3.91L12 16z"/>
                                         </svg>
@@ -377,7 +457,7 @@ export default function CareersPage() {
                                 }}
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
-                                    <div style={{ color: "#f26522", backgroundColor: "rgba(242, 101, 34, 0.15)", padding: "8px", borderRadius: "50%" }}>
+                                    <div style={{ color: "var(--violet-mid)", backgroundColor: "var(--violet-soft)", padding: "8px", borderRadius: "50%" }}>
                                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
                                         </svg>
@@ -399,25 +479,16 @@ export default function CareersPage() {
             <section style={{ backgroundColor: "#060913", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "40px 0" }}>
                 <div className="container" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                     <Link 
-                        href="/contact" 
-                        className="btn"
-                        style={{
-                            background: "linear-gradient(135deg, #f26522, #c2410c)",
-                            color: "#ffffff",
-                            padding: "14px 40px",
-                            fontWeight: 600,
-                            borderRadius: "100px",
-                            boxShadow: "0 0 25px rgba(242, 101, 34, 0.35)",
-                            fontSize: "0.95rem"
-                        }}
+                        href="#job-openings" 
+                        className="btn btn-primary"
                     >
-                        Contact Us
+                        Explore Automotive Engineering Roles
                     </Link>
                 </div>
             </section>
 
             {/* ── Job Openings Filter Area ── */}
-            <section style={{ padding: "80px 0 120px 0" }}>
+            <section id="job-openings" style={{ padding: "80px 0 120px 0" }}>
                 <div className="container">
                     <div style={{ textAlign: "center", marginBottom: "48px" }}>
                         <h2 style={{ fontSize: "2.2rem", fontWeight: 700, fontFamily: "var(--font-display)", color: "#ffffff" }}>

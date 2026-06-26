@@ -134,16 +134,15 @@ export default function AboutCompany() {
                             </div>
                             <div>
                                 <div style={{
-                                    fontFamily: "var(--font-display)",
-                                    fontSize: "2.5rem",
-                                    fontWeight: 700,
+                                    fontSize: "0.88rem",
                                     color: "var(--text-primary)",
-                                    lineHeight: 1
+                                    lineHeight: 1.6,
+                                    fontWeight: 500
                                 }}>
-                                    30+
+                                    India delivery center with global customer and partner presence across Europe, US, Japan and South Korea
                                 </div>
                                 <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
-                                    Engineering Hubs
+                                    Global Footprint
                                 </div>
                             </div>
                         </div>

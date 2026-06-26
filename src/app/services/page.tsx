@@ -55,15 +55,11 @@ const services = [
                 <path d="M14.5 13.5l2 2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
             </svg>
         ),
-        title: "Consulting & Strategic Staffing",
-        href: "/services/consulting-staffing",
-        description: "Domain-aligned engineers in HMI, SDV, and validation, deployed exactly how your programme needs them — from POC to production.",
-        items: [
-            "Build-Operate-Transfer (BOT)",
-            "Centers of Excellence (CoE)",
-            "Managed engineering teams",
-            "Technical leadership & architecture",
-        ],
+        title: "Engagement Models",
+        href: "/engagement-models",
+        description: "Explore our flexible models structured to align with your program timeline and organizational needs.",
+        items: [],
+        buttonText: "View Engagement Models",
     },
 ];
 
@@ -97,7 +93,7 @@ export default function ServicesPage() {
                         animate="visible"
                     >
                         <motion.div variants={fadeUpVariants(shouldReduce)}>
-                            <span className="badge" style={{ marginBottom: "24px" }}>Services</span>
+                            <span className="badge" style={{ marginBottom: "24px" }}>Engineering Offerings</span>
                         </motion.div>
                         <motion.h1 id="services-page-heading" variants={fadeUpVariants(shouldReduce)} style={{ marginBottom: "20px" }}>
                             Engineering across the full vehicle software stack
@@ -152,11 +148,20 @@ export default function ServicesPage() {
                                     </div>
                                     <h3>{s.title}</h3>
                                     <p>{s.description}</p>
-                                    <ul>
-                                        {s.items.map((item) => (
-                                            <li key={item}>{item}</li>
-                                        ))}
-                                    </ul>
+                                    {s.items && s.items.length > 0 ? (
+                                        <ul>
+                                            {s.items.map((item) => (
+                                                <li key={item}>{item}</li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <div style={{ marginTop: "24px", color: "var(--rose)", fontSize: "0.85rem", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
+                                            {s.buttonText || "Learn More"}
+                                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                                                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                            </svg>
+                                        </div>
+                                    )}
                                 </Link>
                             </motion.div>
                         ))}
@@ -234,7 +239,7 @@ export default function ServicesPage() {
                         </p>
                         <div className="cta-actions">
                             <Link href="/contact" className="btn btn-primary" id="services-cta-btn">
-                                Contact Us
+                                Request Capability Walkthrough
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
