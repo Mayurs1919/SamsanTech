@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
+import Link from "next/link";
 
 const metrics = [
     { label: "Revenue Growth YoY", value: "+42%" },
@@ -11,10 +12,11 @@ const metrics = [
 ];
 
 const documents = [
-    { title: "SAMSAN Capabilities Presentation 2026", size: "4.2 MB", type: "PDF" },
-    { title: "AUTOSAR System Engineering Brief", size: "2.1 MB", type: "PDF" },
-    { title: "ISO 27001 Certification Confirmation", size: "1.5 MB", type: "PDF" },
-    { title: "Company Profile & Financial Overview", size: "3.8 MB", type: "PDF" }
+    { title: "SAMSAN Engineering Capabilities Deck", size: "4.5 MB", type: "PDF" },
+    { title: "SAMSAN Investor / Strategic Partner Brief", size: "3.8 MB", type: "PDF" },
+    { title: "SAMSAN Products & Accelerators One-Pager", size: "2.4 MB", type: "PDF" },
+    { title: "SAMSAN Case Studies Snapshot", size: "1.8 MB", type: "PDF" },
+    { title: "ISO / Quality / Compliance Credentials", size: "1.5 MB", type: "PDF" }
 ];
 
 export default function InvestorsPage() {
@@ -79,6 +81,76 @@ export default function InvestorsPage() {
                         </div>
                     </div>
 
+                    {/* Why Strategic Buyers Choose SAMSAN Section */}
+                    <div style={{ marginBottom: "80px", borderTop: "1px solid rgba(255, 255, 255, 0.08)", paddingTop: "64px" }}>
+                        <span className="badge violet" style={{ marginBottom: "16px" }}>Strategic Alignment</span>
+                        <h2 style={{ fontSize: "1.75rem", fontWeight: 700, marginBottom: "32px", color: "#ffffff" }}>
+                            Why Strategic Buyers Choose SAMSAN
+                        </h2>
+                        
+                        <div className="spec-table">
+                            {/* Header Row */}
+                            <div className="comparison-row comparison-header" style={{ borderBottom: "2px solid rgba(255, 255, 255, 0.12)" }}>
+                                <div className="spec-key" style={{ background: "var(--navy-light)", color: "var(--text-primary)", fontWeight: 600, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.06em", borderRight: "1px solid rgba(255, 255, 255, 0.08)", padding: "18px 24px" }}>
+                                    Strategic Buyer Gets
+                                </div>
+                                <div className="spec-val" style={{ background: "var(--navy-light)", color: "var(--text-primary)", fontWeight: 600, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.06em", padding: "18px 28px" }}>
+                                    Why It Matters
+                                </div>
+                            </div>
+
+                            {/* Row 1 */}
+                            <div className="comparison-row">
+                                <div className="spec-key">
+                                    Automotive software engineering team
+                                </div>
+                                <div className="spec-val">
+                                    Faster scale-up in cockpit, SDV, and connected mobility
+                                </div>
+                            </div>
+
+                            {/* Row 2 */}
+                            <div className="comparison-row">
+                                <div className="spec-key">
+                                    Customer access and delivery references
+                                </div>
+                                <div className="spec-val">
+                                    Faster market entry and credibility
+                                </div>
+                            </div>
+
+                            {/* Row 3 */}
+                            <div className="comparison-row">
+                                <div className="spec-key">
+                                    Engineering accelerators
+                                </div>
+                                <div className="spec-val">
+                                    Higher productivity and differentiated delivery
+                                </div>
+                            </div>
+
+                            {/* Row 4 */}
+                            <div className="comparison-row">
+                                <div className="spec-key">
+                                    India-based cost structure
+                                </div>
+                                <div className="spec-val">
+                                    Margin advantage and scalable delivery
+                                </div>
+                            </div>
+
+                            {/* Row 5 */}
+                            <div className="comparison-row">
+                                <div className="spec-key">
+                                    Founder-led domain expertise
+                                </div>
+                                <div className="spec-val">
+                                    Continuity and business development support
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Resources Downloads */}
                     <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "48px", alignItems: "start" }}>
                         <div>
@@ -115,13 +187,23 @@ export default function InvestorsPage() {
                                                 <span style={{ fontSize: "0.78rem", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Size: {doc.size}</span>
                                             </div>
                                         </div>
-                                        <button
-                                            className="btn btn-outline"
-                                            style={{ padding: "8px 16px", fontSize: "0.75rem" }}
-                                            onClick={() => alert("Simulating file download...")}
-                                        >
-                                            Download
-                                        </button>
+                                        {doc.title === "SAMSAN Case Studies Snapshot" ? (
+                                            <Link
+                                                href="/case-studies"
+                                                className="btn btn-outline"
+                                                style={{ padding: "8px 16px", fontSize: "0.75rem", textDecoration: "none" }}
+                                            >
+                                                Download
+                                            </Link>
+                                        ) : (
+                                            <button
+                                                className="btn btn-outline"
+                                                style={{ padding: "8px 16px", fontSize: "0.75rem" }}
+                                                onClick={() => alert("Simulating file download...")}
+                                            >
+                                                Download
+                                            </button>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -144,7 +226,7 @@ export default function InvestorsPage() {
                                 className="btn btn-primary"
                                 style={{ width: "100%", justifyContent: "center" }}
                             >
-                                Contact Corporate Relations
+                                Request Strategic Partner Brief
                             </a>
                         </div>
                     </div>

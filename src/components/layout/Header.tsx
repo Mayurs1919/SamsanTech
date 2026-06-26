@@ -18,18 +18,16 @@ interface NavItem {
 
 const navItems: NavItem[] = [
     { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
     {
-        label: "Services",
+        label: "Engineering Offerings",
         href: "/services",
         submenu: [
             { label: "Embedded Systems", href: "/services/embedded-systems" },
             { label: "Digital & Cloud Platforms", href: "/services/digital-platforms" },
-            { label: "Consulting & Strategic Staffing", href: "/services/consulting-staffing" },
         ]
     },
     {
-        label: "Solutions",
+        label: "Products & Accelerators",
         href: "/solutions",
         submenu: [
             { label: "Auto Embedded Solutions", href: "/solutions/auto-embedded" },
@@ -37,9 +35,12 @@ const navItems: NavItem[] = [
             { label: "Digital Solutions", href: "/solutions/digital" },
         ]
     },
+    { label: "Case Studies", href: "/case-studies" },
+    { label: "Labs & Delivery", href: "/labs-and-delivery" },
+    { label: "Engagement Models", href: "/engagement-models" },
+    { label: "About", href: "/about" },
+    { label: "Investors / Partners", href: "/investors" },
     { label: "Careers", href: "/careers" },
-    { label: "Gallery", href: "/gallery" },
-    { label: "Investors", href: "/investors" },
     { label: "Contact", href: "/contact" },
 ];
 
@@ -80,22 +81,15 @@ export default function Header() {
                 Skip to main content
             </a>
 
-            <header className="site-header">
-                <div className="container">
+            <header className={`site-header ${scrolled ? "scrolled" : ""} ${isOpen ? "menu-open" : ""}`}>
                     <nav className="nav-inner" aria-label="Primary navigation">
                         {/* Brand */}
-                        <Link href="/" className="brand" aria-label="Samsan Labs — Home">
-                            <div className="brand-mark" aria-hidden="true">
-                                <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M3 5.5C3 4.12 4.12 3 5.5 3h7C13.88 3 15 4.12 15 5.5v7C15 13.88 13.88 15 12.5 15h-7C4.12 15 3 13.88 3 12.5v-7Z" stroke="white" strokeWidth="1.4"/>
-                                    <circle cx="9" cy="9" r="2.2" fill="white"/>
-                                    <path d="M9 3v2M9 13v2M3 9h2M13 9h2" stroke="white" strokeWidth="1.4" strokeLinecap="round"/>
-                                </svg>
-                            </div>
-                            <span>
-                                Samsan Labs
-                                <small className="brand-sub">Engineering · Digital · AI</small>
-                            </span>
+                        <Link href="/" className="brand" aria-label="Samsan — Home">
+                            <img
+                                src="/images/samsan_logo_wordmark.png"
+                                alt="Samsan"
+                                style={{ height: "28px", width: "auto", display: "block", objectFit: "contain" }}
+                            />
                         </Link>
 
                         {/* Desktop Links */}
@@ -212,13 +206,12 @@ export default function Header() {
                                     </>
                                 ) : (
                                     <>
-                                        <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+                                        <path d="M3 4h14M3 10h14M3 16h14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
                                     </>
                                 )}
                             </svg>
                         </button>
                     </nav>
-                </div>
 
                 {/* Mobile menu */}
                 <AnimatePresence>

@@ -98,29 +98,22 @@ export default function RingsOfSolution() {
                         boxShadow: "inset 0 0 40px rgba(0,0,0,0.6)"
                     }}>
                         
-                        {/* Blueprint background grid */}
-                        <div style={{
-                            position: "absolute",
-                            inset: 0,
-                            backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
-                            backgroundSize: "20px 20px"
-                        }} />
-
-                        {/* Blueprint SVG wireframe Car */}
-                        <svg width="80%" height="80%" viewBox="0 0 600 300" fill="none" opacity="0.4" style={{ position: "absolute", pointerEvents: "none" }}>
-                            {/* Car body outline */}
-                            <path d="M 50 180 L 70 140 L 120 135 L 200 90 L 380 90 L 460 135 L 530 140 L 550 180 L 530 220 L 480 220 C 480 200, 420 200, 420 220 L 180 220 C 180 200, 120 200, 120 220 L 70 220 Z" stroke="var(--blue)" strokeWidth="1.5" strokeDasharray="5 3" />
-                            {/* Chassis structures */}
-                            <line x1="100" y1="180" x2="500" y2="180" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1" />
-                            {/* Wheels */}
-                            <circle cx="150" cy="220" r="30" stroke="var(--blue)" strokeWidth="2" />
-                            <circle cx="150" cy="220" r="10" fill="rgba(59, 130, 246, 0.2)" stroke="var(--blue)" strokeWidth="1" />
-                            <circle cx="450" cy="220" r="30" stroke="var(--blue)" strokeWidth="2" />
-                            <circle cx="450" cy="220" r="10" fill="rgba(59, 130, 246, 0.2)" stroke="var(--blue)" strokeWidth="1" />
-                            {/* Connectivity signals */}
-                            <path d="M 380 90 A 40 40 0 0 1 420 50" stroke="var(--rose)" strokeWidth="1.5" strokeDasharray="3 3" />
-                            <circle cx="420" cy="50" r="4" fill="var(--rose)" />
-                        </svg>
+                        
+                        {/* Rings of Solution background image */}
+                        <img
+                            src="/images/samsan_rings_of_solution.png"
+                            alt="SAMSAN Rings of Solution vehicle architecture"
+                            style={{
+                                position: "absolute",
+                                inset: 0,
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "contain",
+                                objectPosition: "center",
+                                pointerEvents: "none",
+                                padding: "16px",
+                            }}
+                        />
 
                         {/* Subsystem Hotspots */}
                         {nodes.map((node) => (

@@ -4,10 +4,11 @@ import { motion, useReducedMotion } from "framer-motion";
 import { fadeInVariants, staggerContainerVariants, fadeUpVariants } from "@/lib/motion";
 
 const metrics = [
-    { value: "10+", label: "Years Domain Experience" },
-    { value: "50M+", label: "Daily Telemetry Requests" },
-    { value: "ISO 27001", label: "Security Certified" },
-    { value: "3", label: "Global Delivery Regions" },
+    { value: "50+", label: "Engineers" },
+    { value: "20+", label: "Automotive Product Solutions" },
+    { value: "10+", label: "Accelerators" },
+    { value: "Global", label: "OEM/Tier-1 Engagements" },
+    { value: "India Delivery", label: "with Global Market Reach" }
 ];
 
 export default function TrustBar() {

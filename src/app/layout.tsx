@@ -5,17 +5,17 @@ import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
     title: {
-        default: "Samsan Labs — Software Defined Vehicle Engineering",
-        template: "%s | Samsan Labs",
+        default: "SAMSAN Technische Labs Pvt. Ltd. — Software Defined Vehicle Engineering",
+        template: "%s | SAMSAN Technische Labs Pvt. Ltd.",
     },
     description:
-        "Samsan Labs is a specialized design house for Software Defined Vehicles, delivering embedded systems, cloud telemetry platforms, and AI architectures for connected mobility.",
+        "SAMSAN Technische Labs Pvt. Ltd. is a specialized design house for Software Defined Vehicles, delivering embedded systems, cloud telemetry platforms, and AI architectures for connected mobility.",
     keywords: [
         "automotive software", "SDV", "software defined vehicle", "embedded systems",
         "ADAS", "telematics", "automotive AI", "HMI", "AUTOSAR",
     ],
     openGraph: {
-        siteName: "Samsan Labs",
+        siteName: "SAMSAN Technische Labs Pvt. Ltd.",
         locale: "en_IN",
         type: "website",
     },
