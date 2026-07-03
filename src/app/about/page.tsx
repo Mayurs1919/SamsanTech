@@ -360,7 +360,7 @@ export default function AboutPage() {
                                 el.style.boxShadow = "inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 20px 50px rgba(0,0,0,0.3)";
                             }}
                         >
-                            <p style={{ fontSize: "30px", textTransform: "uppercase", letterSpacing: "0.12em", color: "#94A3B8", marginBottom: "24px", fontWeight: 600 }}>
+                            <p style={{ fontSize: "35px", textTransform: "uppercase", letterSpacing: "0.12em", color: "#94A3B8", marginBottom: "24px", fontWeight: 600 }}>
                                 Founder & CEO
                             </p>
 
@@ -390,7 +390,7 @@ export default function AboutPage() {
                                         />
                                     </div>
                                 </div>
-                                <h3 style={{ fontSize: "20px", fontWeight: 700, color: "#FFFFFF", margin: 0, lineHeight: 1.3 }}>
+                                <h3 style={{ fontSize: "25px", fontWeight: 700, color: "#FFFFFF", margin: 0, lineHeight: 1.3 }}>
                                     Prashant Deshpande
                                 </h3>
                                 <p style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#94A3B8", marginTop: "6px", marginBottom: "10px" }}>
@@ -429,7 +429,7 @@ export default function AboutPage() {
                                 el.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 50px rgba(0,0,0,0.3)";
                             }}
                         >
-                            <p style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "0.12em", color: "#94A3B8", marginBottom: "32px", textAlign: "center", fontWeight: 600 }}>
+                            <p style={{ fontSize: "35px", textTransform: "uppercase", letterSpacing: "0.12em", color: "#94A3B8", marginBottom: "32px", textAlign: "center", fontWeight: 600 }}>
                                 Board of Advisors
                             </p>
 
@@ -500,7 +500,7 @@ export default function AboutPage() {
                                 el.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 50px rgba(0,0,0,0.3)";
                             }}
                         >
-                            <p style={{ fontSize: "16px", textTransform: "uppercase", letterSpacing: "0.12em", color: "#94A3B8", marginBottom: "32px", textAlign: "center", fontWeight: 600 }}>
+                            <p style={{ fontSize: "35px", textTransform: "uppercase", letterSpacing: "0.12em", color: "#94A3B8", marginBottom: "32px", textAlign: "center", fontWeight: 600 }}>
                                 Leaders
                             </p>
 

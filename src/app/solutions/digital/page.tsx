@@ -7,10 +7,10 @@ import Link from "next/link";
 const digitalProducts = [
     {
         id: "maestro",
-        badge: "Unified IoT Platform",
-        title: "Maestro",
-        desc: "Maestro unifies devices from different vendors—including vehicle cameras, building management systems, and industrial sensors—into a single operational dashboard. We operate the platform end-to-end; your team sees clear dashboards and timely alerts, while the infrastructure remains our responsibility.",
-        image: "/images/iot_gateway.png",
+        badge: "IoT & Platform",
+        title: "Maestro™",
+        desc: "Unifies devices from different vendors — vehicle cameras, building management systems, and industrial sensors — into a single operational dashboard. Managed end-to-end by SAMSAN, Maestro provides real-time visibility, centralized monitoring, clear dashboards, and timely alerts. SAMSAN takes full responsibility for integration, maintenance, and platform reliability.",
+        image: "/images/maestro.png",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="2" y="3" width="20" height="14" rx="2" strokeWidth="2"/>
@@ -19,11 +19,38 @@ const digitalProducts = [
         )
     },
     {
-        id: "twinlink",
-        badge: "Industrial Digital Twin",
-        title: "TwinLink™",
-        desc: "An advanced industrial digital twin and connectivity solution. TwinLink™ seamlessly bridges hardware and cloud connectivity, supporting complex industrial applications and focused IoT digital solutions for real-time asset monitoring.",
-        image: "/images/serve_semiconductor.png",
+        id: "vemeego",
+        badge: "Collaboration",
+        title: "Vemeego",
+        desc: "An intelligent workspace and video conferencing platform built for enhanced remote and corporate collaboration. Developed under the \"Make in India\" initiative by SAMSAN Technische Labs, Vemeego goes beyond basic video calling — delivering a rich digital workspace that brings teams together with context, structure, and productivity in mind.",
+        image: "/images/vemeego.png",
+        icon: (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+        )
+    },
+    {
+        id: "pikniknow",
+        badge: "Consumer & Travel",
+        title: "PiknikNow",
+        desc: "Discover unique picnic spots nearby, share travel stories with fellow explorers, and plan adventures to hidden destinations. Built for travel enthusiasts, photography lovers, and the social media generation — PiknikNow combines location discovery, community storytelling, and trip planning in one platform.",
+        image: "/images/pikniknow.jpg",
+        icon: (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+            </svg>
+        )
+    },
+    {
+        id: "twinlnk",
+        badge: "IoT & Telematics",
+        title: "TwinLnk™",
+        desc: "An intelligent telematics and IoT gateway platform enabling secure, seamless data flow between edge devices and cloud applications. Built for automotive, industrial, and infrastructure environments — supporting real-time monitoring, remote diagnostics, remote configuration, and secure OTA firmware updates. Features multi-GNSS tracking, MQTT-based communication, edge intelligence, and rugged industrial-grade connectivity.",
+        image: "/images/twinlink.png",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M20 12l-8-8-8 8"/>
@@ -31,24 +58,11 @@ const digitalProducts = [
         )
     },
     {
-        id: "mobile-apps",
-        badge: "User Interface Platforms",
-        title: "Mobile Applications & Platforms",
-        desc: "High-performance custom mobile interfaces enabling end-users to interact with complex hardware systems. Includes real-time control dashboards, user onboarding, and seamless communication channels.",
-        image: "/images/ai_digital_tech.png",
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="5" y="2" width="14" height="20" rx="2" strokeWidth="2"/>
-                <circle cx="12" cy="18" r="1"/>
-            </svg>
-        )
-    },
-    {
         id: "samchat",
-        badge: "AI Chat & Communication",
+        badge: "AI & Communication",
         title: "SamChat",
-        desc: "A proprietary, intelligent chat-based communication platform focusing on AI chatbot integration, client assistance, automated customer service, and natural language query processing.",
-        image: "/images/auto_cockpit_sys.png",
+        desc: "Build, train, and deploy AI chatbots in minutes. Upload documents, FAQs, and data — SamChat's AI learns from your content and responds with accurate, context-aware answers. Designed for businesses, support teams, and startups looking to scale customer support and smart automation with 50+ integrations and enterprise-grade security.",
+        image: "/images/samchat.png",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -56,38 +70,14 @@ const digitalProducts = [
         )
     },
     {
-        id: "analytics",
-        badge: "Enterprise Analytics",
-        title: "Dashboard & Analytics Systems",
-        desc: "Powerful data visualization and analysis pipelines that convert raw machine telemetry into actionable business insights. Displays historical telemetry, alerts, and system health charts.",
-        image: "/images/digital_cloud_connectivity.png",
+        id: "automate-ai",
+        badge: "Automotive Software",
+        title: "AutoMATE.ai",
+        desc: "Contextual, voice-based AI assistant integrated directly into the vehicle cockpit. Provides intelligent access to vehicle functionalities, e-manuals, and diagnostics through natural language interaction — enabling drivers and technicians to get answers without leaving the driving context.",
+        image: "/images/automate.png",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 20V10M12 20V4M6 20v-6"/>
-            </svg>
-        )
-    },
-    {
-        id: "industrial-digital",
-        badge: "OT-IT Integration",
-        title: "Industrial & Production Systems",
-        desc: "Real-world engineering meets digital operations. We develop the software bridge to integrate machinery, robotic hardware, and assembly line sensors with cloud orchestration networks.",
-        image: "/images/serve_industrial.png",
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-            </svg>
-        )
-    },
-    {
-        id: "gen-ai",
-        badge: "Cognitive Computing",
-        title: "AI & Generative AI",
-        desc: "Integrate cutting-edge cognitive models, LLMs, and semantic search tools directly into your engineering workflows to automate specifications analysis and system verification.",
-        image: "/images/embedded_engineering.png",
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
             </svg>
         )
     },
@@ -95,43 +85,54 @@ const digitalProducts = [
         id: "sdv",
         badge: "Automotive Software",
         title: "Software Defined Vehicle (SDV)",
-        desc: "End-to-end software frameworks enabling over-the-air updates, isolated application containerization, and advanced vehicular communications inside a smart vehicle ecosystem.",
-        image: "/images/serve_automotive.png",
+        desc: "SAMSAN actively develops solutions across all four major SDV domains — SDV.ONBOARD (platform development, V-HAL/CAN management, HPC, middleware, FuSa & CySec), SDV.CLOUD (feature management, monetization, containerization, SOA), SDV.OFFBOARD (backend services, data analytics, cybersecurity), and SDV.DEV (cloud development environments, Virtual ECU, DevOps/CloudOps).",
+        image: "/images/embedded_engineering.png",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="18.5" cy="17.5" r="2.5"/>
-                <circle cx="5.5" cy="17.5" r="2.5"/>
+                <circle cx="18.5" cy="17.5" r="2.5"/><circle cx="5.5" cy="17.5" r="2.5"/>
                 <path d="M7 9h11l2 4v4H4v-4l3-4z"/>
             </svg>
         )
     },
     {
-        id: "cockpit-sys",
+        id: "driver-health",
         badge: "In-Vehicle HMI",
-        title: "Driver & Cockpit Systems",
-        desc: "Seamless integration between embedded automotive hardware and high-level digital user experiences. We power fluid HUDs, clusters, and multi-display dashboard setups.",
-        image: "/images/gallery_hil.png",
+        title: "Driver Health & Wellness Monitoring",
+        desc: "Monitors driver health in real time using sensors embedded in the steering wheel. Phase 1 (live): mobile app retrieving pulse and health data via Bluetooth, processing and visualizing structured health parameters. Phase 2 (in progress): integrating mmWave radar for vital signs, fatigue and emotion sensing, fall detection, and occupancy sensing — enhanced by generative AI for wellness insights.",
+        image: "/images/driver-health.png",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10zM2 12h20"/>
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
             </svg>
         )
     },
     {
-        id: "lifecycle-delivery",
-        badge: "Full Lifecycle Solutions",
-        title: "End-to-End Delivery Services",
-        desc: "TwinLink AI deployment and validation. SAMSAN supports the entire lifecycle from early stage consulting and systems design to cloud deployment and field validation.",
-        image: "/images/serve_oems.png",
+        id: "sam-sanvaad",
+        badge: "AI & Engineering",
+        title: "Sam-Sanvaad",
+        desc: "Converts any engineering document into an interactive, context-aware AI chatbot. Teams can interact with technical content — manuals, specifications, standards — based on context, document content, and personal preferences, eliminating manual document search.",
+        image: "/images/sam-sanvaad.png",
         icon: (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            </svg>
+        )
+    },
+    {
+        id: "stafd",
+        badge: "Enterprise SaaS",
+        title: "STAFD.IN",
+        desc: "An AI-powered, cloud-native SaaS platform revolutionizing staffing in high-tech industries. Connects candidates, recruiters, and placement companies for seamless collaboration on tech projects — specializing in automotive software and semiconductor chip design. Powered by advanced analytics, intelligent matching algorithms, and AI-driven insights for efficient talent acquisition and targeted deployment.",
+        image: "/images/stafd.png",
+        icon: (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
             </svg>
         )
     }
 ];
+
+const ENTERPRISE_DIVIDER_AFTER_INDEX = 5; // Insert divider after card index 5 (card 6)
 
 export default function DigitalSolutionsPage() {
     const shouldReduce = useReducedMotion();
@@ -182,9 +183,35 @@ export default function DigitalSolutionsPage() {
                     {digitalProducts.map((prod, index) => {
                         const isEven = index % 2 === 0;
                         const accent = accents[index % accents.length];
+                        const isWhiteBgLogo = ["maestro", "vemeego", "pikniknow", "samchat", "automate-ai", "stafd", "twinlnk", "driver-health", "sam-sanvaad"].includes(prod.id);
+                        const isContainImage = ["maestro", "vemeego", "pikniknow", "samchat", "automate-ai", "stafd", "twinlnk", "driver-health", "sam-sanvaad"].includes(prod.id);
+                        const isLogoImage = isContainImage;
+                        const cardHeight = prod.id === "twinlnk" ? "480px" : "360px";
                         return (
-                            <motion.div
-                                key={prod.id}
+                            <div key={prod.id} style={{ display: "contents" }}>
+                                {index === ENTERPRISE_DIVIDER_AFTER_INDEX + 1 && (
+                                    <div style={{ 
+                                        display: "flex", 
+                                        flexDirection: "column", 
+                                        alignItems: "center", 
+                                        gap: "16px",
+                                        width: "100%",
+                                        padding: "16px 0",
+                                        borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+                                        borderBottom: "1px solid rgba(255, 255, 255, 0.08)"
+                                    }}>
+                                        <span style={{ 
+                                            color: "var(--violet-mid)", 
+                                            fontWeight: 700, 
+                                            fontSize: "0.8rem", 
+                                            textTransform: "uppercase", 
+                                            letterSpacing: "0.15em"
+                                        }}>
+                                            Enterprise &amp; Beyond
+                                        </span>
+                                    </div>
+                                )}
+                                <motion.div
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-100px" }}
@@ -210,24 +237,30 @@ export default function DigitalSolutionsPage() {
                                     overflow: "hidden",
                                     border: "1px solid rgba(255, 255, 255, 0.08)",
                                     boxShadow: "0 12px 28px rgba(0, 0, 0, 0.3)",
-                                    height: "360px",
-                                    position: "relative"
+                                    height: cardHeight,
+                                    position: "relative",
+                                    backgroundColor: isWhiteBgLogo ? "#ffffff" : "transparent",
+                                    padding: isWhiteBgLogo ? "32px" : "0",
+                                    boxSizing: "border-box"
                                 }}>
                                     <div
                                         style={{
                                             backgroundImage: `url('${prod.image}')`,
-                                            backgroundSize: "cover",
+                                            backgroundSize: isContainImage ? "contain" : "cover",
                                             backgroundPosition: "center",
+                                            backgroundRepeat: "no-repeat",
                                             width: "100%",
                                             height: "100%"
                                         }}
                                         aria-label={prod.title}
                                     />
                                     {/* Overlay Gradient for tech feel */}
-                                    <div style={{
-                                        position: "absolute", inset: 0,
-                                        background: `linear-gradient(to top, ${accent}15, transparent)`
-                                    }}/>
+                                    {!isLogoImage && (
+                                        <div style={{
+                                            position: "absolute", inset: 0,
+                                            background: `linear-gradient(to top, ${accent}15, transparent)`
+                                        }}/>
+                                    )}
                                 </div>
 
                                 {/* Content Column */}
@@ -283,8 +316,9 @@ export default function DigitalSolutionsPage() {
                                     </motion.div>
                                 </div>
                             </motion.div>
-                        );
-                    })}
+                        </div>
+                    );
+                })}
                 </div>
             </section>
 
