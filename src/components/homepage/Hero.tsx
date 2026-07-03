@@ -52,20 +52,28 @@ const pillars = [
 
 function CinematicVideoPlayer() {
     const [isPlaying, setIsPlaying] = useState(false);
+    const [showControls, setShowControls] = useState(false);
+    const [loadError, setLoadError] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    const handlePlayClick = () => {
-        if (videoRef.current) {
-            if (isPlaying) {
-                videoRef.current.pause();
-                setIsPlaying(false);
-            } else {
-                videoRef.current.play().then(() => {
-                    setIsPlaying(true);
-                }).catch(err => {
-                    console.log("Playback failed:", err);
-                });
-            }
+    const handlePlayClick = (e?: React.MouseEvent) => {
+        e?.stopPropagation();
+        const vid = videoRef.current;
+        if (!vid) return;
+        if (isPlaying) {
+            vid.pause();
+            setIsPlaying(false);
+            setShowControls(false);
+        } else {
+            // Force load if preload="none" hasn't loaded anything yet
+            if (vid.readyState === 0) vid.load();
+            vid.play().then(() => {
+                setIsPlaying(true);
+                setShowControls(true);
+            }).catch(err => {
+                console.error("Video playback failed:", err);
+                setLoadError(true);
+            });
         }
     };
 
@@ -90,7 +98,18 @@ function CinematicVideoPlayer() {
             whileHover={{ scale: 1.015, borderColor: "rgba(139, 92, 246, 0.3)", boxShadow: "0 30px 70px rgba(0, 0, 0, 0.6), 0 0 50px rgba(139, 92, 246, 0.25)" }}
         >
             <div style={{ position: "absolute", inset: "-20px", background: "radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)", filter: "blur(20px)", zIndex: -1, pointerEvents: "none" }} />
-            <video ref={videoRef} style={{ width: "100%", display: "block", aspectRatio: "16/9", objectFit: "cover" }} loop muted playsInline src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-hud-interface-screen-loop-41604-large.mp4" />
+            <video
+                ref={videoRef}
+                style={{ width: "100%", display: "block", aspectRatio: "16/9", objectFit: "cover", cursor: "pointer" }}
+                loop
+                playsInline
+                preload="none"
+                controls={showControls}
+                onClick={handlePlayClick}
+                onEnded={() => { setIsPlaying(false); setShowControls(false); }}
+                onError={(e) => { console.error("Video load error:", e); setLoadError(true); }}
+                src="/videos/samsan-demo.mp4"
+            />
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(10, 15, 28, 0.4) 0%, rgba(10, 15, 28, 0) 50%, rgba(10, 15, 28, 0.8) 100%)", pointerEvents: "none" }} />
             <div style={{ position: "absolute", bottom: "24px", left: "24px", right: "24px", display: "flex", flexDirection: "column", gap: "8px", pointerEvents: "none", textAlign: "left" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -111,11 +130,25 @@ function CinematicVideoPlayer() {
             </div>
             <AnimatePresence>
                 {!isPlaying && (
-                    <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(10, 15, 28, 0.3), rgba(10, 15, 28, 0.7)), url('/images/auto_cockpit_sys.png')", backgroundSize: "cover", backgroundPosition: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} style={{ width: "70px", height: "70px", borderRadius: "50%", background: "rgba(139, 92, 246, 0.9)", color: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 30px rgba(139, 92, 246, 0.6)", border: "2px solid rgba(255, 255, 255, 0.2)", marginBottom: "16px" }}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
-                        </motion.div>
-                        <span style={{ color: "#ffffff", fontSize: "0.85rem", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", textShadow: "0 2px 8px rgba(0,0,0,0.8)" }}>Click to Play Concept Video</span>
+                    <motion.div
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4 }}
+                        onClick={handlePlayClick}
+                        style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(10, 15, 28, 0.3), rgba(10, 15, 28, 0.7)), url('/images/auto_cockpit_sys.png')", backgroundSize: "cover", backgroundPosition: "center", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 2 }}
+                    >
+                        {loadError ? (
+                            <div style={{ textAlign: "center", padding: "24px" }}>
+                                <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.85rem" }}>Video unavailable — please check your connection.</span>
+                            </div>
+                        ) : (
+                            <>
+                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} style={{ width: "70px", height: "70px", borderRadius: "50%", background: "rgba(139, 92, 246, 0.9)", color: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 30px rgba(139, 92, 246, 0.6)", border: "2px solid rgba(255, 255, 255, 0.2)", marginBottom: "16px" }}>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+                                </motion.div>
+                                <span style={{ color: "#ffffff", fontSize: "0.85rem", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", textShadow: "0 2px 8px rgba(0,0,0,0.8)" }}>CLICK TO PLAY — AI-GENERATED CONCEPT VIDEO</span>
+                            </>
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>
