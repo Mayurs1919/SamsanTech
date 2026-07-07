@@ -14,34 +14,20 @@ interface NavItem {
     label: string;
     href: string;
     submenu?: SubmenuItem[];
+    isVisible?: boolean;
 }
 
 const navItems: NavItem[] = [
-    { label: "Home", href: "/" },
-    {
-        label: "Engineering Offerings",
-        href: "/services",
-        submenu: [
-            { label: "Embedded Systems", href: "/services/embedded-systems" },
-            { label: "Digital & Cloud Platforms", href: "/services/digital-platforms" },
-        ]
-    },
-    {
-        label: "Products & Accelerators",
-        href: "/solutions",
-        submenu: [
-            { label: "Auto Embedded Solutions", href: "/solutions/auto-embedded" },
-            { label: "Embedded Solutions", href: "/solutions/embedded" },
-            { label: "Digital Solutions", href: "/solutions/digital" },
-        ]
-    },
-    { label: "Case Studies", href: "/case-studies" },
-    { label: "Labs & Delivery", href: "/labs-and-delivery" },
-    { label: "Engagement Models", href: "/engagement-models" },
-    { label: "About", href: "/about" },
-    { label: "Investors / Partners", href: "/investors" },
-    { label: "Careers", href: "/careers" },
-    { label: "Contact", href: "/contact" },
+    { label: "Home", href: "/", isVisible: true },
+    { label: "About", href: "/about", isVisible: true },
+    { label: "Engineering Offerings", href: "/services", isVisible: true },
+    { label: "Products & Accelerators", href: "/solutions", isVisible: true },
+    { label: "Case Studies", href: "/case-studies", isVisible: false },
+    { label: "Labs & Delivery", href: "/labs-and-delivery", isVisible: true },
+    { label: "Engagement Models", href: "/engagement-models", isVisible: false },
+    { label: "Investors / Partners", href: "/investors", isVisible: true },
+    { label: "Careers", href: "/careers", isVisible: true },
+    { label: "Contact", href: "/contact", isVisible: true },
 ];
 
 export default function Header() {
@@ -93,7 +79,7 @@ export default function Header() {
 
                     {/* Desktop Links */}
                     <ul className="nav-links" role="list">
-                        {navItems.map((item) => {
+                        {navItems.filter(item => item.isVisible !== false).map((item) => {
                             const hasSubmenu = !!item.submenu;
                             const isActive = pathname === item.href || (hasSubmenu && pathname.startsWith(item.href));
 
@@ -223,7 +209,7 @@ export default function Header() {
                             transition={{ duration: 0.22, ease: "easeInOut" }}
                             style={{ overflow: "hidden" }}
                         >
-                            {navItems.map((item) => {
+                            {navItems.filter(item => item.isVisible !== false).map((item) => {
                                 const hasSubmenu = !!item.submenu;
                                 const isMobileExpanded = expandedMobileItem === item.label;
 

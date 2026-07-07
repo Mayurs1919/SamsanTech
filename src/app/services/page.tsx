@@ -3,226 +3,348 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
+import ServiceCard, { Logos, WifiIcon, BluetoothIcon, MqttIcon, type TechChip } from "@/components/ui/ServiceCard";
 
-const services = [
+// ── Embedded service card data ───────────────────────────────────
+const embeddedCards = [
     {
-        accent: "violet",
         number: "01",
+        title: "Embedded Software",
+        iconColor: "#06B6D4",
+        description: "Platform software, OS, and middleware for automotive MCUs and devices.",
         icon: (
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-                <rect x="6" y="6" width="16" height="16" rx="3" stroke="currentColor" strokeWidth="1.6"/>
-                <path d="M6 11H3M6 17H3M22 11h3M22 17h3M11 6V3M17 6V3M11 22v3M17 22v3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-                <circle cx="14" cy="14" r="2.5" fill="currentColor"/>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" />
+                <path d="M9 9h6v6H9z" />
+                <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3" />
             </svg>
         ),
-        title: "Embedded Systems",
-        href: "/services/embedded-systems",
-        description: "Vehicle-grade embedded software built for cockpit, telematics, and connectivity systems where timing and reliability are mission-critical.",
-        items: [
-            "Cockpit & infotainment platforms",
-            "Telematics & connectivity stacks",
-            "Diagnostics & middleware",
-            "Safety & functional safety (ISO 26262)",
-        ],
+        techs: [
+            { label: "AUTOSAR", isBadge: true },
+            { label: "Linux", logoUrl: Logos.linux },
+            { label: "Android", logoUrl: Logos.android },
+            { label: "QNX", isBadge: true },
+            { label: "Bluetooth", icon: <BluetoothIcon /> },
+            { label: "Wi-Fi", icon: <WifiIcon /> },
+            { label: "CAN Bus", isBadge: true },
+        ] as TechChip[]
     },
     {
-        accent: "mint",
         number: "02",
+        title: "Internet of Things (IoT)",
+        iconColor: "#F59E0B",
+        description: "End-to-end IoT development from edge devices to cloud — with AI/ML integration.",
         icon: (
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-                <path d="M14 3C8.48 3 4 7.48 4 13s4.48 10 10 10 10-4.48 10-10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-                <path d="M18 3a7 7 0 0 1 7 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-                <path d="M10 13l3.5 3.5 6.5-7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" />
             </svg>
         ),
-        title: "Digital & Cloud Platforms",
-        href: "/services/digital-platforms",
-        description: "Cloud-native platforms for software-defined vehicles — built to ingest sensor data, scale across vehicle fleets, and ship OTA updates reliably.",
-        items: [
-            "AI/ML & computer vision systems",
-            "IoT integration & fleet telemetry",
-            "Full-stack & cloud-native platforms",
-            "OTA update orchestration",
-        ],
+        techs: [
+            { label: "MQTT", icon: <MqttIcon /> },
+            { label: "AWS", logoUrl: Logos.aws },
+            { label: "Firebase", logoUrl: Logos.firebase },
+            { label: "TensorFlow", logoUrl: Logos.tensorflow },
+            { label: "Node.js", logoUrl: Logos.nodejs },
+            { label: "Docker", logoUrl: Logos.docker },
+            { label: "Kubernetes", logoUrl: Logos.kubernetes },
+        ] as TechChip[]
     },
     {
-        accent: "rose",
         number: "03",
+        title: "Hardware Design",
+        iconColor: "#10B981",
+        description: "Electronic design and simulation across automotive, industrial, IoT, and custom domains.",
         icon: (
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-                <circle cx="10" cy="10" r="5" stroke="currentColor" strokeWidth="1.6"/>
-                <circle cx="20" cy="20" r="5" stroke="currentColor" strokeWidth="1.6"/>
-                <path d="M14.5 13.5l2 2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="2" />
+                <path d="M6 14h4v4M6 6h6v4M18 6h-4v4M14 18v-4h4" />
+                <circle cx="10" cy="14" r="1" /><circle cx="12" cy="10" r="1" />
+                <circle cx="14" cy="10" r="1" /><circle cx="14" cy="14" r="1" />
             </svg>
         ),
-        title: "Engagement Models",
-        href: "/engagement-models",
-        description: "Explore our flexible models structured to align with your program timeline and organizational needs.",
-        items: [],
-        buttonText: "View Engagement Models",
+        techs: [
+            { label: "SoC", isBadge: true },
+            { label: "SaM", isBadge: true },
+            { label: "SBC", isBadge: true },
+            { label: "PCB Layout", isBadge: true },
+            { label: "SPICE Sim", isBadge: true },
+        ] as TechChip[]
     },
+    {
+        number: "04",
+        title: "Verification & Validation",
+        iconColor: "#8B5CF6",
+        description: "Comprehensive testing from functional to environmental — with industry-standard toolchains.",
+        icon: (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <path d="m9 11 2 2 4-4" />
+            </svg>
+        ),
+        techs: [
+            { label: "MATLAB", isBadge: true },
+            { label: "LabVIEW", isBadge: true },
+            { label: "Rhapsody", isBadge: true },
+            { label: "Canata++", isBadge: true },
+            { label: "dSpace HIL", isBadge: true },
+            { label: "Jenkins", logoUrl: Logos.jenkins },
+            { label: "GitHub", logoUrl: Logos.github },
+        ] as TechChip[]
+    },
+    {
+        number: "05",
+        title: "AUTOSAR, Functional Safety & Cybersecurity",
+        iconColor: "#EF4444",
+        description: "Expert consulting across AUTOSAR architecture, ISO 26262 functional safety, and automotive cybersecurity.",
+        icon: (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+        ),
+        techs: [
+            { label: "AUTOSAR", isBadge: true },
+            { label: "ISO 26262", isBadge: true },
+            { label: "UNECE WP.29", isBadge: true },
+            { label: "FuSa", isBadge: true },
+            { label: "CySec", isBadge: true },
+        ] as TechChip[]
+    }
 ];
 
-const accelerators = [
+// ── Showcase placeholder data ────────────────────────────────────
+const showcaseAutomotive = [
+    { label: "Digital Dashboard Systems" },
+    { label: "Driver Assistance Displays" },
+    { label: "In-Car Display Integration" },
+    { label: "Speed Recognition Systems" }
+];
+
+const showcaseProducts = [
+    { label: "Handheld Scanning Devices" },
+    { label: "Robotic & Optical Instruments" },
+    { label: "Home Media Systems" },
+    { label: "PCB & SBC Boards" }
+];
+
+// ── Digital product card data ────────────────────────────────────
+const digitalCards = [
     {
         number: "01",
-        title: "GenAI AutoMATE",
-        description: "Applies generative AI across the automotive software delivery pipeline — from code generation to test scaffolding — so teams spend their time on the parts of the system that actually differentiate the product.",
-        tags: ["Code Generation", "Test Scaffolding", "Pipeline Automation", "AUTOSAR Support"],
+        title: "Vemeego",
+        iconColor: "#8B5CF6",
+        image: "/images/vemeego.png",
+        description: "An intelligent workspace and video conferencing platform built for enhanced remote and corporate collaboration. Developed under the Make in India initiative by SAMSAN Technische Labs.",
+        techs: [
+            { label: "React", logoUrl: Logos.react },
+            { label: "Node.js", logoUrl: Logos.nodejs },
+            { label: "WebRTC", isBadge: true },
+            { label: "Make in India", isBadge: true },
+        ] as TechChip[],
+        icon: (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m22 8-6 4 6 4V8Z" /><rect x="2" y="6" width="14" height="12" rx="2" ry="2" />
+            </svg>
+        ),
+        slug: "vemeego"
     },
     {
         number: "02",
-        title: "GenAI System Engg",
-        description: "Brings GenAI into requirements capture, architecture documentation, and validation planning — the system-engineering work that usually slows a programme down before a line of code is written.",
-        tags: ["Requirements Capture", "Architecture Documentation", "Validation Planning", "Traceability"],
+        title: "PiknikNow",
+        iconColor: "#10B981",
+        image: "/images/pikniknow.jpg",
+        description: "Discover unique picnic spots nearby, share travel stories with fellow explorers, and plan adventures to hidden destinations.",
+        techs: [
+            { label: "Flutter", logoUrl: Logos.flutter },
+            { label: "Firebase", logoUrl: Logos.firebase },
+            { label: "Maps API", isBadge: true },
+            { label: "Social", isBadge: true },
+        ] as TechChip[],
+        icon: (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" />
+            </svg>
+        ),
+        slug: "pikniknow"
     },
+    {
+        number: "03",
+        title: "vSeva",
+        iconColor: "#EC4899",
+        image: undefined,
+        description: "[Content Pending from CEO]",
+        techs: [
+            { label: "PLACEHOLDER — awaiting CEO tech stack info", isBadge: true },
+        ] as TechChip[],
+        icon: (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+        ),
+        slug: "vseva"
+    }
 ];
 
+// ── Showcase placeholder component ──────────────────────────────
+function ShowcasePlaceholder({ label }: { label: string }) {
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div style={{
+                position: "relative",
+                aspectRatio: "16/9",
+                background: "rgba(255, 255, 255, 0.03)",
+                border: "1px dashed var(--border)",
+                borderRadius: "8px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                overflow: "hidden"
+            }}>
+                {/* REPLACE: real product image — {label} */}
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--text-muted)" }}>
+                    Image Placeholder
+                </span>
+            </div>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.72rem", color: "var(--text-secondary)", letterSpacing: "0.02em" }}>
+                {label}
+            </div>
+        </div>
+    );
+}
+
+// ── Page component ───────────────────────────────────────────────
 export default function ServicesPage() {
     const shouldReduce = useReducedMotion();
 
     return (
-        <>
+        <div style={{ paddingBottom: "100px" }}>
 
-            {/* Page Hero */}
+            {/* SECTION 0 — PAGE HEADER */}
             <section className="page-hero" aria-labelledby="services-page-heading">
+                <div className="hero-glow" style={{ opacity: 0.15 }} />
                 <div className="container">
-                    <motion.div
-                        variants={staggerContainerVariants}
-                        initial="hidden"
-                        animate="visible"
-                    >
+                    <motion.div variants={staggerContainerVariants} initial="hidden" animate="visible">
                         <motion.div variants={fadeUpVariants(shouldReduce)}>
-                            <span className="badge" style={{ marginBottom: "24px" }}>Engineering Offerings</span>
+                            <span className="badge" style={{ marginBottom: "24px" }}>// Engineering Offerings</span>
                         </motion.div>
                         <motion.h1 id="services-page-heading" variants={fadeUpVariants(shouldReduce)} style={{ marginBottom: "20px" }}>
-                            Engineering across the full vehicle software stack
+                            Excellence in Product Design Engineering for High-Tech Industries
                         </motion.h1>
                         <motion.p className="lead" variants={fadeUpVariants(shouldReduce)} style={{ maxWidth: "580px" }}>
-                            Three disciplines, one specialization. Everything we build sits inside Software Defined Vehicles, connected mobility, and AI-driven automotive innovation.
+                            Two core practice areas — Automotive Embedded Engineering and Digital Solutions — delivered by 50+ domain-aligned engineers across global OEM and Tier-1 engagements.
                         </motion.p>
                     </motion.div>
                 </div>
             </section>
 
-            {/* Services Grid */}
-            <section className="section" aria-labelledby="core-services-heading">
+            {/* SECTION 1 — AUTOMOTIVE EMBEDDED SOLUTIONS */}
+            <section className="section" style={{ borderTop: "1px solid var(--border)" }} aria-labelledby="embedded-solutions-heading">
                 <div className="container">
-                    <div style={{ marginBottom: "56px" }}>
-                        <h2 id="core-services-heading" style={{ marginBottom: "12px" }}>Core disciplines</h2>
-                        <p className="lead" style={{ maxWidth: "520px" }}>
-                            Each discipline is delivered by engineers who specialize exclusively in automotive software — not generalists adapting to the domain.
-                        </p>
-                    </div>
-
-                    <motion.div
-                        className="services-grid"
-                        variants={staggerContainerVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                    >
-                        {services.map((s) => (
-                            <motion.div
-                                key={s.title}
-                                variants={fadeUpVariants(shouldReduce)}
-                            >
-                                <Link href={s.href} className="service-card" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
-                                    <div style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                        marginBottom: "24px",
-                                    }}>
-                                        <div className={`service-icon ${s.accent}`}>
-                                            {s.icon}
-                                        </div>
-                                        <span style={{
-                                            fontFamily: "var(--font-mono)",
-                                            fontSize: "11px",
-                                            color: "var(--text-muted)",
-                                            letterSpacing: "0.08em",
-                                        }}>
-                                            {s.number}
-                                        </span>
-                                    </div>
-                                    <h3>{s.title}</h3>
-                                    <p>{s.description}</p>
-                                    {s.items && s.items.length > 0 ? (
-                                        <ul>
-                                            {s.items.map((item) => (
-                                                <li key={item}>{item}</li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <div style={{ marginTop: "24px", color: "var(--rose)", fontSize: "0.85rem", fontWeight: 600, display: "flex", alignItems: "center", gap: "6px" }}>
-                                            {s.buttonText || "Learn More"}
-                                            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                                                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                            </svg>
-                                        </div>
-                                    )}
-                                </Link>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Accelerators */}
-            <section className="section" style={{ background: "var(--navy)" }} aria-labelledby="accel-page-heading">
-                <div className="container">
-                    <div style={{ marginBottom: "56px" }}>
-                        <span className="badge rose" style={{ marginBottom: "16px" }}>Accelerators</span>
-                        <h2 id="accel-page-heading" style={{ marginTop: "16px", marginBottom: "12px" }}>
-                            Pre-built, not bolted on.
+                    <div style={{ marginBottom: "48px" }}>
+                        <span className="badge" style={{ marginBottom: "16px" }}>// Automotive Embedded Solutions & Products</span>
+                        <h2 id="embedded-solutions-heading" style={{ marginTop: "12px", marginBottom: "0" }}>
+                            Embedded Engineering, End to End.
                         </h2>
-                        <p className="lead" style={{ maxWidth: "540px" }}>
-                            GenAI AutoMATE and GenAI System Engg ship into engagements from day one — proven tools that compress delivery timelines, not experiments.
-                        </p>
                     </div>
 
                     <motion.div
-                        className="accelerators-grid"
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6"
                         variants={staggerContainerVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
-                        {accelerators.map((a) => (
-                            <motion.div
-                                key={a.title}
-                                className="accel-card"
-                                variants={fadeUpVariants(shouldReduce)}
-                            >
-                                <div className="accel-number">Accelerator {a.number}</div>
-                                <h3>{a.title}</h3>
-                                <p>{a.description}</p>
-                                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "24px" }}>
-                                    {a.tags.map((tag) => (
-                                        <span
-                                            key={tag}
-                                            style={{
-                                                fontFamily: "var(--font-mono)",
-                                                fontSize: "10.5px",
-                                                letterSpacing: "0.06em",
-                                                color: "var(--text-muted)",
-                                                border: "1px solid var(--border)",
-                                                borderRadius: "100px",
-                                                padding: "4px 12px",
-                                            }}
-                                        >
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </div>
+                        {embeddedCards.map((card, idx) => {
+                            let colClass = "col-span-1 md:col-span-1 lg:col-span-2";
+                            if (idx === 3) colClass = "col-span-1 md:col-span-1 lg:col-span-2 lg:col-start-2";
+                            if (idx === 4) colClass = "col-span-1 md:col-span-2 lg:col-span-2 lg:col-start-4";
+
+                            return (
+                                <motion.div key={card.title} className={colClass} variants={fadeUpVariants(shouldReduce)}>
+                                    <ServiceCard
+                                        number={card.number}
+                                        title={card.title}
+                                        description={card.description}
+                                        icon={card.icon}
+                                        iconColor={card.iconColor}
+                                        techs={card.techs}
+                                    />
+                                </motion.div>
+                            );
+                        })}
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* SECTION 2 — PRODUCT SHOWCASE */}
+            <section className="section" style={{ borderTop: "1px solid var(--border)", background: "rgba(10,15,28,0.2)" }} aria-labelledby="showcase-heading">
+                <div className="container">
+                    <div style={{ marginBottom: "40px" }}>
+                        <span className="badge" style={{ marginBottom: "16px" }}>// Real-World Applications</span>
+                        <h2 id="showcase-heading" style={{ marginTop: "12px", marginBottom: "12px" }}>
+                            Embedded Solutions in Action.
+                        </h2>
+                        <p className="lead" style={{ maxWidth: "560px" }}>
+                            Real-world automotive applications across digital dashboards, driver assistance systems, in-car displays, and speed recognition.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" style={{ marginBottom: "56px" }}>
+                        {showcaseAutomotive.map((item) => (
+                            <ShowcasePlaceholder key={item.label} label={item.label} />
+                        ))}
+                    </div>
+
+                    <div style={{ marginBottom: "32px" }}>
+                        <span className="badge rose">// Engineering Products</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {showcaseProducts.map((item) => (
+                            <ShowcasePlaceholder key={item.label} label={item.label} />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* SECTION 3 — DIGITAL SOLUTIONS */}
+            <section className="section" style={{ borderTop: "1px solid var(--border)" }} aria-labelledby="digital-solutions-heading">
+                <div className="container">
+                    <div style={{ marginBottom: "48px" }}>
+                        <span className="badge" style={{ marginBottom: "16px" }}>// Digital Solutions & Products</span>
+                        <h2 id="digital-solutions-heading" style={{ marginTop: "12px", marginBottom: "0" }}>
+                            Software Products Built for the Next Generation.
+                        </h2>
+                    </div>
+
+                    <motion.div
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                        variants={staggerContainerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                    >
+                        {digitalCards.map((card) => (
+                            <motion.div key={card.title} className="col-span-1" variants={fadeUpVariants(shouldReduce)}>
+                                {/* REPLACE: vSeva description & tech chips — content pending from CEO */}
+                                <ServiceCard
+                                    number={card.number}
+                                    title={card.title}
+                                    description={card.description}
+                                    icon={card.icon}
+                                    iconColor={card.iconColor}
+                                    image={card.image}
+                                    techs={card.techs}
+                                    contactSlug={card.slug}
+                                    isPending={card.title === "vSeva"}
+                                />
                             </motion.div>
                         ))}
                     </motion.div>
                 </div>
             </section>
 
-            {/* CTA */}
+            {/* SECTION 4 — BOTTOM CTA */}
             <section className="cta-section" aria-labelledby="services-cta-heading">
                 <div className="container">
                     <motion.div
@@ -232,13 +354,12 @@ export default function ServicesPage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
                     >
-                        <span className="badge mint" style={{ marginBottom: "24px" }}>Ready to build?</span>
-                        <h2 id="services-cta-heading">Ready to scope an engagement?</h2>
+                        <h2 id="services-cta-heading">Ready to scope an engineering engagement?</h2>
                         <p className="lead">
-                            Tell us which discipline you need first — we&apos;ll take it from there.
+                            Tell us what you're building — we'll match the right discipline and team to your program.
                         </p>
                         <div className="cta-actions">
-                            <Link href="/contact" className="btn btn-primary" id="services-cta-btn">
+                            <Link href="/contact?product=engineering-offerings" className="btn btn-primary" id="services-cta-btn">
                                 Request Capability Walkthrough
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
@@ -249,6 +370,6 @@ export default function ServicesPage() {
                 </div>
             </section>
 
-        </>
+        </div>
     );
 }
