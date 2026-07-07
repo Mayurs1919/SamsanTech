@@ -6,16 +6,16 @@ export default function Footer() {
     const year = new Date().getFullYear();
 
     const navigateLinks = [
-        { label: "Home",                     href: "/" },
-        { label: "Engineering Offerings",     href: "/services" },
-        { label: "Products & Accelerators",   href: "/solutions" },
-        { label: "Case Studies",             href: "/case-studies" },
-        { label: "Labs & Delivery",           href: "/labs-and-delivery" },
-        { label: "Engagement Models",         href: "/engagement-models" },
-        { label: "About",                    href: "/about" },
-        { label: "Investors / Partners",     href: "/investors" },
-        { label: "Careers",                  href: "/careers" },
-        { label: "Contact",                  href: "/contact" },
+        { label: "Home",                     href: "/", isVisible: true },
+        { label: "About",                    href: "/about", isVisible: true },
+        { label: "Engineering Offerings",     href: "/services", isVisible: true },
+        { label: "Products & Accelerators",   href: "/solutions", isVisible: true },
+        { label: "Case Studies",             href: "/case-studies", isVisible: false },
+        { label: "Labs & Delivery",           href: "/labs-and-delivery", isVisible: true },
+        { label: "Engagement Models",         href: "/engagement-models", isVisible: false },
+        { label: "Investors / Partners",     href: "/investors", isVisible: true },
+        { label: "Careers",                  href: "/careers", isVisible: true },
+        { label: "Contact",                  href: "/contact", isVisible: true },
     ];
 
     return (
@@ -43,7 +43,7 @@ export default function Footer() {
                     {/* Navigate column */}
                     <div className="footer-col">
                         <h5>Navigate</h5>
-                        {navigateLinks.map((item) => (
+                        {navigateLinks.filter(item => item.isVisible !== false).map((item) => (
                             <Link key={item.href} href={item.href}>{item.label}</Link>
                         ))}
                     </div>
