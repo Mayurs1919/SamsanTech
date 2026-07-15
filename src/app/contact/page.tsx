@@ -64,29 +64,29 @@ function ContactPageContent() {
 
     const validate = () => {
         const newErrors: Record<string, string> = {};
-        
+
         if (!name || name.trim().length < 2) {
             newErrors.name = "Full name must be at least 2 characters.";
         }
-        
+
         if (!email) {
             newErrors.email = "Work email is required.";
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
             newErrors.email = "Please enter a valid email address.";
         }
-        
+
         if (!company || company.trim().length === 0) {
             newErrors.company = "Company name is required.";
         }
-        
+
         if (phone && !/^\d{7,15}$/.test(phone)) {
             newErrors.phone = "Phone number must be between 7 and 15 digits.";
         }
-        
+
         if (!interest) {
             newErrors.interest = "Please select what you are interested in.";
         }
-        
+
         if (!message || message.trim().length < 10) {
             newErrors.message = "Message must be at least 10 characters.";
         }
@@ -108,21 +108,21 @@ function ContactPageContent() {
 
     return (
         <div style={{ backgroundColor: "var(--midnight)", color: "var(--text-primary)", minHeight: "100vh" }}>
-            
+
             {/* ── Hero Banner Section with Diagonal Slanted Divider ── */}
-            <section 
-                style={{ 
+            <section
+                style={{
                     position: "relative",
                     backgroundImage: "linear-gradient(rgba(10, 15, 28, 0.5), rgba(10, 15, 28, 0.7)), url('https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1600&auto=format&fit=crop')",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
-                    padding: "200px 0 160px 0",
+                    padding: "200px 0 110px 0",
                     textAlign: "center",
                     overflow: "hidden"
                 }}
             >
                 {/* Slanted overlay at bottom matching midnight background */}
-                <div 
+                <div
                     style={{
                         position: "absolute",
                         bottom: 0,
@@ -134,26 +134,26 @@ function ContactPageContent() {
                         zIndex: 10
                     }}
                 />
-                
+
                 <div className="container" style={{ position: "relative", zIndex: 5 }}>
                     <motion.div
                         variants={staggerContainerVariants}
                         initial="hidden"
                         animate="visible"
                     >
-                        <motion.span 
+                        <motion.span
                             variants={fadeUpVariants(shouldReduce)}
-                            className="badge" 
+                            className="badge"
                             style={{ marginBottom: "20px" }}
                         >
                             Get In Touch
                         </motion.span>
-                        <motion.h1 
+                        <motion.h1
                             variants={fadeUpVariants(shouldReduce)}
-                            style={{ 
-                                fontFamily: "var(--font-display)", 
-                                fontStyle: "italic", 
-                                fontSize: "clamp(2.8rem, 6.5vw, 4.5rem)", 
+                            style={{
+                                fontFamily: "var(--font-display)",
+                                fontStyle: "italic",
+                                fontSize: "clamp(2.8rem, 6.5vw, 4.5rem)",
                                 color: "var(--text-primary)",
                                 margin: 0,
                                 textShadow: "0 4px 12px rgba(0,0,0,0.4)"
@@ -186,7 +186,7 @@ function ContactPageContent() {
                         gap: "40px",
                         alignItems: "stretch"
                     }}>
-                        
+
                         {/* Left Section: Map */}
                         <motion.div
                             initial={{ opacity: 0, y: 30 }}
@@ -202,13 +202,13 @@ function ContactPageContent() {
                                 display: "flex"
                             }}
                         >
-                            <iframe 
+                            <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.3813958936647!2d73.7296894!3d18.5917904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bbc121555555%3A0xbc4db79d20c5c50b!2sSoftware+Technology+Parks+of+India!5e0!3m2!1sen!2sin!4v1718700000000!5m2!1sen!2sin"
-                                width="100%" 
-                                height="100%" 
+                                width="100%"
+                                height="100%"
                                 style={{ border: 0, minHeight: "480px", filter: "invert(90%) hue-rotate(180deg) opacity(0.85)" }}
-                                allowFullScreen={true} 
-                                loading="lazy" 
+                                allowFullScreen={true}
+                                loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"
                             />
                         </motion.div>
@@ -236,7 +236,7 @@ function ContactPageContent() {
                                 <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "var(--text-primary)", margin: 0, fontFamily: "var(--font-display)" }}>
                                     Meet Us
                                 </h2>
-                                
+
                                 <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                                     {/* Phone */}
                                     <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
@@ -248,7 +248,7 @@ function ContactPageContent() {
                                             boxShadow: "0 0 15px var(--violet-soft)"
                                         }}>
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                                             </svg>
                                         </div>
                                         <div>
@@ -269,8 +269,8 @@ function ContactPageContent() {
                                             boxShadow: "0 0 15px var(--violet-soft)"
                                         }}>
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                                <polyline points="22,6 12,13 2,6"/>
+                                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                                <polyline points="22,6 12,13 2,6" />
                                             </svg>
                                         </div>
                                         <div>
@@ -291,8 +291,8 @@ function ContactPageContent() {
                                             boxShadow: "0 0 15px var(--violet-soft)"
                                         }}>
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                                <circle cx="12" cy="10" r="3"/>
+                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                                <circle cx="12" cy="10" r="3" />
                                             </svg>
                                         </div>
                                         <div>
@@ -312,7 +312,7 @@ function ContactPageContent() {
                                 </h2>
 
                                 {currentState === "submitted" ? (
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         style={{ width: "100%" }}
@@ -320,9 +320,9 @@ function ContactPageContent() {
                                         {!isValidProduct ? (
                                             /* VARIANT A — No product parameter */
                                             <div style={{
-                                                textAlign: "center", 
-                                                padding: "24px", 
-                                                backgroundColor: "rgba(10, 15, 28, 0.6)", 
+                                                textAlign: "center",
+                                                padding: "24px",
+                                                backgroundColor: "rgba(10, 15, 28, 0.6)",
                                                 borderRadius: "var(--radius)",
                                                 border: "1px solid rgba(16, 185, 129, 0.2)",
                                                 boxShadow: "0 10px 25px rgba(16, 185, 129, 0.1)"
@@ -338,7 +338,7 @@ function ContactPageContent() {
                                                     color: "var(--mint)",
                                                 }}>
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                                        <polyline points="20 6 9 17 4 12"/>
+                                                        <polyline points="20 6 9 17 4 12" />
                                                     </svg>
                                                 </div>
                                                 <h4 style={{ color: "var(--text-primary)", margin: "0 0 12px 0", fontSize: "1.2rem", fontWeight: 700 }}>
@@ -363,8 +363,8 @@ function ContactPageContent() {
                                         ) : (
                                             /* VARIANT B — Product parameter present (Brochure Flow) */
                                             <div style={{
-                                                padding: "24px", 
-                                                backgroundColor: "rgba(10, 15, 28, 0.6)", 
+                                                padding: "24px",
+                                                backgroundColor: "rgba(10, 15, 28, 0.6)",
                                                 borderRadius: "var(--radius)",
                                                 border: "1px solid rgba(16, 185, 129, 0.2)",
                                                 boxShadow: "0 10px 25px rgba(16, 185, 129, 0.1)"
@@ -380,7 +380,7 @@ function ContactPageContent() {
                                                     color: "var(--mint)",
                                                 }}>
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                                        <polyline points="20 6 9 17 4 12"/>
+                                                        <polyline points="20 6 9 17 4 12" />
                                                     </svg>
                                                 </div>
                                                 <h4 style={{ color: "var(--text-primary)", margin: "0 0 8px 0", fontSize: "1.2rem", fontWeight: 700, textAlign: "center" }}>
@@ -417,10 +417,10 @@ function ContactPageContent() {
                                                             flexShrink: 0
                                                         }}>
                                                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                                                <polyline points="14 2 14 8 20 8"/>
-                                                                <line x1="16" y1="13" x2="8" y2="13"/>
-                                                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                                                <polyline points="14 2 14 8 20 8" />
+                                                                <line x1="16" y1="13" x2="8" y2="13" />
+                                                                <line x1="16" y1="17" x2="8" y2="17" />
                                                             </svg>
                                                         </div>
                                                         <div>
@@ -435,13 +435,13 @@ function ContactPageContent() {
 
                                                     {/* Side-by-side Buttons */}
                                                     <div style={{ display: "flex", gap: "12px", width: "100%" }}>
-                                                        <a 
+                                                        <a
                                                             href={`/brochures/${productSlug}.pdf`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="btn btn-outline"
-                                                            style={{ 
-                                                                padding: "10px 14px", 
+                                                            style={{
+                                                                padding: "10px 14px",
                                                                 fontSize: "0.8rem",
                                                                 flex: 1,
                                                                 justifyContent: "center"
@@ -449,12 +449,12 @@ function ContactPageContent() {
                                                         >
                                                             View
                                                         </a>
-                                                        <a 
+                                                        <a
                                                             href={`/brochures/${productSlug}.pdf`}
                                                             download={`SAMSAN-${productDisplayName}-Brochure.pdf`}
                                                             className="btn btn-primary"
-                                                            style={{ 
-                                                                padding: "10px 14px", 
+                                                            style={{
+                                                                padding: "10px 14px",
                                                                 fontSize: "0.8rem",
                                                                 background: "linear-gradient(135deg, #f59e0b, #ea580c)",
                                                                 boxShadow: "0 4px 14px rgba(234, 88, 12, 0.4), 0 0 0 1px rgba(245, 158, 11, 0.5)",
@@ -473,12 +473,12 @@ function ContactPageContent() {
                                                 </p>
 
                                                 <div style={{ marginTop: "24px", textAlign: "center" }}>
-                                                    <Link 
-                                                        href="/solutions" 
-                                                        style={{ 
-                                                            fontSize: "0.8rem", 
-                                                            color: "var(--violet-mid)", 
-                                                            textDecoration: "none", 
+                                                    <Link
+                                                        href="/solutions"
+                                                        style={{
+                                                            fontSize: "0.8rem",
+                                                            color: "var(--violet-mid)",
+                                                            textDecoration: "none",
                                                             fontWeight: 600,
                                                             display: "inline-flex",
                                                             alignItems: "center",
@@ -506,10 +506,10 @@ function ContactPageContent() {
                                                 marginBottom: "4px"
                                             }}>
                                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, color: "var(--violet-mid)" }}>
-                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                                    <polyline points="14 2 14 8 20 8"/>
-                                                    <line x1="16" y1="13" x2="8" y2="13"/>
-                                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                                    <polyline points="14 2 14 8 20 8" />
+                                                    <line x1="16" y1="13" x2="8" y2="13" />
+                                                    <line x1="16" y1="17" x2="8" y2="17" />
                                                 </svg>
                                                 <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)", margin: 0, lineHeight: "1.4" }}>
                                                     You&apos;re one step away from accessing the <strong style={{ color: "var(--text-primary)" }}>{productDisplayName}</strong> brochure. Fill out the form below to unlock it.
@@ -523,10 +523,10 @@ function ContactPageContent() {
 
                                             {/* Name */}
                                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                                                <input 
-                                                    type="text" 
-                                                    name="name" 
-                                                    placeholder="Full Name" 
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    placeholder="Full Name"
                                                     value={name}
                                                     onChange={(e) => {
                                                         setName(e.target.value);
@@ -555,10 +555,10 @@ function ContactPageContent() {
 
                                             {/* Email */}
                                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                                                <input 
-                                                    type="email" 
-                                                    name="email" 
-                                                    placeholder="Work Email" 
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    placeholder="Work Email"
                                                     value={email}
                                                     onChange={(e) => {
                                                         setEmail(e.target.value);
@@ -587,10 +587,10 @@ function ContactPageContent() {
 
                                             {/* Company */}
                                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                                                <input 
-                                                    type="text" 
-                                                    name="company" 
-                                                    placeholder="Company" 
+                                                <input
+                                                    type="text"
+                                                    name="company"
+                                                    placeholder="Company"
                                                     value={company}
                                                     onChange={(e) => {
                                                         setCompany(e.target.value);
@@ -619,10 +619,10 @@ function ContactPageContent() {
 
                                             {/* Phone Number */}
                                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                                                <input 
-                                                    type="tel" 
-                                                    name="phone" 
-                                                    placeholder="Phone Number (Optional)" 
+                                                <input
+                                                    type="tel"
+                                                    name="phone"
+                                                    placeholder="Phone Number (Optional)"
                                                     value={phone}
                                                     onChange={(e) => {
                                                         setPhone(e.target.value);
@@ -651,7 +651,7 @@ function ContactPageContent() {
 
                                             {/* Interest Dropdown */}
                                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                                                <select 
+                                                <select
                                                     name="interest"
                                                     value={interest}
                                                     onChange={(e) => {
@@ -692,9 +692,9 @@ function ContactPageContent() {
 
                                             {/* Message */}
                                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                                                <textarea 
-                                                    name="message" 
-                                                    placeholder="What are you building? (minimum 10 characters)" 
+                                                <textarea
+                                                    name="message"
+                                                    placeholder="What are you building? (minimum 10 characters)"
                                                     rows={4}
                                                     value={message}
                                                     onChange={(e) => {

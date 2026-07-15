@@ -1,9 +1,290 @@
 "use client";
 
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
 import Link from "next/link";
 import ServiceCard, { Logos, WifiIcon, BluetoothIcon, MqttIcon, type TechChip } from "@/components/ui/ServiceCard";
+
+function getCardColor(title: string) {
+    if (title.startsWith("Digital Cockpit")) return "#4DD8E8";
+    if (title.startsWith("TwinLnk")) return "#FF8A3D";
+    if (title.startsWith("TCU")) return "#8B5CF6";
+    if (title.startsWith("DMS Edge")) return "#22C55E";
+    if (title.startsWith("Maestro")) return "#4DD8E8";
+    if (title.startsWith("AutoMATE")) return "#FF8A3D";
+    if (title.startsWith("CabinIQ")) return "#8B5CF6";
+    if (title.startsWith("Vemeego")) return "#22C55E";
+    if (title.startsWith("PiknikNow")) return "#FFC83D";
+    return "#4DD8E8";
+}
+
+function getRgbString(color: string) {
+    if (color === "#4DD8E8") return "77, 216, 232";
+    if (color === "#FF8A3D") return "255, 138, 61";
+    if (color === "#8B5CF6") return "139, 92, 246";
+    if (color === "#22C55E") return "34, 197, 94";
+    if (color === "#FFC83D") return "255, 200, 61";
+    return "77, 216, 232";
+}
+
+function TechChipItem({ chip }: { chip: TechChip }) {
+    const [imgError, setImgError] = useState(false);
+
+    return (
+        <span style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            background: "rgba(255, 255, 255, 0.04)",
+            border: "1px solid var(--border)",
+            borderRadius: "20px",
+            padding: "5px 11px",
+            fontSize: "12px",
+            color: "var(--text-secondary)",
+            fontFamily: "var(--font-body)",
+            whiteSpace: "nowrap"
+        }}>
+            {chip.logoUrl && !imgError && (
+                <img
+                    src={chip.logoUrl}
+                    alt={chip.label}
+                    height={16}
+                    style={{ width: "auto", height: "16px", display: "block", flexShrink: 0 }}
+                    onError={() => setImgError(true)}
+                />
+            )}
+            {chip.icon && (
+                <span style={{ color: "var(--text-secondary)", display: "flex", alignItems: "center", flexShrink: 0 }}>
+                    {chip.icon}
+                </span>
+            )}
+            <span style={{ color: "var(--text-secondary)" }}>{chip.label}</span>
+        </span>
+    );
+}
+
+const productImages: Record<string, string> = {
+    "vemeego": "/images/vemeego.png",
+    "pikniknow": "/images/pikniknow.jpg",
+    "twinlnk": "/images/twinlink.png",
+    "maestro": "/images/maestro.png",
+    "automate-ai": "/images/automate.png"
+};
+
+function ProductFlipCard({
+    prod,
+    idx,
+    shouldReduce
+}: {
+    prod: any;
+    idx: number;
+    shouldReduce: boolean;
+}) {
+    const [flipped, setFlipped] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const sceneRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (shouldReduce) {
+            setIsVisible(true);
+            return;
+        }
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.1 }
+        );
+        if (sceneRef.current) {
+            observer.observe(sceneRef.current);
+        }
+        return () => observer.disconnect();
+    }, [shouldReduce]);
+
+    const iconColor = getCardColor(prod.title);
+    const rgbStr = getRgbString(iconColor);
+
+    const clonedIcon = React.cloneElement(prod.icon, {
+        width: 44,
+        height: 44,
+        stroke: iconColor,
+        strokeWidth: 1.5,
+        fill: "none"
+    });
+
+    const brochurePath = (prod as { brochurePath?: string }).brochurePath;
+    const productImg = productImages[prod.id];
+
+    return (
+        <div
+            ref={sceneRef}
+            className={`scene ${isVisible ? "visible" : ""}`}
+            onClick={() => setFlipped(!flipped)}
+            style={{
+                transitionDelay: shouldReduce ? "0s" : `${idx * 0.1}s`
+            }}
+        >
+            <div className={`card ${flipped ? "flipped" : ""}`}>
+                {/* FRONT FACE */}
+                <div
+                    className="card-front"
+                    style={{
+                        background: "rgba(13, 19, 35, 0.55)",
+                        border: "1px solid var(--border)",
+                        borderRadius: "16px",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "28px 24px",
+                        position: "absolute",
+                        inset: 0,
+                        backdropFilter: "blur(12px)",
+                        overflow: "hidden"
+                    }}
+                >
+                    {/* IMAGE or ICON */}
+                    {productImg ? (
+                        <div style={{ width: "100%", flex: "1 1 auto", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 0, padding: "10px" }}>
+                            <img
+                                src={productImg}
+                                alt={prod.title}
+                                style={{
+                                    maxWidth: "95%",
+                                    maxHeight: "200px",
+                                    width: "auto",
+                                    height: "auto",
+                                    objectFit: "contain",
+                                    display: "block",
+                                    filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.35))"
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        <div style={{ width: "96px", height: "96px", borderRadius: "24px", display: "flex", alignItems: "center", justifyContent: "center", background: `rgba(${rgbStr}, 0.12)`, border: `1px solid rgba(${rgbStr}, 0.3)`, flexShrink: 0, marginBottom: "16px" }}>
+                            {clonedIcon}
+                        </div>
+                    )}
+
+                    {/* Divider */}
+                    <div style={{ width: "75%", height: "1px", background: `linear-gradient(90deg, transparent, rgba(${rgbStr}, 0.45), transparent)`, margin: "12px 0 16px", flexShrink: 0 }} />
+
+                    {/* Product name — ALL CAPS */}
+                    <h3 style={{ fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.15em", textTransform: "uppercase", textAlign: "center", lineHeight: 1.4, fontFamily: "'Inter', system-ui, sans-serif", margin: 0, flexShrink: 0, background: `linear-gradient(135deg, #ffffff 60%, rgba(${rgbStr}, 0.95))`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                        {prod.title}
+                    </h3>
+                </div>
+
+                <div
+                    className="card-back"
+                    style={{
+                        background: `linear-gradient(145deg, rgba(${rgbStr}, 0.08) 0%, rgba(13, 19, 35, 0.55) 40%)`,
+                        border: `1px solid rgba(${rgbStr}, 0.35)`,
+                        borderRadius: "16px",
+                        display: "flex",
+                        flexDirection: "column",
+                        padding: "22px 20px",
+                        gap: "10px",
+                        backdropFilter: "blur(12px)",
+                        overflowY: "hidden"
+                    }}
+                >
+                    {/* A) DESCRIPTION */}
+                    <p
+                        style={{
+                            fontSize: "0.82rem",
+                            lineHeight: 1.55,
+                            color: "var(--text-secondary)",
+                            margin: 0,
+                            flexShrink: 1,
+                            overflow: "hidden",
+                            display: "-webkit-box",
+                            WebkitLineClamp: 5,
+                            WebkitBoxOrient: "vertical"
+                        }}
+                    >
+                        {prod.description}
+                    </p>
+
+                    {/* B) TECHNOLOGIES */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "5px", flexShrink: 0 }}>
+                        <span
+                            style={{
+                                fontFamily: "var(--font-mono)",
+                                fontSize: "9px",
+                                letterSpacing: "0.1em",
+                                textTransform: "uppercase",
+                                color: "var(--text-muted)",
+                                display: "block"
+                            }}
+                        >
+                            Technologies
+                        </span>
+
+                        <div
+                            style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: "5px"
+                            }}
+                        >
+                            {prod.techs.map((chip: any, i: number) => (
+                                <TechChipItem key={i} chip={chip} />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* C) BUTTONS */}
+                    <div
+                        style={{
+                            marginTop: "auto",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "8px",
+                            width: "100%",
+                            flexShrink: 0,
+                            paddingTop: "4px"
+                        }}
+                    >
+                        <Link
+                            href={`/contact?product=${prod.id}`}
+                            className="btn btn-primary"
+                            style={{ width: "100%", justifyContent: "center", padding: "10px 16px", fontSize: "0.88rem" }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
+                        >
+                            Contact For More
+                        </Link>
+                        {brochurePath && (
+                            <a
+                                href={brochurePath}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-outline"
+                                style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center", gap: "8px", padding: "9px 16px", fontSize: "0.88rem" }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                Download Brochure
+                            </a>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 // ── Product card definitions ─────────────────────────────────────
 const products = [
@@ -35,6 +316,7 @@ const products = [
         iconColor: "#F59E0B",
         title: "TwinLnk™",
         description: "An intelligent telematics and IoT gateway platform enabling secure, seamless data flow between edge devices and cloud applications — built for automotive, industrial, and infrastructure environments.",
+        brochurePath: "/brochures/TwinLnk%20-%20Product%20Brochure.pdf",
         icon: (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M20 12l-8-8-8 8" />
@@ -95,6 +377,7 @@ const products = [
         iconColor: "#8B5CF6",
         title: "Maestro™",
         description: "Unifies devices from different vendors — vehicle cameras, building management systems, and industrial sensors — into a single operational dashboard, managed end-to-end by SAMSAN.",
+        brochurePath: "/brochures/Maestro%20Standee%20TRL-7%204.png",
         icon: (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -154,6 +437,7 @@ const products = [
         iconColor: "#8B5CF6",
         title: "Vemeego",
         description: "An intelligent workspace and video conferencing platform built for enhanced remote and corporate collaboration — going beyond basic video calling to deliver a rich, structured digital workspace.",
+        brochurePath: "/brochures/VeMee%20Flayer.png",
         icon: (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -174,6 +458,7 @@ const products = [
         iconColor: "#10B981",
         title: "PiknikNow",
         description: "Discover unique picnic spots nearby, share travel stories with fellow explorers, and plan adventures to hidden destinations.",
+        brochurePath: "/brochures/PIKNIKNOW_BROUCHER.pdf",
         icon: (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -260,32 +545,17 @@ export default function SolutionsPage() {
                         </p>
                     </div>
 
-                    <motion.div
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"
-                        variants={staggerContainerVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                    >
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
                         {products.map((prod, idx) => (
-                            <motion.div
-                                key={prod.id}
-                                className="col-span-1"
-                                variants={fadeUpVariants(shouldReduce)}
-                                transition={{ delay: (idx % 3) * 0.07 }}
-                            >
-                                <ServiceCard
-                                    number={prod.number}
-                                    title={prod.title}
-                                    description={prod.description}
-                                    icon={prod.icon}
-                                    iconColor={prod.iconColor}
-                                    techs={prod.techs}
-                                    contactSlug={prod.id}
+                            <div key={prod.id} className="col-span-1">
+                                <ProductFlipCard
+                                    prod={prod}
+                                    idx={idx}
+                                    shouldReduce={!!shouldReduce}
                                 />
-                            </motion.div>
+                            </div>
                         ))}
-                    </motion.div>
+                    </div>
                 </div>
             </section>
 

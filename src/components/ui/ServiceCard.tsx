@@ -30,6 +30,8 @@ export interface ServiceCardProps {
     techs: TechChip[];
     /** If present, renders a "Contact For More" CTA button */
     contactSlug?: string;
+    /** If present, renders a "Download Brochure" button linking to the file */
+    brochurePath?: string;
     /** If true, description is shown in italic (pending content) */
     isPending?: boolean;
 }
@@ -60,29 +62,6 @@ const MqttIcon = () => (
     </svg>
 );
 
-// ── Amber micro-badge for proprietary / niche tech ───────────────
-function TextBadge({ label }: { label: string }) {
-    return (
-        <span style={{
-            background: "rgba(251, 146, 60, 0.9)",
-            color: "#051014",
-            fontSize: "9px",
-            fontWeight: 700,
-            padding: "2px 5px",
-            borderRadius: "3px",
-            letterSpacing: "0.04em",
-            textTransform: "uppercase",
-            fontFamily: "var(--font-mono)",
-            flexShrink: 0,
-            lineHeight: 1,
-            display: "inline-flex",
-            alignItems: "center"
-        }}>
-            {label}
-        </span>
-    );
-}
-
 // ── Single tech chip ─────────────────────────────────────────────
 function TechChipItem({ chip }: { chip: TechChip }) {
     const [imgError, setImgError] = useState(false);
@@ -97,7 +76,7 @@ function TechChipItem({ chip }: { chip: TechChip }) {
             borderRadius: "20px",
             padding: "5px 11px",
             fontSize: "12px",
-            color: "var(--text-primary)",
+            color: "var(--text-secondary)",
             fontFamily: "var(--font-body)",
             whiteSpace: "nowrap"
         }}>
@@ -117,12 +96,7 @@ function TechChipItem({ chip }: { chip: TechChip }) {
                     {chip.icon}
                 </span>
             )}
-            {/* Amber text badge for proprietary tech */}
-            {chip.isBadge && <TextBadge label={chip.label} />}
-            {/* Chip label — hidden if isBadge since badge already contains the text */}
-            {!chip.isBadge && (
-                <span style={{ color: "var(--text-primary)" }}>{chip.label}</span>
-            )}
+            <span style={{ color: "var(--text-secondary)" }}>{chip.label}</span>
         </span>
     );
 }
@@ -137,6 +111,7 @@ export default function ServiceCard({
     image,
     techs,
     contactSlug,
+    brochurePath,
     isPending = false,
 }: ServiceCardProps) {
     const [hovered, setHovered] = useState(false);
@@ -147,7 +122,7 @@ export default function ServiceCard({
             onMouseLeave={() => setHovered(false)}
             style={{
                 background: "rgba(13, 19, 35, 0.55)",
-                border: `1px solid ${hovered ? `${iconColor}55` : "var(--border)"}`,
+                border: `1px solid ${hovered ? "var(--border-hov)" : "var(--border)"}`,
                 borderRadius: "12px",
                 padding: "28px",
                 display: "flex",
@@ -155,10 +130,10 @@ export default function ServiceCard({
                 gap: "20px",
                 height: "100%",
                 backdropFilter: "blur(12px)",
-                transform: hovered ? "translateY(-3px)" : "translateY(0)",
-                transition: "border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease",
+                transform: hovered ? "translateY(-4px)" : "translateY(0)",
+                transition: "all 0.2s ease",
                 boxShadow: hovered
-                    ? `0 16px 40px rgba(0,0,0,0.3), 0 0 0 1px ${iconColor}22`
+                    ? "0 8px 24px rgba(0,0,0,0.3)"
                     : "0 4px 16px rgba(0,0,0,0.15)",
                 justifyContent: "space-between"
             }}
@@ -183,8 +158,10 @@ export default function ServiceCard({
                     </div>
                     <span style={{
                         fontFamily: "var(--font-mono)",
-                        fontSize: "13px",
-                        color: "var(--text-muted)",
+                        fontSize: "12px",
+                        color: "var(--text-secondary)",
+                        letterSpacing: "0.1em",
+                        opacity: 0.45,
                         fontWeight: 400
                     }}>
                         {number}
@@ -196,7 +173,9 @@ export default function ServiceCard({
                     fontSize: "1.15rem",
                     fontWeight: 700,
                     color: "#ffffff",
-                    margin: 0,
+                    letterSpacing: "0.01em",
+                    marginTop: "14px",
+                    marginBottom: "10px",
                     lineHeight: 1.35,
                     fontFamily: "var(--font-display)"
                 }}>
@@ -205,9 +184,9 @@ export default function ServiceCard({
 
                 {/* ROW 3 — Description */}
                 <p style={{
-                    fontSize: "0.875rem",
+                    fontSize: "0.92rem",
                     color: isPending ? "var(--text-muted)" : "var(--text-secondary)",
-                    lineHeight: 1.7,
+                    lineHeight: 1.65,
                     margin: 0,
                     fontStyle: isPending ? "italic" : "normal"
                 }}>
@@ -245,23 +224,30 @@ export default function ServiceCard({
                 )}
 
                 {/* DIVIDER */}
-                <div style={{ borderTop: "1px solid var(--border)", margin: "0" }} />
+                <div style={{ borderTop: "1px solid var(--border)", marginTop: "18px", marginBottom: "14px" }} />
 
                 {/* ROW 4 — Technologies label */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     <span style={{
                         fontFamily: "var(--font-mono)",
-                        fontSize: "11px",
-                        letterSpacing: "0.08em",
+                        fontSize: "10.5px",
+                        letterSpacing: "0.1em",
                         textTransform: "uppercase",
                         color: "var(--text-muted)",
-                        display: "block"
+                        display: "block",
+                        marginBottom: "12px"
                     }}>
                         Technologies
                     </span>
 
                     {/* ROW 5 — Tech chips */}
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                    <div style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: "8px",
+                        filter: hovered ? "brightness(1.15)" : "none",
+                        transition: "filter 0.2s ease"
+                    }}>
                         {techs.map((chip, i) => (
                             <TechChipItem key={i} chip={chip} />
                         ))}
@@ -269,16 +255,34 @@ export default function ServiceCard({
                 </div>
             </div>
 
-            {/* CTA Button — only if contactSlug provided */}
-            {contactSlug && (
-                <div style={{ marginTop: "8px" }}>
-                    <Link
-                        href={`/contact?product=${contactSlug}`}
-                        className="btn btn-outline"
-                        style={{ width: "100%", justifyContent: "center" }}
-                    >
-                        Contact For More
-                    </Link>
+            {/* CTA Buttons — contact + brochure download */}
+            {(contactSlug || brochurePath) && (
+                <div style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "10px" }}>
+                    {contactSlug && (
+                        <Link
+                            href={`/contact?product=${contactSlug}`}
+                            className="btn btn-primary"
+                            style={{ width: "100%", justifyContent: "center" }}
+                        >
+                            Contact For More
+                        </Link>
+                    )}
+                    {brochurePath && (
+                        <a
+                            href={brochurePath}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-outline"
+                            style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center", gap: "8px" }}
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Download Brochure
+                        </a>
+                    )}
                 </div>
             )}
         </div>

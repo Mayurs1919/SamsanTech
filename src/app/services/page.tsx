@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
 import ServiceCard, { Logos, WifiIcon, BluetoothIcon, MqttIcon, type TechChip } from "@/components/ui/ServiceCard";
 
 // ── Embedded service card data ───────────────────────────────────
@@ -112,19 +112,19 @@ const embeddedCards = [
     }
 ];
 
-// ── Showcase placeholder data ────────────────────────────────────
+// ── Showcase image data ──────────────────────────────────────────
 const showcaseAutomotive = [
-    { label: "Digital Dashboard Systems" },
-    { label: "Driver Assistance Displays" },
-    { label: "In-Car Display Integration" },
-    { label: "Speed Recognition Systems" }
+    { label: "Digital Dashboard Systems", url: "/images/digital-dashboard-systems.jpg" },
+    { label: "Driver Assistance Displays", url: "/images/driver-assistance-displays.jpg" },
+    { label: "In-Car Display Integration", url: "/images/in-car-display-integration.jpg" },
+    { label: "Speed Recognition Systems", url: "/images/speed-recognition-systems.jpg" }
 ];
 
 const showcaseProducts = [
-    { label: "Handheld Scanning Devices" },
-    { label: "Robotic & Optical Instruments" },
-    { label: "Home Media Systems" },
-    { label: "PCB & SBC Boards" }
+    { label: "Handheld Scanning Devices", url: "/images/handheld-scanning-devices.jpg" },
+    { label: "Robotic & Optical Instruments", url: "/images/robotic-optical-instruments.jpg" },
+    { label: "Home Media Systems", url: "/images/home-media-systems.jpg" },
+    { label: "PCB & SBC Boards", url: "/images/pcb-sbc-boards.jpg" }
 ];
 
 // ── Digital product card data ────────────────────────────────────
@@ -134,7 +134,7 @@ const digitalCards = [
         title: "Vemeego",
         iconColor: "#8B5CF6",
         image: "/images/vemeego.png",
-        description: "An intelligent workspace and video conferencing platform built for enhanced remote and corporate collaboration. Developed under the Make in India initiative by SAMSAN Technische Labs.",
+        description: "An intelligent workspace and video conferencing platform built for remote and corporate collaboration. Developed under the Make in India initiative by SAMSAN Technische Labs.",
         techs: [
             { label: "React", logoUrl: Logos.react },
             { label: "Node.js", logoUrl: Logos.nodejs },
@@ -185,52 +185,141 @@ const digitalCards = [
     }
 ];
 
-// ── Showcase placeholder component ──────────────────────────────
-function ShowcasePlaceholder({ label }: { label: string }) {
+// ── Showcase Image Card Component ────────────────────────────────
+function ShowcaseImageCard({ label, imageUrl }: { label: string; imageUrl: string }) {
+    const [hovered, setHovered] = useState(false);
+
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        <div
+            style={{ display: "flex", flexDirection: "column" }}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+        >
             <div style={{
                 position: "relative",
                 aspectRatio: "16/9",
-                background: "rgba(255, 255, 255, 0.03)",
-                border: "1px dashed var(--border)",
                 borderRadius: "8px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden"
+                overflow: "hidden",
+                border: "1px solid var(--border)"
             }}>
-                {/* REPLACE: real product image — {label} */}
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--text-muted)" }}>
-                    Image Placeholder
-                </span>
+                <img
+                    src={imageUrl}
+                    alt={label}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        objectPosition: "center",
+                        display: "block",
+                        transform: hovered ? "scale(1.04)" : "scale(1)",
+                        transition: "transform 0.35s ease",
+                        borderRadius: "inherit"
+                    }}
+                />
+                <div style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "linear-gradient(to bottom, transparent 50%, rgba(10, 13, 17, 0.7) 100%)",
+                    pointerEvents: "none"
+                }} />
             </div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.72rem", color: "var(--text-secondary)", letterSpacing: "0.02em" }}>
+            <div style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "12px",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "var(--text-secondary)",
+                marginTop: "10px"
+            }}>
                 {label}
             </div>
         </div>
     );
 }
 
+// ── Animation Variants ───────────────────────────────────────────
+const cardAnimationVariants = (shouldReduce: boolean) => ({
+    hidden: {
+        opacity: 0,
+        y: shouldReduce ? 0 : 24
+    },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: shouldReduce
+            ? { duration: 0 }
+            : { duration: 0.5, ease: "easeOut" as const }
+    }
+});
+
+const containerAnimationVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1
+        }
+    }
+};
+
+const labelAnimationVariants = (shouldReduce: boolean) => ({
+    hidden: {
+        opacity: 0,
+        y: shouldReduce ? 0 : 24
+    },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: shouldReduce
+            ? { duration: 0 }
+            : { duration: 0.4, ease: "easeOut" as const }
+    }
+});
+
 // ── Page component ───────────────────────────────────────────────
 export default function ServicesPage() {
-    const shouldReduce = useReducedMotion();
+    const shouldReduce = useReducedMotion() ?? false;
 
     return (
         <div style={{ paddingBottom: "100px" }}>
 
             {/* SECTION 0 — PAGE HEADER */}
-            <section className="page-hero" aria-labelledby="services-page-heading">
+            <section className="page-hero" aria-labelledby="services-page-heading" style={{ padding: "80px 0" }}>
                 <div className="hero-glow" style={{ opacity: 0.15 }} />
                 <div className="container">
-                    <motion.div variants={staggerContainerVariants} initial="hidden" animate="visible">
-                        <motion.div variants={fadeUpVariants(shouldReduce)}>
-                            <span className="badge" style={{ marginBottom: "24px" }}>// Engineering Offerings</span>
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        variants={{
+                            hidden: { opacity: 0 },
+                            visible: { opacity: 1 }
+                        }}
+                    >
+                        <motion.div
+                            initial={shouldReduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
+                            animate={shouldReduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                            transition={shouldReduce ? { duration: 0 } : { duration: 0.6, ease: "easeOut" }}
+                        >
+                            <span className="badge" style={{ marginBottom: "24px", letterSpacing: "0.12em", fontFamily: "var(--font-mono)" }}>
+                                // Engineering Offerings
+                            </span>
                         </motion.div>
-                        <motion.h1 id="services-page-heading" variants={fadeUpVariants(shouldReduce)} style={{ marginBottom: "20px" }}>
+                        <motion.h1
+                            id="services-page-heading"
+                            style={{ marginBottom: "20px", fontWeight: 700, lineHeight: 1.08 }}
+                            initial={shouldReduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
+                            animate={shouldReduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                            transition={shouldReduce ? { duration: 0 } : { duration: 0.6, ease: "easeOut", delay: 0.1 }}
+                        >
                             Excellence in Product Design Engineering for High-Tech Industries
                         </motion.h1>
-                        <motion.p className="lead" variants={fadeUpVariants(shouldReduce)} style={{ maxWidth: "580px" }}>
+                        <motion.p
+                            className="lead"
+                            style={{ maxWidth: "640px", fontSize: "1.1rem", lineHeight: "1.7", color: "var(--text-secondary)" }}
+                            initial={shouldReduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
+                            animate={shouldReduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                            transition={shouldReduce ? { duration: 0 } : { duration: 0.6, ease: "easeOut", delay: 0.35 }}
+                        >
                             Two core practice areas — Automotive Embedded Engineering and Digital Solutions — delivered by 50+ domain-aligned engineers across global OEM and Tier-1 engagements.
                         </motion.p>
                     </motion.div>
@@ -238,18 +327,27 @@ export default function ServicesPage() {
             </section>
 
             {/* SECTION 1 — AUTOMOTIVE EMBEDDED SOLUTIONS */}
-            <section className="section" style={{ borderTop: "1px solid var(--border)" }} aria-labelledby="embedded-solutions-heading">
+            <section className="section" style={{ borderTop: "1px solid var(--border)", padding: "80px 0" }} aria-labelledby="embedded-solutions-heading">
                 <div className="container">
                     <div style={{ marginBottom: "48px" }}>
-                        <span className="badge" style={{ marginBottom: "16px" }}>// Automotive Embedded Solutions & Products</span>
-                        <h2 id="embedded-solutions-heading" style={{ marginTop: "12px", marginBottom: "0" }}>
+                        <motion.span
+                            className="badge"
+                            variants={labelAnimationVariants(shouldReduce)}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            style={{ marginBottom: "8px", display: "inline-block" }}
+                        >
+                            // Automotive Embedded Solutions & Products
+                        </motion.span>
+                        <h2 id="embedded-solutions-heading" style={{ marginTop: "0", marginBottom: "16px", fontWeight: 700, letterSpacing: "0.01em" }}>
                             Embedded Engineering, End to End.
                         </h2>
                     </div>
 
                     <motion.div
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6"
-                        variants={staggerContainerVariants}
+                        variants={containerAnimationVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
@@ -260,7 +358,7 @@ export default function ServicesPage() {
                             if (idx === 4) colClass = "col-span-1 md:col-span-2 lg:col-span-2 lg:col-start-4";
 
                             return (
-                                <motion.div key={card.title} className={colClass} variants={fadeUpVariants(shouldReduce)}>
+                                <motion.div key={card.title} className={colClass} variants={cardAnimationVariants(shouldReduce)}>
                                     <ServiceCard
                                         number={card.number}
                                         title={card.title}
@@ -277,56 +375,97 @@ export default function ServicesPage() {
             </section>
 
             {/* SECTION 2 — PRODUCT SHOWCASE */}
-            <section className="section" style={{ borderTop: "1px solid var(--border)", background: "rgba(10,15,28,0.2)" }} aria-labelledby="showcase-heading">
+            <section className="section" style={{ borderTop: "1px solid var(--border)", background: "rgba(10,15,28,0.2)", padding: "80px 0" }} aria-labelledby="showcase-heading">
                 <div className="container">
                     <div style={{ marginBottom: "40px" }}>
-                        <span className="badge" style={{ marginBottom: "16px" }}>// Real-World Applications</span>
-                        <h2 id="showcase-heading" style={{ marginTop: "12px", marginBottom: "12px" }}>
+                        <motion.span
+                            className="badge"
+                            variants={labelAnimationVariants(shouldReduce)}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            style={{ marginBottom: "8px", display: "inline-block" }}
+                        >
+                            // Real-World Applications
+                        </motion.span>
+                        <h2 id="showcase-heading" style={{ marginTop: "0", marginBottom: "16px", fontWeight: 700, letterSpacing: "0.01em" }}>
                             Embedded Solutions in Action.
                         </h2>
-                        <p className="lead" style={{ maxWidth: "560px" }}>
+                        <p style={{ fontSize: "1rem", lineHeight: "1.65", maxWidth: "580px", color: "var(--text-secondary)", margin: "0" }}>
                             Real-world automotive applications across digital dashboards, driver assistance systems, in-car displays, and speed recognition.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" style={{ marginBottom: "56px" }}>
+                    <motion.div 
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+                        variants={containerAnimationVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                    >
                         {showcaseAutomotive.map((item) => (
-                            <ShowcasePlaceholder key={item.label} label={item.label} />
+                            <motion.div key={item.label} variants={cardAnimationVariants(shouldReduce)}>
+                                <ShowcaseImageCard label={item.label} imageUrl={item.url} />
+                            </motion.div>
                         ))}
+                    </motion.div>
+
+                    <div style={{ marginTop: "56px", marginBottom: "32px" }}>
+                        <motion.span
+                            className="badge rose"
+                            variants={labelAnimationVariants(shouldReduce)}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                        >
+                            // Engineering Products
+                        </motion.span>
                     </div>
 
-                    <div style={{ marginBottom: "32px" }}>
-                        <span className="badge rose">// Engineering Products</span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <motion.div 
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+                        variants={containerAnimationVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                    >
                         {showcaseProducts.map((item) => (
-                            <ShowcasePlaceholder key={item.label} label={item.label} />
+                            <motion.div key={item.label} variants={cardAnimationVariants(shouldReduce)}>
+                                <ShowcaseImageCard label={item.label} imageUrl={item.url} />
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
             {/* SECTION 3 — DIGITAL SOLUTIONS */}
-            <section className="section" style={{ borderTop: "1px solid var(--border)" }} aria-labelledby="digital-solutions-heading">
+            <section className="section" style={{ borderTop: "1px solid var(--border)", padding: "80px 0" }} aria-labelledby="digital-solutions-heading">
                 <div className="container">
                     <div style={{ marginBottom: "48px" }}>
-                        <span className="badge" style={{ marginBottom: "16px" }}>// Digital Solutions & Products</span>
-                        <h2 id="digital-solutions-heading" style={{ marginTop: "12px", marginBottom: "0" }}>
+                        <motion.span
+                            className="badge"
+                            variants={labelAnimationVariants(shouldReduce)}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            style={{ marginBottom: "8px", display: "inline-block" }}
+                        >
+                            // Digital Solutions & Products
+                        </motion.span>
+                        <h2 id="digital-solutions-heading" style={{ marginTop: "0", marginBottom: "16px", fontWeight: 700, letterSpacing: "0.01em" }}>
                             Software Products Built for the Next Generation.
                         </h2>
                     </div>
 
                     <motion.div
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                        variants={staggerContainerVariants}
+                        variants={containerAnimationVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
                         {digitalCards.map((card) => (
-                            <motion.div key={card.title} className="col-span-1" variants={fadeUpVariants(shouldReduce)}>
-                                {/* REPLACE: vSeva description & tech chips — content pending from CEO */}
+                            <motion.div key={card.title} className="col-span-1" variants={cardAnimationVariants(shouldReduce)}>
                                 <ServiceCard
                                     number={card.number}
                                     title={card.title}
@@ -345,7 +484,7 @@ export default function ServicesPage() {
             </section>
 
             {/* SECTION 4 — BOTTOM CTA */}
-            <section className="cta-section" aria-labelledby="services-cta-heading">
+            <section className="cta-section" style={{ padding: "80px 0" }} aria-labelledby="services-cta-heading">
                 <div className="container">
                     <motion.div
                         className="cta-inner"
