@@ -111,7 +111,7 @@ export default function ServicesPreview() {
                     transition={{ duration: 0.5, delay: 0.35 }}
                 >
                     <motion.div whileHover={shouldReduce ? {} : { scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                        <Link href="/services" className="btn btn-outline" id="services-preview-link">
+                        <Link href="/engineering-offerings" className="btn btn-outline" id="services-preview-link">
                             View Engineering Offerings
                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                                 <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>

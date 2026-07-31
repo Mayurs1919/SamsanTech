@@ -117,6 +117,82 @@ function ProfileAvatar({ name, role, imagePath }: { name: string; role: string; 
     );
 }
 
+// LinkedIn SVG path
+const LINKEDIN_SVG_PATH = "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z";
+
+function LinkedInIcon({ href, name, centered }: { href?: string; name: string; centered?: boolean }) {
+    if (!href) {
+        // Disabled state for people without a LinkedIn URL
+        return (
+            <div
+                title="LinkedIn profile not available"
+                style={{
+                    position: centered ? "relative" : "absolute",
+                    bottom: centered ? "auto" : "12px",
+                    ...(centered
+                        ? {
+                            marginTop: "auto",
+                            marginBottom: "-8px",
+                            alignSelf: "center",
+                          }
+                        : { right: "16px" }),
+                    width: "38px",
+                    height: "38px",
+                    borderRadius: "6px",
+                    background: "rgba(22, 30, 53, 0.6)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    opacity: 0.35,
+                    cursor: "default",
+                    zIndex: 5
+                }}
+            >
+                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" />
+                </svg>
+            </div>
+        );
+    }
+
+    return (
+        <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${name} on LinkedIn`}
+            className="linkedin-icon-btn"
+            style={{
+                position: centered ? "relative" : "absolute",
+                bottom: centered ? "auto" : "12px",
+                ...(centered
+                    ? {
+                        marginTop: "auto",
+                        marginBottom: "-8px",
+                        alignSelf: "center",
+                      }
+                    : { right: "16px" }),
+                width: "38px",
+                height: "38px",
+                borderRadius: "6px",
+                background: "rgba(22, 30, 53, 0.6)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                transition: "background 0.2s, border-color 0.2s",
+                zIndex: 5,
+                textDecoration: "none"
+            }}
+        >
+            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" style={{ transition: "fill 0.2s" }} />
+            </svg>
+        </a>
+    );
+}
+
 function SpecRow({ specKey, specVal, index, shouldReduce }: { specKey: string; specVal: string; index: number; shouldReduce: boolean }) {
     const [isHovered, setIsHovered] = useState(false);
 
@@ -162,6 +238,49 @@ function SpecRow({ specKey, specVal, index, shouldReduce }: { specKey: string; s
 
 export default function AboutPage() {
     const shouldReduce = !!useReducedMotion();
+
+    const leadershipMembers = [
+        {
+            name: "V. Shankaran",
+            role: "Engineering Director — Embedded",
+            dept: "Embedded Engineering",
+            imagePath: "/images/team/v_shankaran.png",
+            glowColor: "#4DD8E8",
+            linkedinUrl: "https://www.linkedin.com/in/shankaran-venugopalan-92759611/"
+        },
+        {
+            name: "Sharana Gouda",
+            role: "Engineering Director — Cockpit",
+            dept: "Cockpit Engineering",
+            imagePath: "/images/team/sharana_gouda.png",
+            glowColor: "#4DD8E8",
+            linkedinUrl: "https://www.linkedin.com/in/sharana-gouda-patil-a53b7715"
+        },
+        {
+            name: "Dr. Pradeep Bilurkar",
+            role: "Chief Data Scientist",
+            dept: "Data & AI",
+            imagePath: "/images/team/dr_pradeep_bilurkar.png",
+            glowColor: "#FF8A3D",
+            linkedinUrl: "https://www.linkedin.com/in/dr-pradeep-bilurkar-5a72922b/"
+        },
+        {
+            name: "Pratik Waghmode",
+            role: "Technical Sales",
+            dept: "Business Development",
+            imagePath: "/images/team/pratik_waghmode.png",
+            glowColor: "#22C55E",
+            linkedinUrl: "https://www.linkedin.com/in/pratik-waghmode-742b3440/"
+        },
+        {
+            name: "Gaurav Joshi",
+            role: "Accounts & Finance",
+            dept: "Finance & Operations",
+            imagePath: "/images/team/gaurav_joshi.png",
+            glowColor: "#FFC83D",
+            linkedinUrl: "https://www.linkedin.com/in/gaurav-joshi-a3677b147/"
+        }
+    ];
 
     return (
         <div style={{ paddingBottom: "0px" }}>
@@ -610,75 +729,201 @@ export default function AboutPage() {
             <section style={{ borderTop: "1px solid var(--border)", background: "#0A0F1C", padding: "96px 0" }}>
                 <style dangerouslySetInnerHTML={{
                     __html: `
-                    /* Responsive CEO Card */
+                    /* CEO Spotlight Card */
                     .ceo-card {
                         width: 100%;
                         background: rgba(13, 19, 35, 0.55);
-                        border-radius: 20px;
                         border: 1px solid rgba(255, 255, 255, 0.08);
-                        padding: 48px;
+                        border-radius: 16px;
+                        padding: 0;
+                        overflow: hidden;
+                        position: relative;
                         display: grid;
-                        grid-template-columns: 280px 1fr;
-                        gap: 48px;
-                        align-items: center;
+                        grid-template-columns: 380px 1fr;
+                        align-items: stretch;
+                        transition: box-shadow 0.25s ease, border-color 0.25s ease;
+                        margin-bottom: 64px;
+                    }
+
+                    .ceo-card:hover {
+                        box-shadow: 0 20px 48px rgba(0,0,0,0.35);
+                        border-color: rgba(77, 216, 232, 0.4);
+                    }
+
+                    .ceo-card:hover .ceo-accent-line {
+                        opacity: 1 !important;
+                    }
+
+                    .ceo-photo-area {
                         position: relative;
                         overflow: hidden;
-                        margin-bottom: 48px;
+                        min-height: 420px;
+                        background: linear-gradient(180deg, #1a2235 0%, #0f1720 100%);
+                    }
+
+                    .ceo-content-area {
+                        padding: 48px 44px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        gap: 16px;
+                        text-align: left;
                     }
 
                     @media (max-width: 1023px) {
                         .ceo-card {
                             grid-template-columns: 1fr;
-                            text-align: center;
-                            padding: 36px 28px;
                         }
-                        .ceo-card-text {
-                            align-items: center;
-                            text-align: center !important;
+                        .ceo-photo-area {
+                            min-height: 320px;
+                            aspect-ratio: 4/3;
                         }
-                        .ceo-stat-row {
-                            justify-content: center;
+                        .ceo-content-area {
+                            padding: 32px 28px;
                         }
                     }
 
                     @media (max-width: 639px) {
-                        .ceo-card {
+                        .ceo-content-area {
                             padding: 28px 20px;
-                        }
-                        .ceo-photo-container {
-                            width: 180px !important;
-                            height: 180px !important;
                         }
                     }
 
-                    /* Advisors Grid */
+                    /* Board of Advisors Grid & Cards */
                     .advisors-grid {
                         width: 100%;
                         display: flex;
                         justify-content: center;
-                        gap: 20px;
+                        gap: 24px;
                         flex-wrap: wrap;
                     }
 
-                    /* Leadership Grid */
-                    .leadership-grid {
-                        display: grid;
-                        grid-template-columns: repeat(3, 260px);
-                        justify-content: center;
-                        gap: 20px;
+                    .advisor-card {
+                        background: rgba(13, 19, 35, 0.55);
+                        border: 1px solid rgba(255, 255, 255, 0.08);
+                        border-radius: 16px;
+                        padding: 0;
+                        overflow: hidden;
+                        position: relative;
+                        width: calc(33.333% - 16px);
+                        max-width: 340px;
+                        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+                        cursor: default;
+                    }
+
+                    .advisor-card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+                        border-color: rgba(139, 92, 246, 0.4);
+                    }
+
+                    .advisor-card:hover .advisor-accent-line {
+                        opacity: 1 !important;
+                    }
+
+                    .advisor-card:hover .advisor-dept-label {
+                        filter: brightness(1.2);
                     }
 
                     @media (max-width: 1023px) {
-                        .leadership-grid {
-                            grid-template-columns: repeat(2, 260px);
-                            justify-content: center;
+                        .advisor-card {
+                            width: calc(50% - 12px);
                         }
                     }
 
                     @media (max-width: 639px) {
-                        .leadership-grid {
-                            grid-template-columns: repeat(2, 1fr);
+                        .advisor-card {
+                            width: 100%;
+                            max-width: 100%;
+                        }
+                    }
+
+                    /* Leadership Section Grid Layout */
+                    .leadership-section-grid {
+                        width: 100%;
+                    }
+
+                    .leadership-grid-top {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 24px;
+                    }
+
+                    .leadership-grid-bottom {
+                        display: flex;
+                        justify-content: center;
+                        gap: 24px;
+                        margin-top: 24px;
+                    }
+
+                    .leadership-grid-bottom .lead-card {
+                        width: calc(33.333% - 16px);
+                    }
+
+                    /* Lead Card Container */
+                    .lead-card {
+                        background: rgba(13, 19, 35, 0.55);
+                        border: 1px solid rgba(255, 255, 255, 0.08);
+                        border-radius: 16px;
+                        padding: 0;
+                        overflow: hidden;
+                        position: relative;
+                        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+                        cursor: default;
+                    }
+
+                    .lead-card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+                        border-color: rgba(77, 216, 232, 0.4);
+                    }
+
+                    /* Hover animations */
+                    .lead-card:hover .lead-accent-line {
+                        opacity: 1 !important;
+                    }
+
+                    .lead-card:hover .lead-dept-label {
+                        filter: brightness(1.2);
+                    }
+
+                    /* LinkedIn button hover */
+                    .lead-linkedin-btn:hover {
+                        background: #0A66C2 !important;
+                        border-color: #0A66C2 !important;
+                    }
+                    .lead-linkedin-btn:hover svg path {
+                        fill: #ffffff !important;
+                    }
+
+                    /* Responsive overrides */
+                    @media (max-width: 1023px) {
+                        .leadership-section-grid {
+                            display: flex;
+                            flex-wrap: wrap;
                             justify-content: center;
+                            gap: 24px;
+                        }
+                        .leadership-grid-top, .leadership-grid-bottom {
+                            display: contents;
+                        }
+                        .leadership-section-grid .lead-card {
+                            width: calc(50% - 12px);
+                            min-width: 280px;
+                        }
+                    }
+
+                    @media (max-width: 639px) {
+                        .leadership-section-grid .lead-card {
+                            width: 100%;
+                            min-width: unset;
+                        }
+                    }
+
+                    @media (prefers-reduced-motion: reduce) {
+                        .lead-card {
+                            transform: none !important;
+                            transition: none !important;
                         }
                     }
 
@@ -743,11 +988,20 @@ export default function AboutPage() {
                             transition: none !important;
                         }
                     }
+
+                    /* LinkedIn icon hover */
+                    .linkedin-icon-btn:hover {
+                        background: #0A66C2 !important;
+                        border-color: #0A66C2 !important;
+                    }
+                    .linkedin-icon-btn:hover svg path {
+                        fill: #ffffff !important;
+                    }
                 `}} />
                 <div className="container">
 
                     {/* Section Header */}
-                    <div style={{ textAlign: "center", marginBottom: "56px" }}>
+                    <div style={{ textAlign: "center", marginBottom: "64px" }}>
                         <motion.span
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
@@ -771,12 +1025,12 @@ export default function AboutPage() {
                             viewport={{ once: true }}
                             transition={{ duration: shouldReduce ? 0.01 : 0.5, delay: shouldReduce ? 0 : 0.1 }}
                             style={{
-                                fontSize: "clamp(1.8rem, 3vw, 2.4rem)",
+                                fontSize: "clamp(2rem, 3.5vw, 2.6rem)",
                                 fontWeight: 700,
                                 color: "#ffffff",
-                                marginBottom: "12px",
-                                lineHeight: "1.2",
-                                letterSpacing: "-0.025em"
+                                marginBottom: "16px",
+                                lineHeight: "1.25",
+                                letterSpacing: "-0.02em"
                             }}
                         >
                             Meet Our Leadership Team
@@ -787,9 +1041,9 @@ export default function AboutPage() {
                             viewport={{ once: true }}
                             transition={{ duration: shouldReduce ? 0.01 : 0.4, delay: shouldReduce ? 0 : 0.25 }}
                             style={{
-                                fontSize: "1rem",
+                                fontSize: "1.1rem",
                                 lineHeight: 1.7,
-                                maxWidth: "520px",
+                                maxWidth: "580px",
                                 margin: "0 auto",
                                 color: "var(--text-secondary)"
                             }}
@@ -806,129 +1060,211 @@ export default function AboutPage() {
                         transition={{ duration: shouldReduce ? 0.01 : 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
                         className="ceo-card"
                     >
-                        {/* CEO Background Accents */}
-                        <div style={{
+                        {/* Top Accent Line */}
+                        <div className="ceo-accent-line" style={{
                             position: "absolute",
                             top: 0,
+                            left: 0,
                             right: 0,
-                            width: "300px",
-                            height: "300px",
-                            background: "radial-gradient(circle at top right, rgba(77, 216, 232, 0.07) 0%, transparent 70%)",
-                            pointerEvents: "none"
-                        }} />
-                        <div style={{
-                            position: "absolute",
-                            top: 0,
-                            left: "60px",
-                            right: "60px",
-                            height: "1px",
-                            background: "linear-gradient(90deg, transparent, rgba(77, 216, 232, 0.5) 30%, rgba(77, 216, 232, 0.5) 70%, transparent)"
+                            height: "3px",
+                            borderRadius: "16px 16px 0 0",
+                            background: "linear-gradient(90deg, #4DD8E8 0%, #FF8A3D 50%, #4DD8E8 100%)",
+                            opacity: 0.85,
+                            transition: "opacity 0.25s ease",
+                            zIndex: 2
                         }} />
 
-                        {/* CEO PHOTO (Left column) */}
-                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
-                            <div className="ceo-photo-container" style={{ width: "240px", height: "240px", position: "relative" }}>
-                                {/* Layer 1: Outer glow */}
-                                <div style={{
-                                    position: "absolute",
-                                    inset: "-3px",
-                                    borderRadius: "18px",
-                                    background: "linear-gradient(135deg, rgba(77, 216, 232, 0.6), rgba(77, 216, 232, 0.0) 50%, rgba(255, 138, 61, 0.4))",
-                                    zIndex: 0
-                                }} />
-                                {/* Layer 2: Inner dark separator */}
-                                <div style={{
-                                    position: "absolute",
-                                    inset: "-1px",
-                                    borderRadius: "17px",
-                                    background: "#0A0F1C",
-                                    zIndex: 0
-                                }} />
-                                {/* Image */}
-                                <div style={{ width: "100%", height: "100%", borderRadius: "16px", overflow: "hidden", position: "relative", zIndex: 1 }}>
-                                    <Image
-                                        src="/images/team/prashant_deshpande.png"
-                                        alt="Prashant Deshpande"
-                                        fill
-                                        sizes="240px"
-                                        priority
-                                        style={{ objectFit: "cover", objectPosition: "center top" }}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* CEO ROLE BADGE */}
+                        {/* LEFT SIDE — PHOTO AREA */}
+                        <div className="ceo-photo-area">
+                            <Image
+                                src="/images/team/prashant_deshpande.png"
+                                alt="Prashant Deshpande"
+                                fill
+                                sizes="(max-width: 1023px) 100vw, 380px"
+                                priority
+                                style={{
+                                    objectFit: "cover",
+                                    objectPosition: "center top",
+                                    display: "block",
+                                    mixBlendMode: "luminosity",
+                                    opacity: 0.92
+                                }}
+                            />
+                            {/* Bottom Gradient Overlay */}
                             <div style={{
-                                marginTop: "16px",
-                                textAlign: "center",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "6px",
-                                padding: "6px 14px",
-                                background: "rgba(77, 216, 232, 0.08)",
-                                border: "1px solid rgba(77, 216, 232, 0.3)",
-                                borderRadius: "20px",
-                                fontFamily: "var(--font-mono)",
-                                fontSize: "11px",
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase",
-                                color: "#4DD8E8"
-                            }}>
-                                <span>●</span> Chief Executive Officer
-                            </div>
+                                position: "absolute",
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                height: "35%",
+                                background: "linear-gradient(to bottom, transparent, rgba(13, 19, 35, 0.55))",
+                                pointerEvents: "none"
+                            }} />
                         </div>
 
-                        {/* CEO TEXT CONTENT (Right column) */}
-                        <div className="ceo-card-text" style={{ display: "flex", flexDirection: "column", gap: "16px", textAlign: "left" }}>
-                            <div>
-                                <h3 style={{
-                                    fontSize: "clamp(1.8rem, 2.8vw, 2.4rem)",
-                                    fontWeight: 800,
-                                    letterSpacing: "-0.02em",
-                                    color: "#ffffff",
-                                    lineHeight: 1.1,
-                                    margin: 0
-                                }}>
-                                    Prashant Deshpande
-                                </h3>
-                                <p style={{
-                                    fontFamily: "var(--font-mono)",
-                                    fontSize: "12px",
-                                    letterSpacing: "0.08em",
-                                    textTransform: "uppercase",
-                                    color: "#F59E0B",
-                                    margin: "8px 0 0 0"
-                                }}>
-                                    Founder, CEO & Managing Director
-                                </p>
-                            </div>
+                        {/* RIGHT SIDE — CONTENT AREA */}
+                        <div className="ceo-content-area">
+                            {/* A) DEPARTMENT TAG */}
+                            <span style={{
+                                fontFamily: "var(--font-mono)",
+                                fontSize: "10px",
+                                letterSpacing: "0.12em",
+                                textTransform: "uppercase",
+                                fontWeight: 600,
+                                color: "#4DD8E8",
+                                marginBottom: "4px"
+                            }}>
+                                Chief Executive Officer
+                            </span>
 
-                            <div style={{ width: "48px", height: "2px", background: "#4DD8E8", borderRadius: "1px", margin: "4px 0" }} />
+                            {/* B) NAME */}
+                            <h3 style={{
+                                fontFamily: "var(--font-display)",
+                                fontSize: "clamp(1.8rem, 2.8vw, 2.4rem)",
+                                fontWeight: 800,
+                                letterSpacing: "-0.02em",
+                                color: "#ffffff",
+                                lineHeight: 1.1,
+                                margin: 0
+                            }}>
+                                Prashant Deshpande
+                            </h3>
 
+                            {/* C) TITLE */}
                             <p style={{
-                                fontSize: "1rem",
+                                fontFamily: "var(--font-mono)",
+                                fontSize: "11.5px",
+                                letterSpacing: "0.07em",
+                                textTransform: "uppercase",
+                                color: "#FF8A3D",
+                                marginBottom: "4px",
+                                marginTop: 0
+                            }}>
+                                Founder, CEO & Managing Director
+                            </p>
+
+                            {/* D) DIVIDER */}
+                            <div style={{
+                                width: "40px",
+                                height: "2px",
+                                background: "linear-gradient(90deg, #4DD8E8, #FF8A3D)",
+                                borderRadius: "1px",
+                                margin: 0
+                            }} />
+
+                            {/* E) BIO TEXT */}
+                            <p style={{
+                                fontSize: "0.97rem",
                                 lineHeight: 1.75,
                                 color: "var(--text-secondary)",
-                                maxWidth: "560px",
+                                maxWidth: "500px",
                                 margin: 0
                             }}>
                                 25+ years in automotive, embedded software, engineering delivery, business development, global customer management, and connected mobility solutions.
                             </p>
 
-                            {/* Stat Row */}
-                            <div className="ceo-stat-row" style={{ display: "flex", gap: "32px", marginTop: "8px" }}>
-                                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "1.6rem", fontWeight: 700, color: "#4DD8E8", lineHeight: 1 }}>25+</span>
-                                    <span style={{ fontSize: "11px", letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--text-secondary)" }}>Years Experience</span>
+                            {/* F) STATS ROW */}
+                            <div style={{ display: "flex", gap: "32px", marginTop: "8px" }}>
+                                <div style={{ display: "flex", flexDirection: "column" }}>
+                                    <span style={{
+                                        fontFamily: "var(--font-display)",
+                                        fontSize: "1.7rem",
+                                        fontWeight: 800,
+                                        letterSpacing: "-0.02em",
+                                        color: "#ffffff",
+                                        lineHeight: 1
+                                    }}>25+</span>
+                                    <span style={{
+                                        fontFamily: "var(--font-mono)",
+                                        fontSize: "10px",
+                                        letterSpacing: "0.07em",
+                                        textTransform: "uppercase",
+                                        color: "var(--text-secondary)",
+                                        display: "block",
+                                        marginTop: "5px"
+                                    }}>Years Experience</span>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "1.6rem", fontWeight: 700, color: "#4DD8E8", lineHeight: 1 }}>50+</span>
-                                    <span style={{ fontSize: "11px", letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--text-secondary)" }}>Engineers Led</span>
+                                <div style={{ display: "flex", flexDirection: "column" }}>
+                                    <span style={{
+                                        fontFamily: "var(--font-display)",
+                                        fontSize: "1.7rem",
+                                        fontWeight: 800,
+                                        letterSpacing: "-0.02em",
+                                        color: "#ffffff",
+                                        lineHeight: 1
+                                    }}>50+</span>
+                                    <span style={{
+                                        fontFamily: "var(--font-mono)",
+                                        fontSize: "10px",
+                                        letterSpacing: "0.07em",
+                                        textTransform: "uppercase",
+                                        color: "var(--text-secondary)",
+                                        display: "block",
+                                        marginTop: "5px"
+                                    }}>Engineers Led</span>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "1.6rem", fontWeight: 700, color: "#4DD8E8", lineHeight: 1 }}>3</span>
-                                    <span style={{ fontSize: "11px", letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--text-secondary)" }}>Global Regions</span>
+                                <div style={{ display: "flex", flexDirection: "column" }}>
+                                    <span style={{
+                                        fontFamily: "var(--font-display)",
+                                        fontSize: "1.7rem",
+                                        fontWeight: 800,
+                                        letterSpacing: "-0.02em",
+                                        color: "#ffffff",
+                                        lineHeight: 1
+                                    }}>3</span>
+                                    <span style={{
+                                        fontFamily: "var(--font-mono)",
+                                        fontSize: "10px",
+                                        letterSpacing: "0.07em",
+                                        textTransform: "uppercase",
+                                        color: "var(--text-secondary)",
+                                        display: "block",
+                                        marginTop: "5px"
+                                    }}>Global Regions</span>
                                 </div>
+                            </div>
+
+                            {/* G) LINKEDIN ROW */}
+                            <div style={{
+                                marginTop: "20px",
+                                paddingTop: "18px",
+                                borderTop: "1px solid rgba(255, 255, 255, 0.04)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between"
+                            }}>
+                                <span style={{
+                                    fontFamily: "var(--font-mono)",
+                                    fontSize: "10px",
+                                    letterSpacing: "0.08em",
+                                    textTransform: "uppercase",
+                                    color: "rgba(255, 255, 255, 0.36)"
+                                }}>
+                                    View Profile
+                                </span>
+                                <a
+                                    href="https://www.linkedin.com/in/prashant-deshpande-samsan/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Prashant Deshpande on LinkedIn"
+                                    className="lead-linkedin-btn"
+                                    style={{
+                                        width: "30px",
+                                        height: "30px",
+                                        borderRadius: "6px",
+                                        background: "rgba(255, 255, 255, 0.06)",
+                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        transition: "all 0.2s ease",
+                                        textDecoration: "none"
+                                    }}
+                                >
+                                    <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" style={{ transition: "fill 0.2s" }} />
+                                    </svg>
+                                </a>
                             </div>
                         </div>
                     </motion.div>
@@ -977,7 +1313,7 @@ export default function AboutPage() {
                                 hidden: {},
                                 visible: {
                                     transition: {
-                                        staggerChildren: shouldReduce ? 0 : 0.08
+                                        staggerChildren: shouldReduce ? 0 : 0.1
                                     }
                                 }
                             }}
@@ -990,20 +1326,18 @@ export default function AboutPage() {
                                 {
                                     name: "Ashok Saraf",
                                     role: "Senior Advisor",
-                                    label: "Senior Advisor",
-                                    tooltip: "Advisory Board",
+                                    dept: "Senior Advisor",
                                     imagePath: "/images/team/ashok_saraf.png",
-                                    glowColor: "#8B5CF6",
-                                    labelColor: "rgba(139, 92, 246, 0.8)"
+                                    accentColor: "#8B5CF6",
+                                    linkedinUrl: "https://www.linkedin.com/in/sarafashok/"
                                 },
                                 {
                                     name: "Anil Patwardhan",
                                     role: "Senior Advisor",
-                                    label: "Senior Advisor",
-                                    tooltip: "Advisory Board",
+                                    dept: "Senior Advisor",
                                     imagePath: "/images/team/anil_patwardhan.png",
-                                    glowColor: "#8B5CF6",
-                                    labelColor: "rgba(139, 92, 246, 0.8)"
+                                    accentColor: "#8B5CF6",
+                                    linkedinUrl: ""
                                 }
                             ].map((member) => (
                                 <motion.div
@@ -1019,94 +1353,167 @@ export default function AboutPage() {
                                             }
                                         }
                                     }}
-                                    className="team-card"
+                                    className="advisor-card"
                                 >
-                                    {/* Bottom Accent Line */}
-                                    <div className="card-accent-line" style={{
+                                    {/* Top Accent Line */}
+                                    <div className="advisor-accent-line" style={{
                                         position: "absolute",
-                                        bottom: 0,
-                                        left: "20%",
-                                        right: "20%",
-                                        height: "2px",
-                                        borderRadius: "1px 1px 0 0",
-                                        background: member.glowColor,
-                                        opacity: 0,
-                                        transition: "opacity 0.3s ease"
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        height: "3px",
+                                        borderRadius: "16px 16px 0 0",
+                                        background: member.accentColor,
+                                        opacity: 0.7,
+                                        transition: "opacity 0.25s ease"
                                     }} />
 
-                                    {/* Tooltip */}
-                                    <div className="team-tooltip">
-                                        {member.tooltip}
+                                    {/* Photo Area */}
+                                    <div style={{
+                                        width: "100%",
+                                        aspectRatio: "1/1",
+                                        position: "relative",
+                                        overflow: "hidden",
+                                        background: "linear-gradient(180deg, #1a2235 0%, #0f1720 100%)"
+                                    }}>
+                                        <Image
+                                            src={member.imagePath}
+                                            alt={member.name}
+                                            fill
+                                            sizes="(max-width: 639px) 100vw, 340px"
+                                            style={{
+                                                objectFit: "cover",
+                                                objectPosition: "center top",
+                                                display: "block",
+                                                mixBlendMode: "luminosity",
+                                                opacity: 0.92
+                                            }}
+                                        />
+                                        {/* Bottom Gradient Overlay */}
+                                        <div style={{
+                                            position: "absolute",
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            height: "40%",
+                                            background: "linear-gradient(to bottom, transparent, rgba(13, 19, 35, 0.55))",
+                                            pointerEvents: "none"
+                                        }} />
                                     </div>
 
-                                    {/* Photo Container */}
-                                    <div style={{ width: "160px", height: "160px", position: "relative", flexShrink: 0 }}>
-                                        {/* Outer glow layer */}
+                                    {/* Card Body */}
+                                    <div style={{
+                                        padding: "20px 22px 22px",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: "4px",
+                                        textAlign: "left"
+                                    }}>
+                                        {/* Department Tag */}
+                                        <span className="advisor-dept-label" style={{
+                                            fontFamily: "var(--font-mono)",
+                                            fontSize: "10px",
+                                            letterSpacing: "0.1em",
+                                            textTransform: "uppercase",
+                                            fontWeight: 600,
+                                            color: member.accentColor,
+                                            marginBottom: "6px",
+                                            transition: "filter 0.25s ease"
+                                        }}>
+                                            {member.dept}
+                                        </span>
+
+                                        {/* Name */}
+                                        <h4 style={{
+                                            fontFamily: "var(--font-display)",
+                                            fontSize: "1.15rem",
+                                            fontWeight: 700,
+                                            letterSpacing: "-0.01em",
+                                            color: "#ffffff",
+                                            lineHeight: 1.2,
+                                            margin: "0 0 4px 0"
+                                        }}>
+                                            {member.name}
+                                        </h4>
+
+                                        {/* Title */}
+                                        <p style={{
+                                            fontFamily: "var(--font-mono)",
+                                            fontSize: "11px",
+                                            letterSpacing: "0.06em",
+                                            textTransform: "uppercase",
+                                            color: "var(--text-secondary)",
+                                            lineHeight: 1.5,
+                                            margin: 0
+                                        }}>
+                                            {member.role}
+                                        </p>
+
+                                        {/* LinkedIn Link Section */}
                                         <div style={{
-                                            position: "absolute",
-                                            inset: "-3px",
-                                            borderRadius: "17px",
-                                            background: `linear-gradient(135deg, ${member.glowColor} 0%, transparent 60%)`,
-                                            zIndex: 0
-                                        }} />
-                                        {/* Inner separator layer */}
-                                        <div style={{
-                                            position: "absolute",
-                                            inset: "-1px",
-                                            borderRadius: "15px",
-                                            background: "rgba(13, 19, 35, 0.55)",
-                                            zIndex: 0
-                                        }} />
-                                        {/* Photo */}
-                                        <div style={{ width: "100%", height: "100%", borderRadius: "14px", overflow: "hidden", position: "relative", zIndex: 1 }}>
-                                            <Image
-                                                src={member.imagePath}
-                                                alt={member.name}
-                                                fill
-                                                sizes="160px"
-                                                style={{ objectFit: "cover", objectPosition: "center top" }}
-                                            />
+                                            marginTop: "16px",
+                                            paddingTop: "14px",
+                                            borderTop: "1px solid rgba(255, 255, 255, 0.04)",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "space-between"
+                                        }}>
+                                            <span style={{
+                                                fontFamily: "var(--font-mono)",
+                                                fontSize: "10px",
+                                                letterSpacing: "0.08em",
+                                                textTransform: "uppercase",
+                                                color: "rgba(255, 255, 255, 0.36)"
+                                            }}>
+                                                View Profile
+                                            </span>
+                                            {member.linkedinUrl ? (
+                                                <a
+                                                    href={member.linkedinUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    aria-label={`${member.name} on LinkedIn`}
+                                                    className="lead-linkedin-btn"
+                                                    style={{
+                                                        width: "30px",
+                                                        height: "30px",
+                                                        borderRadius: "6px",
+                                                        background: "rgba(255, 255, 255, 0.06)",
+                                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        transition: "all 0.2s ease",
+                                                        textDecoration: "none"
+                                                    }}
+                                                >
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                        <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" style={{ transition: "fill 0.2s" }} />
+                                                    </svg>
+                                                </a>
+                                            ) : (
+                                                <div
+                                                    title="LinkedIn profile not available"
+                                                    style={{
+                                                        width: "30px",
+                                                        height: "30px",
+                                                        borderRadius: "6px",
+                                                        background: "rgba(255, 255, 255, 0.06)",
+                                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        opacity: 0.35,
+                                                        cursor: "default"
+                                                    }}
+                                                >
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                        <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" />
+                                                    </svg>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
-
-                                    {/* Card Content */}
-                                    <span style={{
-                                        fontFamily: "var(--font-mono)",
-                                        fontSize: "10px",
-                                        letterSpacing: "0.1em",
-                                        textTransform: "uppercase",
-                                        color: member.labelColor,
-                                        marginTop: "16px",
-                                        marginBottom: "4px"
-                                    }}>
-                                        {member.label}
-                                    </span>
-                                    <h4 style={{
-                                        fontSize: "1.1rem",
-                                        fontWeight: 800,
-                                        letterSpacing: "0.02em",
-                                        textTransform: "capitalize",
-                                        color: "#ffffff",
-                                        lineHeight: 1.2,
-                                        textAlign: "center",
-                                        marginTop: "2px",
-                                        marginBottom: "6px"
-                                    }}>
-                                        {member.name}
-                                    </h4>
-                                    <p style={{
-                                        fontFamily: "var(--font-mono)",
-                                        fontSize: "12px",
-                                        letterSpacing: "0.07em",
-                                        textTransform: "uppercase",
-                                        color: "var(--text-secondary)",
-                                        lineHeight: 1.5,
-                                        textAlign: "center",
-                                        marginTop: 0,
-                                        marginBottom: 0
-                                    }}>
-                                        {member.role}
-                                    </p>
                                 </motion.div>
                             ))}
                         </motion.div>
@@ -1163,158 +1570,321 @@ export default function AboutPage() {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true, margin: "-100px" }}
-                            className="leadership-grid"
+                            className="leadership-section-grid"
                         >
-                            {[
-                                {
-                                    name: "V. Shankaran",
-                                    role: "Engineering Director — Embedded",
-                                    label: "Leader",
-                                    tooltip: "Embedded Systems",
-                                    imagePath: "/images/team/v_shankaran.png",
-                                    glowColor: "#4DD8E8",
-                                    labelColor: "rgba(77, 216, 232, 0.8)"
-                                },
-                                {
-                                    name: "Sharana Gouda",
-                                    role: "Engineering Director — Cockpit",
-                                    label: "Leader",
-                                    tooltip: "Cockpit Engineering",
-                                    imagePath: "/images/team/sharana_gouda.png",
-                                    glowColor: "#4DD8E8",
-                                    labelColor: "rgba(77, 216, 232, 0.8)"
-                                },
-                                {
-                                    name: "Dr. Pradeep Bilurkar",
-                                    role: "Chief Data Scientist",
-                                    label: "Leader",
-                                    tooltip: "Data & AI",
-                                    imagePath: "/images/team/dr_pradeep_bilurkar.png",
-                                    glowColor: "#FF8A3D",
-                                    labelColor: "rgba(255, 138, 61, 0.8)"
-                                },
-                                {
-                                    name: "Pratik Waghmode",
-                                    role: "Technical Sales",
-                                    label: "Leader",
-                                    tooltip: "Business Development",
-                                    imagePath: "/images/team/pratik_waghmode.png",
-                                    glowColor: "#22C55E",
-                                    labelColor: "rgba(34, 197, 94, 0.8)"
-                                },
-                                {
-                                    name: "Gaurav Joshi",
-                                    role: "Accounts & Finance",
-                                    label: "Leader",
-                                    tooltip: "Finance & Operations",
-                                    imagePath: "/images/team/gaurav_joshi.png",
-                                    glowColor: "#FFC83D",
-                                    labelColor: "rgba(255, 200, 61, 0.8)"
-                                }
-                            ].map((member) => (
-                                <motion.div
-                                    key={member.name}
-                                    variants={{
-                                        hidden: { opacity: 0, y: shouldReduce ? 0 : 24 },
-                                        visible: {
-                                            opacity: 1,
-                                            y: 0,
-                                            transition: {
-                                                duration: shouldReduce ? 0.01 : 0.5,
-                                                ease: [0.25, 0.46, 0.45, 0.94]
+                            {/* Top Row (3 cards) */}
+                            <div className="leadership-grid-top">
+                                {leadershipMembers.slice(0, 3).map((member) => (
+                                    <motion.div
+                                        key={member.name}
+                                        variants={{
+                                            hidden: { opacity: 0, y: shouldReduce ? 0 : 24 },
+                                            visible: {
+                                                opacity: 1,
+                                                y: 0,
+                                                transition: {
+                                                    duration: shouldReduce ? 0.01 : 0.5,
+                                                    ease: [0.25, 0.46, 0.45, 0.94]
+                                                }
                                             }
-                                        }
-                                    }}
-                                    className="team-card"
-                                >
-                                    {/* Bottom Accent Line */}
-                                    <div className="card-accent-line" style={{
-                                        position: "absolute",
-                                        bottom: 0,
-                                        left: "20%",
-                                        right: "20%",
-                                        height: "2px",
-                                        borderRadius: "1px 1px 0 0",
-                                        background: member.glowColor,
-                                        opacity: 0,
-                                        transition: "opacity 0.3s ease"
-                                    }} />
-
-                                    {/* Tooltip */}
-                                    <div className="team-tooltip">
-                                        {member.tooltip}
-                                    </div>
-
-                                    {/* Photo Container */}
-                                    <div style={{ width: "160px", height: "160px", position: "relative", flexShrink: 0 }}>
-                                        {/* Outer glow layer */}
-                                        <div style={{
+                                        }}
+                                        className="lead-card"
+                                    >
+                                        {/* Top Accent Line */}
+                                        <div className="lead-accent-line" style={{
                                             position: "absolute",
-                                            inset: "-3px",
-                                            borderRadius: "17px",
-                                            background: `linear-gradient(135deg, ${member.glowColor} 0%, transparent 60%)`,
-                                            zIndex: 0
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            height: "3px",
+                                            borderRadius: "16px 16px 0 0",
+                                            background: member.glowColor,
+                                            opacity: 0.7,
+                                            transition: "opacity 0.25s ease"
                                         }} />
-                                        {/* Inner separator layer */}
+
+                                        {/* Photo Area */}
                                         <div style={{
-                                            position: "absolute",
-                                            inset: "-1px",
-                                            borderRadius: "15px",
-                                            background: "rgba(13, 19, 35, 0.55)",
-                                            zIndex: 0
-                                        }} />
-                                        {/* Photo */}
-                                        <div style={{ width: "100%", height: "100%", borderRadius: "14px", overflow: "hidden", position: "relative", zIndex: 1 }}>
+                                            width: "100%",
+                                            aspectRatio: "1/1",
+                                            position: "relative",
+                                            overflow: "hidden",
+                                            background: "linear-gradient(180deg, #1a2235 0%, #0f1720 100%)"
+                                        }}>
                                             <Image
                                                 src={member.imagePath}
                                                 alt={member.name}
                                                 fill
-                                                sizes="160px"
-                                                style={{ objectFit: "cover", objectPosition: "center top" }}
+                                                sizes="(max-width: 768px) 100vw, 33vw"
+                                                style={{
+                                                    objectFit: "cover",
+                                                    objectPosition: "center top",
+                                                    display: "block",
+                                                    mixBlendMode: "luminosity",
+                                                    opacity: 0.92
+                                                }}
                                             />
+                                            {/* Bottom Gradient Overlay */}
+                                            <div style={{
+                                                position: "absolute",
+                                                bottom: 0,
+                                                left: 0,
+                                                right: 0,
+                                                height: "40%",
+                                                background: "linear-gradient(to bottom, transparent, rgba(13, 19, 35, 0.55))",
+                                                pointerEvents: "none"
+                                            }} />
                                         </div>
-                                    </div>
 
-                                    {/* Card Content */}
-                                    <span style={{
-                                        fontFamily: "var(--font-mono)",
-                                        fontSize: "10px",
-                                        letterSpacing: "0.1em",
-                                        textTransform: "uppercase",
-                                        color: member.labelColor,
-                                        marginTop: "16px",
-                                        marginBottom: "4px"
-                                    }}>
-                                        {member.label}
-                                    </span>
-                                    <h4 style={{
-                                        fontSize: "1.1rem",
-                                        fontWeight: 800,
-                                        letterSpacing: "0.02em",
-                                        textTransform: "capitalize",
-                                        color: "#ffffff",
-                                        lineHeight: 1.2,
-                                        textAlign: "center",
-                                        marginTop: "2px",
-                                        marginBottom: "6px"
-                                    }}>
-                                        {member.name}
-                                    </h4>
-                                    <p style={{
-                                        fontFamily: "var(--font-mono)",
-                                        fontSize: "12px",
-                                        letterSpacing: "0.07em",
-                                        textTransform: "uppercase",
-                                        color: "var(--text-secondary)",
-                                        lineHeight: 1.5,
-                                        textAlign: "center",
-                                        marginTop: 0,
-                                        marginBottom: 0
-                                    }}>
-                                        {member.role}
-                                    </p>
-                                </motion.div>
-                            ))}
+                                        {/* Card Body */}
+                                        <div className="lead-card-body" style={{
+                                            padding: "20px 22px 22px",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            gap: "4px",
+                                            textAlign: "left"
+                                        }}>
+                                            {/* Department Label */}
+                                            <span className="lead-dept-label" style={{
+                                                fontFamily: "var(--font-mono)",
+                                                fontSize: "10px",
+                                                letterSpacing: "0.1em",
+                                                textTransform: "uppercase",
+                                                fontWeight: 600,
+                                                color: member.glowColor,
+                                                marginBottom: "6px",
+                                                transition: "filter 0.25s ease"
+                                            }}>
+                                                {member.dept}
+                                            </span>
+                                            {/* Name */}
+                                            <h4 style={{
+                                                fontFamily: "var(--font-display)",
+                                                fontSize: "1.15rem",
+                                                fontWeight: 700,
+                                                letterSpacing: "-0.01em",
+                                                color: "#ffffff",
+                                                lineHeight: 1.2,
+                                                margin: "0 0 4px 0"
+                                            }}>
+                                                {member.name}
+                                            </h4>
+                                            {/* Title */}
+                                            <p style={{
+                                                fontFamily: "var(--font-mono)",
+                                                fontSize: "11px",
+                                                letterSpacing: "0.06em",
+                                                textTransform: "uppercase",
+                                                color: "var(--text-secondary)",
+                                                lineHeight: 1.5,
+                                                margin: 0
+                                            }}>
+                                                {member.role}
+                                            </p>
+
+                                            {/* LinkedIn Link Section */}
+                                            <div style={{
+                                                marginTop: "16px",
+                                                paddingTop: "14px",
+                                                borderTop: "1px solid rgba(255, 255, 255, 0.04)",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between"
+                                            }}>
+                                                <span style={{
+                                                    fontFamily: "var(--font-mono)",
+                                                    fontSize: "10px",
+                                                    letterSpacing: "0.08em",
+                                                    textTransform: "uppercase",
+                                                    color: "rgba(255, 255, 255, 0.36)"
+                                                }}>
+                                                    View Profile
+                                                </span>
+                                                <a
+                                                    href={member.linkedinUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    aria-label={`${member.name} on LinkedIn`}
+                                                    className="lead-linkedin-btn"
+                                                    style={{
+                                                        width: "30px",
+                                                        height: "30px",
+                                                        borderRadius: "6px",
+                                                        background: "rgba(255, 255, 255, 0.06)",
+                                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        transition: "all 0.2s ease",
+                                                        textDecoration: "none"
+                                                    }}
+                                                >
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                        <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" style={{ transition: "fill 0.2s" }} />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+
+                            {/* Bottom Row (2 cards centered) */}
+                            <div className="leadership-grid-bottom">
+                                {leadershipMembers.slice(3).map((member) => (
+                                    <motion.div
+                                        key={member.name}
+                                        variants={{
+                                            hidden: { opacity: 0, y: shouldReduce ? 0 : 24 },
+                                            visible: {
+                                                opacity: 1,
+                                                y: 0,
+                                                transition: {
+                                                    duration: shouldReduce ? 0.01 : 0.5,
+                                                    ease: [0.25, 0.46, 0.45, 0.94]
+                                                }
+                                            }
+                                        }}
+                                        className="lead-card"
+                                    >
+                                        {/* Top Accent Line */}
+                                        <div className="lead-accent-line" style={{
+                                            position: "absolute",
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            height: "3px",
+                                            borderRadius: "16px 16px 0 0",
+                                            background: member.glowColor,
+                                            opacity: 0.7,
+                                            transition: "opacity 0.25s ease"
+                                        }} />
+
+                                        {/* Photo Area */}
+                                        <div style={{
+                                            width: "100%",
+                                            aspectRatio: "1/1",
+                                            position: "relative",
+                                            overflow: "hidden",
+                                            background: "linear-gradient(180deg, #1a2235 0%, #0f1720 100%)"
+                                        }}>
+                                            <Image
+                                                src={member.imagePath}
+                                                alt={member.name}
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, 33vw"
+                                                style={{
+                                                    objectFit: "cover",
+                                                    objectPosition: "center top",
+                                                    display: "block",
+                                                    mixBlendMode: "luminosity",
+                                                    opacity: 0.92
+                                                }}
+                                            />
+                                            {/* Bottom Gradient Overlay */}
+                                            <div style={{
+                                                position: "absolute",
+                                                bottom: 0,
+                                                left: 0,
+                                                right: 0,
+                                                height: "40%",
+                                                background: "linear-gradient(to bottom, transparent, rgba(13, 19, 35, 0.55))",
+                                                pointerEvents: "none"
+                                            }} />
+                                        </div>
+
+                                        {/* Card Body */}
+                                        <div className="lead-card-body" style={{
+                                            padding: "20px 22px 22px",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            gap: "4px",
+                                            textAlign: "left"
+                                        }}>
+                                            {/* Department Label */}
+                                            <span className="lead-dept-label" style={{
+                                                fontFamily: "var(--font-mono)",
+                                                fontSize: "10px",
+                                                letterSpacing: "0.1em",
+                                                textTransform: "uppercase",
+                                                fontWeight: 600,
+                                                color: member.glowColor,
+                                                marginBottom: "6px",
+                                                transition: "filter 0.25s ease"
+                                            }}>
+                                                {member.dept}
+                                            </span>
+                                            {/* Name */}
+                                            <h4 style={{
+                                                fontFamily: "var(--font-display)",
+                                                fontSize: "1.15rem",
+                                                fontWeight: 700,
+                                                letterSpacing: "-0.01em",
+                                                color: "#ffffff",
+                                                lineHeight: 1.2,
+                                                margin: "0 0 4px 0"
+                                            }}>
+                                                {member.name}
+                                            </h4>
+                                            {/* Title */}
+                                            <p style={{
+                                                fontFamily: "var(--font-mono)",
+                                                fontSize: "11px",
+                                                letterSpacing: "0.06em",
+                                                textTransform: "uppercase",
+                                                color: "var(--text-secondary)",
+                                                lineHeight: 1.5,
+                                                margin: 0
+                                            }}>
+                                                {member.role}
+                                            </p>
+
+                                            {/* LinkedIn Link Section */}
+                                            <div style={{
+                                                marginTop: "16px",
+                                                paddingTop: "14px",
+                                                borderTop: "1px solid rgba(255, 255, 255, 0.04)",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between"
+                                            }}>
+                                                <span style={{
+                                                    fontFamily: "var(--font-mono)",
+                                                    fontSize: "10px",
+                                                    letterSpacing: "0.08em",
+                                                    textTransform: "uppercase",
+                                                    color: "rgba(255, 255, 255, 0.36)"
+                                                }}>
+                                                    View Profile
+                                                </span>
+                                                <a
+                                                    href={member.linkedinUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    aria-label={`${member.name} on LinkedIn`}
+                                                    className="lead-linkedin-btn"
+                                                    style={{
+                                                        width: "30px",
+                                                        height: "30px",
+                                                        borderRadius: "6px",
+                                                        background: "rgba(255, 255, 255, 0.06)",
+                                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        transition: "all 0.2s ease",
+                                                        textDecoration: "none"
+                                                    }}
+                                                >
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                        <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" style={{ transition: "fill 0.2s" }} />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
                         </motion.div>
                     </div>
                 </div>

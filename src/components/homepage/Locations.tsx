@@ -61,7 +61,7 @@ export default function Locations() {
     const [activeHub, setActiveHub] = useState(hubs[0]);
 
     return (
-        <section className="section" id="locations-section" style={{ position: "relative", borderTop: "1px solid var(--border)", padding: "100px 0" }}>
+        <section className="section" id="locations-section" style={{ position: "relative", borderTop: "1px solid var(--border)" }}>
             {/* Ambient Background Glow */}
             <div style={{
                 position: "absolute",
@@ -74,7 +74,7 @@ export default function Locations() {
             }} />
 
             <div className="container">
-                <div style={{ textAlign: "center", marginBottom: "56px" }}>
+                <div style={{ textAlign: "center", marginBottom: "36px" }}>
                     <span className="badge mint" style={{ marginBottom: "16px" }}>Our Locations</span>
                     <h2 style={{ fontSize: "2.5rem", fontWeight: 700, letterSpacing: "-0.025em" }}>
                         Global Engineering Footprint

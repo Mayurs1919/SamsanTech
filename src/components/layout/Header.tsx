@@ -19,15 +19,16 @@ interface NavItem {
 
 const navItems: NavItem[] = [
     { label: "Home", href: "/", isVisible: true },
-    { label: "About", href: "/about", isVisible: true },
-    { label: "Engineering Offerings", href: "/services", isVisible: true },
-    { label: "Products & Accelerators", href: "/solutions", isVisible: true },
-    { label: "Case Studies", href: "/case-studies", isVisible: false },
+    { label: "Engineering Offerings", href: "/engineering-offerings", isVisible: true },
+    { label: "Products & Accelerators", href: "/products-and-accelerators", isVisible: true },
     { label: "Labs & Delivery", href: "/labs-and-delivery", isVisible: true },
-    { label: "Engagement Models", href: "/engagement-models", isVisible: false },
     { label: "Investors / Partners", href: "/investors", isVisible: true },
+    { label: "About", href: "/about", isVisible: true },
     { label: "Careers", href: "/careers", isVisible: true },
     { label: "Contact", href: "/contact", isVisible: true },
+    // Hidden items not in the approved list
+    { label: "Case Studies", href: "/case-studies", isVisible: false },
+    { label: "Engagement Models", href: "/engagement-models", isVisible: false },
 ];
 
 export default function Header() {
@@ -38,6 +39,7 @@ export default function Header() {
 
     const pathname = usePathname();
     const shouldReduce = useReducedMotion();
+    const isContactPage = pathname === "/contact";
 
     useEffect(() => {
         setIsOpen(false);
@@ -169,12 +171,14 @@ export default function Header() {
 
                     {/* Desktop CTA + hamburger (grid col 3 — right) */}
                     <div className="nav-actions">
-                        <Link href="/contact" className="btn btn-primary">
-                            Get Started
-                            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </Link>
+                        {!isContactPage && (
+                            <Link href="/contact" className="btn btn-primary">
+                                Get Started
+                                <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </Link>
+                        )}
 
                         {/* Hamburger — shown on small screens, hidden on desktop via CSS */}
                         <button
@@ -272,16 +276,18 @@ export default function Header() {
                                     </div>
                                 );
                             })}
-                            <div className="nav-cta-mobile">
-                                <Link
-                                    href="/contact"
-                                    className="btn btn-primary"
-                                    onClick={() => setIsOpen(false)}
-                                    style={{ width: "100%", justifyContent: "center" }}
-                                >
-                                    Get Started
-                                </Link>
-                            </div>
+                            {!isContactPage && (
+                                <div className="nav-cta-mobile">
+                                    <Link
+                                        href="/contact"
+                                        className="btn btn-primary"
+                                        onClick={() => setIsOpen(false)}
+                                        style={{ width: "100%", justifyContent: "center" }}
+                                    >
+                                        Get Started
+                                    </Link>
+                                </div>
+                            )}
                         </motion.div>
                     )}
                 </AnimatePresence>

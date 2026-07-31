@@ -69,7 +69,8 @@ const productImages: Record<string, string> = {
     "pikniknow": "/images/pikniknow.jpg",
     "twinlnk": "/images/twinlink.png",
     "maestro": "/images/maestro.png",
-    "automate-ai": "/images/automate.png"
+    "automate-ai": "/images/automate.png",
+    "dms-edge": "/images/driver-health.png"
 };
 
 function ProductFlipCard({
@@ -188,7 +189,7 @@ function ProductFlipCard({
                         display: "flex",
                         flexDirection: "column",
                         padding: "22px 20px",
-                        gap: "10px",
+                        gap: "14px",
                         backdropFilter: "blur(12px)",
                         overflowY: "hidden"
                     }}
@@ -211,7 +212,7 @@ function ProductFlipCard({
                     </p>
 
                     {/* B) TECHNOLOGIES */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: "5px", flexShrink: 0 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px", flexShrink: 0, marginTop: "auto" }}>
                         <span
                             style={{
                                 fontFamily: "var(--font-mono)",
@@ -241,13 +242,12 @@ function ProductFlipCard({
                     {/* C) BUTTONS */}
                     <div
                         style={{
-                            marginTop: "auto",
                             display: "flex",
                             flexDirection: "column",
                             gap: "8px",
                             width: "100%",
                             flexShrink: 0,
-                            paddingTop: "4px"
+                            paddingTop: "6px"
                         }}
                     >
                         <Link
@@ -355,20 +355,20 @@ const products = [
         number: "04",
         iconColor: "#EF4444",
         title: "DMS Edge",
-        description: "Advanced Driver Monitoring System (DMS) with real-time facial expression tracking to detect drowsiness and distraction — enhancing driving safety proactively.",
+        description: "AI-based Driver Monitoring System combines facial recognition, gaze tracking, and behavioural analytics to deliver intelligent in-cabin safety monitoring. The solution provides real-time event detection and actionable insights for next-generation connected vehicles.",
         icon: (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="8" r="4" />
-                <path d="M4 20v-1a8 8 0 0 1 16 0v1" />
-                <path d="M9 11l3 3 3-3" />
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 5v2M12 17v2M5 12H3M21 12h-2" strokeWidth="1.5" />
             </svg>
         ),
         techs: [
             { label: "OpenCV", logoUrl: Logos.opencv },
             { label: "TensorFlow", logoUrl: Logos.tensorflow },
-            { label: "Kotlin", logoUrl: Logos.kotlin },
-            { label: "CAN Bus", isBadge: true },
-            { label: "HMI", isBadge: true },
+            { label: "Python", isBadge: true },
+            { label: "Gaze Tracking", isBadge: true },
+            { label: "ADAS", isBadge: true },
         ] as TechChip[]
     },
     {
@@ -477,8 +477,7 @@ const products = [
 const stats = [
     { value: "9+", label: "Products & Accelerators" },
     { value: "Global", label: "OEM/Tier-1 Engagements" },
-    { value: "8+", label: "Industry Verticals" },
-    { value: "100%", label: "On-Time Delivery" }
+    { value: "8+", label: "Industry Verticals" }
 ];
 
 export default function SolutionsPage() {
@@ -517,7 +516,7 @@ export default function SolutionsPage() {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
-                        style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "32px", textAlign: "center" }}
+                        style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "32px", textAlign: "center" }}
                     >
                         {stats.map((s, i) => (
                             <motion.div key={i} variants={fadeUpVariants(shouldReduce)}>
@@ -567,7 +566,7 @@ export default function SolutionsPage() {
                         <p>Our engineering teams can design, build, and deploy tailored systems for your specific requirements.</p>
                         <div className="cta-actions">
                             <Link href="/contact" className="btn btn-primary">Evaluate SAMSAN Accelerators</Link>
-                            <Link href="/services" className="btn btn-outline">View Engineering Offerings</Link>
+                            <Link href="/engineering-offerings" className="btn btn-outline">View Engineering Offerings</Link>
                         </div>
                     </div>
                 </div>

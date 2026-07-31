@@ -73,7 +73,7 @@ export default function EngagementModelsPage() {
                 <div className="container">
                     <motion.div variants={staggerContainerVariants} initial="hidden" animate="visible">
                         <motion.div variants={fadeUpVariants(shouldReduce)} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}>
-                            <Link href="/services" style={{ color: "var(--violet-mid)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
+                            <Link href="/engineering-offerings" style={{ color: "var(--violet-mid)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
                                 Engineering Offerings
                             </Link>
                             <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.8rem" }}>/</span>
@@ -275,7 +275,7 @@ export default function EngagementModelsPage() {
                         <Link href="/contact" className="btn btn-primary">
                             Request Program Consultation
                         </Link>
-                        <Link href="/services" className="btn btn-outline">
+                        <Link href="/engineering-offerings" className="btn btn-outline">
                             View Engineering Offerings
                         </Link>
                     </div>

@@ -50,7 +50,7 @@ export default function CTA() {
                             whileHover={shouldReduce ? {} : { scale: 1.04 }}
                             whileTap={{ scale: 0.97 }}
                         >
-                            <Link href="/services" className="btn btn-outline" id="cta-secondary-btn">
+                            <Link href="/engineering-offerings" className="btn btn-outline" id="cta-secondary-btn">
                                 See our services
                             </Link>
                         </motion.div>
