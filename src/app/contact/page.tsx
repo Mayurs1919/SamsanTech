@@ -24,7 +24,24 @@ const PRODUCT_MAP: Record<string, string> = {
     vseva: "vSeva"
 };
 
+const ROLE_MAP: Record<string, string> = {
+    "linux-bsp-developer": "Linux BSP Developer",
+    "multimedia-middleware-engineer": "Multimedia & Middleware Engineer",
+    "multimedia-middleware-engineer-ota": "Multimedia & Middleware Engineer — OTA",
+    "android-hmi-engineer": "Android HMI Engineer",
+    "connectivity-engineer": "Connectivity Engineer",
+    "media-projection-engineer": "Media Projection Engineer",
+    "android-hmi-engineer-unreal": "Android HMI Engineer — Unreal",
+    "automotive-ivi-testing-engineer": "Automotive IVI Testing Engineer",
+    "hmi-tester": "HMI Tester",
+    "spoc-v2x": "SPOC — V2X",
+    "spoc-rd-ecu": "SPOC — RD ECU",
+    "android-hal-engineer": "Android HAL Engineer",
+    "systems-engineer": "Systems Engineer"
+};
+
 const getInterestFromProduct = (slug: string): string => {
+    if (slug === "careers") return "Careers";
     if (slug === "sdv") return "SDV";
     if (slug === "stafd-in") return "Staffing";
     if (slug === "twinlnk" || slug === "maestro") return "Telematics";
@@ -35,9 +52,12 @@ const getInterestFromProduct = (slug: string): string => {
 function ContactPageContent() {
     const searchParams = useSearchParams();
     const productParam = searchParams.get("product") || "";
+    const roleParam = searchParams.get("role") || "";
     const productSlug = productParam.toLowerCase().trim();
-    const isValidProduct = productSlug && PRODUCT_MAP.hasOwnProperty(productSlug);
-    const productDisplayName = isValidProduct ? PRODUCT_MAP[productSlug] : "";
+    const isCareers = productSlug === "careers";
+    const isValidProduct = productSlug && (PRODUCT_MAP.hasOwnProperty(productSlug) || isCareers);
+    const productDisplayName = isValidProduct && !isCareers ? PRODUCT_MAP[productSlug] : "";
+    const roleDisplayName = ROLE_MAP[roleParam] || (roleParam ? roleParam.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") : "");
 
     const [currentState, setCurrentState] = useState<"form" | "submitted">("form");
     const [submitting, setSubmitting] = useState(false);
@@ -55,12 +75,14 @@ function ContactPageContent() {
 
     const shouldReduce = useReducedMotion();
 
-    // Auto-populate interest dropdown on load based on product
+    // Auto-populate interest dropdown on load based on product or careers
     useEffect(() => {
-        if (isValidProduct) {
+        if (isCareers) {
+            setInterest("Careers");
+        } else if (isValidProduct) {
             setInterest(getInterestFromProduct(productSlug));
         }
-    }, [productSlug, isValidProduct]);
+    }, [productSlug, isCareers, isValidProduct]);
 
     const validate = () => {
         const newErrors: Record<string, string> = {};
@@ -474,7 +496,7 @@ function ContactPageContent() {
 
                                                 <div style={{ marginTop: "24px", textAlign: "center" }}>
                                                     <Link
-                                                        href="/solutions"
+                                                        href="/products-and-accelerators"
                                                         style={{
                                                             fontSize: "0.8rem",
                                                             color: "var(--violet-mid)",
@@ -494,7 +516,27 @@ function ContactPageContent() {
                                 ) : (
                                     <>
                                         {/* Contextual banner ABOVE form */}
-                                        {isValidProduct && (
+                                        {isCareers ? (
+                                            <div style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "12px",
+                                                padding: "16px 20px",
+                                                backgroundColor: "rgba(13, 19, 35, 0.6)",
+                                                border: "1px solid var(--border)",
+                                                borderRadius: "12px",
+                                                marginBottom: "4px"
+                                            }}>
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, color: "var(--violet-mid)" }}>
+                                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                                    <circle cx="8.5" cy="7" r="4" />
+                                                    <polyline points="17 11 19 13 23 9" />
+                                                </svg>
+                                                <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", margin: 0, lineHeight: "1.4" }}>
+                                                    You&apos;re applying for: <strong style={{ color: "var(--text-primary)" }}>{roleDisplayName || "General Application"}</strong>
+                                                </p>
+                                            </div>
+                                        ) : isValidProduct ? (
                                             <div style={{
                                                 display: "flex",
                                                 alignItems: "center",
@@ -515,7 +557,7 @@ function ContactPageContent() {
                                                     You&apos;re one step away from accessing the <strong style={{ color: "var(--text-primary)" }}>{productDisplayName}</strong> brochure. Fill out the form below to unlock it.
                                                 </p>
                                             </div>
-                                        )}
+                                        ) : null}
 
                                         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                                             {/* Hidden field for product slug */}

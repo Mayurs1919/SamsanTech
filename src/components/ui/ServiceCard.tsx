@@ -19,7 +19,7 @@ export interface ServiceCardProps {
     number: string;
     title: string;
     /** Short 1-2 sentence description */
-    description: string;
+    description: string | React.ReactNode;
     /** SVG icon node */
     icon: React.ReactNode;
     /** CSS color value for icon tint — e.g. "#06B6D4" or "var(--mint)" */
@@ -34,6 +34,8 @@ export interface ServiceCardProps {
     brochurePath?: string;
     /** If true, description is shown in italic (pending content) */
     isPending?: boolean;
+    /** Label for the tech chips section, defaults to Technologies */
+    techsLabel?: string;
 }
 
 // ── Inline SVG icons used in chips ──────────────────────────────
@@ -113,6 +115,7 @@ export default function ServiceCard({
     contactSlug,
     brochurePath,
     isPending = false,
+    techsLabel = "Technologies",
 }: ServiceCardProps) {
     const [hovered, setHovered] = useState(false);
 
@@ -237,7 +240,7 @@ export default function ServiceCard({
                         display: "block",
                         marginBottom: "12px"
                     }}>
-                        Technologies
+                        {techsLabel}
                     </span>
 
                     {/* ROW 5 — Tech chips */}

@@ -1,141 +1,180 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
 import Link from "next/link";
+import { runWorkerTask } from "@/utils/multithreadedWorker";
 
 interface Job {
     id: string;
     title: string;
+    slug: string;
     country: string;
     city: string;
     experience: string;
-    category: "Cockpit & IVI" | "Connected Vehicle" | "Embedded & Safety" | "AI & Cloud" | "Management";
+    category: "Embedded Engineering" | "HMI Development" | "Connectivity" | "Validation & Testing" | "Systems Engineering";
     type: string;
     description: string;
+    skills: string[];
 }
 
 const initialJobs: Job[] = [
     {
         id: "1",
-        title: "Android Automotive / AOSP Engineer",
+        title: "Linux BSP Developer",
+        slug: "linux-bsp-developer",
         country: "India",
         city: "Pune",
-        experience: "3-7 years",
-        category: "Cockpit & IVI",
-        type: "Full Time",
-        description: "Develop and integrate Android Automotive OS (AAOS) / AOSP for next-generation in-vehicle infotainment systems. Work on app frameworks, HALs, and system services for automotive platforms."
+        experience: "3–5 Years",
+        category: "Embedded Engineering",
+        type: "Full-time",
+        description: "Hiring developers for Linux BSP and driver development across automotive embedded platforms.",
+        skills: ["Embedded C", "Linux BSP", "Driver Development", "Qualcomm", "NXP", "TI", "Infineon"]
     },
     {
         id: "2",
-        title: "Infotainment Middleware Engineer",
+        title: "Multimedia & Middleware Engineer",
+        slug: "multimedia-middleware-engineer",
         country: "India",
-        city: "Pune",
-        experience: "3-8 years",
-        category: "Cockpit & IVI",
-        type: "Full Time",
-        description: "Design and implement middleware layers for IVI platforms — audio routing, Bluetooth/Wi-Fi stacks, media frameworks, and inter-process communication on QNX or Linux."
+        city: "Pune, Bangalore",
+        experience: "3–5 Years",
+        category: "Embedded Engineering",
+        type: "Full-time",
+        description: "Seeking candidates for multimedia and middleware development in automotive systems including audio/video frameworks and system-level programming.",
+        skills: ["Android Media Framework", "Software Development", "Audio/Video Frameworks", "System Programming"]
     },
     {
         id: "3",
-        title: "Cluster / HMI Developer",
+        title: "Multimedia & Middleware Engineer — OTA",
+        slug: "multimedia-middleware-engineer-ota",
         country: "India",
-        city: "Pune",
-        experience: "2-6 years",
-        category: "Cockpit & IVI",
-        type: "Full Time",
-        description: "Build digital instrument cluster and HMI applications using Qt/QML or HTML5-based frameworks. Integrate with vehicle signal buses and validate display rendering performance."
+        city: "Bangalore",
+        experience: "5–7 Years",
+        category: "Embedded Engineering",
+        type: "Full-time",
+        description: "Looking for professionals with experience in software update systems, update mechanisms, and system integration for automotive platforms.",
+        skills: ["OTA Updates", "AOSP", "AAOS", "Java", "Kotlin", "System Integration"]
     },
     {
         id: "4",
-        title: "Telematics / TCU Engineer",
+        title: "Android HMI Engineer",
+        slug: "android-hmi-engineer",
         country: "India",
         city: "Pune",
-        experience: "3-7 years",
-        category: "Connected Vehicle",
-        type: "Full Time",
-        description: "Develop firmware and software for Telematics Control Units (TCU) — cellular connectivity, GNSS, OTA update pipelines, and remote diagnostics integration with cloud backends."
+        experience: "5–8 Years",
+        category: "HMI Development",
+        type: "Full-time",
+        description: "Hiring experienced HMI Engineers for Android-based automotive applications with system and user-level app development experience.",
+        skills: ["Java", "Kotlin", "Jetpack", "HMI Development", "Android Automotive"]
     },
     {
         id: "5",
-        title: "AUTOSAR Engineer",
+        title: "Connectivity Engineer",
+        slug: "connectivity-engineer",
         country: "India",
-        city: "Pune",
-        experience: "3-8 years",
-        category: "Embedded & Safety",
-        type: "Full Time",
-        description: "Configure and implement Classic or Adaptive AUTOSAR stacks. Work on BSWs, RTE generation, COM stack tuning, and ECU integration across multi-supplier projects."
+        city: "Bangalore",
+        experience: "7–9 Years",
+        category: "Connectivity",
+        type: "Full-time",
+        description: "Looking for senior engineers in the automotive connectivity domain with hands-on experience in connectivity stack and integration.",
+        skills: ["Bluetooth", "Wi-Fi", "AOSP", "Telematics", "Yocto Linux", "Connectivity Stack"]
     },
     {
         id: "6",
-        title: "Functional Safety Engineer",
+        title: "Media Projection Engineer",
+        slug: "media-projection-engineer",
         country: "India",
-        city: "Pune",
-        experience: "4-10 years",
-        category: "Embedded & Safety",
-        type: "Full Time",
-        description: "Drive ISO 26262 compliance activities — HARA, safety concept development, FMEA/FTA, safety case creation, and coordination with system and software teams for ASIL-rated products."
+        city: "Pune, Bangalore",
+        experience: "2–7 Years",
+        category: "HMI Development",
+        type: "Full-time",
+        description: "Seeking engineers with experience in smartphone projection systems and media projection integration for automotive applications.",
+        skills: ["Android Auto", "Apple CarPlay", "Media Projection", "System Integration"]
     },
     {
         id: "7",
-        title: "Cybersecurity Engineer",
+        title: "Android HMI Engineer — Unreal",
+        slug: "android-hmi-engineer-unreal",
         country: "India",
         city: "Pune",
-        experience: "3-8 years",
-        category: "Embedded & Safety",
-        type: "Full Time",
-        description: "Implement automotive cybersecurity per UN R155/ISO 21434 — TARA, secure boot, key management, intrusion detection, and vulnerability assessment across ECUs and network layers."
+        experience: "3–8 Years",
+        category: "HMI Development",
+        type: "Full-time",
+        description: "Hiring developers for advanced HMI development using Unreal Engine with experience in high-performance UI development.",
+        skills: ["Java", "Kotlin", "Unreal Engine", "HMI Development", "High-Performance UI"]
     },
     {
         id: "8",
-        title: "Embedded Linux / BSP Engineer",
+        title: "Automotive IVI Testing Engineer",
+        slug: "automotive-ivi-testing-engineer",
         country: "India",
         city: "Pune",
-        experience: "3-7 years",
-        category: "Embedded & Safety",
-        type: "Full Time",
-        description: "Port and customize Linux BSPs for automotive SoCs (NXP, TI, Renesas, Qualcomm). Driver development, kernel configuration, Yocto/buildroot integration, and bring-up validation."
+        experience: "3–5 Years",
+        category: "Validation & Testing",
+        type: "Full-time",
+        description: "Looking for IVI Test Engineers for infotainment system validation and test automation in automotive environments.",
+        skills: ["Embedded C", "CAPL Scripting", "Python", "Robot Framework", "IVI Testing", "Test Automation"]
     },
     {
         id: "9",
-        title: "Validation Automation Engineer",
+        title: "HMI Tester",
+        slug: "hmi-tester",
         country: "India",
-        city: "Pune",
-        experience: "2-6 years",
-        category: "Embedded & Safety",
-        type: "Full Time",
-        description: "Design and execute automated test frameworks for automotive ECUs and software stacks — HIL/SIL environments, test script development (Python/CAPL), traceability, and CI integration."
+        city: "Bangalore",
+        experience: "3–8 Years",
+        category: "Validation & Testing",
+        type: "Full-time",
+        description: "Seeking HMI Testers with strong experience in validating automotive HMI applications and test automation.",
+        skills: ["Linux", "Python", "Appium", "Automation Scripting", "Android Testing", "Embedded Testing"]
     },
     {
         id: "10",
-        title: "GenAI / AI Engineering Automation Developer",
+        title: "SPOC — V2X",
+        slug: "spoc-v2x",
         country: "India",
         city: "Pune",
-        experience: "2-6 years",
-        category: "AI & Cloud",
-        type: "Full Time",
-        description: "Build GenAI-powered tools for engineering acceleration — requirements generation, test case synthesis, code review automation, and traceability using LLMs and RAG pipelines."
+        experience: "3–8 Years",
+        category: "Connectivity",
+        type: "Full-time",
+        description: "Looking for a SPOC with expertise in Vehicle-to-Everything (V2X) communication systems handling end-to-end V2X modules and integrations.",
+        skills: ["Linux", "C++", "Middleware", "V2X Communication", "System Integration"]
     },
     {
         id: "11",
-        title: "Cloud / IoT Platform Engineer",
+        title: "SPOC — RD ECU",
+        slug: "spoc-rd-ecu",
         country: "India",
         city: "Pune",
-        experience: "3-7 years",
-        category: "AI & Cloud",
-        type: "Full Time",
-        description: "Architect and develop cloud-connected vehicle platforms — telemetry ingestion, OTA management, IoT gateway integration, and real-time data pipelines on AWS / Azure / GCP."
+        experience: "3–8 Years",
+        category: "Embedded Engineering",
+        type: "Full-time",
+        description: "Hiring SPOC for RD ECU development and coordination with experience in ECU software development and automotive communication protocols.",
+        skills: ["Linux", "C++", "Connectivity Protocols", "ECU Development", "Automotive Communication"]
     },
     {
         id: "12",
-        title: "Technical Program Manager — Automotive",
+        title: "Android HAL Engineer",
+        slug: "android-hal-engineer",
+        country: "India",
+        city: "Pune, Bangalore",
+        experience: "3–8 Years",
+        category: "Embedded Engineering",
+        type: "Full-time",
+        description: "Need engineers with strong experience in Android HAL layer development and understanding of Android architecture and low-level system integration.",
+        skills: ["AOSP", "AAOS", "HIDL", "AIDL", "Soong/Make Build System", "Android Architecture"]
+    },
+    {
+        id: "13",
+        title: "Systems Engineer",
+        slug: "systems-engineer",
         country: "India",
         city: "Pune",
-        experience: "7-15 years",
-        category: "Management",
-        type: "Full Time",
-        description: "Lead multi-track automotive software programs from requirements to SOP — stakeholder management, delivery governance, risk tracking, and cross-functional team coordination across OEM and Tier-1 programs."
+        experience: "7+ Years",
+        category: "Systems Engineering",
+        type: "Full-time",
+        description: "Looking for experienced Systems Engineers with strong background in requirements engineering, system architecture, and integration across automotive E/E domains.",
+        skills: ["Requirements Engineering", "System Architecture", "CAN", "LIN", "Ethernet", "ISO 26262", "ISO 21434", "DOORS", "Polarion", "JIRA", "Enterprise Architect", "CANoe", "CANalyzer", "MBSE", "SysML", "UDS", "DoIP", "Agile"]
     }
 ];
 
@@ -152,25 +191,58 @@ export default function CareersPage() {
 
     // Dynamic Filter Option Lists
     const countries = ["All", "India"];
-    const cities = ["All", "Pune"];
-    const experiences = ["All", "2-6 years", "3-7 years", "3-8 years", "4-10 years", "7-15 years"];
-    const categories = ["All", "Cockpit & IVI", "Connected Vehicle", "Embedded & Safety", "AI & Cloud", "Management"];
-    const types = ["All", "Full Time"];
+    const cities = ["All", "Pune", "Bangalore"];
+    const experiences = ["All", "2–7 Years", "3–5 Years", "3–8 Years", "5–7 Years", "5–8 Years", "7–9 Years", "7+ Years"];
+    const categories = ["All", "Embedded Engineering", "HMI Development", "Connectivity", "Validation & Testing", "Systems Engineering"];
+    const types = ["All", "Full-time"];
 
-    // Filter Logic
-    const filteredJobs = useMemo(() => {
-        return initialJobs.filter((job) => {
-            const matchesSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                 job.description.toLowerCase().includes(searchQuery.toLowerCase());
-            
-            const matchesCountry = selectedCountry === "All" || job.country.includes(selectedCountry);
-            const matchesCity = selectedCity === "All" || job.city.includes(selectedCity);
-            const matchesExp = selectedExp === "All" || job.experience.includes(selectedExp);
-            const matchesCategory = selectedCategory === "All" || job.category === selectedCategory;
-            const matchesType = selectedType === "All" || job.type.includes(selectedType);
+    // Multithreaded Background Worker Filter Logic (off-main-thread processing for zero lag)
+    const [filteredJobs, setFilteredJobs] = useState<Job[]>(initialJobs);
 
-            return matchesSearch && matchesCountry && matchesCity && matchesExp && matchesCategory && matchesType;
+    useEffect(() => {
+        let isMounted = true;
+        const filterCriteria = {
+            searchQuery,
+            selectedCountry,
+            selectedCity,
+            selectedExp,
+            selectedCategory,
+            selectedType,
+            jobs: initialJobs
+        };
+
+        runWorkerTask((data) => {
+            return data.jobs.filter((job) => {
+                const matchesSearch = job.title.toLowerCase().includes(data.searchQuery.toLowerCase().trim());
+                const matchesCountry = data.selectedCountry === "All" || job.country.includes(data.selectedCountry);
+                const matchesCity = data.selectedCity === "All" || job.city.includes(data.selectedCity);
+                const matchesExp = data.selectedExp === "All" || job.experience === data.selectedExp;
+                const matchesCategory = data.selectedCategory === "All" || job.category === data.selectedCategory;
+                const matchesType = data.selectedType === "All" || job.type === data.selectedType;
+
+                return matchesSearch && matchesCountry && matchesCity && matchesExp && matchesCategory && matchesType;
+            });
+        }, filterCriteria).then((result) => {
+            if (isMounted) {
+                setFilteredJobs(result);
+            }
+        }).catch(() => {
+            if (isMounted) {
+                setFilteredJobs(initialJobs.filter((job) => {
+                    const matchesSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
+                    const matchesCountry = selectedCountry === "All" || job.country.includes(selectedCountry);
+                    const matchesCity = selectedCity === "All" || job.city.includes(selectedCity);
+                    const matchesExp = selectedExp === "All" || job.experience === selectedExp;
+                    const matchesCategory = selectedCategory === "All" || job.category === selectedCategory;
+                    const matchesType = selectedType === "All" || job.type === selectedType;
+                    return matchesSearch && matchesCountry && matchesCity && matchesExp && matchesCategory && matchesType;
+                }));
+            }
         });
+
+        return () => {
+            isMounted = false;
+        };
     }, [searchQuery, selectedCountry, selectedCity, selectedExp, selectedCategory, selectedType]);
 
     return (
@@ -418,27 +490,30 @@ export default function CareersPage() {
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 0.5 }}
+                                whileHover={{ y: -6, borderColor: "rgba(168, 85, 247, 0.5)", boxShadow: "0 14px 40px rgba(124, 58, 237, 0.25)" }}
+                                transition={{ duration: 0.3 }}
                                 style={{
-                                    background: "rgba(13,19,35,0.4)",
+                                    background: "linear-gradient(135deg, rgba(13,19,35,0.6) 0%, rgba(20,28,50,0.4) 100%)",
                                     border: "1px solid var(--border)",
                                     borderRadius: "var(--radius)",
                                     padding: "32px",
-                                    boxShadow: "0 10px 30px rgba(0,0,0,0.15)"
+                                    position: "relative",
+                                    overflow: "hidden",
+                                    backdropFilter: "blur(12px)"
                                 }}
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
-                                    <div style={{ color: "var(--violet-mid)", backgroundColor: "var(--violet-soft)", padding: "8px", borderRadius: "50%" }}>
+                                    <div style={{ color: "var(--violet-mid)", backgroundColor: "rgba(124,58,237,0.15)", padding: "10px", borderRadius: "12px", border: "1px solid rgba(124,58,237,0.3)" }}>
                                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 13l-9-4.91V15l9 4.91 9-4.91v-3.91L12 16z"/>
                                         </svg>
                                     </div>
                                     <h3 style={{ fontSize: "1.15rem", fontWeight: 600, color: "#ffffff", margin: 0 }}>
-                                        A Culture Of Learning And Growth
+                                        AI-Powered Learning & Growth
                                     </h3>
                                 </div>
                                 <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.7", margin: 0 }}>
-                                    We cultivate a culture of continuous learning and personal growth. With access to resources, workshops, and mentorship, you&apos;ll have the tools to expand your knowledge and develop your skills, unleashing your full potential.
+                                    We cultivate a culture of continuous learning and personal growth using AI-driven knowledge tools, workshops, and high-tech mentorship to unleash your full engineering potential.
                                 </p>
                             </motion.div>
 
@@ -447,17 +522,20 @@ export default function CareersPage() {
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: 0.1 }}
+                                whileHover={{ y: -6, borderColor: "rgba(77, 216, 232, 0.5)", boxShadow: "0 14px 40px rgba(0, 210, 255, 0.2)" }}
+                                transition={{ duration: 0.3, delay: 0.1 }}
                                 style={{
-                                    background: "rgba(13,19,35,0.4)",
+                                    background: "linear-gradient(135deg, rgba(13,19,35,0.6) 0%, rgba(20,28,50,0.4) 100%)",
                                     border: "1px solid var(--border)",
                                     borderRadius: "var(--radius)",
                                     padding: "32px",
-                                    boxShadow: "0 10px 30px rgba(0,0,0,0.15)"
+                                    position: "relative",
+                                    overflow: "hidden",
+                                    backdropFilter: "blur(12px)"
                                 }}
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
-                                    <div style={{ color: "var(--violet-mid)", backgroundColor: "var(--violet-soft)", padding: "8px", borderRadius: "50%" }}>
+                                    <div style={{ color: "#4dd8e8", backgroundColor: "rgba(77,216,232,0.15)", padding: "10px", borderRadius: "12px", border: "1px solid rgba(77,216,232,0.3)" }}>
                                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
                                         </svg>
@@ -472,18 +550,6 @@ export default function CareersPage() {
                             </motion.div>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            {/* ── CTA Banner Strip ── */}
-            <section style={{ backgroundColor: "#060913", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "40px 0" }}>
-                <div className="container" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <Link 
-                        href="#job-openings" 
-                        className="btn btn-primary"
-                    >
-                        Explore Automotive Engineering Roles
-                    </Link>
                 </div>
             </section>
 
@@ -502,10 +568,12 @@ export default function CareersPage() {
                         gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
                         gap: "16px",
                         marginBottom: "40px",
-                        background: "rgba(13,19,35,0.3)",
+                        background: "rgba(13,19,35,0.5)",
                         padding: "24px",
                         borderRadius: "16px",
-                        border: "1px solid var(--border)"
+                        border: "1px solid rgba(124, 58, 237, 0.2)",
+                        boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
+                        backdropFilter: "blur(12px)"
                     }}>
                         {/* Search Query */}
                         <div style={{ position: "relative" }}>
@@ -518,7 +586,7 @@ export default function CareersPage() {
                                     width: "100%",
                                     padding: "12px 16px",
                                     borderRadius: "8px",
-                                    backgroundColor: "rgba(10,15,28,0.6)",
+                                    backgroundColor: "rgba(10,15,28,0.7)",
                                     border: "1px solid var(--border)",
                                     color: "#fff",
                                     outline: "none",
@@ -534,7 +602,7 @@ export default function CareersPage() {
                             style={{
                                 padding: "12px 16px",
                                 borderRadius: "8px",
-                                backgroundColor: "rgba(10,15,28,0.6)",
+                                backgroundColor: "rgba(10,15,28,0.7)",
                                 border: "1px solid var(--border)",
                                 color: "#fff",
                                 outline: "none",
@@ -552,7 +620,7 @@ export default function CareersPage() {
                             style={{
                                 padding: "12px 16px",
                                 borderRadius: "8px",
-                                backgroundColor: "rgba(10,15,28,0.6)",
+                                backgroundColor: "rgba(10,15,28,0.7)",
                                 border: "1px solid var(--border)",
                                 color: "#fff",
                                 outline: "none",
@@ -570,7 +638,7 @@ export default function CareersPage() {
                             style={{
                                 padding: "12px 16px",
                                 borderRadius: "8px",
-                                backgroundColor: "rgba(10,15,28,0.6)",
+                                backgroundColor: "rgba(10,15,28,0.7)",
                                 border: "1px solid var(--border)",
                                 color: "#fff",
                                 outline: "none",
@@ -588,7 +656,7 @@ export default function CareersPage() {
                             style={{
                                 padding: "12px 16px",
                                 borderRadius: "8px",
-                                backgroundColor: "rgba(10,15,28,0.6)",
+                                backgroundColor: "rgba(10,15,28,0.7)",
                                 border: "1px solid var(--border)",
                                 color: "#fff",
                                 outline: "none",
@@ -606,7 +674,7 @@ export default function CareersPage() {
                             style={{
                                 padding: "12px 16px",
                                 borderRadius: "8px",
-                                backgroundColor: "rgba(10,15,28,0.6)",
+                                backgroundColor: "rgba(10,15,28,0.7)",
                                 border: "1px solid var(--border)",
                                 color: "#fff",
                                 outline: "none",
@@ -618,12 +686,12 @@ export default function CareersPage() {
                         </select>
                     </div>
 
-                    {/* Jobs Display Grid */}
+                    {/* Jobs Display Grid with AI Animation */}
                     <motion.div 
                         layout
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
                             gap: "24px"
                         }}
                     >
@@ -632,51 +700,98 @@ export default function CareersPage() {
                                 <motion.div
                                     key={job.id}
                                     layout
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
-                                    transition={{ duration: 0.2 }}
+                                    whileHover={{ 
+                                        y: -8, 
+                                        borderColor: "rgba(168, 85, 247, 0.6)",
+                                        boxShadow: "0 20px 48px rgba(124, 58, 237, 0.22), 0 0 20px rgba(77, 216, 232, 0.15)"
+                                    }}
+                                    transition={{ duration: 0.35, ease: "easeOut" }}
                                     style={{
-                                        background: "rgba(13, 19, 35, 0.45)",
-                                        border: "1px solid var(--border)",
-                                        borderRadius: "var(--radius)",
+                                        background: "linear-gradient(145deg, rgba(13, 19, 35, 0.65) 0%, rgba(20, 28, 52, 0.5) 100%)",
+                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                        borderRadius: "16px",
                                         padding: "30px",
                                         display: "flex",
                                         flexDirection: "column",
                                         justifyContent: "space-between",
-                                        boxShadow: "0 10px 35px rgba(0,0,0,0.1)",
-                                        backdropFilter: "blur(12px)"
+                                        position: "relative",
+                                        overflow: "hidden",
+                                        backdropFilter: "blur(14px)"
                                     }}
                                 >
+                                    {/* AI Futuristic Scanning Pulse Beam */}
+                                    <motion.div 
+                                        animate={{ x: ["-100%", "200%"] }}
+                                        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                                        style={{
+                                            position: "absolute",
+                                            top: 0,
+                                            left: 0,
+                                            width: "40%",
+                                            height: "2px",
+                                            background: "linear-gradient(90deg, transparent, #4dd8e8, #a855f7, transparent)",
+                                            pointerEvents: "none"
+                                        }}
+                                    />
+
                                     <div>
                                         <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "16px", flexWrap: "wrap" }}>
-                                            <span className="badge" style={{ fontSize: "8px", padding: "4px 10px" }}>{job.category}</span>
-                                            <span className="badge rose" style={{ fontSize: "8px", padding: "4px 10px" }}>{job.type.split(",")[0]}</span>
+                                            <span className="badge" style={{ fontSize: "9px", padding: "4px 10px", backgroundColor: "rgba(124, 58, 237, 0.2)", border: "1px solid rgba(124, 58, 237, 0.4)", color: "#c084fc" }}>
+                                                {job.category}
+                                            </span>
+                                            <span className="badge rose" style={{ fontSize: "9px", padding: "4px 10px" }}>{job.type}</span>
+                                            <span style={{ marginLeft: "auto", fontSize: "0.7rem", color: "#4dd8e8", display: "inline-flex", alignItems: "center", gap: "4px", fontWeight: 600 }}>
+                                                <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#4dd8e8", boxShadow: "0 0 8px #4dd8e8" }} />
+                                                AI-Accelerated
+                                            </span>
                                         </div>
-                                        <h3 style={{ fontSize: "1.25rem", color: "#ffffff", fontWeight: 600, marginBottom: "12px", fontFamily: "var(--font-display)" }}>
+                                        <h3 style={{ fontSize: "1.25rem", color: "#ffffff", fontWeight: 600, marginBottom: "12px", fontFamily: "var(--font-display)", lineHeight: "1.3" }}>
                                             {job.title}
                                         </h3>
                                         <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.82rem", color: "var(--text-secondary)", marginBottom: "16px" }}>
-                                            <div>📍 <strong>Location:</strong> {job.country} ({job.city})</div>
+                                            <div>📍 <strong>Location:</strong> {job.city}, {job.country}</div>
                                             <div>💼 <strong>Experience:</strong> {job.experience}</div>
                                         </div>
-                                        <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: "1.6", margin: "0 0 24px 0" }}>
+                                        <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.6", margin: "0 0 20px 0" }}>
                                             {job.description}
                                         </p>
+                                        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "24px" }}>
+                                            {job.skills.map((skill) => (
+                                                <motion.span
+                                                    key={skill}
+                                                    whileHover={{ scale: 1.05, backgroundColor: "rgba(168, 85, 247, 0.15)", borderColor: "rgba(168, 85, 247, 0.4)" }}
+                                                    style={{
+                                                        fontSize: "0.75rem",
+                                                        padding: "4px 9px",
+                                                        borderRadius: "6px",
+                                                        backgroundColor: "rgba(255, 255, 255, 0.04)",
+                                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                                        color: "var(--text-secondary)",
+                                                        transition: "all 0.2s ease"
+                                                    }}
+                                                >
+                                                    {skill}
+                                                </motion.span>
+                                            ))}
+                                        </div>
                                     </div>
                                     <Link 
-                                        href="/contact" 
+                                        href={`/contact?product=careers&role=${job.slug}`} 
                                         className="btn btn-outline" 
                                         style={{ 
                                             padding: "10px 18px", 
-                                            fontSize: "0.8rem", 
+                                            fontSize: "0.85rem", 
                                             width: "100%",
                                             justifyContent: "center",
-                                            border: "1px solid rgba(255,255,255,0.08)",
-                                            backgroundColor: "rgba(255,255,255,0.02)"
+                                            border: "1px solid rgba(168, 85, 247, 0.3)",
+                                            backgroundColor: "rgba(124, 58, 237, 0.05)",
+                                            color: "#ffffff"
                                         }}
                                     >
-                                        More Details →
+                                        Apply Now →
                                     </Link>
                                 </motion.div>
                             ))}
@@ -684,8 +799,11 @@ export default function CareersPage() {
                     </motion.div>
 
                     {filteredJobs.length === 0 && (
-                        <div style={{ textAlign: "center", padding: "60px", color: "var(--text-secondary)" }}>
-                            No job openings match your current filter selections.
+                        <div style={{ textAlign: "center", padding: "60px", color: "var(--text-secondary)", fontSize: "0.95rem" }}>
+                            No openings found for your selection. Try adjusting the filters or contact us at{" "}
+                            <a href="mailto:india@samsanlabs.com" style={{ color: "var(--violet-mid)", textDecoration: "underline" }}>
+                                india@samsanlabs.com
+                            </a>
                         </div>
                     )}
                 </div>

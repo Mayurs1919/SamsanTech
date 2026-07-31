@@ -21,7 +21,7 @@ export default function AboutCompany() {
             }} />
 
             <div className="container">
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "60px", alignItems: "center" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "48px", alignItems: "center" }}>
                     
                     {/* Left side: Intro text */}
                     <div>
@@ -79,7 +79,7 @@ export default function AboutCompany() {
                             background: "linear-gradient(135deg, rgba(22, 30, 53, 0.4) 0%, rgba(27, 36, 64, 0.4) 100%)",
                             border: "1px solid rgba(255, 255, 255, 0.06)",
                             borderRadius: "var(--radius-lg)",
-                            padding: "48px 40px",
+                            padding: "36px 28px",
                             backdropFilter: "blur(20px)",
                             position: "relative",
                             overflow: "hidden"
@@ -96,7 +96,6 @@ export default function AboutCompany() {
                         }} />
 
                         <div style={{ marginBottom: "40px" }}>
-                            <span className="badge" style={{ marginBottom: "16px" }}>Specialized Design House</span>
                             <h3 style={{ fontSize: "1.5rem", fontWeight: 600, color: "#ffffff", lineHeight: "1.3", letterSpacing: "-0.01em" }}>
                                 Focus On Automotive, Cockpit Engineering & Digital Transformation.
                             </h3>

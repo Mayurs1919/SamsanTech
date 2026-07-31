@@ -41,7 +41,7 @@ export default function EmbeddedSystemsPage() {
                         animate="visible"
                     >
                         <motion.div variants={fadeUpVariants(shouldReduce)} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}>
-                            <Link href="/services" style={{ color: "var(--violet-mid)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
+                            <Link href="/engineering-offerings" style={{ color: "var(--violet-mid)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
                                 Engineering Offerings
                             </Link>
                             <span style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}>/</span>

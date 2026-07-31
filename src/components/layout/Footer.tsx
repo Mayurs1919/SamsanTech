@@ -7,15 +7,16 @@ export default function Footer() {
 
     const navigateLinks = [
         { label: "Home",                     href: "/", isVisible: true },
-        { label: "About",                    href: "/about", isVisible: true },
-        { label: "Engineering Offerings",     href: "/services", isVisible: true },
-        { label: "Products & Accelerators",   href: "/solutions", isVisible: true },
-        { label: "Case Studies",             href: "/case-studies", isVisible: false },
+        { label: "Engineering Offerings",     href: "/engineering-offerings", isVisible: true },
+        { label: "Products & Accelerators",   href: "/products-and-accelerators", isVisible: true },
         { label: "Labs & Delivery",           href: "/labs-and-delivery", isVisible: true },
-        { label: "Engagement Models",         href: "/engagement-models", isVisible: false },
         { label: "Investors / Partners",     href: "/investors", isVisible: true },
+        { label: "About",                    href: "/about", isVisible: true },
         { label: "Careers",                  href: "/careers", isVisible: true },
         { label: "Contact",                  href: "/contact", isVisible: true },
+        // Hidden items not in the approved list
+        { label: "Case Studies",             href: "/case-studies", isVisible: false },
+        { label: "Engagement Models",         href: "/engagement-models", isVisible: false },
     ];
 
     return (

@@ -5,15 +5,16 @@ export const siteConfig: SiteConfig = {
     description: "AI-led Automotive Engineering for Software-Defined Mobility. Focused on Automotive, Cockpit Engineering & Digital Transformation.",
     navItems: [
         { label: "Home",                     href: "/" },
-        { label: "Engineering Offerings",     href: "/services" },
-        { label: "Products & Accelerators",   href: "/solutions" },
-        { label: "Case Studies",             href: "/case-studies" },
+        { label: "Engineering Offerings",     href: "/engineering-offerings" },
+        { label: "Products & Accelerators",   href: "/products-and-accelerators" },
         { label: "Labs & Delivery",           href: "/labs-and-delivery" },
-        { label: "Engagement Models",         href: "/engagement-models" },
-        { label: "About",                    href: "/about" },
         { label: "Investors / Partners",     href: "/investors" },
+        { label: "About",                    href: "/about" },
         { label: "Careers",                  href: "/careers" },
         { label: "Contact",                  href: "/contact" },
+        // Hidden items
+        { label: "Case Studies",             href: "/case-studies" },
+        { label: "Engagement Models",         href: "/engagement-models" },
     ],
     socialLinks: [
         { label: "LinkedIn", href: "#" },

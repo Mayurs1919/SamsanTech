@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 const metrics = [
     { label: "Revenue Growth YoY", value: "+42%" },
@@ -19,8 +20,69 @@ const documents = [
     { title: "ISO / Quality / Compliance Credentials", size: "1.5 MB", type: "PDF" }
 ];
 
+const partners = [
+    {
+        initial: "E",
+        domain: "AI & Perception",
+        name: "EdgeTensor",
+        description: "AI-enabled perception stack and solutions for automotive — delivering intelligent sensing and real-time inference at the edge."
+    },
+    {
+        initial: "D",
+        domain: "Connectivity",
+        name: "Deventure",
+        description: "Connectivity experts for automotive — specializing in vehicle communication protocols, telematics, and connected mobility solutions."
+    },
+    {
+        initial: "C",
+        domain: "Web & Mobile",
+        name: "Coreco",
+        description: "Web and mobile app development experts — building scalable, modern applications for enterprise and consumer platforms."
+    },
+    {
+        initial: "P",
+        domain: "Green Mobility",
+        name: "Prasah Pvt Ltd",
+        description: "Hydrogen fuel cell based mobility experts — pioneering clean energy propulsion systems for the next generation of vehicles."
+    },
+    {
+        initial: "P",
+        domain: "ADAS",
+        name: "PEM Technologies Pvt Ltd",
+        description: "ADAS consultants — providing deep expertise in advanced driver assistance systems, sensor fusion, and autonomous driving validation."
+    }
+];
+
 export default function InvestorsPage() {
     const shouldReduce = useReducedMotion();
+    const partnerCardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+    useEffect(() => {
+        if (shouldReduce) {
+            partnerCardsRef.current.forEach((el) => {
+                if (el) { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }
+            });
+            return;
+        }
+        const observers: IntersectionObserver[] = [];
+        partnerCardsRef.current.forEach((el, i) => {
+            if (!el) return;
+            const obs = new IntersectionObserver(
+                ([entry]) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            if (el) { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }
+                        }, i * 100);
+                        obs.disconnect();
+                    }
+                },
+                { threshold: 0.15 }
+            );
+            obs.observe(el);
+            observers.push(obs);
+        });
+        return () => observers.forEach((o) => o.disconnect());
+    }, [shouldReduce]);
 
     return (
         <div style={{ paddingBottom: "80px" }}>
@@ -228,6 +290,120 @@ export default function InvestorsPage() {
                             >
                                 Request Strategic Partner Brief
                             </a>
+                        </div>
+                    </div>
+
+                    {/* Our Partners Section */}
+                    <div style={{ marginTop: "80px", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "64px" }}>
+                        <span
+                            style={{
+                                display: "inline-block",
+                                fontFamily: "var(--font-mono)",
+                                fontSize: "11px",
+                                letterSpacing: "0.1em",
+                                textTransform: "uppercase",
+                                color: "var(--mint)",
+                                marginBottom: "16px"
+                            }}
+                        >
+                            // Our Partners
+                        </span>
+                        <h2 style={{ fontSize: "1.75rem", fontWeight: 700, marginBottom: "12px", color: "#ffffff" }}>
+                            Technology &amp; Domain Partners
+                        </h2>
+                        <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: "1.7", maxWidth: "600px", marginBottom: "40px" }}>
+                            SAMSAN collaborates with specialized technology and domain partners to deliver end-to-end automotive engineering solutions.
+                        </p>
+
+                        <style>{`
+                            .partners-grid {
+                                display: grid;
+                                grid-template-columns: repeat(3, 1fr);
+                                gap: 24px;
+                            }
+                            @media (max-width: 900px) {
+                                .partners-grid { grid-template-columns: repeat(2, 1fr); }
+                            }
+                            @media (max-width: 600px) {
+                                .partners-grid { grid-template-columns: 1fr; }
+                            }
+                            .partner-card {
+                                background: rgba(13, 19, 35, 0.4);
+                                border: 1px solid rgba(255,255,255,0.07);
+                                border-radius: var(--radius);
+                                padding: 28px 24px;
+                                opacity: 0;
+                                transform: translateY(20px);
+                                transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+                            }
+                            .partner-card:hover {
+                                border-color: rgba(6,182,212,0.35);
+                                transform: translateY(-3px);
+                                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                            }
+                        `}</style>
+
+                        <div className="partners-grid">
+                            {partners.map((p, i) => (
+                                <div
+                                    key={p.name}
+                                    className="partner-card"
+                                    ref={(el) => { partnerCardsRef.current[i] = el; }}
+                                >
+                                    {/* Top row */}
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0" }}>
+                                        {/* Initial badge */}
+                                        <div style={{
+                                            width: "48px", height: "48px",
+                                            borderRadius: "10px",
+                                            background: "rgba(16,185,129,0.1)",
+                                            border: "1px solid rgba(16,185,129,0.3)",
+                                            fontFamily: "var(--font-mono)",
+                                            fontSize: "16px",
+                                            fontWeight: 700,
+                                            color: "var(--mint)",
+                                            textAlign: "center",
+                                            lineHeight: "48px",
+                                            flexShrink: 0
+                                        }}>
+                                            {p.initial}
+                                        </div>
+                                        {/* Domain tag */}
+                                        <div style={{
+                                            fontFamily: "var(--font-mono)",
+                                            fontSize: "10px",
+                                            letterSpacing: "0.08em",
+                                            textTransform: "uppercase",
+                                            color: "#F59E0B",
+                                            background: "rgba(245,158,11,0.12)",
+                                            padding: "4px 10px",
+                                            borderRadius: "20px"
+                                        }}>
+                                            {p.domain}
+                                        </div>
+                                    </div>
+                                    {/* Name */}
+                                    <div style={{
+                                        fontSize: "1.05rem",
+                                        fontWeight: 700,
+                                        color: "var(--text-primary)",
+                                        marginTop: "16px",
+                                        marginBottom: "8px",
+                                        fontFamily: "var(--font-display)"
+                                    }}>
+                                        {p.name}
+                                    </div>
+                                    {/* Description */}
+                                    <p style={{
+                                        fontSize: "0.9rem",
+                                        color: "var(--text-secondary)",
+                                        lineHeight: "1.65",
+                                        margin: 0
+                                    }}>
+                                        {p.description}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
                     </div>
 

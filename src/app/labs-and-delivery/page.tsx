@@ -4,52 +4,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
 import Link from "next/link";
 
-// Real classification (Actual vs Representative vs Illustrative) needs sign-off per image before publish
-const labsItems = [
-    {
-        title: "Main Engineering Delivery Floor",
-        category: "Engineering Workspaces",
-        img: "/images/serve_oems.png",
-        desc: "Secure, high-bandwidth design workspaces where systems architects and software engineers collaborate on complex mobility systems.",
-        authenticity: "Representative"
-    },
-    {
-        title: "Software-Defined Cockpit Console",
-        category: "Cockpit / IVI Demonstrators",
-        img: "/images/serve_automotive.png",
-        desc: "Interactive reference cockpit hosting hypervised Android Automotive OS, digital cluster platforms, and multi-display HMI environments.",
-        authenticity: "Representative"
-    },
-    {
-        title: "Hardware-in-the-Loop (HIL) Test Suite",
-        category: "Validation & Test Benches",
-        img: "/images/gallery_hil.png",
-        desc: "Automated real-time test benches validating ECU control firmware under virtualized vehicle dynamics and network loads.",
-        authenticity: "Representative"
-    },
-    {
-        title: "Connected Fleet Management Hub",
-        category: "Cloud / IoT Dashboards",
-        img: "/images/serve_infrastructure.png",
-        desc: "Live telemetry dashboard monitoring diagnostic signals, routing cellular telemetry data, and managing OTA update packages.",
-        authenticity: "Representative"
-    },
-    {
-        title: "Automotive Gateway Edge Platform",
-        category: "Product Accelerators",
-        img: "/images/serve_industrial.png",
-        desc: "Prototype gateway hardware and middleware packages accelerating vehicle-to-cloud security, compute, and connectivity tasks.",
-        authenticity: "Representative"
-    },
-    {
-        title: "Collaborative Innovation Sessions",
-        category: "Team & Culture",
-        img: "/images/serve_semiconductor.png",
-        desc: "Continuous learning workshops, design sprints, and cross-functional teams solving engineering challenges.",
-        authenticity: "Representative"
-    }
-];
-
 export default function LabsAndDeliveryPage() {
     const shouldReduce = useReducedMotion();
 
@@ -84,79 +38,90 @@ export default function LabsAndDeliveryPage() {
                 </div>
             </section>
 
-            {/* Grid Section */}
+            {/* Coming Soon Block */}
             <section className="section compact">
                 <div className="container">
-                    <div style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                        gap: "32px"
-                    }}>
-                        {labsItems.map((item, index) => (
-                            <motion.div
-                                key={item.title}
-                                initial={{ opacity: 0, y: 24 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: index * 0.08 }}
-                                whileHover={{ y: -6 }}
-                                style={{
-                                    background: "rgba(13, 19, 35, 0.4)",
-                                    border: "1px solid rgba(255, 255, 255, 0.05)",
-                                    borderRadius: "var(--radius-lg)",
-                                    overflow: "hidden",
-                                    boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
-                                    transition: "all 0.3s ease"
-                                }}
-                            >
-                                {/* Image Container */}
-                                <div style={{
-                                    height: "240px",
-                                    backgroundImage: `url(${item.img})`,
-                                    backgroundSize: "cover",
-                                    backgroundPosition: "center",
-                                    position: "relative"
-                                }}>
-                                    {/* Category Badge - Left */}
-                                    <div style={{
-                                        position: "absolute",
-                                        top: "16px",
-                                        left: "16px",
-                                    }}>
-                                        <span className="badge rose" style={{ fontSize: "9px" }}>{item.category}</span>
-                                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                        style={{
+                            minHeight: "400px",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            textAlign: "center",
+                            padding: "80px 40px",
+                            gap: "20px"
+                        }}
+                    >
+                        {/* Hourglass Icon */}
+                        <svg
+                            width="64"
+                            height="64"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="var(--mint)"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M5 3h14" />
+                            <path d="M5 21h14" />
+                            <path d="M7 3v4.5A5 5 0 0 0 12 12a5 5 0 0 0 5-4.5V3" />
+                            <path d="M7 21v-4.5A5 5 0 0 1 12 12a5 5 0 0 1 5 4.5V21" />
+                        </svg>
 
-                                    {/* Authenticity Caption Overlay - Right */}
-                                    <div style={{
-                                        position: "absolute",
-                                        top: "16px",
-                                        right: "16px",
-                                    }}>
-                                        <span className="badge" style={{ 
-                                            fontSize: "8px", 
-                                            textTransform: "uppercase", 
-                                            background: "rgba(0, 0, 0, 0.7)", 
-                                            border: "1px solid rgba(255, 255, 255, 0.15)", 
-                                            color: "rgba(255, 255, 255, 0.9)",
-                                            padding: "4px 8px",
-                                            borderRadius: "4px",
-                                            letterSpacing: "0.05em",
-                                            fontWeight: 600
-                                        }}>
-                                            {/* Code Comment: Real classification (Actual vs Representative vs Illustrative) needs sign-off per image before publish */}
-                                            {item.authenticity}
-                                        </span>
-                                    </div>
-                                </div>
+                        {/* Heading */}
+                        <h2 style={{
+                            fontFamily: "var(--font-display)",
+                            fontSize: "1.8rem",
+                            fontWeight: 700,
+                            color: "var(--text-primary)",
+                            margin: 0
+                        }}>
+                            Labs & Delivery
+                        </h2>
 
-                                {/* Text Content */}
-                                <div style={{ padding: "28px" }}>
-                                    <h3 style={{ fontSize: "1.2rem", color: "#ffffff", marginBottom: "12px", fontWeight: 600 }}>{item.title}</h3>
-                                    <p style={{ fontSize: "0.85rem", lineHeight: "1.6", color: "var(--text-secondary)", margin: 0 }}>{item.desc}</p>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
+                        {/* Subheading */}
+                        <span style={{
+                            fontFamily: "var(--font-mono)",
+                            fontSize: "12px",
+                            letterSpacing: "0.1em",
+                            textTransform: "uppercase",
+                            color: "var(--mint)"
+                        }}>
+                            Content Coming Soon
+                        </span>
+
+                        {/* Description */}
+                        <p style={{
+                            fontSize: "1rem",
+                            lineHeight: 1.75,
+                            color: "var(--text-secondary)",
+                            maxWidth: "480px",
+                            margin: 0
+                        }}>
+                            We&apos;re preparing a detailed showcase of our engineering workspaces, cockpit demonstrators, validation benches, and team facilities. Check back soon.
+                        </p>
+
+                        {/* CTA Button */}
+                        <motion.div
+                            whileHover={shouldReduce ? {} : { scale: 1.04 }}
+                            whileTap={{ scale: 0.97 }}
+                            style={{ marginTop: "12px" }}
+                        >
+                            <Link href="/contact" className="btn btn-primary">
+                                Contact Us in the Meantime
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </Link>
+                        </motion.div>
+                    </motion.div>
                 </div>
             </section>
         </div>
