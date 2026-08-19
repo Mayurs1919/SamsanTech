@@ -84,13 +84,13 @@ export default function OfferingCards() {
                 position: "relative",
                 overflow: "hidden",
                 padding: "64px 0",
-                borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+                borderTop: "1px solid rgba(15, 23, 42, 0.1)",
             }}
         >
             <style>{`
                 .pillar-card {
                     position: relative;
-                    background: rgba(13, 19, 35, 0.55);
+                    background: #0F172A;
                     border: none;
                     border-radius: 16px;
                     padding: 28px 24px;
@@ -145,7 +145,7 @@ export default function OfferingCards() {
                 }
                 .pillar-card:hover {
                     transform: translateY(-4px);
-                    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+                    box-shadow: 0 20px 48px rgba(0,0,0,0.45);
                 }
                 .pillar-card:hover .arrow-btn {
                     background: #4DD8E8 !important;
@@ -153,6 +153,23 @@ export default function OfferingCards() {
                 }
                 .pillar-card:hover .arrow-btn svg path {
                     stroke: #ffffff !important;
+                }
+                /* Force card text colors — prevents global h3/p vars from .section-light bleeding in */
+                .pillar-card h3 {
+                    color: #F1F5F9 !important;
+                    -webkit-text-fill-color: #F1F5F9 !important;
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    line-height: 1.3;
+                    letter-spacing: -0.01em;
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                }
+                .pillar-card p {
+                    color: #94A3B8 !important;
+                    -webkit-text-fill-color: #94A3B8 !important;
+                    font-size: 0.93rem;
+                    line-height: 1.7;
                 }
                 @media (max-width: 639px) {
                     .dest-label {
@@ -180,7 +197,7 @@ export default function OfferingCards() {
                         fontWeight: 700,
                         lineHeight: 1.12,
                         letterSpacing: "-0.01em",
-                        color: "#ffffff",
+                        color: "#0F172A",
                         marginBottom: "16px"
                     }}>
                         What We Do
@@ -188,7 +205,7 @@ export default function OfferingCards() {
                     <p className="lead" style={{
                         maxWidth: "600px",
                         margin: "0 auto",
-                        color: "var(--text-secondary)",
+                        color: "#334155",
                         fontSize: "1.1rem",
                         lineHeight: "1.75"
                     }}>
@@ -244,7 +261,7 @@ export default function OfferingCards() {
                                         fontFamily: "var(--font-mono)",
                                         fontSize: "11px",
                                         letterSpacing: "0.1em",
-                                        color: "rgba(255,255,255,0.12)",
+                                        color: "rgba(255,255,255,0.2)",
                                         fontWeight: 400,
                                         zIndex: 2
                                     }}>
@@ -276,7 +293,7 @@ export default function OfferingCards() {
                                         fontWeight: 700,
                                         lineHeight: 1.3,
                                         letterSpacing: "-0.01em",
-                                        color: "#ffffff",
+                                        color: "#F1F5F9",
                                         marginTop: "20px",
                                         marginBottom: "10px",
                                         position: "relative",
@@ -287,7 +304,7 @@ export default function OfferingCards() {
                                     <p style={{
                                         fontSize: "0.93rem",
                                         lineHeight: "1.7",
-                                        color: "var(--text-secondary)",
+                                        color: "#94A3B8",
                                         margin: 0,
                                         marginBottom: "20px",
                                         flexGrow: 1,
@@ -310,9 +327,9 @@ export default function OfferingCards() {
                                                 letterSpacing: "0.05em",
                                                 padding: "4px 10px",
                                                 borderRadius: "20px",
-                                                background: "rgba(255,255,255,0.05)",
-                                                border: "1px solid rgba(255,255,255,0.08)",
-                                                color: "rgba(240, 244, 255, 0.6)"
+                                                background: "rgba(255,255,255,0.08)",
+                                                border: "1px solid rgba(255,255,255,0.12)",
+                                                color: "#CBD5E1"
                                             }}>
                                                 {tag}
                                             </span>
@@ -323,7 +340,7 @@ export default function OfferingCards() {
                                     <div style={{
                                         marginTop: "20px",
                                         paddingTop: "16px",
-                                        borderTop: "1px solid rgba(255, 255, 255, 0.032)",
+                                        borderTop: "1px solid rgba(255, 255, 255, 0.08)",
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "space-between",
@@ -335,7 +352,7 @@ export default function OfferingCards() {
                                             fontSize: "10px",
                                             letterSpacing: "0.08em",
                                             textTransform: "uppercase",
-                                            color: "rgba(156, 168, 196, 0.55)"
+                                            color: "#94A3B8"
                                         }}>
                                             {p.destLabel}
                                         </span>
@@ -344,8 +361,8 @@ export default function OfferingCards() {
                                             width: "32px",
                                             height: "32px",
                                             borderRadius: "50%",
-                                            background: "rgba(255,255,255,0.05)",
-                                            border: "1px solid rgba(255, 255, 255, 0.08)",
+                                            background: "rgba(255,255,255,0.08)",
+                                            border: "1px solid rgba(255, 255, 255, 0.15)",
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "center",
@@ -355,7 +372,7 @@ export default function OfferingCards() {
                                                 <path
                                                     d="M2 7h10M7 2l5 5-5 5"
                                                     style={{
-                                                        stroke: "rgba(156, 168, 196, 0.55)",
+                                                        stroke: "#94A3B8",
                                                         fill: "none",
                                                         strokeWidth: 1.8,
                                                         strokeLinecap: "round",

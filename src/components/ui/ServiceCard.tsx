@@ -36,6 +36,8 @@ export interface ServiceCardProps {
     isPending?: boolean;
     /** Label for the tech chips section, defaults to Technologies */
     techsLabel?: string;
+    /** Theme variant for card styling */
+    theme?: "light" | "dark";
 }
 
 // ── Inline SVG icons used in chips ──────────────────────────────
@@ -65,20 +67,25 @@ const MqttIcon = () => (
 );
 
 // ── Single tech chip ─────────────────────────────────────────────
-function TechChipItem({ chip }: { chip: TechChip }) {
+function TechChipItem({ chip, theme = "dark" }: { chip: TechChip; theme?: "light" | "dark" }) {
     const [imgError, setImgError] = useState(false);
+    const isLight = theme === "light";
+
+    const chipBg = isLight ? "#F1F5F9" : "rgba(255, 255, 255, 0.05)";
+    const chipBorder = isLight ? "1px solid #E2E8F0" : "1px solid rgba(255, 255, 255, 0.08)";
+    const chipTextColor = isLight ? "#64748B" : "#94A3B8";
 
     return (
         <span style={{
             display: "inline-flex",
             alignItems: "center",
             gap: "6px",
-            background: "rgba(255, 255, 255, 0.04)",
-            border: "1px solid var(--border)",
+            background: chipBg,
+            border: chipBorder,
             borderRadius: "20px",
             padding: "5px 11px",
             fontSize: "12px",
-            color: "var(--text-secondary)",
+            color: chipTextColor,
             fontFamily: "var(--font-body)",
             whiteSpace: "nowrap"
         }}>
@@ -94,11 +101,11 @@ function TechChipItem({ chip }: { chip: TechChip }) {
             )}
             {/* Inline SVG icon */}
             {chip.icon && (
-                <span style={{ color: "var(--text-secondary)", display: "flex", alignItems: "center", flexShrink: 0 }}>
+                <span style={{ color: chipTextColor, display: "flex", alignItems: "center", flexShrink: 0 }}>
                     {chip.icon}
                 </span>
             )}
-            <span style={{ color: "var(--text-secondary)" }}>{chip.label}</span>
+            <span style={{ color: chipTextColor }}>{chip.label}</span>
         </span>
     );
 }
@@ -116,28 +123,40 @@ export default function ServiceCard({
     brochurePath,
     isPending = false,
     techsLabel = "Technologies",
+    theme = "dark"
 }: ServiceCardProps) {
     const [hovered, setHovered] = useState(false);
+    const isLight = theme === "light";
+
+    const cardBg = isLight ? "#FFFFFF" : "#161B22";
+    const cardBorder = isLight
+        ? `1px solid ${hovered ? "rgba(232, 82, 26, 0.3)" : "#E2E8F0"}`
+        : `1px solid ${hovered ? "rgba(77, 216, 232, 0.4)" : "rgba(255, 255, 255, 0.07)"}`;
+    const cardShadow = isLight
+        ? (hovered ? "0 8px 24px rgba(11, 19, 32, 0.1)" : "0 2px 12px rgba(11, 19, 32, 0.06)")
+        : (hovered ? "0 8px 24px rgba(0,0,0,0.3)" : "0 4px 16px rgba(0,0,0,0.15)");
+    const numberColor = isLight ? "rgba(11, 19, 32, 0.15)" : "rgba(255, 255, 255, 0.1)";
+    const titleColor = isLight ? "#0B1320" : "#FFFFFF";
+    const descColor = isLight ? "#475569" : "#CBD5E1";
+    const labelColor = isLight ? "#64748B" : "#94A3B8";
+    const dividerColor = isLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.12)";
 
     return (
         <div
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             style={{
-                background: "rgba(13, 19, 35, 0.55)",
-                border: `1px solid ${hovered ? "var(--border-hov)" : "var(--border)"}`,
+                background: cardBg,
+                border: cardBorder,
                 borderRadius: "12px",
                 padding: "28px",
                 display: "flex",
                 flexDirection: "column",
                 gap: "20px",
                 height: "100%",
-                backdropFilter: "blur(12px)",
                 transform: hovered ? "translateY(-4px)" : "translateY(0)",
                 transition: "all 0.2s ease",
-                boxShadow: hovered
-                    ? "0 8px 24px rgba(0,0,0,0.3)"
-                    : "0 4px 16px rgba(0,0,0,0.15)",
+                boxShadow: cardShadow,
                 justifyContent: "space-between"
             }}
         >
@@ -162,9 +181,8 @@ export default function ServiceCard({
                     <span style={{
                         fontFamily: "var(--font-mono)",
                         fontSize: "12px",
-                        color: "var(--text-secondary)",
+                        color: numberColor,
                         letterSpacing: "0.1em",
-                        opacity: 0.45,
                         fontWeight: 400
                     }}>
                         {number}
@@ -175,7 +193,7 @@ export default function ServiceCard({
                 <h3 style={{
                     fontSize: "1.15rem",
                     fontWeight: 700,
-                    color: "#ffffff",
+                    color: titleColor,
                     letterSpacing: "0.01em",
                     marginTop: "14px",
                     marginBottom: "10px",
@@ -186,15 +204,19 @@ export default function ServiceCard({
                 </h3>
 
                 {/* ROW 3 — Description */}
-                <p style={{
-                    fontSize: "0.92rem",
-                    color: isPending ? "var(--text-muted)" : "var(--text-secondary)",
-                    lineHeight: 1.65,
-                    margin: 0,
-                    fontStyle: isPending ? "italic" : "normal"
-                }}>
-                    {description}
-                </p>
+                {typeof description === "string" ? (
+                    <p style={{
+                        fontSize: "0.92rem",
+                        color: isPending ? "var(--text-muted)" : descColor,
+                        lineHeight: 1.65,
+                        margin: 0,
+                        fontStyle: isPending ? "italic" : "normal"
+                    }}>
+                        {description}
+                    </p>
+                ) : (
+                    description
+                )}
 
                 {/* Optional product image banner */}
                 {image && (
@@ -204,7 +226,7 @@ export default function ServiceCard({
                         aspectRatio: "16/9",
                         borderRadius: "8px",
                         overflow: "hidden",
-                        border: "1px solid var(--border)"
+                        border: `1px solid ${dividerColor}`
                     }}>
                         <img
                             src={image}
@@ -217,17 +239,11 @@ export default function ServiceCard({
                                 display: "block"
                             }}
                         />
-                        <div style={{
-                            position: "absolute",
-                            inset: 0,
-                            background: "linear-gradient(to top, rgba(10,15,28,0.5) 0%, transparent 60%)",
-                            pointerEvents: "none"
-                        }} />
                     </div>
                 )}
 
                 {/* DIVIDER */}
-                <div style={{ borderTop: "1px solid var(--border)", marginTop: "18px", marginBottom: "14px" }} />
+                <div style={{ borderTop: `1px solid ${dividerColor}`, marginTop: "18px", marginBottom: "14px" }} />
 
                 {/* ROW 4 — Technologies label */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -236,7 +252,7 @@ export default function ServiceCard({
                         fontSize: "10.5px",
                         letterSpacing: "0.1em",
                         textTransform: "uppercase",
-                        color: "var(--text-muted)",
+                        color: labelColor,
                         display: "block",
                         marginBottom: "12px"
                     }}>
@@ -248,11 +264,11 @@ export default function ServiceCard({
                         display: "flex",
                         flexWrap: "wrap",
                         gap: "8px",
-                        filter: hovered ? "brightness(1.15)" : "none",
+                        filter: hovered ? "brightness(1.08)" : "none",
                         transition: "filter 0.2s ease"
                     }}>
                         {techs.map((chip, i) => (
-                            <TechChipItem key={i} chip={chip} />
+                            <TechChipItem key={i} chip={chip} theme={theme} />
                         ))}
                     </div>
                 </div>

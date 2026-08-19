@@ -6,7 +6,7 @@ export default function AboutCompany() {
     const shouldReduce = useReducedMotion();
 
     return (
-        <section className="section" id="about-company-section" style={{ position: "relative", overflow: "hidden", borderTop: "1px solid var(--border)" }}>
+        <section className="section" id="about-company-section" style={{ position: "relative", overflow: "hidden", borderTop: "1px solid rgba(15, 23, 42, 0.1)" }}>
             
             {/* Background Glow */}
             <div style={{
@@ -21,7 +21,7 @@ export default function AboutCompany() {
             }} />
 
             <div className="container">
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "48px", alignItems: "center" }}>
+                <div className="about-company-grid">
                     
                     {/* Left side: Intro text */}
                     <div>
@@ -38,30 +38,30 @@ export default function AboutCompany() {
                             A Technology Outcomes And Systems Company
                         </span>
                         
-                        <h2 style={{ fontSize: "2.8rem", marginBottom: "28px", fontWeight: 700, letterSpacing: "-0.025em" }}>
+                        <h2 style={{ fontSize: "2.8rem", marginBottom: "28px", fontWeight: 700, letterSpacing: "-0.025em", color: "#FFFFFF" }}>
                             We Are SAMSAN
                         </h2>
 
                         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                            <p style={{ fontSize: "1.05rem", lineHeight: "1.8", color: "var(--text-primary)" }}>
+                            <p style={{ fontSize: "1.05rem", lineHeight: "1.8", color: "#F1F5F9" }}>
                                 A specialized systems design house focused on high-integrity software platforms, embedded engineering, and digital transformation. Focused on Cockpit Engineering, ADAS, and connected mobility ecosystems.
                             </p>
-                            <p style={{ fontSize: "0.95rem", lineHeight: "1.8", color: "var(--text-secondary)" }}>
+                            <p style={{ fontSize: "0.95rem", lineHeight: "1.8", color: "#94A3B8" }}>
                                 We deliver full-lifecycle engineering, from concept definition to deployment. Serving global tier-1s, OEMs, and technology companies with premium software-defined architectures.
                             </p>
                         </div>
 
                         <div style={{
                             marginTop: "32px",
-                            borderLeft: "2px solid var(--violet-mid)",
+                            borderLeft: "2px solid #8B5CF6",
                             paddingLeft: "16px"
                         }}>
                             <span style={{
                                 fontFamily: "var(--font-mono)",
                                 fontSize: "12px",
-                                fontWeight: 500,
+                                fontWeight: 600,
                                 letterSpacing: "0.08em",
-                                color: "var(--text-secondary)",
+                                color: "#A78BFA",
                                 textTransform: "uppercase"
                             }}>
                                 Always in sync with the future
@@ -76,11 +76,11 @@ export default function AboutCompany() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
                         style={{
-                            background: "linear-gradient(135deg, rgba(22, 30, 53, 0.4) 0%, rgba(27, 36, 64, 0.4) 100%)",
-                            border: "1px solid rgba(255, 255, 255, 0.06)",
+                            background: "#FFFFFF",
+                            border: "1px solid rgba(15, 23, 42, 0.1)",
                             borderRadius: "var(--radius-lg)",
                             padding: "36px 28px",
-                            backdropFilter: "blur(20px)",
+                            boxShadow: "0 4px 24px rgba(15, 23, 42, 0.08)",
                             position: "relative",
                             overflow: "hidden"
                         }}
@@ -96,24 +96,24 @@ export default function AboutCompany() {
                         }} />
 
                         <div style={{ marginBottom: "40px" }}>
-                            <h3 style={{ fontSize: "1.5rem", fontWeight: 600, color: "#ffffff", lineHeight: "1.3", letterSpacing: "-0.01em" }}>
+                            <h3 style={{ fontSize: "1.5rem", fontWeight: 600, color: "#0F172A", lineHeight: "1.3", letterSpacing: "-0.01em" }}>
                                 Focus On Automotive, Cockpit Engineering & Digital Transformation.
                             </h3>
                         </div>
 
                         {/* Stats grid */}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "24px", paddingTop: "32px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "24px", paddingTop: "32px", borderTop: "1px solid rgba(15, 23, 42, 0.1)" }}>
                             <div>
                                 <div style={{
                                     fontFamily: "var(--font-display)",
                                     fontSize: "2.5rem",
                                     fontWeight: 700,
-                                    color: "var(--text-primary)",
+                                    color: "#0F172A",
                                     lineHeight: 1
                                 }}>
                                     50+
                                 </div>
-                                <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
+                                <div style={{ fontSize: "0.78rem", color: "#64748B", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
                                     Projects Completed
                                 </div>
                             </div>
@@ -122,25 +122,25 @@ export default function AboutCompany() {
                                     fontFamily: "var(--font-display)",
                                     fontSize: "2.5rem",
                                     fontWeight: 700,
-                                    color: "var(--text-primary)",
+                                    color: "#0F172A",
                                     lineHeight: 1
                                 }}>
                                     6+
                                 </div>
-                                <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
+                                <div style={{ fontSize: "0.78rem", color: "#64748B", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
                                     Countries Served
                                 </div>
                             </div>
                             <div>
                                 <div style={{
                                     fontSize: "0.88rem",
-                                    color: "var(--text-primary)",
+                                    color: "#1E293B",
                                     lineHeight: 1.6,
                                     fontWeight: 500
                                 }}>
                                     India delivery center with global customer and partner presence across Europe, US, Japan and South Korea
                                 </div>
-                                <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
+                                <div style={{ fontSize: "0.78rem", color: "#64748B", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
                                     Global Footprint
                                 </div>
                             </div>

@@ -54,7 +54,7 @@ export default function CaseStudiesPage() {
                         {/* Breadcrumbs */}
                         <div style={{ display: "flex", gap: "8px", fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "24px" }}>
                             <Link href="/" className="hover:text-white transition-colors">Home</Link>
-                            <span>&gt;</span>
+                            <span style={{ fontWeight: 700, opacity: 0.6 }}>//</span>
                             <span style={{ color: "var(--text-primary)" }}>Case Studies</span>
                         </div>
 

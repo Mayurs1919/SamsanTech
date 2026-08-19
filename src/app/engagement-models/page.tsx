@@ -76,7 +76,7 @@ export default function EngagementModelsPage() {
                             <Link href="/engineering-offerings" style={{ color: "var(--violet-mid)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
                                 Engineering Offerings
                             </Link>
-                            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.8rem" }}>/</span>
+                            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.8rem", fontWeight: 700 }}>//</span>
                             <span style={{ color: "#ffffff", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "100px", padding: "4px 12px", fontSize: "0.75rem", fontWeight: 600 }}>Engagement Models</span>
                         </motion.div>
                         <motion.h1 id="engagement-heading" variants={fadeUpVariants(shouldReduce)} style={{ fontSize: "3rem", fontWeight: 800, marginBottom: "20px", color: "#ffffff", letterSpacing: "-0.02em" }}>
@@ -243,10 +243,9 @@ export default function EngagementModelsPage() {
                                         {model.bullets.map((bullet, idx) => (
                                             <li key={idx} style={{ fontSize: "0.9rem", color: "var(--text-primary)", position: "relative", paddingLeft: "24px", lineHeight: "1.55" }}>
                                                 <span style={{
-                                                    position: "absolute", left: 0, top: "7px",
-                                                    width: "6px", height: "6px", borderRadius: "50%",
-                                                    backgroundColor: model.accent
-                                                }} />
+                                                    position: "absolute", left: 0, top: "0",
+                                                    color: model.accent, fontWeight: 700
+                                                }}>//</span>
                                                 {bullet}
                                             </li>
                                         ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
 import Link from "next/link";
@@ -12,352 +12,447 @@ interface Job {
     slug: string;
     country: string;
     city: string;
-    experience: string;
+    experience: "0-2 Years" | "2-5 Years" | "5-8 Years" | "8+ Years";
     category: "Embedded Engineering" | "HMI Development" | "Connectivity" | "Validation & Testing" | "Systems Engineering";
     type: string;
     description: string;
     skills: string[];
 }
 
-const initialJobs: Job[] = [
+// Standardized Job Openings list — sorted alphabetically by title by default
+const rawJobs: Job[] = [
     {
         id: "1",
+        title: "Android HAL Engineer",
+        slug: "android-hal-engineer",
+        country: "India",
+        city: "Pune, Bangalore",
+        experience: "2-5 Years",
+        category: "Embedded Engineering",
+        type: "Full-time",
+        description: "Need engineers with strong experience in Android HAL layer development, HIDL/AIDL interfaces, and low-level system integration across automotive architectures.",
+        skills: ["AOSP", "AAOS", "HIDL", "AIDL", "Soong/Make", "Android Architecture"]
+    },
+    {
+        id: "2",
+        title: "Android HMI Engineer",
+        slug: "android-hmi-engineer",
+        country: "India",
+        city: "Pune",
+        experience: "5-8 Years",
+        category: "HMI Development",
+        type: "Full-time",
+        description: "Hiring experienced HMI Engineers for Android-based automotive cockpit applications with system and user-level app development experience.",
+        skills: ["Java", "Kotlin", "Jetpack", "HMI Development", "Android Automotive"]
+    },
+    {
+        id: "3",
+        title: "Android HMI Engineer — Unreal",
+        slug: "android-hmi-engineer-unreal",
+        country: "India",
+        city: "Pune",
+        experience: "5-8 Years",
+        category: "HMI Development",
+        type: "Full-time",
+        description: "Hiring developers for advanced cockpit HMI development using Unreal Engine with experience in high-performance 3D UI rendering.",
+        skills: ["Java", "Kotlin", "Unreal Engine", "HMI Development", "High-Performance UI"]
+    },
+    {
+        id: "4",
+        title: "Associate Embedded Test Engineer",
+        slug: "associate-embedded-test-engineer",
+        country: "India",
+        city: "Pune",
+        experience: "0-2 Years",
+        category: "Validation & Testing",
+        type: "Full-time",
+        description: "Entry-level position for passionate engineers looking to build a career in automotive embedded testing, test script execution, and validation.",
+        skills: ["Embedded C", "Python", "Manual Testing", "CAN Protocol", "Test Automation"]
+    },
+    {
+        id: "5",
+        title: "Automotive IVI Testing Engineer",
+        slug: "automotive-ivi-testing-engineer",
+        country: "India",
+        city: "Pune",
+        experience: "2-5 Years",
+        category: "Validation & Testing",
+        type: "Full-time",
+        description: "Looking for IVI Test Engineers for in-vehicle infotainment system validation, CAPL scripting, and test automation in automotive environments.",
+        skills: ["Embedded C", "CAPL Scripting", "Python", "Robot Framework", "IVI Testing", "Test Automation"]
+    },
+    {
+        id: "6",
+        title: "Connectivity Engineer",
+        slug: "connectivity-engineer",
+        country: "India",
+        city: "Bangalore",
+        experience: "8+ Years",
+        category: "Connectivity",
+        type: "Full-time",
+        description: "Looking for senior engineers in the automotive connectivity domain with hands-on experience in telematics, Bluetooth/Wi-Fi stack, and Yocto Linux.",
+        skills: ["Bluetooth", "Wi-Fi", "AOSP", "Telematics", "Yocto Linux", "Connectivity Stack"]
+    },
+    {
+        id: "7",
+        title: "HMI Tester",
+        slug: "hmi-tester",
+        country: "India",
+        city: "Bangalore",
+        experience: "2-5 Years",
+        category: "Validation & Testing",
+        type: "Full-time",
+        description: "Seeking HMI Testers with strong experience in validating automotive HMI applications, UI automated testing, and Appium scripting.",
+        skills: ["Linux", "Python", "Appium", "Automation Scripting", "Android Testing", "Embedded Testing"]
+    },
+    {
+        id: "8",
+        title: "Junior Android HMI Developer",
+        slug: "junior-android-hmi-developer",
+        country: "India",
+        city: "Bangalore",
+        experience: "0-2 Years",
+        category: "HMI Development",
+        type: "Full-time",
+        description: "Entry-level role for Android developers eager to learn automotive cockpit interfaces, Kotlin UI development, and HMI framework architecture.",
+        skills: ["Java", "Kotlin", "Android SDK", "Git", "UI Components"]
+    },
+    {
+        id: "9",
         title: "Linux BSP Developer",
         slug: "linux-bsp-developer",
         country: "India",
         city: "Pune",
-        experience: "3–5 Years",
+        experience: "2-5 Years",
         category: "Embedded Engineering",
         type: "Full-time",
-        description: "Hiring developers for Linux BSP and driver development across automotive embedded platforms.",
+        description: "Hiring developers for Linux BSP and driver development across automotive embedded platforms (Qualcomm, NXP, TI, Infineon).",
         skills: ["Embedded C", "Linux BSP", "Driver Development", "Qualcomm", "NXP", "TI", "Infineon"]
     },
     {
-        id: "2",
+        id: "10",
+        title: "Media Projection Engineer",
+        slug: "media-projection-engineer",
+        country: "India",
+        city: "Pune, Bangalore",
+        experience: "2-5 Years",
+        category: "HMI Development",
+        type: "Full-time",
+        description: "Seeking engineers with experience in smartphone projection systems (Android Auto, Apple CarPlay) and media projection integration for automotive platforms.",
+        skills: ["Android Auto", "Apple CarPlay", "Media Projection", "System Integration"]
+    },
+    {
+        id: "11",
         title: "Multimedia & Middleware Engineer",
         slug: "multimedia-middleware-engineer",
         country: "India",
         city: "Pune, Bangalore",
-        experience: "3–5 Years",
+        experience: "2-5 Years",
         category: "Embedded Engineering",
         type: "Full-time",
         description: "Seeking candidates for multimedia and middleware development in automotive systems including audio/video frameworks and system-level programming.",
         skills: ["Android Media Framework", "Software Development", "Audio/Video Frameworks", "System Programming"]
     },
     {
-        id: "3",
+        id: "12",
         title: "Multimedia & Middleware Engineer — OTA",
         slug: "multimedia-middleware-engineer-ota",
         country: "India",
         city: "Bangalore",
-        experience: "5–7 Years",
+        experience: "5-8 Years",
         category: "Embedded Engineering",
         type: "Full-time",
-        description: "Looking for professionals with experience in software update systems, update mechanisms, and system integration for automotive platforms.",
+        description: "Looking for professionals with experience in software update systems, OTA mechanisms, AOSP/AAOS, and system integration for automotive platforms.",
         skills: ["OTA Updates", "AOSP", "AAOS", "Java", "Kotlin", "System Integration"]
     },
     {
-        id: "4",
-        title: "Android HMI Engineer",
-        slug: "android-hmi-engineer",
+        id: "13",
+        title: "SPOC — RD ECU",
+        slug: "spoc-rd-ecu",
         country: "India",
         city: "Pune",
-        experience: "5–8 Years",
-        category: "HMI Development",
+        experience: "5-8 Years",
+        category: "Embedded Engineering",
         type: "Full-time",
-        description: "Hiring experienced HMI Engineers for Android-based automotive applications with system and user-level app development experience.",
-        skills: ["Java", "Kotlin", "Jetpack", "HMI Development", "Android Automotive"]
+        description: "Hiring Single Point of Contact (SPOC) for RD ECU development and coordination with experience in ECU software development and automotive communication protocols.",
+        skills: ["Linux", "C++", "Connectivity Protocols", "ECU Development", "Automotive Communication"]
     },
     {
-        id: "5",
-        title: "Connectivity Engineer",
-        slug: "connectivity-engineer",
-        country: "India",
-        city: "Bangalore",
-        experience: "7–9 Years",
-        category: "Connectivity",
-        type: "Full-time",
-        description: "Looking for senior engineers in the automotive connectivity domain with hands-on experience in connectivity stack and integration.",
-        skills: ["Bluetooth", "Wi-Fi", "AOSP", "Telematics", "Yocto Linux", "Connectivity Stack"]
-    },
-    {
-        id: "6",
-        title: "Media Projection Engineer",
-        slug: "media-projection-engineer",
-        country: "India",
-        city: "Pune, Bangalore",
-        experience: "2–7 Years",
-        category: "HMI Development",
-        type: "Full-time",
-        description: "Seeking engineers with experience in smartphone projection systems and media projection integration for automotive applications.",
-        skills: ["Android Auto", "Apple CarPlay", "Media Projection", "System Integration"]
-    },
-    {
-        id: "7",
-        title: "Android HMI Engineer — Unreal",
-        slug: "android-hmi-engineer-unreal",
-        country: "India",
-        city: "Pune",
-        experience: "3–8 Years",
-        category: "HMI Development",
-        type: "Full-time",
-        description: "Hiring developers for advanced HMI development using Unreal Engine with experience in high-performance UI development.",
-        skills: ["Java", "Kotlin", "Unreal Engine", "HMI Development", "High-Performance UI"]
-    },
-    {
-        id: "8",
-        title: "Automotive IVI Testing Engineer",
-        slug: "automotive-ivi-testing-engineer",
-        country: "India",
-        city: "Pune",
-        experience: "3–5 Years",
-        category: "Validation & Testing",
-        type: "Full-time",
-        description: "Looking for IVI Test Engineers for infotainment system validation and test automation in automotive environments.",
-        skills: ["Embedded C", "CAPL Scripting", "Python", "Robot Framework", "IVI Testing", "Test Automation"]
-    },
-    {
-        id: "9",
-        title: "HMI Tester",
-        slug: "hmi-tester",
-        country: "India",
-        city: "Bangalore",
-        experience: "3–8 Years",
-        category: "Validation & Testing",
-        type: "Full-time",
-        description: "Seeking HMI Testers with strong experience in validating automotive HMI applications and test automation.",
-        skills: ["Linux", "Python", "Appium", "Automation Scripting", "Android Testing", "Embedded Testing"]
-    },
-    {
-        id: "10",
+        id: "14",
         title: "SPOC — V2X",
         slug: "spoc-v2x",
         country: "India",
         city: "Pune",
-        experience: "3–8 Years",
+        experience: "5-8 Years",
         category: "Connectivity",
         type: "Full-time",
         description: "Looking for a SPOC with expertise in Vehicle-to-Everything (V2X) communication systems handling end-to-end V2X modules and integrations.",
         skills: ["Linux", "C++", "Middleware", "V2X Communication", "System Integration"]
     },
     {
-        id: "11",
-        title: "SPOC — RD ECU",
-        slug: "spoc-rd-ecu",
-        country: "India",
-        city: "Pune",
-        experience: "3–8 Years",
-        category: "Embedded Engineering",
-        type: "Full-time",
-        description: "Hiring SPOC for RD ECU development and coordination with experience in ECU software development and automotive communication protocols.",
-        skills: ["Linux", "C++", "Connectivity Protocols", "ECU Development", "Automotive Communication"]
-    },
-    {
-        id: "12",
-        title: "Android HAL Engineer",
-        slug: "android-hal-engineer",
-        country: "India",
-        city: "Pune, Bangalore",
-        experience: "3–8 Years",
-        category: "Embedded Engineering",
-        type: "Full-time",
-        description: "Need engineers with strong experience in Android HAL layer development and understanding of Android architecture and low-level system integration.",
-        skills: ["AOSP", "AAOS", "HIDL", "AIDL", "Soong/Make Build System", "Android Architecture"]
-    },
-    {
-        id: "13",
+        id: "15",
         title: "Systems Engineer",
         slug: "systems-engineer",
         country: "India",
         city: "Pune",
-        experience: "7+ Years",
+        experience: "8+ Years",
         category: "Systems Engineering",
         type: "Full-time",
-        description: "Looking for experienced Systems Engineers with strong background in requirements engineering, system architecture, and integration across automotive E/E domains.",
-        skills: ["Requirements Engineering", "System Architecture", "CAN", "LIN", "Ethernet", "ISO 26262", "ISO 21434", "DOORS", "Polarion", "JIRA", "Enterprise Architect", "CANoe", "CANalyzer", "MBSE", "SysML", "UDS", "DoIP", "Agile"]
+        description: "Looking for senior Systems Engineers with strong background in requirements engineering, system architecture, and integration across automotive E/E domains.",
+        skills: ["Requirements Engineering", "System Architecture", "CAN", "LIN", "Ethernet", "ISO 26262", "ISO 21434", "DOORS", "Polarion", "JIRA", "MBSE", "SysML", "UDS", "DoIP"]
     }
+];
+
+// Ensure alphabetical sorting by title by default
+const initialJobs: Job[] = [...rawJobs].sort((a, b) => a.title.localeCompare(b.title));
+
+const careerStats = [
+    { value: "15+", label: "Open Positions" },
+    { value: "5", label: "Specialized Engineering Domains" },
+    { value: "4+", label: "Global Innovation Hubs" },
+    { value: "100%", label: "Engineering Excellence" }
 ];
 
 export default function CareersPage() {
     const shouldReduce = useReducedMotion();
 
-    // Filters state
+    // Standardized Filter Options
+    const countries = ["All Countries", "India"];
+    const cities = ["All Cities", "Pune", "Bangalore"];
+    const experiences = ["All Experience", "0-2 Years", "2-5 Years", "5-8 Years", "8+ Years"];
+    const categories = ["All Categories", "Embedded Engineering", "HMI Development", "Connectivity", "Validation & Testing", "Systems Engineering"];
+    const types = ["All Types", "Full-time"];
+
+    // Draft / Pending Filter State (for selection before clicking Apply)
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCountry, setSelectedCountry] = useState("All");
-    const [selectedCity, setSelectedCity] = useState("All");
-    const [selectedExp, setSelectedExp] = useState("All");
-    const [selectedCategory, setSelectedCategory] = useState("All");
-    const [selectedType, setSelectedType] = useState("All");
+    const [selectedCountry, setSelectedCountry] = useState("All Countries");
+    const [selectedCity, setSelectedCity] = useState("All Cities");
+    const [selectedExp, setSelectedExp] = useState("All Experience");
+    const [selectedCategory, setSelectedCategory] = useState("All Categories");
+    const [selectedType, setSelectedType] = useState("All Types");
 
-    // Dynamic Filter Option Lists
-    const countries = ["All", "India"];
-    const cities = ["All", "Pune", "Bangalore"];
-    const experiences = ["All", "2–7 Years", "3–5 Years", "3–8 Years", "5–7 Years", "5–8 Years", "7–9 Years", "7+ Years"];
-    const categories = ["All", "Embedded Engineering", "HMI Development", "Connectivity", "Validation & Testing", "Systems Engineering"];
-    const types = ["All", "Full-time"];
+    // Applied Filter State (triggers job list update)
+    const [appliedFilters, setAppliedFilters] = useState({
+        searchQuery: "",
+        selectedCountry: "All Countries",
+        selectedCity: "All Cities",
+        selectedExp: "All Experience",
+        selectedCategory: "All Categories",
+        selectedType: "All Types"
+    });
 
-    // Multithreaded Background Worker Filter Logic (off-main-thread processing for zero lag)
     const [filteredJobs, setFilteredJobs] = useState<Job[]>(initialJobs);
 
+    // Filter Triggering Effect
     useEffect(() => {
         let isMounted = true;
+
         const filterCriteria = {
-            searchQuery,
-            selectedCountry,
-            selectedCity,
-            selectedExp,
-            selectedCategory,
-            selectedType,
+            searchQuery: appliedFilters.searchQuery,
+            selectedCountry: appliedFilters.selectedCountry,
+            selectedCity: appliedFilters.selectedCity,
+            selectedExp: appliedFilters.selectedExp,
+            selectedCategory: appliedFilters.selectedCategory,
+            selectedType: appliedFilters.selectedType,
             jobs: initialJobs
         };
 
         runWorkerTask((data) => {
-            return data.jobs.filter((job) => {
-                const matchesSearch = job.title.toLowerCase().includes(data.searchQuery.toLowerCase().trim());
-                const matchesCountry = data.selectedCountry === "All" || job.country.includes(data.selectedCountry);
-                const matchesCity = data.selectedCity === "All" || job.city.includes(data.selectedCity);
-                const matchesExp = data.selectedExp === "All" || job.experience === data.selectedExp;
-                const matchesCategory = data.selectedCategory === "All" || job.category === data.selectedCategory;
-                const matchesType = data.selectedType === "All" || job.type === data.selectedType;
+            const query = data.searchQuery.toLowerCase().trim();
+            const countryFilter = data.selectedCountry;
+            const cityFilter = data.selectedCity;
+            const expFilter = data.selectedExp;
+            const catFilter = data.selectedCategory;
+            const typeFilter = data.selectedType;
+
+            const results = data.jobs.filter((job) => {
+                const matchesSearch = !query ||
+                    job.title.toLowerCase().includes(query) ||
+                    job.description.toLowerCase().includes(query) ||
+                    job.skills.some((s: string) => s.toLowerCase().includes(query));
+
+                const matchesCountry = countryFilter === "All Countries" || job.country.includes(countryFilter);
+                const matchesCity = cityFilter === "All Cities" || job.city.includes(cityFilter);
+                const matchesExp = expFilter === "All Experience" || job.experience === expFilter;
+                const matchesCategory = catFilter === "All Categories" || job.category === catFilter;
+                const matchesType = typeFilter === "All Types" || job.type === typeFilter;
 
                 return matchesSearch && matchesCountry && matchesCity && matchesExp && matchesCategory && matchesType;
             });
+
+            // Always return sorted alphabetically by job title
+            return results.sort((a: Job, b: Job) => a.title.localeCompare(b.title));
         }, filterCriteria).then((result) => {
             if (isMounted) {
                 setFilteredJobs(result);
             }
         }).catch(() => {
             if (isMounted) {
-                setFilteredJobs(initialJobs.filter((job) => {
-                    const matchesSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase().trim());
-                    const matchesCountry = selectedCountry === "All" || job.country.includes(selectedCountry);
-                    const matchesCity = selectedCity === "All" || job.city.includes(selectedCity);
-                    const matchesExp = selectedExp === "All" || job.experience === selectedExp;
-                    const matchesCategory = selectedCategory === "All" || job.category === selectedCategory;
-                    const matchesType = selectedType === "All" || job.type === selectedType;
+                const query = appliedFilters.searchQuery.toLowerCase().trim();
+                const results = initialJobs.filter((job) => {
+                    const matchesSearch = !query ||
+                        job.title.toLowerCase().includes(query) ||
+                        job.description.toLowerCase().includes(query) ||
+                        job.skills.some(s => s.toLowerCase().includes(query));
+
+                    const matchesCountry = appliedFilters.selectedCountry === "All Countries" || job.country.includes(appliedFilters.selectedCountry);
+                    const matchesCity = appliedFilters.selectedCity === "All Cities" || job.city.includes(appliedFilters.selectedCity);
+                    const matchesExp = appliedFilters.selectedExp === "All Experience" || job.experience === appliedFilters.selectedExp;
+                    const matchesCategory = appliedFilters.selectedCategory === "All Categories" || job.category === appliedFilters.selectedCategory;
+                    const matchesType = appliedFilters.selectedType === "All Types" || job.type === appliedFilters.selectedType;
+
                     return matchesSearch && matchesCountry && matchesCity && matchesExp && matchesCategory && matchesType;
-                }));
+                });
+                setFilteredJobs(results.sort((a, b) => a.title.localeCompare(b.title)));
             }
         });
 
         return () => {
             isMounted = false;
         };
-    }, [searchQuery, selectedCountry, selectedCity, selectedExp, selectedCategory, selectedType]);
+    }, [appliedFilters]);
+
+    // Handle Apply Filter Button
+    const handleApplyFilter = () => {
+        setAppliedFilters({
+            searchQuery,
+            selectedCountry,
+            selectedCity,
+            selectedExp,
+            selectedCategory,
+            selectedType
+        });
+    };
+
+    // Handle Reset Filter Button
+    const handleResetFilter = () => {
+        setSearchQuery("");
+        setSelectedCountry("All Countries");
+        setSelectedCity("All Cities");
+        setSelectedExp("All Experience");
+        setSelectedCategory("All Categories");
+        setSelectedType("All Types");
+
+        setAppliedFilters({
+            searchQuery: "",
+            selectedCountry: "All Countries",
+            selectedCity: "All Cities",
+            selectedExp: "All Experience",
+            selectedCategory: "All Categories",
+            selectedType: "All Types"
+        });
+    };
 
     return (
-        <div style={{ backgroundColor: "var(--midnight)", color: "var(--text-primary)", minHeight: "100vh" }}>
-            
-            {/* ── Hero Section with Handshake Background ── */}
-            <section 
-                style={{ 
-                    position: "relative",
-                    backgroundImage: "linear-gradient(rgba(10, 15, 28, 0.65), rgba(10, 15, 28, 0.8)), url('https://images.unsplash.com/photo-1521791136368-1a8682707636?q=80&w=1600&auto=format&fit=crop')",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    padding: "200px 0 160px 0",
-                    textAlign: "center",
-                    overflow: "hidden"
-                }}
-            >
-                {/* Slanted overlay divider */}
-                <div 
-                    style={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: "120px",
-                        backgroundColor: "var(--midnight)",
-                        clipPath: "polygon(0 100%, 100% 0, 100% 100%)",
-                        zIndex: 10
-                    }}
-                />
+        <div style={{ paddingBottom: "0" }}>
 
-                <div className="container" style={{ position: "relative", zIndex: 5 }}>
+            {/* ── Page Hero (section-light) ── */}
+            <section className="section-dark page-hero" aria-labelledby="careers-heading" style={{ background: "#0A0D11", padding: "80px 0 60px" }}>
+                <div className="container">
                     <motion.div
                         variants={staggerContainerVariants}
                         initial="hidden"
                         animate="visible"
                     >
-                        <div style={{ display: "flex", justifyContent: "center", gap: "8px", fontSize: "0.85rem", color: "var(--text-secondary)", marginBottom: "16px" }}>
-                            <Link href="/" className="hover:text-white transition-colors">Home</Link>
-                            <span>&gt;</span>
-                            <span style={{ color: "var(--text-primary)" }}>Careers</span>
+                        <div style={{ display: "flex", gap: "8px", fontSize: "0.85rem", color: "#94A3B8", marginBottom: "16px" }}>
+                            <Link href="/" style={{ color: "#94A3B8", textDecoration: "none" }}>Home</Link>
+                            <span style={{ fontWeight: 700, opacity: 0.6, color: "#94A3B8" }}>//</span>
+                            <span style={{ color: "#FFFFFF", fontWeight: 600 }}>Careers</span>
                         </div>
-                        <motion.h1 
+                        <motion.div variants={fadeUpVariants(shouldReduce)}>
+                            <span className="badge" style={{ marginBottom: "24px", color: "#4DD8E8", background: "rgba(77, 216, 232, 0.08)", border: "1px solid rgba(77, 216, 232, 0.2)" }}>
+                                Join Our Engineering Team
+                            </span>
+                        </motion.div>
+                        <motion.h1
+                            id="careers-heading"
                             variants={fadeUpVariants(shouldReduce)}
-                            style={{ 
-                                fontFamily: "var(--font-display)", 
-                                fontStyle: "italic", 
-                                fontSize: "clamp(3rem, 7vw, 5rem)", 
-                                color: "#ffffff",
-                                margin: 0,
-                                textShadow: "0 4px 16px rgba(0,0,0,0.5)"
+                            style={{
+                                marginBottom: "20px",
+                                color: "#FFFFFF"
                             }}
                         >
                             SAMSAN Careers
                         </motion.h1>
                         <motion.p
+                            className="lead"
                             variants={fadeUpVariants(shouldReduce)}
                             style={{
-                                color: "var(--text-secondary)",
-                                fontSize: "1.15rem",
-                                maxWidth: "580px",
-                                margin: "20px auto 0 auto",
-                                lineHeight: "1.6"
+                                color: "#94A3B8",
+                                maxWidth: "580px"
                             }}
                         >
-                            Attract engineering talent, explore our collaborative culture, and build the future of technology with us.
+                            Explore engineering opportunities, join our domain-led teams, and help build the future of software-defined vehicle mobility.
                         </motion.p>
                     </motion.div>
                 </div>
             </section>
 
-            {/* ── Culture & Values Section ── */}
-            <section style={{ padding: "60px 0 100px 0", position: "relative" }}>
+            {/* ── Culture & Values Section (section-light) ── */}
+            <section className="section-light section" style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "80px 0" }}>
                 <div className="container">
                     <div style={{ textAlign: "center", marginBottom: "60px" }}>
-                        <span className="badge" style={{ marginBottom: "16px" }}>Our Culture</span>
-                        <h2 style={{ fontSize: "2.4rem", fontWeight: 700, fontFamily: "var(--font-display)" }}>
-                            SAMSAN Careers
+                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", background: "rgba(232, 82, 26, 0.08)", border: "1px solid rgba(232, 82, 26, 0.2)" }}>
+                            Our Culture
+                        </span>
+                        <h2 style={{ fontSize: "2.2rem", fontWeight: 700, color: "#0B1320", marginBottom: "16px" }}>
+                            Life at SAMSAN
                         </h2>
+                        <p style={{ color: "#64748B", maxWidth: "600px", margin: "0 auto", lineHeight: "1.7" }}>
+                            We build an environment where engineering excellence, innovation, and career progression thrive.
+                        </p>
                     </div>
+
+                    <style>{`
+                        .culture-card {
+                            background: #FFFFFF;
+                            border: 1px solid #E2E8F0;
+                            border-radius: 12px;
+                            padding: 32px;
+                            box-shadow: 0 2px 12px rgba(11,19,32,0.06);
+                            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+                        }
+                        .culture-card:hover {
+                            border-color: rgba(232,82,26,0.3);
+                            box-shadow: 0 8px 24px rgba(11,19,32,0.1);
+                            transform: translateY(-2px);
+                        }
+                        .value-node {
+                            background: #FFFFFF;
+                            border: 1px solid #E2E8F0;
+                            border-radius: 12px;
+                            padding: 16px 20px;
+                            display: flex;
+                            align-items: center;
+                            gap: 16px;
+                            box-shadow: 0 2px 8px rgba(11,19,32,0.04);
+                        }
+                    `}</style>
 
                     <div style={{
                         display: "grid",
                         gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                        gap: "40px",
+                        gap: "32px",
                         alignItems: "center"
                     }}>
                         {/* Left Column Culture Cards */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                             {/* Card 1 */}
                             <motion.div
                                 initial={{ opacity: 0, x: -20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5 }}
-                                style={{
-                                    background: "rgba(13,19,35,0.4)",
-                                    border: "1px solid var(--border)",
-                                    borderRadius: "var(--radius)",
-                                    padding: "32px",
-                                    boxShadow: "0 10px 30px rgba(0,0,0,0.15)"
-                                }}
+                                className="culture-card"
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
-                                    <div style={{ color: "var(--violet-mid)", backgroundColor: "var(--violet-soft)", padding: "8px", borderRadius: "50%" }}>
-                                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M2 21h19v-2H2v2zM20 8h-2V5h2v3zm-4 0h-2V3h2v5zM12 8h-2V1h2v7zm-4 0H6v-3h2v3zm-4 0H2v5h2v-5zM2 13h19v-2H2v2zm0 4h19v-2H2v2z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 style={{ fontSize: "1.15rem", fontWeight: 600, color: "#ffffff", margin: 0 }}>
-                                        Embrace An Empowering Work Environment
+                                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 700, color: "#E8521A" }}>// 01</span>
+                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#0B1320", margin: 0 }}>
+                                        Empowering Work Environment
                                     </h3>
                                 </div>
-                                <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.7", margin: 0 }}>
-                                    At SAMSAN, we believe in fostering a flexible work environment that empowers our talented team to thrive. Join us, and you&apos;ll have the incredible opportunity to work on cutting-edge technology projects for global customers, making your mark on the world stage.
+                                <p style={{ fontSize: "0.88rem", color: "#64748B", lineHeight: "1.7", margin: 0 }}>
+                                    At SAMSAN, we believe in fostering a flexible work environment that empowers our engineering teams. Work on cutting-edge automotive embedded systems for global OEM customers.
                                 </p>
                             </motion.div>
 
@@ -367,26 +462,16 @@ export default function CareersPage() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: 0.1 }}
-                                style={{
-                                    background: "rgba(13,19,35,0.4)",
-                                    border: "1px solid var(--border)",
-                                    borderRadius: "var(--radius)",
-                                    padding: "32px",
-                                    boxShadow: "0 10px 30px rgba(0,0,0,0.15)"
-                                }}
+                                className="culture-card"
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
-                                    <div style={{ color: "var(--violet-mid)", backgroundColor: "var(--violet-soft)", padding: "8px", borderRadius: "50%" }}>
-                                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 style={{ fontSize: "1.15rem", fontWeight: 600, color: "#ffffff", margin: 0 }}>
-                                        Be An Integral Part Of Our Growth Story
+                                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 700, color: "#E8521A" }}>// 02</span>
+                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#0B1320", margin: 0 }}>
+                                        Integral Part of Our Growth
                                     </h3>
                                 </div>
-                                <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.7", margin: 0 }}>
-                                    As SAMSAN continues to embark on a journey of growth and success, we invite you to be an essential part of our story. Together, we&apos;ll shape the future, driving innovation and excellence in every endeavor.
+                                <p style={{ fontSize: "0.88rem", color: "#64748B", lineHeight: "1.7", margin: 0 }}>
+                                    As SAMSAN scales its domain CoEs across SDV, Android Automotive, and V2X, you will drive key technological milestones and shape industry solutions.
                                 </p>
                             </motion.div>
                         </div>
@@ -398,122 +483,75 @@ export default function CareersPage() {
                                 flexDirection: "column",
                                 alignItems: "center",
                                 gap: "20px",
-                                background: "radial-gradient(circle at center, rgba(124,58,237,0.08) 0%, transparent 70%)",
-                                padding: "40px",
-                                borderRadius: "50%"
+                                background: "#FFFFFF",
+                                border: "1px solid #E2E8F0",
+                                padding: "32px",
+                                borderRadius: "24px",
+                                boxShadow: "0 2px 12px rgba(11,19,32,0.06)",
+                                width: "100%"
                             }}>
                                 {/* Central Core Values Node */}
                                 <div style={{
-                                    background: "linear-gradient(135deg, var(--blue), var(--violet-mid))",
-                                    padding: "20px 30px",
+                                    background: "rgba(232, 82, 26, 0.08)",
+                                    border: "1px solid rgba(232, 82, 26, 0.2)",
+                                    padding: "16px 28px",
                                     borderRadius: "100px",
-                                    boxShadow: "0 0 30px var(--violet-glow)",
-                                    border: "1px solid rgba(255,255,255,0.15)",
                                     textAlign: "center"
                                 }}>
-                                    <span style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.8)" }}>Our Core</span>
-                                    <h4 style={{ margin: "2px 0 0 0", color: "#ffffff", fontSize: "1.2rem", fontWeight: 700 }}>VALUES</h4>
+                                    <span style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#E8521A" }}>Our Core</span>
+                                    <h4 style={{ margin: "2px 0 0 0", color: "#0B1320", fontSize: "1.2rem", fontWeight: 700 }}>VALUES</h4>
                                 </div>
 
                                 {/* Nodes Layout */}
-                                <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%" }}>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
                                     {/* Collaboration Node */}
-                                    <motion.div 
-                                        whileHover={{ scale: 1.03 }}
-                                        style={{
-                                            background: "rgba(255,255,255,0.03)",
-                                            border: "1px solid var(--border)",
-                                            borderRadius: "14px",
-                                            padding: "16px 20px",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "16px",
-                                            backdropFilter: "blur(8px)"
-                                        }}
-                                    >
-                                        <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--blue)" }}>01</div>
+                                    <div className="value-node">
+                                        <div style={{ fontSize: "1.25rem", fontWeight: 700, color: "#E8521A", fontFamily: "var(--font-mono)" }}>01</div>
                                         <div>
-                                            <h5 style={{ margin: 0, color: "#ffffff", fontSize: "0.95rem" }}>COLLABORATION</h5>
-                                            <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--text-muted)" }}>One team, one goal, zero surprises!</p>
+                                            <h5 style={{ margin: 0, color: "#0B1320", fontSize: "0.95rem", fontWeight: 600 }}>COLLABORATION</h5>
+                                            <p style={{ margin: 0, fontSize: "0.78rem", color: "#64748B" }}>One team, one goal, zero surprises!</p>
                                         </div>
-                                    </motion.div>
+                                    </div>
 
                                     {/* Aspiration Node */}
-                                    <motion.div 
-                                        whileHover={{ scale: 1.03 }}
-                                        style={{
-                                            background: "rgba(255,255,255,0.03)",
-                                            border: "1px solid var(--border)",
-                                            borderRadius: "14px",
-                                            padding: "16px 20px",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "16px",
-                                            backdropFilter: "blur(8px)"
-                                        }}
-                                    >
-                                        <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--violet-mid)" }}>02</div>
+                                    <div className="value-node">
+                                        <div style={{ fontSize: "1.25rem", fontWeight: 700, color: "#E8521A", fontFamily: "var(--font-mono)" }}>02</div>
                                         <div>
-                                            <h5 style={{ margin: 0, color: "#ffffff", fontSize: "0.95rem" }}>ASPIRATION</h5>
-                                            <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--text-muted)" }}>Think Big. Deliver Big. Act Big.</p>
+                                            <h5 style={{ margin: 0, color: "#0B1320", fontSize: "0.95rem", fontWeight: 600 }}>ASPIRATION</h5>
+                                            <p style={{ margin: 0, fontSize: "0.78rem", color: "#64748B" }}>Think Big. Deliver Big. Act Big.</p>
                                         </div>
-                                    </motion.div>
+                                    </div>
 
                                     {/* Respect Node */}
-                                    <motion.div 
-                                        whileHover={{ scale: 1.03 }}
-                                        style={{
-                                            background: "rgba(255,255,255,0.03)",
-                                            border: "1px solid var(--border)",
-                                            borderRadius: "14px",
-                                            padding: "16px 20px",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "16px",
-                                            backdropFilter: "blur(8px)"
-                                        }}
-                                    >
-                                        <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--rose)" }}>03</div>
+                                    <div className="value-node">
+                                        <div style={{ fontSize: "1.25rem", fontWeight: 700, color: "#E8521A", fontFamily: "var(--font-mono)" }}>03</div>
                                         <div>
-                                            <h5 style={{ margin: 0, color: "#ffffff", fontSize: "0.95rem" }}>RESPECT</h5>
-                                            <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--text-muted)" }}>Respect is earned. Honesty is expected.</p>
+                                            <h5 style={{ margin: 0, color: "#0B1320", fontSize: "0.95rem", fontWeight: 600 }}>RESPECT</h5>
+                                            <p style={{ margin: 0, fontSize: "0.78rem", color: "#64748B" }}>Respect is earned. Honesty is expected.</p>
                                         </div>
-                                    </motion.div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Right Column Culture Cards */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
                             {/* Card 3 */}
                             <motion.div
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
-                                whileHover={{ y: -6, borderColor: "rgba(168, 85, 247, 0.5)", boxShadow: "0 14px 40px rgba(124, 58, 237, 0.25)" }}
                                 transition={{ duration: 0.3 }}
-                                style={{
-                                    background: "linear-gradient(135deg, rgba(13,19,35,0.6) 0%, rgba(20,28,50,0.4) 100%)",
-                                    border: "1px solid var(--border)",
-                                    borderRadius: "var(--radius)",
-                                    padding: "32px",
-                                    position: "relative",
-                                    overflow: "hidden",
-                                    backdropFilter: "blur(12px)"
-                                }}
+                                className="culture-card"
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
-                                    <div style={{ color: "var(--violet-mid)", backgroundColor: "rgba(124,58,237,0.15)", padding: "10px", borderRadius: "12px", border: "1px solid rgba(124,58,237,0.3)" }}>
-                                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zm0 13l-9-4.91V15l9 4.91 9-4.91v-3.91L12 16z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 style={{ fontSize: "1.15rem", fontWeight: 600, color: "#ffffff", margin: 0 }}>
-                                        AI-Powered Learning & Growth
+                                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 700, color: "#E8521A" }}>// 03</span>
+                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#0B1320", margin: 0 }}>
+                                        Continuous Technical Learning
                                     </h3>
                                 </div>
-                                <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.7", margin: 0 }}>
-                                    We cultivate a culture of continuous learning and personal growth using AI-driven knowledge tools, workshops, and high-tech mentorship to unleash your full engineering potential.
+                                <p style={{ fontSize: "0.88rem", color: "#64748B", lineHeight: "1.7", margin: 0 }}>
+                                    We cultivate a culture of ongoing skill enrichment through domain workshops, platform certifications, and high-tech engineering mentorship.
                                 </p>
                             </motion.div>
 
@@ -522,30 +560,17 @@ export default function CareersPage() {
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
-                                whileHover={{ y: -6, borderColor: "rgba(77, 216, 232, 0.5)", boxShadow: "0 14px 40px rgba(0, 210, 255, 0.2)" }}
                                 transition={{ duration: 0.3, delay: 0.1 }}
-                                style={{
-                                    background: "linear-gradient(135deg, rgba(13,19,35,0.6) 0%, rgba(20,28,50,0.4) 100%)",
-                                    border: "1px solid var(--border)",
-                                    borderRadius: "var(--radius)",
-                                    padding: "32px",
-                                    position: "relative",
-                                    overflow: "hidden",
-                                    backdropFilter: "blur(12px)"
-                                }}
+                                className="culture-card"
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
-                                    <div style={{ color: "#4dd8e8", backgroundColor: "rgba(77,216,232,0.15)", padding: "10px", borderRadius: "12px", border: "1px solid rgba(77,216,232,0.3)" }}>
-                                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/>
-                                        </svg>
-                                    </div>
-                                    <h3 style={{ fontSize: "1.15rem", fontWeight: 600, color: "#ffffff", margin: 0 }}>
-                                        Unleash The High Performer Within
+                                    <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 700, color: "#E8521A" }}>// 04</span>
+                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#0B1320", margin: 0 }}>
+                                        High Performance Recognition
                                     </h3>
                                 </div>
-                                <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.7", margin: 0 }}>
-                                    At SAMSAN, we recognize and celebrate high performers. As you contribute your expertise and dedication, you&apos;ll discover the high achiever within you, propelling your career to new heights.
+                                <p style={{ fontSize: "0.88rem", color: "#64748B", lineHeight: "1.7", margin: 0 }}>
+                                    At SAMSAN, high performance is recognized and rewarded. As you contribute your engineering expertise, you&apos;ll accelerate your career trajectory.
                                 </p>
                             </motion.div>
                         </div>
@@ -553,141 +578,266 @@ export default function CareersPage() {
                 </div>
             </section>
 
-            {/* ── Job Openings Filter Area ── */}
-            <section id="job-openings" style={{ padding: "80px 0 120px 0" }}>
+            {/* ── Experience Band / Stats Strip (section-dark) ── */}
+            <section className="section-dark" style={{
+                background: "#0A0D11",
+                borderTop: "1px solid rgba(255,255,255,0.06)",
+                borderBottom: "1px solid rgba(255,255,255,0.06)",
+                padding: "48px 0"
+            }}>
                 <div className="container">
-                    <div style={{ textAlign: "center", marginBottom: "48px" }}>
-                        <h2 style={{ fontSize: "2.2rem", fontWeight: 700, fontFamily: "var(--font-display)", color: "#ffffff" }}>
-                            Job Openings
+                    <motion.div
+                        variants={staggerContainerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "32px", textAlign: "center" }}
+                    >
+                        {careerStats.map((s, i) => (
+                            <motion.div key={i} variants={fadeUpVariants(shouldReduce)}>
+                                <div style={{
+                                    fontSize: "2.8rem", fontWeight: 800,
+                                    color: "#FFFFFF",
+                                    lineHeight: 1.1, marginBottom: "8px"
+                                }}>{s.value}</div>
+                                <div style={{ fontSize: "0.85rem", color: "#94A3B8", letterSpacing: "0.04em" }}>{s.label}</div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ── Job Openings Filter Area (section-dark) ── */}
+            <section id="job-openings" className="section-dark section" style={{ background: "#0A0D11", padding: "80px 0" }}>
+                <div className="container">
+                    <div style={{ textAlign: "center", marginBottom: "40px" }}>
+                        <span className="badge" style={{ marginBottom: "16px", color: "#4DD8E8", background: "rgba(77, 216, 232, 0.08)", border: "1px solid rgba(77, 216, 232, 0.2)" }}>
+                            Current Opportunities
+                        </span>
+                        <h2 style={{ fontSize: "2.2rem", fontWeight: 700, color: "#F1F5F9", marginBottom: "12px" }}>
+                            Explore Job Openings
                         </h2>
+                        <p style={{ color: "#94A3B8", maxWidth: "600px", margin: "0 auto", fontSize: "0.95rem" }}>
+                            Filter by domain, experience, location, or search keywords to find your next engineering role.
+                        </p>
                     </div>
 
-                    {/* Filter Inputs Grid */}
+                    {/* Filter Controls Panel */}
                     <div style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                        gap: "16px",
-                        marginBottom: "40px",
-                        background: "rgba(13,19,35,0.5)",
+                        background: "#161B22",
                         padding: "24px",
                         borderRadius: "16px",
-                        border: "1px solid rgba(124, 58, 237, 0.2)",
-                        boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
-                        backdropFilter: "blur(12px)"
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+                        marginBottom: "32px"
                     }}>
-                        {/* Search Query */}
-                        <div style={{ position: "relative" }}>
-                            <input 
-                                type="text"
-                                placeholder="Search..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
+                        <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
+                            gap: "14px",
+                            alignItems: "center"
+                        }}>
+                            {/* Search Query */}
+                            <div style={{ position: "relative" }}>
+                                <input
+                                    type="text"
+                                    placeholder="Search title, skill..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    style={{
+                                        width: "100%",
+                                        padding: "11px 14px",
+                                        borderRadius: "8px",
+                                        backgroundColor: "#0D1117",
+                                        border: "1px solid rgba(255,255,255,0.12)",
+                                        color: "#F1F5F9",
+                                        outline: "none",
+                                        fontSize: "0.85rem"
+                                    }}
+                                />
+                            </div>
+
+                            {/* Country Filter */}
+                            <select
+                                value={selectedCountry}
+                                onChange={(e) => setSelectedCountry(e.target.value)}
                                 style={{
-                                    width: "100%",
-                                    padding: "12px 16px",
+                                    padding: "11px 14px",
                                     borderRadius: "8px",
-                                    backgroundColor: "rgba(10,15,28,0.7)",
-                                    border: "1px solid var(--border)",
-                                    color: "#fff",
+                                    backgroundColor: "#0D1117",
+                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    color: "#F1F5F9",
                                     outline: "none",
                                     fontSize: "0.85rem"
                                 }}
-                            />
+                            >
+                                {countries.map(c => <option key={c} value={c} style={{ background: "#0D1117", color: "#F1F5F9" }}>{c}</option>)}
+                            </select>
+
+                            {/* City Filter */}
+                            <select
+                                value={selectedCity}
+                                onChange={(e) => setSelectedCity(e.target.value)}
+                                style={{
+                                    padding: "11px 14px",
+                                    borderRadius: "8px",
+                                    backgroundColor: "#0D1117",
+                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    color: "#F1F5F9",
+                                    outline: "none",
+                                    fontSize: "0.85rem"
+                                }}
+                            >
+                                {cities.map(c => <option key={c} value={c} style={{ background: "#0D1117", color: "#F1F5F9" }}>{c}</option>)}
+                            </select>
+
+                            {/* Experience Filter */}
+                            <select
+                                value={selectedExp}
+                                onChange={(e) => setSelectedExp(e.target.value)}
+                                style={{
+                                    padding: "11px 14px",
+                                    borderRadius: "8px",
+                                    backgroundColor: "#0D1117",
+                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    color: "#F1F5F9",
+                                    outline: "none",
+                                    fontSize: "0.85rem"
+                                }}
+                            >
+                                {experiences.map(e => <option key={e} value={e} style={{ background: "#0D1117", color: "#F1F5F9" }}>{e}</option>)}
+                            </select>
+
+                            {/* Category Filter */}
+                            <select
+                                value={selectedCategory}
+                                onChange={(e) => setSelectedCategory(e.target.value)}
+                                style={{
+                                    padding: "11px 14px",
+                                    borderRadius: "8px",
+                                    backgroundColor: "#0D1117",
+                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    color: "#F1F5F9",
+                                    outline: "none",
+                                    fontSize: "0.85rem"
+                                }}
+                            >
+                                {categories.map(c => <option key={c} value={c} style={{ background: "#0D1117", color: "#F1F5F9" }}>{c}</option>)}
+                            </select>
+
+                            {/* Type Filter */}
+                            <select
+                                value={selectedType}
+                                onChange={(e) => setSelectedType(e.target.value)}
+                                style={{
+                                    padding: "11px 14px",
+                                    borderRadius: "8px",
+                                    backgroundColor: "#0D1117",
+                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    color: "#F1F5F9",
+                                    outline: "none",
+                                    fontSize: "0.85rem"
+                                }}
+                            >
+                                {types.map(t => <option key={t} value={t} style={{ background: "#0D1117", color: "#F1F5F9" }}>{t}</option>)}
+                            </select>
                         </div>
 
-                        {/* Country Filter */}
-                        <select 
-                            value={selectedCountry}
-                            onChange={(e) => setSelectedCountry(e.target.value)}
-                            style={{
-                                padding: "12px 16px",
-                                borderRadius: "8px",
-                                backgroundColor: "rgba(10,15,28,0.7)",
-                                border: "1px solid var(--border)",
-                                color: "#fff",
-                                outline: "none",
-                                fontSize: "0.85rem"
-                            }}
-                        >
-                            <option value="All">All Countries</option>
-                            {countries.filter(c => c !== "All").map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
+                        {/* Action Buttons Row: Apply Filter & Reset Filter */}
+                        <div style={{
+                            marginTop: "20px",
+                            paddingTop: "16px",
+                            borderTop: "1px solid rgba(255,255,255,0.06)",
+                            display: "flex",
+                            gap: "12px",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                            flexWrap: "wrap"
+                        }}>
+                            <button
+                                type="button"
+                                onClick={handleApplyFilter}
+                                style={{
+                                    padding: "10px 22px",
+                                    borderRadius: "8px",
+                                    backgroundColor: "#E8521A",
+                                    color: "#FFFFFF",
+                                    border: "none",
+                                    fontWeight: 600,
+                                    fontSize: "0.85rem",
+                                    cursor: "pointer",
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    boxShadow: "0 4px 14px rgba(232, 82, 26, 0.3)",
+                                    transition: "all 0.2s ease"
+                                }}
+                            >
+                                🔍 Apply Filter
+                            </button>
 
-                        {/* City Filter */}
-                        <select 
-                            value={selectedCity}
-                            onChange={(e) => setSelectedCity(e.target.value)}
-                            style={{
-                                padding: "12px 16px",
-                                borderRadius: "8px",
-                                backgroundColor: "rgba(10,15,28,0.7)",
-                                border: "1px solid var(--border)",
-                                color: "#fff",
-                                outline: "none",
-                                fontSize: "0.85rem"
-                            }}
-                        >
-                            <option value="All">All Cities</option>
-                            {cities.filter(c => c !== "All").map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
-
-                        {/* Experience Filter */}
-                        <select 
-                            value={selectedExp}
-                            onChange={(e) => setSelectedExp(e.target.value)}
-                            style={{
-                                padding: "12px 16px",
-                                borderRadius: "8px",
-                                backgroundColor: "rgba(10,15,28,0.7)",
-                                border: "1px solid var(--border)",
-                                color: "#fff",
-                                outline: "none",
-                                fontSize: "0.85rem"
-                            }}
-                        >
-                            <option value="All">All Experiences</option>
-                            {experiences.filter(e => e !== "All").map(e => <option key={e} value={e}>{e}</option>)}
-                        </select>
-
-                        {/* Job Category Filter */}
-                        <select 
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
-                            style={{
-                                padding: "12px 16px",
-                                borderRadius: "8px",
-                                backgroundColor: "rgba(10,15,28,0.7)",
-                                border: "1px solid var(--border)",
-                                color: "#fff",
-                                outline: "none",
-                                fontSize: "0.85rem"
-                            }}
-                        >
-                            <option value="All">All Categories</option>
-                            {categories.filter(c => c !== "All").map(c => <option key={c} value={c}>{c}</option>)}
-                        </select>
-
-                        {/* Job Type Filter */}
-                        <select 
-                            value={selectedType}
-                            onChange={(e) => setSelectedType(e.target.value)}
-                            style={{
-                                padding: "12px 16px",
-                                borderRadius: "8px",
-                                backgroundColor: "rgba(10,15,28,0.7)",
-                                border: "1px solid var(--border)",
-                                color: "#fff",
-                                outline: "none",
-                                fontSize: "0.85rem"
-                            }}
-                        >
-                            <option value="All">All Types</option>
-                            {types.filter(t => t !== "All").map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
+                            <button
+                                type="button"
+                                onClick={handleResetFilter}
+                                style={{
+                                    padding: "10px 22px",
+                                    borderRadius: "8px",
+                                    backgroundColor: "transparent",
+                                    color: "#94A3B8",
+                                    border: "1px solid rgba(255, 255, 255, 0.18)",
+                                    fontWeight: 600,
+                                    fontSize: "0.85rem",
+                                    cursor: "pointer",
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    transition: "all 0.2s ease"
+                                }}
+                            >
+                                🔄 Reset Filter
+                            </button>
+                        </div>
                     </div>
 
-                    {/* Jobs Display Grid with AI Animation */}
-                    <motion.div 
+                    {/* Results Counter Header */}
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "24px",
+                        padding: "0 4px"
+                    }}>
+                        <div style={{ fontSize: "0.9rem", color: "#94A3B8", fontFamily: "var(--font-mono)" }}>
+                            Showing <strong style={{ color: "#4DD8E8" }}>{filteredJobs.length}</strong> {filteredJobs.length === 1 ? "Role" : "Roles"} <span style={{ opacity: 0.6, fontSize: "0.8rem" }}>(Sorted A-Z)</span>
+                        </div>
+                    </div>
+
+                    <style>{`
+                        .job-card-item {
+                            background: #161B22;
+                            border: 1px solid rgba(255, 255, 255, 0.08);
+                            border-radius: 16px;
+                            padding: 28px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
+                            transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+                        }
+                        .job-card-item:hover {
+                            border-color: rgba(32, 26, 24, 0.35);
+                            box-shadow: 0 10px 30px rgba(229, 220, 220, 0.79);
+                            transform: translateY(-4px);
+                        }
+                        .job-card-title {
+                            transition: color 0.2s ease;
+                        }
+                        .job-card-item:hover .job-card-title {
+                            color: #FF8A3D !important;
+                        }
+                    `}</style>
+
+                    {/* Jobs Display Grid */}
+                    <motion.div
                         layout
                         style={{
                             display: "grid",
@@ -703,92 +853,91 @@ export default function CareersPage() {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
-                                    whileHover={{ 
-                                        y: -8, 
-                                        borderColor: "rgba(168, 85, 247, 0.6)",
-                                        boxShadow: "0 20px 48px rgba(124, 58, 237, 0.22), 0 0 20px rgba(77, 216, 232, 0.15)"
-                                    }}
-                                    transition={{ duration: 0.35, ease: "easeOut" }}
-                                    style={{
-                                        background: "linear-gradient(145deg, rgba(13, 19, 35, 0.65) 0%, rgba(20, 28, 52, 0.5) 100%)",
-                                        border: "1px solid rgba(255, 255, 255, 0.08)",
-                                        borderRadius: "16px",
-                                        padding: "30px",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between",
-                                        position: "relative",
-                                        overflow: "hidden",
-                                        backdropFilter: "blur(14px)"
-                                    }}
+                                    transition={{ duration: 0.3, ease: "easeOut" }}
+                                    className="job-card-item"
                                 >
-                                    {/* AI Futuristic Scanning Pulse Beam */}
-                                    <motion.div 
-                                        animate={{ x: ["-100%", "200%"] }}
-                                        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                                        style={{
-                                            position: "absolute",
-                                            top: 0,
-                                            left: 0,
-                                            width: "40%",
-                                            height: "2px",
-                                            background: "linear-gradient(90deg, transparent, #4dd8e8, #a855f7, transparent)",
-                                            pointerEvents: "none"
-                                        }}
-                                    />
-
                                     <div>
+                                        {/* Category & Experience Badges */}
                                         <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "16px", flexWrap: "wrap" }}>
-                                            <span className="badge" style={{ fontSize: "9px", padding: "4px 10px", backgroundColor: "rgba(124, 58, 237, 0.2)", border: "1px solid rgba(124, 58, 237, 0.4)", color: "#c084fc" }}>
+                                            <span style={{
+                                                fontSize: "10px",
+                                                fontFamily: "var(--font-mono)",
+                                                letterSpacing: "0.06em",
+                                                textTransform: "uppercase",
+                                                padding: "4px 10px",
+                                                borderRadius: "20px",
+                                                backgroundColor: "rgba(255, 138, 61, 0.1)",
+                                                border: "1px solid rgba(255, 138, 61, 0.25)",
+                                                color: "#FF8A3D",
+                                                fontWeight: 600
+                                            }}>
                                                 {job.category}
                                             </span>
-                                            <span className="badge rose" style={{ fontSize: "9px", padding: "4px 10px" }}>{job.type}</span>
-                                            <span style={{ marginLeft: "auto", fontSize: "0.7rem", color: "#4dd8e8", display: "inline-flex", alignItems: "center", gap: "4px", fontWeight: 600 }}>
-                                                <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "#4dd8e8", boxShadow: "0 0 8px #4dd8e8" }} />
-                                                AI-Accelerated
+                                            <span style={{
+                                                fontSize: "10px",
+                                                fontFamily: "var(--font-mono)",
+                                                letterSpacing: "0.06em",
+                                                padding: "4px 10px",
+                                                borderRadius: "20px",
+                                                backgroundColor: "rgba(77, 216, 232, 0.1)",
+                                                border: "1px solid rgba(77, 216, 232, 0.25)",
+                                                color: "#4DD8E8",
+                                                fontWeight: 600
+                                            }}>
+                                                ⏱️ {job.experience}
                                             </span>
                                         </div>
-                                        <h3 style={{ fontSize: "1.25rem", color: "#ffffff", fontWeight: 600, marginBottom: "12px", fontFamily: "var(--font-display)", lineHeight: "1.3" }}>
+
+                                        {/* Job Title */}
+                                        <h3 className="job-card-title" style={{ fontSize: "1.25rem", color: "#F1F5F9", fontWeight: 700, marginBottom: "12px", lineHeight: "1.3" }}>
                                             {job.title}
                                         </h3>
-                                        <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.82rem", color: "var(--text-secondary)", marginBottom: "16px" }}>
+
+                                        {/* Meta Information */}
+                                        <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.82rem", color: "#94A3B8", marginBottom: "16px" }}>
                                             <div>📍 <strong>Location:</strong> {job.city}, {job.country}</div>
-                                            <div>💼 <strong>Experience:</strong> {job.experience}</div>
+                                            <div>💼 <strong>Type:</strong> {job.type}</div>
                                         </div>
-                                        <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.6", margin: "0 0 20px 0" }}>
+
+                                        {/* Description */}
+                                        <p style={{ fontSize: "0.88rem", color: "#94A3B8", lineHeight: "1.65", margin: "0 0 20px 0" }}>
                                             {job.description}
                                         </p>
+
+                                        {/* Skill Tags */}
                                         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "24px" }}>
                                             {job.skills.map((skill) => (
-                                                <motion.span
+                                                <span
                                                     key={skill}
-                                                    whileHover={{ scale: 1.05, backgroundColor: "rgba(168, 85, 247, 0.15)", borderColor: "rgba(168, 85, 247, 0.4)" }}
                                                     style={{
                                                         fontSize: "0.75rem",
                                                         padding: "4px 9px",
                                                         borderRadius: "6px",
                                                         backgroundColor: "rgba(255, 255, 255, 0.04)",
                                                         border: "1px solid rgba(255, 255, 255, 0.08)",
-                                                        color: "var(--text-secondary)",
-                                                        transition: "all 0.2s ease"
+                                                        color: "#94A3B8"
                                                     }}
                                                 >
                                                     {skill}
-                                                </motion.span>
+                                                </span>
                                             ))}
                                         </div>
                                     </div>
-                                    <Link 
-                                        href={`/contact?product=careers&role=${job.slug}`} 
-                                        className="btn btn-outline" 
-                                        style={{ 
-                                            padding: "10px 18px", 
-                                            fontSize: "0.85rem", 
+
+                                    {/* Apply CTA Button */}
+                                    <Link
+                                        href={`/contact?product=careers&role=${job.slug}`}
+                                        className="btn btn-primary"
+                                        style={{
+                                            padding: "11px 18px",
+                                            fontSize: "0.85rem",
                                             width: "100%",
                                             justifyContent: "center",
-                                            border: "1px solid rgba(168, 85, 247, 0.3)",
-                                            backgroundColor: "rgba(124, 58, 237, 0.05)",
-                                            color: "#ffffff"
+                                            backgroundColor: "#E8521A",
+                                            color: "#FFFFFF",
+                                            fontWeight: 600,
+                                            borderRadius: "8px",
+                                            textDecoration: "none"
                                         }}
                                     >
                                         Apply Now →
@@ -799,13 +948,50 @@ export default function CareersPage() {
                     </motion.div>
 
                     {filteredJobs.length === 0 && (
-                        <div style={{ textAlign: "center", padding: "60px", color: "var(--text-secondary)", fontSize: "0.95rem" }}>
-                            No openings found for your selection. Try adjusting the filters or contact us at{" "}
-                            <a href="mailto:india@samsanlabs.com" style={{ color: "var(--violet-mid)", textDecoration: "underline" }}>
-                                india@samsanlabs.com
-                            </a>
+                        <div style={{
+                            textAlign: "center",
+                            padding: "60px 20px",
+                            background: "#161B22",
+                            borderRadius: "16px",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            color: "#94A3B8",
+                            fontSize: "0.95rem"
+                        }}>
+                            <div style={{ fontSize: "2rem", marginBottom: "12px" }}>🔍</div>
+                            No open roles matched your selected filters. Try clearing some criteria or click <strong>Reset Filter</strong>.
+                            <div style={{ marginTop: "16px" }}>
+                                <button
+                                    onClick={handleResetFilter}
+                                    style={{
+                                        padding: "8px 18px",
+                                        borderRadius: "6px",
+                                        backgroundColor: "#E8521A",
+                                        color: "#FFFFFF",
+                                        border: "none",
+                                        cursor: "pointer",
+                                        fontSize: "0.85rem",
+                                        fontWeight: 600
+                                    }}
+                                >
+                                    Reset All Filters
+                                </button>
+                            </div>
                         </div>
                     )}
+                </div>
+            </section>
+
+            {/* ── CTA Band (section-light) ── */}
+            <section className="section-light cta-section" style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "80px 0" }}>
+                <div className="container">
+                    <div className="cta-inner">
+                        <h2 style={{ color: "#FFFFFF" }}>Don&apos;t see a matching role?</h2>
+                        <p style={{ color: "#CBD5E1" }}>Send your resume directly to our talent acquisition team for upcoming embedded engineering openings.</p>
+                        <div className="cta-actions">
+                            <a href="mailto:india@samsanlabs.com" className="btn btn-primary" style={{ background: "#E8521A", color: "#FFFFFF" }}>Submit General Resume</a>
+                            <Link href="/services" className="btn btn-outline" style={{ border: "1px solid rgba(255, 255, 255, 0.2)", color: "#FFFFFF", background: "transparent" }}>View Engineering Offerings</Link>
+                        </div>
+                    </div>
                 </div>
             </section>
 

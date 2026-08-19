@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import SamsanAnimatedLogo from "@/components/ui/SamsanAnimatedLogo";
 
 interface SubmenuItem {
     label: string;
@@ -48,7 +49,7 @@ export default function Header() {
     }, [pathname]);
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 16);
+        const onScroll = () => setScrolled(window.scrollY > 40);
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
@@ -73,10 +74,7 @@ export default function Header() {
                 <nav className="nav-inner" aria-label="Primary navigation">
                     {/* Brand */}
                     <Link href="/" className="brand" aria-label="Samsan — Home">
-                        <img
-                            src="/images/samsan_logo_wordmark.png"
-                            alt="Samsan"
-                        />
+                        <SamsanAnimatedLogo height="64px" />
                     </Link>
 
                     {/* Desktop Links */}

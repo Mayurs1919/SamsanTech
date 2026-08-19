@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 
+import SamsanAnimatedLogo from "@/components/ui/SamsanAnimatedLogo";
+
 export default function Footer() {
     const year = new Date().getFullYear();
 
@@ -26,11 +28,7 @@ export default function Footer() {
                     {/* Brand column */}
                     <div className="footer-brand">
                         <Link href="/" className="brand" aria-label="Samsan — Home">
-                            <img
-                                src="/images/samsan_logo_wordmark.png"
-                                alt="Samsan"
-                                style={{ height: "26px", width: "auto", display: "block", objectFit: "contain" }}
-                            />
+                            <SamsanAnimatedLogo height="56px" />
                         </Link>
                         <p style={{ marginTop: "16px", fontSize: "0.875rem", lineHeight: "1.8", maxWidth: "280px", color: "var(--text-secondary)" }}>
                             A specialized design house for Software Defined Vehicles, connected mobility, and AI-driven automotive innovation.

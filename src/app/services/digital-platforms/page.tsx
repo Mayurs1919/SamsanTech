@@ -46,7 +46,7 @@ export default function DigitalPlatformsPage() {
                             <Link href="/engineering-offerings" style={{ color: "var(--violet-mid)", fontSize: "0.85rem", fontWeight: 600, textDecoration: "none" }}>
                                 Engineering Offerings
                             </Link>
-                            <span style={{ color: "var(--text-muted)", fontSize: "0.8rem" }}>/</span>
+                            <span style={{ color: "var(--text-muted)", fontSize: "0.8rem", fontWeight: 700 }}>//</span>
                             <span className="badge">Digital Solutions</span>
                         </motion.div>
                         <motion.h1 id="service-heading" variants={fadeUpVariants(shouldReduce)} style={{ marginBottom: "20px" }}>

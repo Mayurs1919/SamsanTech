@@ -36,12 +36,12 @@ function TechChipItem({ chip }: { chip: TechChip }) {
             display: "inline-flex",
             alignItems: "center",
             gap: "6px",
-            background: "rgba(255, 255, 255, 0.04)",
-            border: "1px solid var(--border)",
+            background: "rgba(255, 255, 255, 0.08)",
+            border: "1px solid rgba(255, 255, 255, 0.12)",
             borderRadius: "20px",
             padding: "5px 11px",
             fontSize: "12px",
-            color: "var(--text-secondary)",
+            color: "#CBD5E1",
             fontFamily: "var(--font-body)",
             whiteSpace: "nowrap"
         }}>
@@ -55,22 +55,24 @@ function TechChipItem({ chip }: { chip: TechChip }) {
                 />
             )}
             {chip.icon && (
-                <span style={{ color: "var(--text-secondary)", display: "flex", alignItems: "center", flexShrink: 0 }}>
+                <span style={{ color: "#94A3B8", display: "flex", alignItems: "center", flexShrink: 0 }}>
                     {chip.icon}
                 </span>
             )}
-            <span style={{ color: "var(--text-secondary)" }}>{chip.label}</span>
+            <span style={{ color: "#CBD5E1" }}>{chip.label}</span>
         </span>
     );
 }
 
 const productImages: Record<string, string> = {
+    "digital-cockpit-solution": "/images/digital_cockpit.png",
     "vemeego": "/images/vemeego.png",
     "pikniknow": "/images/pikniknow.jpg",
     "twinlnk": "/images/twinlink.png",
     "maestro": "/images/maestro.png",
     "automate-ai": "/images/automate.png",
-    "dms-edge": "/images/driver-health.png"
+    "dms-edge": "/images/driver-health.png",
+    "cabiniq": "/images/cabiniq.png"
 };
 
 function ProductFlipCard({
@@ -83,6 +85,7 @@ function ProductFlipCard({
     shouldReduce: boolean;
 }) {
     const [flipped, setFlipped] = useState(false);
+    const [hovered, setHovered] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const sceneRef = useRef<HTMLDivElement>(null);
 
@@ -125,6 +128,8 @@ function ProductFlipCard({
             ref={sceneRef}
             className={`scene ${isVisible ? "visible" : ""}`}
             onClick={() => setFlipped(!flipped)}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
             style={{
                 transitionDelay: shouldReduce ? "0s" : `${idx * 0.1}s`
             }}
@@ -134,8 +139,8 @@ function ProductFlipCard({
                 <div
                     className="card-front"
                     style={{
-                        background: "rgba(13, 19, 35, 0.55)",
-                        border: "1px solid var(--border)",
+                        background: "#0D1117",
+                        border: `1px solid ${hovered ? `rgba(${rgbStr}, 0.6)` : "rgba(255, 255, 255, 0.12)"}`,
                         borderRadius: "16px",
                         display: "flex",
                         flexDirection: "column",
@@ -144,62 +149,138 @@ function ProductFlipCard({
                         padding: "28px 24px",
                         position: "absolute",
                         inset: 0,
-                        backdropFilter: "blur(12px)",
-                        overflow: "hidden"
+                        overflow: "hidden",
+                        boxShadow: hovered ? `0 20px 48px rgba(${rgbStr}, 0.25)` : "0 8px 32px rgba(0,0,0,0.3)",
+                        transition: "all 0.3s ease"
                     }}
                 >
-                    {/* IMAGE or ICON */}
+                    {/* Card number */}
+                    <span style={{
+                        position: "absolute",
+                        top: "16px",
+                        right: "20px",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "12px",
+                        color: "rgba(255, 255, 255, 0.3)",
+                        letterSpacing: "0.1em",
+                        fontWeight: 600
+                    }}>
+                        {prod.number}
+                    </span>
+
+                    {/* IMAGE or ICON — constrained so title always fits */}
                     {productImg ? (
-                        <div style={{ width: "100%", flex: "1 1 auto", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 0, padding: "10px" }}>
+                        <div style={{
+                            width: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "8px 10px",
+                            flexShrink: 1,
+                            minHeight: 0
+                        }}>
                             <img
                                 src={productImg}
                                 alt={prod.title}
                                 style={{
-                                    maxWidth: "95%",
-                                    maxHeight: "200px",
+                                    maxWidth: "100%",
+                                    maxHeight: "160px",
                                     width: "auto",
                                     height: "auto",
                                     objectFit: "contain",
                                     display: "block",
-                                    filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.35))"
+                                    filter: "drop-shadow(0 4px 20px rgba(0, 0, 0, 0.6))"
                                 }}
                             />
                         </div>
                     ) : (
-                        <div style={{ width: "96px", height: "96px", borderRadius: "24px", display: "flex", alignItems: "center", justifyContent: "center", background: `rgba(${rgbStr}, 0.12)`, border: `1px solid rgba(${rgbStr}, 0.3)`, flexShrink: 0, marginBottom: "16px" }}>
+                        <div style={{
+                            width: "88px",
+                            height: "88px",
+                            borderRadius: "22px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            background: `rgba(${rgbStr}, 0.12)`,
+                            border: `1px solid rgba(${rgbStr}, 0.35)`,
+                            flexShrink: 0,
+                            marginBottom: "8px"
+                        }}>
                             {clonedIcon}
                         </div>
                     )}
 
                     {/* Divider */}
-                    <div style={{ width: "75%", height: "1px", background: `linear-gradient(90deg, transparent, rgba(${rgbStr}, 0.45), transparent)`, margin: "12px 0 16px", flexShrink: 0 }} />
+                    <div style={{
+                        width: "70%",
+                        height: "1px",
+                        background: `linear-gradient(90deg, transparent, rgba(${rgbStr}, 0.5), transparent)`,
+                        margin: "10px 0 12px",
+                        flexShrink: 0
+                    }} />
 
-                    {/* Product name — ALL CAPS */}
-                    <h3 style={{ fontSize: "0.85rem", fontWeight: 800, letterSpacing: "0.15em", textTransform: "uppercase", textAlign: "center", lineHeight: 1.4, fontFamily: "'Inter', system-ui, sans-serif", margin: 0, flexShrink: 0, background: `linear-gradient(135deg, #ffffff 60%, rgba(${rgbStr}, 0.95))`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                    {/* Product name — always visible, crisp white */}
+                    <h3 style={{
+                        fontSize: "0.92rem",
+                        fontWeight: 800,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        textAlign: "center",
+                        lineHeight: 1.3,
+                        fontFamily: "var(--font-display)",
+                        margin: 0,
+                        flexShrink: 0,
+                        color: "#FFFFFF",
+                        textShadow: "0 1px 8px rgba(0,0,0,0.6)",
+                        padding: "0 8px"
+                    }}>
                         {prod.title}
                     </h3>
+
+                    {/* Hover hint */}
+                    <span style={{
+                        fontSize: "10px",
+                        fontFamily: "var(--font-mono)",
+                        color: `rgba(${rgbStr}, 0.8)`,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.12em",
+                        marginTop: "8px",
+                        flexShrink: 0
+                    }}>
+                        Click to explore →
+                    </span>
                 </div>
 
+                {/* BACK FACE */}
                 <div
                     className="card-back"
                     style={{
-                        background: `linear-gradient(145deg, rgba(${rgbStr}, 0.08) 0%, rgba(13, 19, 35, 0.55) 40%)`,
-                        border: `1px solid rgba(${rgbStr}, 0.35)`,
+                        background: "#0D1117",
+                        border: `1px solid rgba(255, 255, 255, 0.12)`,
                         borderRadius: "16px",
                         display: "flex",
                         flexDirection: "column",
                         padding: "22px 20px",
                         gap: "14px",
-                        backdropFilter: "blur(12px)",
                         overflowY: "hidden"
                     }}
                 >
+                    {/* TOP ACCENT PRODUCT NAME */}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
+                        <h4 style={{ color: iconColor, fontSize: "0.88rem", fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", margin: 0, fontFamily: "var(--font-display)" }}>
+                            {prod.title}
+                        </h4>
+                        <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "rgba(255, 255, 255, 0.4)" }}>
+                            {prod.number}
+                        </span>
+                    </div>
+
                     {/* A) DESCRIPTION */}
                     <p
                         style={{
                             fontSize: "0.82rem",
                             lineHeight: 1.55,
-                            color: "var(--text-secondary)",
+                            color: "#CBD5E1",
                             margin: 0,
                             flexShrink: 1,
                             overflow: "hidden",
@@ -219,11 +300,11 @@ function ProductFlipCard({
                                 fontSize: "9px",
                                 letterSpacing: "0.1em",
                                 textTransform: "uppercase",
-                                color: "var(--text-muted)",
+                                color: "#94A3B8",
                                 display: "block"
                             }}
                         >
-                            Technologies
+                            TECHNOLOGIES
                         </span>
 
                         <div
@@ -253,7 +334,7 @@ function ProductFlipCard({
                         <Link
                             href={`/contact?product=${prod.id}`}
                             className="btn btn-primary"
-                            style={{ width: "100%", justifyContent: "center", padding: "10px 16px", fontSize: "0.88rem" }}
+                            style={{ width: "100%", justifyContent: "center", padding: "10px 16px", fontSize: "0.88rem", background: "#E8521A", color: "#FFFFFF" }}
                             onClick={(e) => {
                                 e.stopPropagation();
                             }}
@@ -266,7 +347,7 @@ function ProductFlipCard({
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn btn-outline"
-                                style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center", gap: "8px", padding: "9px 16px", fontSize: "0.88rem" }}
+                                style={{ width: "100%", justifyContent: "center", display: "flex", alignItems: "center", gap: "8px", padding: "9px 16px", fontSize: "0.88rem", background: "transparent", color: "#FFFFFF", border: "1px solid rgba(255, 255, 255, 0.2)" }}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                 }}
@@ -486,28 +567,30 @@ export default function SolutionsPage() {
     return (
         <div style={{ paddingBottom: "0" }}>
 
-            {/* ── Page Hero ── */}
-            <section className="page-hero" aria-labelledby="solutions-heading" style={{ paddingBottom: "100px" }}>
+            {/* ── Page Hero (Dark Theme Upper Part) ── */}
+            <section className="section-dark page-hero" aria-labelledby="solutions-heading" style={{ background: "#0A0D11", padding: "80px 0 60px" }}>
                 <div className="container">
                     <motion.div variants={staggerContainerVariants} initial="hidden" animate="visible">
                         <motion.div variants={fadeUpVariants(shouldReduce)}>
-                            <span className="badge" style={{ marginBottom: "24px" }}>Products &amp; Accelerators</span>
+                            <span className="badge" style={{ marginBottom: "24px", color: "#4DD8E8", background: "rgba(77, 216, 232, 0.08)", border: "1px solid rgba(77, 216, 232, 0.2)" }}>
+                                Products &amp; Accelerators
+                            </span>
                         </motion.div>
-                        <motion.h1 id="solutions-heading" variants={fadeUpVariants(shouldReduce)} style={{ marginBottom: "20px" }}>
+                        <motion.h1 id="solutions-heading" variants={fadeUpVariants(shouldReduce)} style={{ marginBottom: "20px", color: "#FFFFFF" }}>
                             SAMSAN Products &amp; Accelerators
                         </motion.h1>
-                        <motion.p className="lead" variants={fadeUpVariants(shouldReduce)} style={{ maxWidth: "620px" }}>
+                        <motion.p className="lead" variants={fadeUpVariants(shouldReduce)} style={{ maxWidth: "620px", color: "#94A3B8" }}>
                             Production-proven solutions across automotive embedded, IoT, and digital platforms. From concept to deployment — engineered for reliability, safety, and scale.
                         </motion.p>
                     </motion.div>
                 </div>
             </section>
 
-            {/* ── Stats Bar ── */}
-            <section style={{
-                borderTop: "1px solid var(--border)",
-                borderBottom: "1px solid var(--border)",
-                background: "rgba(10,15,28,0.4)",
+            {/* ── Stats Bar (Dark Theme Upper Part) ── */}
+            <section className="section-dark" style={{
+                borderTop: "1px solid rgba(255,255,255,0.07)",
+                borderBottom: "1px solid rgba(255,255,255,0.07)",
+                background: "#0D1117",
                 padding: "48px 0"
             }}>
                 <div className="container">
@@ -522,24 +605,25 @@ export default function SolutionsPage() {
                             <motion.div key={i} variants={fadeUpVariants(shouldReduce)}>
                                 <div style={{
                                     fontSize: "2.8rem", fontWeight: 800,
-                                    background: "linear-gradient(135deg, var(--violet-mid), var(--mint))",
-                                    WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                                    color: "#FFFFFF",
                                     lineHeight: 1.1, marginBottom: "8px"
                                 }}>{s.value}</div>
-                                <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", letterSpacing: "0.04em" }}>{s.label}</div>
+                                <div style={{ fontSize: "0.85rem", color: "#94A3B8", letterSpacing: "0.04em" }}>{s.label}</div>
                             </motion.div>
                         ))}
                     </motion.div>
                 </div>
             </section>
 
-            {/* ── Product Cards Grid ── */}
-            <section className="section">
+            {/* ── Product Cards Grid (Light Theme starting from Products & Accelerators down to footer) ── */}
+            <section className="section-light section" style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "80px 0" }}>
                 <div className="container">
                     <div style={{ textAlign: "center", marginBottom: "64px" }}>
-                        <span className="badge" style={{ marginBottom: "16px" }}>Our Portfolio</span>
-                        <h2 style={{ fontSize: "2.2rem", marginBottom: "16px" }}>9 Products &amp; Accelerators</h2>
-                        <p style={{ color: "var(--text-secondary)", maxWidth: "600px", margin: "0 auto", lineHeight: "1.7" }}>
+                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", background: "rgba(232, 82, 26, 0.08)", border: "1px solid rgba(232, 82, 26, 0.2)" }}>
+                            Our Portfolio
+                        </span>
+                        <h2 style={{ fontSize: "2.2rem", marginBottom: "16px", color: "#0B1320" }}>9 Products &amp; Accelerators</h2>
+                        <p style={{ color: "#64748B", maxWidth: "600px", margin: "0 auto", lineHeight: "1.7" }}>
                             Each product is backed by deep domain expertise, production-grade engineering, and a relentless focus on quality. Contact us for a brochure or discovery call.
                         </p>
                     </div>
@@ -558,15 +642,15 @@ export default function SolutionsPage() {
                 </div>
             </section>
 
-            {/* ── CTA ── */}
-            <section className="cta-section">
+            {/* ── CTA (Light Theme) ── */}
+            <section className="section-light cta-section" style={{ background: "#FFFFFF", borderTop: "1px solid #E2E8F0", padding: "80px 0" }}>
                 <div className="container">
                     <div className="cta-inner">
-                        <h2>Need a custom solution?</h2>
-                        <p>Our engineering teams can design, build, and deploy tailored systems for your specific requirements.</p>
+                        <h2 style={{ color: "#FFFFFF" }}>Need a custom solution?</h2>
+                        <p style={{ color: "#CBD5E1" }}>Our engineering teams can design, build, and deploy tailored systems for your specific requirements.</p>
                         <div className="cta-actions">
-                            <Link href="/contact" className="btn btn-primary">Evaluate SAMSAN Accelerators</Link>
-                            <Link href="/engineering-offerings" className="btn btn-outline">View Engineering Offerings</Link>
+                            <Link href="/contact" className="btn btn-primary" style={{ background: "#E8521A", color: "#FFFFFF" }}>Evaluate SAMSAN Accelerators</Link>
+                            <Link href="/services" className="btn btn-outline" style={{ border: "1px solid rgba(255, 255, 255, 0.2)", color: "#FFFFFF", background: "transparent" }}>View Engineering Offerings</Link>
                         </div>
                     </div>
                 </div>

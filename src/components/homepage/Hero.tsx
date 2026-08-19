@@ -82,7 +82,7 @@ function CinematicVideoPlayer() {
                 <div style={{ position: "absolute", bottom: "24px", left: "24px", right: "80px", display: "flex", flexDirection: "column", gap: "8px", pointerEvents: "none", textAlign: "left" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                         <span style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "var(--mint)", border: "1px solid rgba(16, 185, 129, 0.25)", fontSize: "0.7rem", padding: "3px 8px", borderRadius: "100px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                            <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "var(--mint)", display: "inline-block" }} />
+                            <span style={{ color: "var(--mint)", fontWeight: 700 }}>//</span>
                             System Active
                         </span>
                         <span style={{ color: "rgba(255, 255, 255, 0.4)", fontSize: "0.75rem", fontFamily: "var(--font-mono)" }}>SAMSAN AI CORE v4.0</span>

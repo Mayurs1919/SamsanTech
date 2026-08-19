@@ -16,23 +16,36 @@ const technologies = [
 
 export default function Partners() {
     return (
-        <section className="section compact" style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", background: "rgba(10, 15, 28, 0.2)" }}>
+        <section
+            className="section compact"
+            style={{
+                borderTop: "1px solid rgba(15, 23, 42, 0.1)",
+                borderBottom: "1px solid rgba(15, 23, 42, 0.1)",
+            }}
+        >
             <div className="container">
                 <div style={{ textAlign: "center", marginBottom: "32px", maxWidth: "800px", margin: "0 auto 32px auto" }}>
                     <span style={{
                         fontFamily: "var(--font-mono)",
                         fontSize: "10px",
                         letterSpacing: "0.12em",
-                        color: "var(--text-muted)",
+                        color: "#64748B",
                         textTransform: "uppercase"
                     }}>
                         Ecosystem Expertise
                     </span>
-                    <h3 style={{ fontSize: "1.75rem", color: "#ffffff", marginTop: "8px", marginBottom: "16px", fontWeight: 600, fontFamily: "var(--font-display)" }}>
-                        Platforms & Tools Our Teams Work With
+                    <h3 style={{
+                        fontSize: "1.75rem",
+                        color: "#0F172A",
+                        marginTop: "8px",
+                        marginBottom: "16px",
+                        fontWeight: 600,
+                        fontFamily: "var(--font-display)"
+                    }}>
+                        Platforms &amp; Tools Our Teams Work With
                     </h3>
                     <p style={{
-                        color: "var(--text-secondary)",
+                        color: "#334155",
                         fontSize: "0.95rem",
                         lineHeight: "1.8",
                         margin: 0
@@ -53,11 +66,15 @@ export default function Partners() {
                     {technologies.map((tech) => (
                         <motion.div
                             key={tech}
-                            whileHover={{ scale: 1.03, borderColor: "rgba(255,255,255,0.12)", backgroundColor: "rgba(255, 255, 255, 0.04)" }}
+                            whileHover={{
+                                scale: 1.03,
+                                borderColor: "rgba(15, 23, 42, 0.25)",
+                                backgroundColor: "rgba(15, 23, 42, 0.06)"
+                            }}
                             style={{
                                 padding: "10px 20px",
-                                background: "rgba(255, 255, 255, 0.02)",
-                                border: "1px solid rgba(255, 255, 255, 0.06)",
+                                background: "rgba(15, 23, 42, 0.04)",
+                                border: "1px solid rgba(15, 23, 42, 0.12)",
                                 borderRadius: "100px",
                                 transition: "all 0.2s ease",
                                 textAlign: "center",
@@ -68,7 +85,7 @@ export default function Partners() {
                                 fontFamily: "var(--font-body)",
                                 fontSize: "0.85rem",
                                 fontWeight: 500,
-                                color: "#ffffff",
+                                color: "#1E293B",
                                 letterSpacing: "0.02em"
                             }}>
                                 {tech}
