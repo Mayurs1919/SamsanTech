@@ -134,7 +134,7 @@ function LinkedInIcon({ href, name, centered }: { href?: string; name: string; c
                             marginTop: "auto",
                             marginBottom: "-8px",
                             alignSelf: "center",
-                          }
+                        }
                         : { right: "16px" }),
                     width: "38px",
                     height: "38px",
@@ -171,7 +171,7 @@ function LinkedInIcon({ href, name, centered }: { href?: string; name: string; c
                         marginTop: "auto",
                         marginBottom: "-8px",
                         alignSelf: "center",
-                      }
+                    }
                     : { right: "16px" }),
                 width: "38px",
                 height: "38px",
@@ -206,21 +206,28 @@ function SpecRow({ specKey, specVal, index, shouldReduce }: { specKey: string; s
             onMouseLeave={() => setIsHovered(false)}
             className="spec-row"
             style={{
-                background: isHovered ? "rgba(22, 30, 53, 0.6)" : "transparent",
-                borderLeft: isHovered ? "3px solid #4DD8E8" : "3px solid transparent",
+                display: "grid",
+                gridTemplateColumns: "minmax(240px, 32%) 1fr",
+                background: isHovered ? "rgba(232, 82, 26, 0.04)" : "#FFFFFF",
+                borderLeft: isHovered ? "3px solid #E8521A" : "3px solid transparent",
                 transition: "background 0.2s ease, border-left-color 0.2s ease",
                 marginLeft: isHovered ? "-3px" : "0px",
-                borderBottom: "1px solid rgba(255, 255, 255, 0.08)"
+                borderBottom: "1px solid #E2E8F0",
+                minHeight: "64px"
             }}
         >
             <div className="spec-key" style={{
-                fontSize: "11.5px",
-                letterSpacing: "0.08em",
+                fontSize: "0.88rem",
+                letterSpacing: "0.04em",
                 padding: "20px 24px",
-                minWidth: "200px",
-                background: "transparent",
-                borderRight: "1px solid rgba(255, 255, 255, 0.08)",
-                color: "var(--violet-mid)"
+                background: "#F8FAFC",
+                borderRight: "1px solid #E2E8F0",
+                color: "#E8521A",
+                fontWeight: 700,
+                textTransform: "uppercase",
+                fontFamily: "var(--font-sans)",
+                display: "flex",
+                alignItems: "center"
             }}>
                 {specKey}
             </div>
@@ -228,7 +235,12 @@ function SpecRow({ specKey, specVal, index, shouldReduce }: { specKey: string; s
                 fontSize: "0.95rem",
                 lineHeight: "1.6",
                 padding: "20px 24px",
-                background: "transparent"
+                background: "#FFFFFF",
+                color: "#0B1320",
+                fontWeight: 400,
+                fontFamily: "var(--font-sans)",
+                display: "flex",
+                alignItems: "center"
             }}>
                 {specVal}
             </div>
@@ -249,19 +261,19 @@ export default function AboutPage() {
             linkedinUrl: "https://www.linkedin.com/in/shankaran-venugopalan-92759611/"
         },
         {
-            name: "Sharana Gouda",
+            name: "Shridhar Pophali",
             role: "Engineering Director — Cockpit",
-            dept: "Cockpit Engineering",
-            imagePath: "/images/team/sharana_gouda.png",
+            dept: "Digital Cockpit | Telematics | SDV | Android Automotive | HMI | ",
+            imagePath: "/images/team/shridhar_pophali.jpg",
             glowColor: "#4DD8E8",
-            linkedinUrl: "https://www.linkedin.com/in/sharana-gouda-patil-a53b7715"
+            linkedinUrl: "https://www.linkedin.com/in/shridharpophali/"
         },
         {
             name: "Dr. Pradeep Bilurkar",
             role: "Chief Data Scientist",
             dept: "Data & AI",
             imagePath: "/images/team/dr_pradeep_bilurkar.png",
-            glowColor: "#FF8A3D",
+            glowColor: "#4DD8E8",
             linkedinUrl: "https://www.linkedin.com/in/dr-pradeep-bilurkar-5a72922b/"
         },
         {
@@ -269,7 +281,7 @@ export default function AboutPage() {
             role: "Technical Sales",
             dept: "Business Development",
             imagePath: "/images/team/pratik_waghmode.png",
-            glowColor: "#22C55E",
+            glowColor: "#4DD8E8",
             linkedinUrl: "https://www.linkedin.com/in/pratik-waghmode-742b3440/"
         },
         {
@@ -277,7 +289,7 @@ export default function AboutPage() {
             role: "Accounts & Finance",
             dept: "Finance & Operations",
             imagePath: "/images/team/gaurav_joshi.png",
-            glowColor: "#FFC83D",
+            glowColor: "#4DD8E8",
             linkedinUrl: "https://www.linkedin.com/in/gaurav-joshi-a3677b147/"
         }
     ];
@@ -286,14 +298,14 @@ export default function AboutPage() {
         <div style={{ paddingBottom: "0px" }}>
 
             {/* Page Hero */}
-            <section className="page-hero" aria-labelledby="about-heading" style={{
+            <section className="section-dark page-hero" aria-labelledby="about-heading" style={{
                 position: "relative",
                 minHeight: "320px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 textAlign: "center",
-                background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(77, 216, 232, 0.06) 0%, transparent 70%)"
+                background: "#0A0D11"
             }}>
                 <div className="container">
                     <motion.div
@@ -307,7 +319,7 @@ export default function AboutPage() {
                                 visible: { opacity: 1, transition: { duration: shouldReduce ? 0.01 : 0.4 } }
                             }}
                         >
-                            <span className="badge" style={{ marginBottom: "16px", fontSize: "12px", letterSpacing: "0.12em" }}>About Us</span>
+                            <span className="badge" style={{ marginBottom: "16px", fontSize: "12px", letterSpacing: "0.12em", color: "#4DD8E8", borderColor: "rgba(77, 216, 232, 0.2)", background: "rgba(77, 216, 232, 0.06)" }}>About Us</span>
                         </motion.div>
                         <motion.h1
                             id="about-heading"
@@ -320,7 +332,8 @@ export default function AboutPage() {
                                 fontWeight: 800,
                                 lineHeight: 1.08,
                                 letterSpacing: "-0.02em",
-                                marginBottom: "20px"
+                                marginBottom: "20px",
+                                color: "#FFFFFF"
                             }}
                         >
                             About Company
@@ -336,7 +349,7 @@ export default function AboutPage() {
                                 lineHeight: 1.75,
                                 maxWidth: "580px",
                                 margin: "0 auto",
-                                color: "var(--text-secondary)"
+                                color: "#94A3B8"
                             }}
                         >
                             SAMSAN Technische Labs Pvt. Ltd. is a technology reimagined systems design house powering global automotive megatrends.
@@ -346,12 +359,12 @@ export default function AboutPage() {
             </section>
 
             {/* SAMSAN Technische Labs Intro Section */}
-            <section className="section compact" style={{ borderTop: "1px solid var(--border)" }}>
+            <section className="section-light section compact" style={{ borderTop: "1px solid #E2E8F0", background: "#FFFFFF" }}>
                 <div className="container">
                     <div className="about-two-col" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "60px", alignItems: "center" }}>
                         <div>
-                            <span className="badge rose" style={{ marginBottom: "16px" }}>Company Overview</span>
-                            <h2 style={{ fontSize: "2.2rem", fontWeight: 700, marginBottom: "28px", color: "#ffffff", letterSpacing: "-0.025em" }}>
+                            <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)" }}>Company Overview</span>
+                            <h2 style={{ fontSize: "2.2rem", fontWeight: 700, marginBottom: "28px", color: "#0B1320", letterSpacing: "-0.025em" }}>
                                 SAMSAN Technische Labs Pvt. Ltd.
                             </h2>
 
@@ -371,7 +384,7 @@ export default function AboutPage() {
                                     fontFamily: "var(--font-mono)",
                                     fontSize: "11px",
                                     letterSpacing: "0.1em",
-                                    color: "#F59E0B",
+                                    color: "#E8521A",
                                     marginBottom: "10px",
                                     textTransform: "uppercase"
                                 }}>
@@ -382,7 +395,7 @@ export default function AboutPage() {
                                     fontWeight: 600,
                                     lineHeight: "1.4",
                                     fontStyle: "normal",
-                                    color: "#ffffff"
+                                    color: "#0B1320"
                                 }}>
                                     To design safe, connected, and intelligent systems that power the vehicle of the future.
                                 </div>
@@ -410,7 +423,7 @@ export default function AboutPage() {
                                     style={{
                                         fontSize: "1rem",
                                         lineHeight: "1.8",
-                                        color: "rgba(240, 244, 255, 0.85)",
+                                        color: "#64748B",
                                         margin: 0
                                     }}
                                 >
@@ -424,7 +437,7 @@ export default function AboutPage() {
                                     style={{
                                         fontSize: "1rem",
                                         lineHeight: "1.8",
-                                        color: "rgba(240, 244, 255, 0.85)",
+                                        color: "#64748B",
                                         margin: 0
                                     }}
                                 >
@@ -435,8 +448,8 @@ export default function AboutPage() {
 
                         {/* Interactive Side Graphic */}
                         <div style={{
-                            background: "rgba(13, 19, 35, 0.45)",
-                            border: "1px solid rgba(255, 255, 255, 0.06)",
+                            background: "#F8FAFC",
+                            border: "1px solid #E2E8F0",
                             borderRadius: "var(--radius-lg)",
                             padding: "40px",
                             display: "flex",
@@ -448,16 +461,16 @@ export default function AboutPage() {
                             backgroundImage: "url('/images/ai_digital_tech.png')",
                             backgroundSize: "cover",
                             backgroundPosition: "center",
-                            boxShadow: "0 20px 40px rgba(0,0,0,0.3)"
+                            boxShadow: "0 10px 30px rgba(0,0,0,0.06)"
                         }}>
                             <div style={{
                                 position: "absolute",
                                 inset: 0,
-                                background: "linear-gradient(to top, rgba(10,15,28,0.9) 0%, rgba(10,15,28,0.3) 100%)",
+                                background: "linear-gradient(to top, rgba(11,19,32,0.85) 0%, rgba(11,19,32,0.2) 100%)",
                                 zIndex: 1
                             }} />
                             <div style={{ position: "relative", zIndex: 2, textAlign: "center" }}>
-                                <span className="badge" style={{ background: "rgba(255,255,255,0.1)", backdropFilter: "blur(4px)" }}>AI & Digital Embedded Technologies</span>
+                                <span className="badge" style={{ background: "rgba(255,255,255,0.2)", color: "#FFFFFF", backdropFilter: "blur(4px)", borderColor: "rgba(255,255,255,0.3)" }}>AI & Digital Embedded Technologies</span>
                             </div>
                         </div>
                     </div>
@@ -465,11 +478,11 @@ export default function AboutPage() {
             </section>
 
             {/* Automotive Megatrends */}
-            <section className="section compact" style={{ borderTop: "1px solid var(--border)", background: "rgba(10,15,28,0.2)" }}>
+            <section className="section-light section compact" style={{ borderTop: "1px solid #E2E8F0", background: "#F8FAFC" }}>
                 <div className="container">
                     <div style={{ textAlign: "center", marginBottom: "48px" }}>
                         <span className="badge mint" style={{ marginBottom: "16px" }}>Core Competencies</span>
-                        <h2 style={{ fontSize: "2.2rem", fontWeight: 700 }}>What We Specialize In</h2>
+                        <h2 style={{ fontSize: "2.2rem", fontWeight: 700, color: "#0B1320" }}>What We Specialize In</h2>
                     </div>
 
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "24px" }}>
@@ -477,12 +490,13 @@ export default function AboutPage() {
                             <div
                                 key={trend.title}
                                 style={{
-                                    background: "rgba(13, 19, 35, 0.45)",
-                                    border: "1px solid rgba(255, 255, 255, 0.05)",
+                                    background: "#FFFFFF",
+                                    border: "1px solid #E2E8F0",
                                     borderRadius: "var(--radius)",
                                     padding: "32px 28px",
                                     position: "relative",
-                                    overflow: "hidden"
+                                    overflow: "hidden",
+                                    boxShadow: "0 4px 12px rgba(0,0,0,0.03)"
                                 }}
                             >
                                 <div style={{
@@ -494,8 +508,8 @@ export default function AboutPage() {
                                     top: "32px",
                                     borderRadius: "0 4px 4px 0"
                                 }} />
-                                <h3 style={{ fontSize: "1.2rem", color: "#ffffff", marginBottom: "14px", fontWeight: 600 }}>{trend.title}</h3>
-                                <p style={{ fontSize: "0.85rem", lineHeight: "1.65", color: "var(--text-secondary)" }}>{trend.desc}</p>
+                                <h3 style={{ fontSize: "1.2rem", color: "#0B1320", marginBottom: "14px", fontWeight: 600 }}>{trend.title}</h3>
+                                <p style={{ fontSize: "0.85rem", lineHeight: "1.65", color: "#64748B" }}>{trend.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -511,12 +525,12 @@ export default function AboutPage() {
                         backgroundPosition: "center",
                         position: "relative",
                         overflow: "hidden",
-                        border: "1px solid rgba(255,255,255,0.06)",
-                        boxShadow: "0 20px 40px rgba(0,0,0,0.4)"
+                        border: "1px solid #E2E8F0",
+                        boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
                     }}>
                         <div style={{
                             position: "absolute", inset: 0,
-                            background: "linear-gradient(to top, rgba(10,15,28,0.95) 0%, rgba(10,15,28,0.1) 100%)"
+                            background: "linear-gradient(to top, rgba(11,19,32,0.9) 0%, rgba(11,19,32,0.1) 100%)"
                         }} />
                         <div style={{
                             position: "absolute", bottom: "32px", left: "32px", right: "32px"
@@ -529,23 +543,23 @@ export default function AboutPage() {
             </section>
 
             {/* Vision & Why Choose Us */}
-            <section className="section compact" style={{ borderTop: "1px solid var(--border)" }}>
+            <section className="section-light section compact" style={{ borderTop: "1px solid #E2E8F0", background: "#FFFFFF" }}>
                 <div className="container">
                     <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: "60px", alignItems: "start" }}>
 
                         {/* Vision Card */}
                         <div style={{
-                            background: "linear-gradient(135deg, rgba(22, 30, 53, 0.5) 0%, rgba(27, 36, 64, 0.5) 100%)",
-                            border: "1px solid rgba(255, 255, 255, 0.06)",
+                            background: "#F8FAFC",
+                            border: "1px solid #E2E8F0",
                             borderRadius: "var(--radius-lg)",
                             padding: "44px",
-                            boxShadow: "0 15px 35px rgba(0,0,0,0.2)"
+                            boxShadow: "0 10px 30px rgba(0,0,0,0.04)"
                         }}>
-                            <span className="badge" style={{ marginBottom: "20px" }}>Our Vision</span>
-                            <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#ffffff", marginBottom: "20px", lineHeight: "1.3" }}>
+                            <span className="badge" style={{ marginBottom: "20px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)" }}>Our Vision</span>
+                            <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#0B1320", marginBottom: "20px", lineHeight: "1.3" }}>
                                 To design safe, connected, and intelligent systems that power the vehicle of the future.
                             </h2>
-                            <p style={{ fontSize: "0.95rem", lineHeight: "1.7", color: "var(--text-secondary)" }}>
+                            <p style={{ fontSize: "0.95rem", lineHeight: "1.7", color: "#64748B" }}>
                                 SAMSAN bridges the gap between hardware restrictions and complex software layers. We are committed to engineering platforms that meet the highest functional safety standards while driving agile, digital-first feature delivery.
                             </p>
                             <div style={{
@@ -555,14 +569,14 @@ export default function AboutPage() {
                                 backgroundImage: "url('/images/embedded_engineering.png')",
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
-                                border: "1px solid rgba(255,255,255,0.1)"
+                                border: "1px solid #E2E8F0"
                             }} />
                         </div>
 
                         {/* Why Choose Us */}
                         <div>
                             <span className="badge rose" style={{ marginBottom: "16px" }}>Our Philosophy</span>
-                            <h2 style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: "24px", color: "#ffffff" }}>Delivery Philosophy</h2>
+                            <h2 style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: "24px", color: "#0B1320" }}>Delivery Philosophy</h2>
                             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                                 {reasons.map((reason, idx) => (
                                     <div
@@ -570,8 +584,8 @@ export default function AboutPage() {
                                         style={{
                                             display: "flex",
                                             gap: "16px",
-                                            background: "rgba(13, 19, 35, 0.3)",
-                                            border: "1px solid rgba(255,255,255,0.04)",
+                                            background: "#F1F5F9",
+                                            border: "1px solid #E2E8F0",
                                             borderRadius: "var(--radius-sm)",
                                             padding: "16px 20px",
                                             alignItems: "center"
@@ -580,8 +594,8 @@ export default function AboutPage() {
                                         <div style={{
                                             width: "24px", height: "24px",
                                             borderRadius: "50%",
-                                            background: "rgba(124, 58, 237, 0.15)",
-                                            color: "var(--violet-mid)",
+                                            background: "rgba(232, 82, 26, 0.12)",
+                                            color: "#E8521A",
                                             display: "flex", alignItems: "center", justifyContent: "center",
                                             flexShrink: 0,
                                             fontSize: "0.8rem",
@@ -589,7 +603,7 @@ export default function AboutPage() {
                                         }}>
                                             ✓
                                         </div>
-                                        <p style={{ fontSize: "0.88rem", color: "var(--text-primary)", lineHeight: "1.4" }}>{reason}</p>
+                                        <p style={{ fontSize: "0.88rem", color: "#0B1320", lineHeight: "1.4", margin: 0, fontWeight: 500 }}>{reason}</p>
                                     </div>
                                 ))}
                             </div>
@@ -600,15 +614,15 @@ export default function AboutPage() {
             </section>
 
             {/* Spec Sheet Section */}
-            <section className="section compact" style={{ borderTop: "1px solid var(--border)", background: "rgba(10,15,28,0.15)" }}>
+            <section className="section-light section compact" style={{ borderTop: "1px solid #E2E8F0", background: "#F8FAFC" }}>
                 <div className="container">
                     <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-                        <span className="badge violet" style={{ marginBottom: "16px" }}>Company Profile</span>
+                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)" }}>Company Profile</span>
                         <h2 style={{
                             fontSize: "clamp(1.6rem, 2.8vw, 2.2rem)",
                             fontWeight: 700,
                             marginBottom: "32px",
-                            color: "#ffffff"
+                            color: "#0B1320"
                         }}>
                             Company Facts & Specifications
                         </h2>
@@ -626,8 +640,8 @@ export default function AboutPage() {
                             }}
                             className="spec-table"
                             style={{
-                                background: "rgba(13, 19, 35, 0.2)",
-                                border: "1px solid rgba(255, 255, 255, 0.08)",
+                                background: "#FFFFFF",
+                                border: "1px solid #E2E8F0",
                                 borderRadius: "12px",
                                 overflow: "hidden"
                             }}
@@ -641,7 +655,7 @@ export default function AboutPage() {
             </section>
 
             {/* Global Presence Section */}
-            <section className="section compact" style={{ borderTop: "1px solid var(--border)" }}>
+            <section className="section-dark section compact" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "#0A0D11" }}>
                 <div className="container">
                     <style dangerouslySetInnerHTML={{
                         __html: `
@@ -682,8 +696,8 @@ export default function AboutPage() {
                                     visible: { opacity: 1, scale: 1, transition: { duration: shouldReduce ? 0.01 : 0.5 } }
                                 }}
                                 style={{
-                                    background: "rgba(13, 19, 35, 0.45)",
-                                    border: "1px solid rgba(255, 255, 255, 0.06)",
+                                    background: "#161B22",
+                                    border: "1px solid rgba(255, 255, 255, 0.07)",
                                     borderRadius: "16px",
                                     padding: "32px",
                                     display: "flex",
@@ -714,7 +728,7 @@ export default function AboutPage() {
                                     </h3>
                                     <p style={{
                                         fontSize: "0.9rem",
-                                        color: "var(--text-secondary)",
+                                        color: "#94A3B8",
                                         margin: "4px 0 0 0",
                                         lineHeight: "1.4"
                                     }}>
@@ -725,15 +739,17 @@ export default function AboutPage() {
                         ))}
                     </motion.div>
                 </div>
-            </section>            {/* Leadership & Team Section */}
-            <section style={{ borderTop: "1px solid var(--border)", background: "#0A0F1C", padding: "96px 0" }}>
+            </section>
+
+            {/* Leadership & Team Section */}
+            <section className="section-dark" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "#0A0D11", padding: "96px 0" }}>
                 <style dangerouslySetInnerHTML={{
                     __html: `
                     /* CEO Spotlight Card */
                     .ceo-card {
                         width: 100%;
-                        background: rgba(13, 19, 35, 0.55);
-                        border: 1px solid rgba(255, 255, 255, 0.08);
+                        background: #161B22;
+                        border: 1px solid rgba(255, 255, 255, 0.07);
                         border-radius: 16px;
                         padding: 0;
                         overflow: hidden;
@@ -799,8 +815,8 @@ export default function AboutPage() {
                     }
 
                     .advisor-card {
-                        background: rgba(13, 19, 35, 0.55);
-                        border: 1px solid rgba(255, 255, 255, 0.08);
+                        background: #161B22;
+                        border: 1px solid rgba(255, 255, 255, 0.07);
                         border-radius: 16px;
                         padding: 0;
                         overflow: hidden;
@@ -862,8 +878,8 @@ export default function AboutPage() {
 
                     /* Lead Card Container */
                     .lead-card {
-                        background: rgba(13, 19, 35, 0.55);
-                        border: 1px solid rgba(255, 255, 255, 0.08);
+                        background: #161B22;
+                        border: 1px solid rgba(255, 255, 255, 0.07);
                         border-radius: 16px;
                         padding: 0;
                         overflow: hidden;
@@ -932,8 +948,8 @@ export default function AboutPage() {
                         width: 260px;
                         min-height: 320px;
                         box-sizing: border-box;
-                        background: rgba(13, 19, 35, 0.55);
-                        border: 1px solid rgba(255, 255, 255, 0.08);
+                        background: #161B22;
+                        border: 1px solid rgba(255, 255, 255, 0.07);
                         border-radius: 16px;
                         padding: 28px 20px;
                         display: flex;
@@ -1045,7 +1061,7 @@ export default function AboutPage() {
                                 lineHeight: 1.7,
                                 maxWidth: "580px",
                                 margin: "0 auto",
-                                color: "var(--text-secondary)"
+                                color: "#94A3B8"
                             }}
                         >
                             Our experienced professionals are dedicated to delivering excellence, innovation, and outstanding results for our clients.
@@ -1123,7 +1139,7 @@ export default function AboutPage() {
                                 fontSize: "clamp(1.8rem, 2.8vw, 2.4rem)",
                                 fontWeight: 800,
                                 letterSpacing: "-0.02em",
-                                color: "#ffffff",
+                                color: "#F1F5F9",
                                 lineHeight: 1.1,
                                 margin: 0
                             }}>
@@ -1156,7 +1172,7 @@ export default function AboutPage() {
                             <p style={{
                                 fontSize: "0.97rem",
                                 lineHeight: 1.75,
-                                color: "var(--text-secondary)",
+                                color: "#94A3B8",
                                 maxWidth: "500px",
                                 margin: 0
                             }}>
@@ -1171,7 +1187,7 @@ export default function AboutPage() {
                                         fontSize: "1.7rem",
                                         fontWeight: 800,
                                         letterSpacing: "-0.02em",
-                                        color: "#ffffff",
+                                        color: "#F1F5F9",
                                         lineHeight: 1
                                     }}>25+</span>
                                     <span style={{
@@ -1179,7 +1195,7 @@ export default function AboutPage() {
                                         fontSize: "10px",
                                         letterSpacing: "0.07em",
                                         textTransform: "uppercase",
-                                        color: "var(--text-secondary)",
+                                        color: "#94A3B8",
                                         display: "block",
                                         marginTop: "5px"
                                     }}>Years Experience</span>
@@ -1190,7 +1206,7 @@ export default function AboutPage() {
                                         fontSize: "1.7rem",
                                         fontWeight: 800,
                                         letterSpacing: "-0.02em",
-                                        color: "#ffffff",
+                                        color: "#F1F5F9",
                                         lineHeight: 1
                                     }}>50+</span>
                                     <span style={{
@@ -1198,7 +1214,7 @@ export default function AboutPage() {
                                         fontSize: "10px",
                                         letterSpacing: "0.07em",
                                         textTransform: "uppercase",
-                                        color: "var(--text-secondary)",
+                                        color: "#94A3B8",
                                         display: "block",
                                         marginTop: "5px"
                                     }}>Engineers Led</span>
@@ -1209,7 +1225,7 @@ export default function AboutPage() {
                                         fontSize: "1.7rem",
                                         fontWeight: 800,
                                         letterSpacing: "-0.02em",
-                                        color: "#ffffff",
+                                        color: "#F1F5F9",
                                         lineHeight: 1
                                     }}>3</span>
                                     <span style={{
@@ -1217,7 +1233,7 @@ export default function AboutPage() {
                                         fontSize: "10px",
                                         letterSpacing: "0.07em",
                                         textTransform: "uppercase",
-                                        color: "var(--text-secondary)",
+                                        color: "#94A3B8",
                                         display: "block",
                                         marginTop: "5px"
                                     }}>Global Regions</span>
@@ -1262,7 +1278,7 @@ export default function AboutPage() {
                                     }}
                                 >
                                     <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                        <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" style={{ transition: "fill 0.2s" }} />
+                                        <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
                                     </svg>
                                 </a>
                             </div>
@@ -1281,8 +1297,8 @@ export default function AboutPage() {
                                 gap: "8px",
                                 padding: "8px 18px",
                                 borderRadius: "24px",
-                                border: "1px solid rgba(139,92,246,0.3)",
-                                backgroundColor: "rgba(139,92,246,0.06)",
+                                border: "1px solid rgba(139, 92, 246, 0.3)",
+                                backgroundColor: "rgba(139, 92, 246, 0.06)",
                                 color: "#8B5CF6",
                                 flexShrink: 0
                             }}>
@@ -1313,7 +1329,7 @@ export default function AboutPage() {
                                 hidden: {},
                                 visible: {
                                     transition: {
-                                        staggerChildren: shouldReduce ? 0 : 0.1
+                                        staggerChildren: shouldReduce ? 0 : 0.08
                                     }
                                 }
                             }}
@@ -1325,15 +1341,15 @@ export default function AboutPage() {
                             {[
                                 {
                                     name: "Ashok Saraf",
-                                    role: "Senior Advisor",
+                                    role: "Senior Advisor — Strategy & Growth",
                                     dept: "Senior Advisor",
                                     imagePath: "/images/team/ashok_saraf.png",
                                     accentColor: "#8B5CF6",
-                                    linkedinUrl: "https://www.linkedin.com/in/sarafashok/"
+                                    linkedinUrl: ""
                                 },
                                 {
                                     name: "Anil Patwardhan",
-                                    role: "Senior Advisor",
+                                    role: "Senior Advisor — Technology & Governance",
                                     dept: "Senior Advisor",
                                     imagePath: "/images/team/anil_patwardhan.png",
                                     accentColor: "#8B5CF6",
@@ -1380,7 +1396,7 @@ export default function AboutPage() {
                                             src={member.imagePath}
                                             alt={member.name}
                                             fill
-                                            sizes="(max-width: 639px) 100vw, 340px"
+                                            sizes="(max-width: 768px) 100vw, 33vw"
                                             style={{
                                                 objectFit: "cover",
                                                 objectPosition: "center top",
@@ -1416,7 +1432,7 @@ export default function AboutPage() {
                                             letterSpacing: "0.1em",
                                             textTransform: "uppercase",
                                             fontWeight: 600,
-                                            color: member.accentColor,
+                                            color: "#8B5CF6",
                                             marginBottom: "6px",
                                             transition: "filter 0.25s ease"
                                         }}>
@@ -1429,7 +1445,7 @@ export default function AboutPage() {
                                             fontSize: "1.15rem",
                                             fontWeight: 700,
                                             letterSpacing: "-0.01em",
-                                            color: "#ffffff",
+                                            color: "#F1F5F9",
                                             lineHeight: 1.2,
                                             margin: "0 0 4px 0"
                                         }}>
@@ -1442,7 +1458,7 @@ export default function AboutPage() {
                                             fontSize: "11px",
                                             letterSpacing: "0.06em",
                                             textTransform: "uppercase",
-                                            color: "var(--text-secondary)",
+                                            color: "#94A3B8",
                                             lineHeight: 1.5,
                                             margin: 0
                                         }}>
@@ -1488,7 +1504,7 @@ export default function AboutPage() {
                                                     }}
                                                 >
                                                     <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                        <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" style={{ transition: "fill 0.2s" }} />
+                                                        <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
                                                     </svg>
                                                 </a>
                                             ) : (
@@ -1508,7 +1524,7 @@ export default function AboutPage() {
                                                     }}
                                                 >
                                                     <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                        <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" />
+                                                        <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" />
                                                     </svg>
                                                 </div>
                                             )}
@@ -1663,7 +1679,7 @@ export default function AboutPage() {
                                                 fontSize: "1.15rem",
                                                 fontWeight: 700,
                                                 letterSpacing: "-0.01em",
-                                                color: "#ffffff",
+                                                color: "#F1F5F9",
                                                 lineHeight: 1.2,
                                                 margin: "0 0 4px 0"
                                             }}>
@@ -1675,7 +1691,7 @@ export default function AboutPage() {
                                                 fontSize: "11px",
                                                 letterSpacing: "0.06em",
                                                 textTransform: "uppercase",
-                                                color: "var(--text-secondary)",
+                                                color: "#94A3B8",
                                                 lineHeight: 1.5,
                                                 margin: 0
                                             }}>
@@ -1720,7 +1736,7 @@ export default function AboutPage() {
                                                     }}
                                                 >
                                                     <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                        <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" style={{ transition: "fill 0.2s" }} />
+                                                        <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
                                                     </svg>
                                                 </a>
                                             </div>
@@ -1820,7 +1836,7 @@ export default function AboutPage() {
                                                 fontSize: "1.15rem",
                                                 fontWeight: 700,
                                                 letterSpacing: "-0.01em",
-                                                color: "#ffffff",
+                                                color: "#F1F5F9",
                                                 lineHeight: 1.2,
                                                 margin: "0 0 4px 0"
                                             }}>
@@ -1832,7 +1848,7 @@ export default function AboutPage() {
                                                 fontSize: "11px",
                                                 letterSpacing: "0.06em",
                                                 textTransform: "uppercase",
-                                                color: "var(--text-secondary)",
+                                                color: "#94A3B8",
                                                 lineHeight: 1.5,
                                                 margin: 0
                                             }}>
@@ -1877,7 +1893,7 @@ export default function AboutPage() {
                                                     }}
                                                 >
                                                     <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                        <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" style={{ transition: "fill 0.2s" }} />
+                                                        <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
                                                     </svg>
                                                 </a>
                                             </div>
@@ -1891,7 +1907,7 @@ export default function AboutPage() {
             </section>
 
             {/* Bottom CTA Section */}
-            <section style={{ borderTop: "1px solid var(--border)", padding: "100px 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
+            <section className="section-dark" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "#0A0D11", padding: "100px 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
                 {/* Background Glow */}
                 <div style={{
                     position: "absolute",
@@ -1915,10 +1931,10 @@ export default function AboutPage() {
                         <h2 style={{ fontSize: "clamp(1.7rem, 2.8vw, 2.2rem)", fontWeight: 700, margin: 0, color: "#ffffff", letterSpacing: "-0.02em" }}>
                             Ready to power your next engineering program?
                         </h2>
-                        <p style={{ fontSize: "1rem", lineHeight: "1.7", color: "var(--text-secondary)", maxWidth: "480px", margin: "0 auto" }}>
+                        <p style={{ fontSize: "1rem", lineHeight: "1.7", color: "#94A3B8", maxWidth: "480px", margin: "0 auto" }}>
                             Connect with SAMSAN Technische Labs to establish your dedicated COE or leverage our vehicle systems experts.
                         </p>
-                        <Link href="/contact" className="btn btn-primary" style={{ display: "inline-flex", textDecoration: "none" }}>
+                        <Link href="/contact" className="btn btn-primary" style={{ display: "inline-flex", textDecoration: "none", background: "#E8521A", color: "#FFFFFF" }}>
                             Get Started
                         </Link>
                     </motion.div>

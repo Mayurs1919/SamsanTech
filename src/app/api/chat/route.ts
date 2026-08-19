@@ -27,7 +27,7 @@ Mission: Build solutions that are smarter, faster, and ready for the next genera
 Founder, CEO & Managing Director: Prashant Deshpande
 Experience: 25+ years in automotive, embedded software, engineering delivery, business development, global customer management, and connected mobility solutions.
 Senior Advisors: Ashok Saraf, Anil Patwardhan
-Engineering Directors: V. Shankaran (Embedded), Sharana Gouda (Cockpit)
+Engineering Directors: V. Shankaran (Embedded), Shridhar Pophali (Cockpit)
 Chief Data Scientist: Dr. Pradeep Bilurkar
 Technical Sales: Pratik Waghmode
 Accounts & Finance: Gaurav Joshi

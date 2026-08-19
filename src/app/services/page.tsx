@@ -274,7 +274,7 @@ export default function ServicesPage() {
         <div style={{ paddingBottom: "100px" }}>
 
             {/* SECTION 0 — PAGE HEADER */}
-            <section className="page-hero" aria-labelledby="services-page-heading" style={{ padding: "80px 0" }}>
+            <section className="section-dark page-hero" aria-labelledby="services-page-heading" style={{ background: "#0A0D11", padding: "80px 0" }}>
                 <div className="hero-glow" style={{ opacity: 0.15 }} />
                 <div className="container">
                     <motion.div
@@ -290,13 +290,13 @@ export default function ServicesPage() {
                             animate={shouldReduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
                             transition={shouldReduce ? { duration: 0 } : { duration: 0.6, ease: "easeOut" }}
                         >
-                            <span className="badge" style={{ marginBottom: "24px", letterSpacing: "0.12em", fontFamily: "var(--font-mono)" }}>
-                                // Engineering Offerings
+                            <span className="badge" style={{ marginBottom: "24px", letterSpacing: "0.12em", fontFamily: "var(--font-mono)", color: "#4DD8E8", background: "rgba(77, 216, 232, 0.08)", border: "1px solid rgba(77, 216, 232, 0.2)" }}>
+                                Engineering Offerings
                             </span>
                         </motion.div>
                         <motion.h1
                             id="services-page-heading"
-                            style={{ marginBottom: "20px", fontWeight: 700, lineHeight: 1.08 }}
+                            style={{ marginBottom: "20px", fontWeight: 700, lineHeight: 1.08, color: "#FFFFFF" }}
                             initial={shouldReduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
                             animate={shouldReduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
                             transition={shouldReduce ? { duration: 0 } : { duration: 0.6, ease: "easeOut", delay: 0.1 }}
@@ -305,7 +305,7 @@ export default function ServicesPage() {
                         </motion.h1>
                         <motion.p
                             className="lead"
-                            style={{ maxWidth: "640px", fontSize: "1.1rem", lineHeight: "1.7", color: "var(--text-secondary)" }}
+                            style={{ maxWidth: "640px", fontSize: "1.1rem", lineHeight: "1.7", color: "#94A3B8" }}
                             initial={shouldReduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
                             animate={shouldReduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
                             transition={shouldReduce ? { duration: 0 } : { duration: 0.6, ease: "easeOut", delay: 0.35 }}
@@ -317,7 +317,7 @@ export default function ServicesPage() {
             </section>
 
             {/* SECTION 1 — AUTOMOTIVE EMBEDDED SOLUTIONS */}
-            <section className="section" style={{ borderTop: "1px solid var(--border)", padding: "80px 0" }} aria-labelledby="embedded-solutions-heading">
+            <section className="section-light section" style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "80px 0" }} aria-labelledby="embedded-solutions-heading">
                 <div className="container">
                     <div style={{ marginBottom: "48px" }}>
                         <motion.span
@@ -326,11 +326,11 @@ export default function ServicesPage() {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true }}
-                            style={{ marginBottom: "8px", display: "inline-block" }}
+                            style={{ marginBottom: "8px", display: "inline-block", color: "#E8521A", background: "rgba(232, 82, 26, 0.08)", border: "1px solid rgba(232, 82, 26, 0.2)" }}
                         >
-                            // Automotive Embedded Solutions & Products
+                            Automotive Embedded Solutions & Products
                         </motion.span>
-                        <h2 id="embedded-solutions-heading" style={{ marginTop: "0", marginBottom: "16px", fontWeight: 700, letterSpacing: "0.01em" }}>
+                        <h2 id="embedded-solutions-heading" style={{ marginTop: "0", marginBottom: "16px", fontWeight: 700, letterSpacing: "0.01em", color: "#0B1320" }}>
                             Embedded Engineering, End to End.
                         </h2>
                     </div>
@@ -356,6 +356,8 @@ export default function ServicesPage() {
                                         icon={card.icon}
                                         iconColor={card.iconColor}
                                         techs={card.techs}
+                                        techsLabel="CAPABILITIES"
+                                        theme="light"
                                     />
                                 </motion.div>
                             );
@@ -365,7 +367,7 @@ export default function ServicesPage() {
             </section>
 
             {/* SECTION 2 — SPECIALIZED SERVICES */}
-            <section className="section" style={{ borderTop: "1px solid var(--border)", padding: "80px 0" }} aria-labelledby="specialized-services-heading">
+            <section className="section-dark section" style={{ background: "#0A0D11", borderTop: "1px solid rgba(255,255,255,0.07)", padding: "80px 0" }} aria-labelledby="specialized-services-heading">
                 <div className="container">
                     <div style={{ marginBottom: "48px" }}>
                         <motion.span
@@ -374,14 +376,14 @@ export default function ServicesPage() {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true }}
-                            style={{ marginBottom: "8px", display: "inline-block" }}
+                            style={{ marginBottom: "8px", display: "inline-block", color: "#4DD8E8", background: "rgba(77, 216, 232, 0.08)", border: "1px solid rgba(77, 216, 232, 0.2)" }}
                         >
-                            // Engineering Services
+                            Engineering Services
                         </motion.span>
-                        <h2 id="specialized-services-heading" style={{ marginTop: "0", marginBottom: "16px", fontWeight: 700, letterSpacing: "0.01em" }}>
+                        <h2 id="specialized-services-heading" style={{ marginTop: "0", marginBottom: "16px", fontWeight: 700, letterSpacing: "0.01em", color: "#F1F5F9" }}>
                             Specialized Services Across the Full Engineering Lifecycle
                         </h2>
-                        <p style={{ fontSize: "1.05rem", lineHeight: "1.7", maxWidth: "600px", color: "var(--text-secondary)", margin: "0" }}>
+                        <p style={{ fontSize: "1.05rem", lineHeight: "1.7", maxWidth: "600px", color: "#94A3B8", margin: "0" }}>
                             Domain-aligned engineering services delivered by 50+ specialists across automotive, embedded, digital, and AI engineering disciplines.
                         </p>
                     </div>
@@ -422,14 +424,14 @@ export default function ServicesPage() {
                                     title={card.title}
                                     description={
                                         <div style={{
-                                            border: "1px dashed rgba(255,255,255,0.15)",
+                                            border: "1px dashed rgba(255,255,255,0.2)",
                                             borderRadius: "8px",
                                             padding: "12px 16px",
                                             textAlign: "center",
                                             fontFamily: "var(--font-mono)",
                                             fontSize: "0.8rem",
-                                            color: "var(--text-secondary)",
-                                            background: "rgba(255,255,255,0.01)"
+                                            color: "#94A3B8",
+                                            background: "rgba(255,255,255,0.03)"
                                         }}>
                                             Content coming soon
                                         </div>
@@ -437,7 +439,8 @@ export default function ServicesPage() {
                                     icon={card.icon}
                                     iconColor={card.iconColor}
                                     techs={card.techs}
-                                    techsLabel="Capabilities"
+                                    techsLabel="CAPABILITIES"
+                                    theme="dark"
                                 />
                             </motion.div>
                         ))}
@@ -446,7 +449,7 @@ export default function ServicesPage() {
             </section>
 
             {/* SECTION 4 — BOTTOM CTA */}
-            <section className="cta-section" style={{ padding: "80px 0" }} aria-labelledby="services-cta-heading">
+            <section className="section-light cta-section" style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "80px 0" }} aria-labelledby="services-cta-heading">
                 <div className="container">
                     <motion.div
                         className="cta-inner"
@@ -455,15 +458,15 @@ export default function ServicesPage() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h2 id="services-cta-heading">Ready to scope an engineering engagement?</h2>
-                        <p className="lead">
+                        <h2 id="services-cta-heading" style={{ color: "#e9ecefff" }}>Ready to scope an engineering engagement?</h2>
+                        <p className="lead" style={{ color: "#e9ecefff" }}>
                             Tell us what you're building — we'll match the right discipline and team to your program.
                         </p>
                         <div className="cta-actions">
-                            <Link href="/contact?product=engineering-offerings" className="btn btn-primary" id="services-cta-btn">
+                            <Link href="/contact?product=engineering-offerings" className="btn btn-primary" id="services-cta-btn" style={{ background: "#E8521A", color: "#FFFFFF" }}>
                                 Request Capability Walkthrough
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </Link>
                         </div>

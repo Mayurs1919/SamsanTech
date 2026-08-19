@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { fadeInVariants, staggerContainerVariants, fadeUpVariants } from "@/lib/motion";
+import { staggerContainerVariants, fadeUpVariants } from "@/lib/motion";
 
 const metrics = [
     { value: "50+", label: "Engineers" },
@@ -15,7 +15,11 @@ export default function TrustBar() {
     const shouldReduce = useReducedMotion();
 
     return (
-        <section className="metrics-strip" aria-label="Key company metrics">
+        <section
+            className="metrics-strip"
+            aria-label="Key company metrics"
+            style={{ background: "#0A0D11" }}
+        >
             <div className="container">
                 <motion.div
                     className="metrics-grid"
@@ -29,9 +33,26 @@ export default function TrustBar() {
                             key={m.label}
                             className="metric-item"
                             variants={fadeUpVariants(shouldReduce)}
+                            style={{ background: "#12161C" }}
                         >
-                            <div className="metric-value">{m.value}</div>
-                            <div className="metric-label">{m.label}</div>
+                            <div
+                                className="metric-value"
+                                style={{
+                                    background: "linear-gradient(135deg, #7C3AED, #EC4899)",
+                                    backgroundSize: "200% auto",
+                                    WebkitBackgroundClip: "text",
+                                    WebkitTextFillColor: "transparent",
+                                    backgroundClip: "text",
+                                }}
+                            >
+                                {m.value}
+                            </div>
+                            <div
+                                className="metric-label"
+                                style={{ color: "#94A3B8" }}
+                            >
+                                {m.label}
+                            </div>
                         </motion.div>
                     ))}
                 </motion.div>
