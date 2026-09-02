@@ -9,7 +9,7 @@ export default function RingsOfSolution() {
             style={{
                 position: "relative",
                 padding: "80px 0 100px",
-                background: "linear-gradient(180deg, #0A0F1C 0%, #070B14 100%)",
+                background: "linear-gradient(180deg, var(--midnight) 0%, var(--navy) 100%)",
                 overflow: "hidden"
             }}
         >

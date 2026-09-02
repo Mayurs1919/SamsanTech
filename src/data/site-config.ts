@@ -13,7 +13,6 @@ export const siteConfig: SiteConfig = {
         { label: "Careers",                  href: "/careers" },
         { label: "Contact",                  href: "/contact" },
         // Hidden items
-        { label: "Case Studies",             href: "/case-studies" },
         { label: "Engagement Models",         href: "/engagement-models" },
     ],
     socialLinks: [

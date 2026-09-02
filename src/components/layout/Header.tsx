@@ -28,7 +28,6 @@ const navItems: NavItem[] = [
     { label: "Careers", href: "/careers", isVisible: true },
     { label: "Contact", href: "/contact", isVisible: true },
     // Hidden items not in the approved list
-    { label: "Case Studies", href: "/case-studies", isVisible: false },
     { label: "Engagement Models", href: "/engagement-models", isVisible: false },
 ];
 
@@ -74,7 +73,7 @@ export default function Header() {
                 <nav className="nav-inner" aria-label="Primary navigation">
                     {/* Brand */}
                     <Link href="/" className="brand" aria-label="Samsan — Home">
-                        <SamsanAnimatedLogo height="64px" />
+                        <SamsanAnimatedLogo height="80px" />
                     </Link>
 
                     {/* Desktop Links */}
@@ -167,16 +166,21 @@ export default function Header() {
                         })}
                     </ul>
 
-                    {/* Desktop CTA + hamburger (grid col 3 — right) */}
+                        {/* Desktop CTA + hamburger (grid col 3 — right) */}
                     <div className="nav-actions">
-                        {!isContactPage && (
-                            <Link href="/contact" className="btn btn-primary">
-                                Get Started
-                                <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </Link>
-                        )}
+                        {/* Always reserve the button's space; hide it on the contact page so layout stays stable */}
+                        <Link
+                            href="/contact"
+                            className="btn btn-primary"
+                            style={{ visibility: isContactPage ? "hidden" : "visible", pointerEvents: isContactPage ? "none" : "auto" }}
+                            aria-hidden={isContactPage}
+                            tabIndex={isContactPage ? -1 : undefined}
+                        >
+                            Get Started
+                            <svg width="15" height="15" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </Link>
 
                         {/* Hamburger — shown on small screens, hidden on desktop via CSS */}
                         <button

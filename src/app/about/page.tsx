@@ -46,6 +46,66 @@ const companySpecs = [
     { key: "COMPLIANCE & SAFETY", value: "ISO 26262 Road Vehicles Functional Safety & Secure Bootloaders" }
 ];
 
+const globalHubs = [
+    {
+        region: "India (HQ)",
+        city: "Pune (HQ)",
+        address: "STPI New Building, Rajiv Gandhi Infotech Park, Phase I, Hinjawadi Pune - 411057",
+        phone: "8956927909",
+        email: "india@samsanlabs.com",
+        mapQuery: "STPI, Rajiv Gandhi Infotech Park, Hinjawadi, Pune, Maharashtra 411057",
+        coordinates: "18.5662° N, 73.7337° E",
+        tagColor: "#4DD8E8"
+    },
+    {
+        region: "India",
+        city: "Bengaluru",
+        address: "MSRIT Post, M S Ramaiah Nagar, MSR Nagar, Bengaluru, Karnataka - 560054",
+        phone: "+91-895-692-7909",
+        email: "india@samsanlabs.com",
+        mapQuery: "M. S. Ramaiah Institute of Technology, Bengaluru, Karnataka 560054",
+        coordinates: "13.0305° N, 77.5649° E",
+        tagColor: "#4DD8E8"
+    },
+    {
+        region: "United States",
+        city: "Detroit",
+        address: "Detroit Hub, Michigan, USA",
+        email: "usa@samsanlabs.com",
+        mapQuery: "Detroit, Michigan, USA",
+        coordinates: "42.3314° N, 83.0458° W",
+        tagColor: "#E8521A"
+    },
+    {
+        region: "Europe / Germany",
+        city: "Munich",
+        address: "Europe / Germany Hub, Leopoldstraße, Germany",
+        email: "europe@samsanlabs.com",
+        mapQuery: "Leopoldstraße 244, 80807 München, Germany",
+        coordinates: "48.1764° N, 11.5901° E",
+        tagColor: "#3B82F6"
+    },
+    {
+        region: "Japan",
+        city: "Tokyo",
+        address: "Tokyo Hub, Shibuya, Japan",
+        email: "japan@samsanlabs.com",
+        mapQuery: "Shibuya, Tokyo, Japan",
+        coordinates: "35.6580° N, 139.7016° E",
+        tagColor: "#10B981"
+    },
+    {
+        region: "South Korea",
+        city: "Seongnam",
+        address: "28, hwangsaeul-ro 200 beAon-gil, Bundang-gu, Seongnam-si, Gyeonggi-do, Korea",
+        phone: "+82-10-9779-5698",
+        email: "india@samsanlabs.com",
+        mapQuery: "28, Hwangsaeul-ro 200beon-gil, Bundang-gu, Seongnam-si, Gyeonggi-do, South Korea",
+        coordinates: "37.3828° N, 127.1189° E",
+        tagColor: "#A855F7"
+    }
+];
+
 // Profile Avatar Monogram Component to replace static photos with premium neon initials
 function ProfileAvatar({ name, role, imagePath }: { name: string; role: string; imagePath?: string }) {
     if (imagePath) {
@@ -207,7 +267,6 @@ function SpecRow({ specKey, specVal, index, shouldReduce }: { specKey: string; s
             className="spec-row"
             style={{
                 display: "grid",
-                gridTemplateColumns: "minmax(240px, 32%) 1fr",
                 background: isHovered ? "rgba(232, 82, 26, 0.04)" : "#FFFFFF",
                 borderLeft: isHovered ? "3px solid #E8521A" : "3px solid transparent",
                 transition: "background 0.2s ease, border-left-color 0.2s ease",
@@ -250,6 +309,7 @@ function SpecRow({ specKey, specVal, index, shouldReduce }: { specKey: string; s
 
 export default function AboutPage() {
     const shouldReduce = !!useReducedMotion();
+    const [activeHub, setActiveHub] = useState(globalHubs[0]);
 
     const leadershipMembers = [
         {
@@ -263,7 +323,7 @@ export default function AboutPage() {
         {
             name: "Shridhar Pophali",
             role: "Engineering Director — Cockpit",
-            dept: "Digital Cockpit | Telematics | SDV | Android Automotive | HMI | ",
+            dept: "Digital Cockpit & SDV",
             imagePath: "/images/team/shridhar_pophali.jpg",
             glowColor: "#4DD8E8",
             linkedinUrl: "https://www.linkedin.com/in/shridharpophali/"
@@ -300,71 +360,141 @@ export default function AboutPage() {
             {/* Page Hero */}
             <section className="section-dark page-hero" aria-labelledby="about-heading" style={{
                 position: "relative",
-                minHeight: "320px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                background: "#0A0D11"
+                paddingTop: "140px",
+                paddingBottom: "96px",
+                background: "var(--midnight)",
+                overflow: "hidden",
+                borderBottom: "none"
             }}>
-                <div className="container">
+                {/* Ambient glow effect */}
+                <div style={{
+                    position: "absolute",
+                    top: "30%", left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: "1100px", height: "550px",
+                    background: "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(77, 216, 232, 0.12) 0%, transparent 70%)",
+                    pointerEvents: "none", zIndex: 0
+                }} />
+
+                <div className="container" style={{ position: "relative", zIndex: 1, maxWidth: "1400px" }}>
                     <motion.div
                         initial="hidden"
                         animate="visible"
-                        style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+                        variants={{
+                            visible: {
+                                transition: { staggerChildren: shouldReduce ? 0 : 0.1 }
+                            }
+                        }}
                     >
                         <motion.div
                             variants={{
-                                hidden: { opacity: 0 },
-                                visible: { opacity: 1, transition: { duration: shouldReduce ? 0.01 : 0.4 } }
+                                hidden: { opacity: 0, y: shouldReduce ? 0 : 12 },
+                                visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.4 } }
                             }}
                         >
-                            <span className="badge" style={{ marginBottom: "16px", fontSize: "12px", letterSpacing: "0.12em", color: "#4DD8E8", borderColor: "rgba(77, 216, 232, 0.2)", background: "rgba(77, 216, 232, 0.06)" }}>About Us</span>
+                            <span className="badge" style={{ marginBottom: "20px", fontSize: "12px", letterSpacing: "0.12em", color: "#4DD8E8", borderColor: "rgba(77, 216, 232, 0.25)", background: "rgba(77, 216, 232, 0.08)", fontFamily: "var(--font-mono)" }}>Company Overview</span>
                         </motion.div>
+
                         <motion.h1
                             id="about-heading"
                             variants={{
                                 hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },
-                                visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.6, delay: shouldReduce ? 0 : 0.1 } }
+                                visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.6 } }
                             }}
                             style={{
-                                fontSize: "clamp(2.4rem, 4.5vw, 3.4rem)",
+                                fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)",
                                 fontWeight: 800,
-                                lineHeight: 1.08,
+                                lineHeight: 1.1,
                                 letterSpacing: "-0.02em",
-                                marginBottom: "20px",
-                                color: "#FFFFFF"
+                                marginBottom: "24px",
+                                color: "#FFFFFF",
+                                fontFamily: "var(--font-display)"
                             }}
                         >
-                            About Company
+                            About SAMSAN Technische Labs
                         </motion.h1>
+
                         <motion.p
                             className="lead"
                             variants={{
-                                hidden: { opacity: 0 },
-                                visible: { opacity: 1, transition: { duration: shouldReduce ? 0.01 : 0.5, delay: shouldReduce ? 0 : 0.3 } }
+                                hidden: { opacity: 0, y: shouldReduce ? 0 : 16 },
+                                visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.5 } }
                             }}
                             style={{
-                                fontSize: "1.1rem",
+                                fontSize: "1.12rem",
                                 lineHeight: 1.75,
-                                maxWidth: "580px",
-                                margin: "0 auto",
-                                color: "#94A3B8"
+                                maxWidth: "760px",
+                                margin: "0 0 40px 0",
+                                color: "#94A3B8",
+                                fontFamily: "var(--font-body)"
                             }}
                         >
-                            SAMSAN Technische Labs Pvt. Ltd. is a technology reimagined systems design house powering global automotive megatrends.
+                            SAMSAN Technische Labs Pvt. Ltd. is a technology-reimagined systems design house powering global automotive megatrends with safety-critical software, digital cockpit engineering, and software-defined vehicle architectures.
                         </motion.p>
+
+                        {/* Hero Quick Highlights Row */}
+                        <motion.div
+                            variants={{
+                                hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },
+                                visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.5 } }
+                            }}
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                                gap: "16px",
+                                marginTop: "24px"
+                            }}
+                        >
+                            {[
+                                { title: "2023 FOUNDED", desc: "Automotive Systems Design" },
+                                { title: "50+ ENGINEERS", desc: "Architects & Systems Experts" },
+                                { title: "3 REGIONS", desc: "India, Europe & Americas" },
+                                { title: "ISO 26262", desc: "Functional Safety Discipline" }
+                            ].map((spec, i) => (
+                                <div
+                                    key={i}
+                                    style={{
+                                        background: "rgba(16, 24, 48, 0.65)",
+                                        backdropFilter: "blur(16px)",
+                                        WebkitBackdropFilter: "blur(16px)",
+                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                        borderRadius: "14px",
+                                        padding: "18px 20px",
+                                        boxShadow: "0 10px 24px rgba(0,0,0,0.2)"
+                                    }}
+                                >
+                                    <div style={{
+                                        fontFamily: "var(--font-mono)",
+                                        fontSize: "0.76rem",
+                                        fontWeight: 700,
+                                        color: "#4DD8E8",
+                                        letterSpacing: "0.08em",
+                                        marginBottom: "4px"
+                                    }}>
+                                        {spec.title}
+                                    </div>
+                                    <div style={{
+                                        fontFamily: "var(--font-body)",
+                                        fontSize: "0.92rem",
+                                        color: "#E2E8F0",
+                                        fontWeight: 500
+                                    }}>
+                                        {spec.desc}
+                                    </div>
+                                </div>
+                            ))}
+                        </motion.div>
                     </motion.div>
                 </div>
             </section>
 
             {/* SAMSAN Technische Labs Intro Section */}
-            <section className="section-light section compact" style={{ borderTop: "1px solid #E2E8F0", background: "#FFFFFF" }}>
-                <div className="container">
-                    <div className="about-two-col" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "60px", alignItems: "center" }}>
+            <section className="section-light section" style={{ background: "#FFFFFF", padding: "108px 0" }}>
+                <div className="container" style={{ maxWidth: "1400px" }}>
+                    <div className="about-two-col" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "64px", alignItems: "center" }}>
                         <div>
-                            <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)" }}>Company Overview</span>
-                            <h2 style={{ fontSize: "2.2rem", fontWeight: 700, marginBottom: "28px", color: "#0B1320", letterSpacing: "-0.025em" }}>
+                            <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)", fontFamily: "var(--font-mono)" }}>Company Overview</span>
+                            <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.5rem)", fontWeight: 700, marginBottom: "28px", color: "#0B1320", letterSpacing: "-0.025em", fontFamily: "var(--font-display)" }}>
                                 SAMSAN Technische Labs Pvt. Ltd.
                             </h2>
 
@@ -375,9 +505,13 @@ export default function AboutPage() {
                                 viewport={{ once: true, margin: "-100px" }}
                                 transition={{ duration: shouldReduce ? 0.01 : 0.5, ease: "easeOut" }}
                                 style={{
-                                    borderLeft: "3px solid #F59E0B",
-                                    paddingLeft: "28px",
-                                    marginBottom: "28px"
+                                    borderLeft: "4px solid #E8521A",
+                                    paddingLeft: "24px",
+                                    marginBottom: "32px",
+                                    background: "#F8FAFC",
+                                    paddingTop: "16px",
+                                    paddingBottom: "16px",
+                                    borderRadius: "0 12px 12px 0"
                                 }}
                             >
                                 <div style={{
@@ -385,17 +519,18 @@ export default function AboutPage() {
                                     fontSize: "11px",
                                     letterSpacing: "0.1em",
                                     color: "#E8521A",
-                                    marginBottom: "10px",
-                                    textTransform: "uppercase"
+                                    marginBottom: "8px",
+                                    textTransform: "uppercase",
+                                    fontWeight: 700
                                 }}>
-                                    // Mission
+                                    Mission Statement
                                 </div>
                                 <div style={{
-                                    fontSize: "clamp(1.3rem, 2.2vw, 1.65rem)",
+                                    fontSize: "clamp(1.2rem, 2vw, 1.5rem)",
                                     fontWeight: 600,
                                     lineHeight: "1.4",
-                                    fontStyle: "normal",
-                                    color: "#0B1320"
+                                    color: "#0B1320",
+                                    fontFamily: "var(--font-display)"
                                 }}>
                                     To design safe, connected, and intelligent systems that power the vehicle of the future.
                                 </div>
@@ -421,10 +556,11 @@ export default function AboutPage() {
                                         visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.4 } }
                                     }}
                                     style={{
-                                        fontSize: "1rem",
+                                        fontSize: "1.05rem",
                                         lineHeight: "1.8",
-                                        color: "#64748B",
-                                        margin: 0
+                                        color: "#475569",
+                                        margin: 0,
+                                        fontFamily: "var(--font-body)"
                                     }}
                                 >
                                     SAMSAN Technische Labs Pvt. Ltd. is an automotive engineering and digital transformation company focused on connected mobility, cockpit engineering, embedded systems, SDV platforms, AI-led engineering automation, and strategic engineering capacity for global customers.
@@ -435,10 +571,11 @@ export default function AboutPage() {
                                         visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.4 } }
                                     }}
                                     style={{
-                                        fontSize: "1rem",
+                                        fontSize: "1.05rem",
                                         lineHeight: "1.8",
-                                        color: "#64748B",
-                                        margin: 0
+                                        color: "#475569",
+                                        margin: 0,
+                                        fontFamily: "var(--font-body)"
                                     }}
                                 >
                                     Our focus is to build safety-critical software that is always reliable, secure, and ready for production, bringing systems engineering excellence to automotive megatrends.
@@ -450,18 +587,18 @@ export default function AboutPage() {
                         <div style={{
                             background: "#F8FAFC",
                             border: "1px solid #E2E8F0",
-                            borderRadius: "var(--radius-lg)",
+                            borderRadius: "16px",
                             padding: "40px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            minHeight: "300px",
+                            minHeight: "360px",
                             position: "relative",
                             overflow: "hidden",
                             backgroundImage: "url('/images/ai_digital_tech.png')",
                             backgroundSize: "cover",
                             backgroundPosition: "center",
-                            boxShadow: "0 10px 30px rgba(0,0,0,0.06)"
+                            boxShadow: "0 12px 32px rgba(0,0,0,0.08)"
                         }}>
                             <div style={{
                                 position: "absolute",
@@ -470,102 +607,102 @@ export default function AboutPage() {
                                 zIndex: 1
                             }} />
                             <div style={{ position: "relative", zIndex: 2, textAlign: "center" }}>
-                                <span className="badge" style={{ background: "rgba(255,255,255,0.2)", color: "#FFFFFF", backdropFilter: "blur(4px)", borderColor: "rgba(255,255,255,0.3)" }}>AI & Digital Embedded Technologies</span>
+                                <span className="badge" style={{ background: "rgba(255,255,255,0.2)", color: "#FFFFFF", backdropFilter: "blur(8px)", borderColor: "rgba(255,255,255,0.3)", padding: "8px 16px" }}>AI &amp; Digital Embedded Technologies</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Automotive Megatrends */}
-            <section className="section-light section compact" style={{ borderTop: "1px solid #E2E8F0", background: "#F8FAFC" }}>
-                <div className="container">
-                    <div style={{ textAlign: "center", marginBottom: "48px" }}>
-                        <span className="badge mint" style={{ marginBottom: "16px" }}>Core Competencies</span>
-                        <h2 style={{ fontSize: "2.2rem", fontWeight: 700, color: "#0B1320" }}>What We Specialize In</h2>
+            {/* Automotive Megatrends / Core Competencies */}
+            <section className="section-light section" style={{ background: "#F8FAFC", padding: "108px 0" }}>
+                <div className="container" style={{ maxWidth: "1400px" }}>
+                    <div style={{ textAlign: "center", marginBottom: "56px" }}>
+                        <span className="badge mint" style={{ marginBottom: "16px", fontFamily: "var(--font-mono)" }}>Core Competencies</span>
+                        <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.5rem)", fontWeight: 700, color: "#0B1320", fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}>What We Specialize In</h2>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "24px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "28px" }}>
                         {megatrends.map((trend) => (
                             <div
                                 key={trend.title}
                                 style={{
                                     background: "#FFFFFF",
                                     border: "1px solid #E2E8F0",
-                                    borderRadius: "var(--radius)",
-                                    padding: "32px 28px",
+                                    borderRadius: "16px",
+                                    padding: "36px 30px",
                                     position: "relative",
                                     overflow: "hidden",
-                                    boxShadow: "0 4px 12px rgba(0,0,0,0.03)"
+                                    boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
+                                    transition: "transform 0.25s ease, boxShadow 0.25s ease, borderColor 0.25s ease"
                                 }}
                             >
                                 <div style={{
                                     width: "4px",
-                                    height: "32px",
+                                    height: "36px",
                                     background: trend.color,
                                     position: "absolute",
                                     left: 0,
-                                    top: "32px",
+                                    top: "36px",
                                     borderRadius: "0 4px 4px 0"
                                 }} />
-                                <h3 style={{ fontSize: "1.2rem", color: "#0B1320", marginBottom: "14px", fontWeight: 600 }}>{trend.title}</h3>
-                                <p style={{ fontSize: "0.85rem", lineHeight: "1.65", color: "#64748B" }}>{trend.desc}</p>
+                                <h3 style={{ fontSize: "1.25rem", color: "#0B1320", marginBottom: "14px", fontWeight: 700, fontFamily: "var(--font-display)" }}>{trend.title}</h3>
+                                <p style={{ fontSize: "0.92rem", lineHeight: "1.7", color: "#475569", margin: 0, fontFamily: "var(--font-body)" }}>{trend.desc}</p>
                             </div>
                         ))}
                     </div>
 
                     {/* Cinematic Visual - Automotive Cockpit */}
                     <div style={{
-                        marginTop: "48px",
+                        marginTop: "56px",
                         width: "100%",
-                        height: "350px",
-                        borderRadius: "var(--radius-lg)",
+                        height: "380px",
+                        borderRadius: "16px",
                         backgroundImage: "url('/images/auto_cockpit_sys.png')",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         position: "relative",
                         overflow: "hidden",
                         border: "1px solid #E2E8F0",
-                        boxShadow: "0 10px 30px rgba(0,0,0,0.08)"
+                        boxShadow: "0 12px 36px rgba(0,0,0,0.08)"
                     }}>
                         <div style={{
                             position: "absolute", inset: 0,
-                            background: "linear-gradient(to top, rgba(11,19,32,0.9) 0%, rgba(11,19,32,0.1) 100%)"
+                            background: "linear-gradient(to top, rgba(11,19,32,0.92) 0%, rgba(11,19,32,0.2) 100%)"
                         }} />
                         <div style={{
-                            position: "absolute", bottom: "32px", left: "32px", right: "32px"
+                            position: "absolute", bottom: "36px", left: "36px", right: "36px"
                         }}>
-                            <span className="badge violet" style={{ marginBottom: "12px" }}>Automotive Cockpit Systems</span>
-                            <h3 style={{ fontSize: "1.6rem", color: "#ffffff", fontWeight: 600 }}>Next-Gen Hyper-Modern Cockpit Ecosystems</h3>
+                            <span className="badge violet" style={{ marginBottom: "14px", fontFamily: "var(--font-mono)" }}>Automotive Cockpit Systems</span>
+                            <h3 style={{ fontSize: "clamp(1.5rem, 2.5vw, 1.85rem)", color: "#ffffff", fontWeight: 700, fontFamily: "var(--font-display)", margin: 0 }}>Next-Gen Hyper-Modern Cockpit Ecosystems</h3>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Vision & Why Choose Us */}
-            <section className="section-light section compact" style={{ borderTop: "1px solid #E2E8F0", background: "#FFFFFF" }}>
-                <div className="container">
-                    <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: "60px", alignItems: "start" }}>
+            {/* Vision & Delivery Philosophy */}
+            <section className="section-light section" style={{ background: "#FFFFFF", padding: "108px 0" }}>
+                <div className="container" style={{ maxWidth: "1400px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: "64px", alignItems: "start" }}>
 
                         {/* Vision Card */}
                         <div style={{
                             background: "#F8FAFC",
                             border: "1px solid #E2E8F0",
-                            borderRadius: "var(--radius-lg)",
+                            borderRadius: "16px",
                             padding: "44px",
-                            boxShadow: "0 10px 30px rgba(0,0,0,0.04)"
+                            boxShadow: "0 10px 30px rgba(0,0,0,0.03)"
                         }}>
-                            <span className="badge" style={{ marginBottom: "20px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)" }}>Our Vision</span>
-                            <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "#0B1320", marginBottom: "20px", lineHeight: "1.3" }}>
+                            <span className="badge" style={{ marginBottom: "20px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)", fontFamily: "var(--font-mono)" }}>Our Vision</span>
+                            <h2 style={{ fontSize: "clamp(1.5rem, 2.5vw, 1.85rem)", fontWeight: 700, color: "#0B1320", marginBottom: "20px", lineHeight: "1.35", fontFamily: "var(--font-display)" }}>
                                 To design safe, connected, and intelligent systems that power the vehicle of the future.
                             </h2>
-                            <p style={{ fontSize: "0.95rem", lineHeight: "1.7", color: "#64748B" }}>
+                            <p style={{ fontSize: "0.98rem", lineHeight: "1.75", color: "#475569", fontFamily: "var(--font-body)", margin: "0 0 28px 0" }}>
                                 SAMSAN bridges the gap between hardware restrictions and complex software layers. We are committed to engineering platforms that meet the highest functional safety standards while driving agile, digital-first feature delivery.
                             </p>
                             <div style={{
-                                marginTop: "32px",
-                                height: "200px",
-                                borderRadius: "var(--radius-sm)",
+                                height: "220px",
+                                borderRadius: "12px",
                                 backgroundImage: "url('/images/embedded_engineering.png')",
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
@@ -573,37 +710,37 @@ export default function AboutPage() {
                             }} />
                         </div>
 
-                        {/* Why Choose Us */}
+                        {/* Why Choose Us / Delivery Philosophy */}
                         <div>
-                            <span className="badge rose" style={{ marginBottom: "16px" }}>Our Philosophy</span>
-                            <h2 style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: "24px", color: "#0B1320" }}>Delivery Philosophy</h2>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                            <span className="badge rose" style={{ marginBottom: "16px", fontFamily: "var(--font-mono)" }}>Our Philosophy</span>
+                            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.2rem)", fontWeight: 700, marginBottom: "28px", color: "#0B1320", fontFamily: "var(--font-display)" }}>Delivery Philosophy</h2>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
                                 {reasons.map((reason, idx) => (
                                     <div
                                         key={idx}
                                         style={{
                                             display: "flex",
-                                            gap: "16px",
-                                            background: "#F1F5F9",
+                                            gap: "18px",
+                                            background: "#F8FAFC",
                                             border: "1px solid #E2E8F0",
-                                            borderRadius: "var(--radius-sm)",
-                                            padding: "16px 20px",
+                                            borderRadius: "12px",
+                                            padding: "20px 24px",
                                             alignItems: "center"
                                         }}
                                     >
                                         <div style={{
-                                            width: "24px", height: "24px",
+                                            width: "28px", height: "28px",
                                             borderRadius: "50%",
                                             background: "rgba(232, 82, 26, 0.12)",
                                             color: "#E8521A",
                                             display: "flex", alignItems: "center", justifyContent: "center",
-                                            flexShrink: 0,
-                                            fontSize: "0.8rem",
-                                            fontWeight: 700
+                                            flexShrink: 0
                                         }}>
-                                            ✓
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8521A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                <polyline points="20 6 9 17 4 12" />
+                                            </svg>
                                         </div>
-                                        <p style={{ fontSize: "0.88rem", color: "#0B1320", lineHeight: "1.4", margin: 0, fontWeight: 500 }}>{reason}</p>
+                                        <p style={{ fontSize: "0.95rem", color: "#0B1320", lineHeight: "1.5", margin: 0, fontWeight: 500, fontFamily: "var(--font-body)" }}>{reason}</p>
                                     </div>
                                 ))}
                             </div>
@@ -614,62 +751,19 @@ export default function AboutPage() {
             </section>
 
             {/* Spec Sheet Section */}
-            <section className="section-light section compact" style={{ borderTop: "1px solid #E2E8F0", background: "#F8FAFC" }}>
-                <div className="container">
-                    <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)" }}>Company Profile</span>
+            <section className="section-light section" style={{ background: "#F8FAFC", padding: "108px 0" }}>
+                <div className="container" style={{ maxWidth: "960px" }}>
+                    <div style={{ textAlign: "center", marginBottom: "40px" }}>
+                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)", fontFamily: "var(--font-mono)" }}>Company Profile</span>
                         <h2 style={{
-                            fontSize: "clamp(1.6rem, 2.8vw, 2.2rem)",
+                            fontSize: "clamp(1.8rem, 3vw, 2.3rem)",
                             fontWeight: 700,
-                            marginBottom: "32px",
-                            color: "#0B1320"
+                            color: "#0B1320",
+                            fontFamily: "var(--font-display)"
                         }}>
-                            Company Facts & Specifications
+                            Company Facts &amp; Specifications
                         </h2>
-
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
-                            variants={{
-                                visible: {
-                                    transition: {
-                                        staggerChildren: shouldReduce ? 0 : 0.08
-                                    }
-                                }
-                            }}
-                            className="spec-table"
-                            style={{
-                                background: "#FFFFFF",
-                                border: "1px solid #E2E8F0",
-                                borderRadius: "12px",
-                                overflow: "hidden"
-                            }}
-                        >
-                            {companySpecs.map((spec, idx) => (
-                                <SpecRow key={spec.key} specKey={spec.key} specVal={spec.value} index={idx} shouldReduce={shouldReduce} />
-                            ))}
-                        </motion.div>
                     </div>
-                </div>
-            </section>
-
-            {/* Global Presence Section */}
-            <section className="section-dark section compact" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "#0A0D11" }}>
-                <div className="container">
-                    <style dangerouslySetInnerHTML={{
-                        __html: `
-                        @keyframes presencePulse {
-                            0% { box-shadow: 0 0 0 0 rgba(77, 216, 232, 0.5); }
-                            70% { box-shadow: 0 0 0 10px rgba(77, 216, 232, 0); }
-                            100% { box-shadow: 0 0 0 0 rgba(77, 216, 232, 0); }
-                        }
-                    `}} />
-
-                    <span className="badge rose" style={{ marginBottom: "16px" }}>Presence</span>
-                    <h2 style={{ fontSize: "clamp(1.6rem, 2.8vw, 2.2rem)", fontWeight: 700, marginBottom: "32px", color: "#ffffff" }}>
-                        Global Presence
-                    </h2>
 
                     <motion.div
                         initial="hidden"
@@ -678,71 +772,28 @@ export default function AboutPage() {
                         variants={{
                             visible: {
                                 transition: {
-                                    staggerChildren: shouldReduce ? 0 : 0.2
+                                    staggerChildren: shouldReduce ? 0 : 0.08
                                 }
                             }
                         }}
-                        style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "32px" }}
+                        className="spec-table"
+                        style={{
+                            background: "#FFFFFF",
+                            border: "1px solid #E2E8F0",
+                            borderRadius: "16px",
+                            overflow: "hidden",
+                            boxShadow: "0 8px 30px rgba(0,0,0,0.03)"
+                        }}
                     >
-                        {[
-                            { region: "India/APAC", city: "Pune (HQ) & Bengaluru", delay: "0s" },
-                            { region: "Europe", city: "Munich, Germany", delay: "0.5s" },
-                            { region: "United States", city: "Detroit, Michigan", delay: "1s" }
-                        ].map((node) => (
-                            <motion.div
-                                key={node.region}
-                                variants={{
-                                    hidden: { opacity: 0, scale: shouldReduce ? 1 : 0.8 },
-                                    visible: { opacity: 1, scale: 1, transition: { duration: shouldReduce ? 0.01 : 0.5 } }
-                                }}
-                                style={{
-                                    background: "#161B22",
-                                    border: "1px solid rgba(255, 255, 255, 0.07)",
-                                    borderRadius: "16px",
-                                    padding: "32px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "20px"
-                                }}
-                            >
-                                <div style={{
-                                    width: "14px",
-                                    height: "14px",
-                                    borderRadius: "50%",
-                                    backgroundColor: "#4DD8E8",
-                                    boxShadow: "0 0 10px rgba(77, 216, 232, 0.8)",
-                                    animation: "presencePulse 2s infinite",
-                                    animationDelay: node.delay,
-                                    flexShrink: 0
-                                }} />
-                                <div>
-                                    <h3 style={{
-                                        fontSize: "13px",
-                                        letterSpacing: "0.06em",
-                                        fontWeight: 600,
-                                        color: "#ffffff",
-                                        margin: 0,
-                                        textTransform: "uppercase"
-                                    }}>
-                                        {node.region}
-                                    </h3>
-                                    <p style={{
-                                        fontSize: "0.9rem",
-                                        color: "#94A3B8",
-                                        margin: "4px 0 0 0",
-                                        lineHeight: "1.4"
-                                    }}>
-                                        {node.city}
-                                    </p>
-                                </div>
-                            </motion.div>
+                        {companySpecs.map((spec, idx) => (
+                            <SpecRow key={spec.key} specKey={spec.key} specVal={spec.value} index={idx} shouldReduce={shouldReduce} />
                         ))}
                     </motion.div>
                 </div>
             </section>
 
             {/* Leadership & Team Section */}
-            <section className="section-dark" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "#0A0D11", padding: "96px 0" }}>
+            <section className="section-dark" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "var(--midnight)", padding: "108px 0" }}>
                 <style dangerouslySetInnerHTML={{
                     __html: `
                     /* CEO Spotlight Card */
@@ -1018,23 +1069,7 @@ export default function AboutPage() {
 
                     {/* Section Header */}
                     <div style={{ textAlign: "center", marginBottom: "64px" }}>
-                        <motion.span
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: shouldReduce ? 0.01 : 0.4 }}
-                            style={{
-                                fontFamily: "var(--font-mono)",
-                                fontSize: "11px",
-                                letterSpacing: "0.1em",
-                                textTransform: "uppercase",
-                                color: "#4DD8E8",
-                                display: "block",
-                                marginBottom: "12px"
-                            }}
-                        >
-                            // Our Leadership
-                        </motion.span>
+                        <span className="badge" style={{ marginBottom: "16px", color: "#4DD8E8", borderColor: "rgba(77, 216, 232, 0.25)", background: "rgba(77, 216, 232, 0.08)", fontFamily: "var(--font-mono)" }}>Our Leadership</span>
                         <motion.h2
                             initial={{ opacity: 0, y: shouldReduce ? 0 : 16 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -1046,7 +1081,8 @@ export default function AboutPage() {
                                 color: "#ffffff",
                                 marginBottom: "16px",
                                 lineHeight: "1.25",
-                                letterSpacing: "-0.02em"
+                                letterSpacing: "-0.02em",
+                                fontFamily: "var(--font-display)"
                             }}
                         >
                             Meet Our Leadership Team
@@ -1906,38 +1942,398 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Bottom CTA Section */}
-            <section className="section-dark" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "#0A0D11", padding: "100px 0", textAlign: "center", position: "relative", overflow: "hidden" }}>
-                {/* Background Glow */}
-                <div style={{
-                    position: "absolute",
-                    bottom: "0",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: "600px",
-                    height: "300px",
-                    background: "radial-gradient(circle, rgba(77, 216, 232, 0.06) 0%, transparent 70%)",
-                    pointerEvents: "none"
-                }} />
+            {/* Global Engineering Footprint & Operating Hubs Section (Light Theme) */}
+            <section className="section-light section" style={{ background: "#FAFAFC", padding: "108px 0", borderTop: "1px solid #E2E8F0", position: "relative" }}>
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                    @keyframes presencePulseLight {
+                        0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+                        70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+                        100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+                    }
+                    .about-locations-grid {
+                        display: grid;
+                        grid-template-columns: 1.15fr 1.85fr;
+                        gap: 36px;
+                        align-items: stretch;
+                    }
+                    @media (max-width: 991px) {
+                        .about-locations-grid {
+                            grid-template-columns: 1fr;
+                            gap: 28px;
+                        }
+                    }
+                `}} />
 
-                <div className="container">
+                <div className="container" style={{ maxWidth: "1400px", position: "relative", zIndex: 1 }}>
+                    <div style={{ textAlign: "center", marginBottom: "56px" }}>
+                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.25)", background: "rgba(232, 82, 26, 0.06)", fontFamily: "var(--font-mono)" }}>
+                            Global Engineering Footprint
+                        </span>
+                        <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.6rem)", fontWeight: 700, color: "#0B1320", fontFamily: "var(--font-display)", letterSpacing: "-0.02em", marginBottom: "16px" }}>
+                            Global Presence &amp; Operating Hubs
+                        </h2>
+                        <p style={{ fontSize: "1.05rem", color: "#475569", maxWidth: "680px", margin: "0 auto", lineHeight: "1.7", fontFamily: "var(--font-body)" }}>
+                            Delivering vehicle-grade software architectures, cockpit engineering, and digital transformation platforms from our worldwide technology hubs.
+                        </p>
+                    </div>
+
+
+
+                    {/* Interactive 2-Column Hub Selector + Google Map */}
+                    <div className="about-locations-grid">
+                        {/* Left Column: Hub Selector Cards */}
+                        <div style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "14px",
+                            maxHeight: "620px",
+                            overflowY: "auto",
+                            paddingRight: "6px"
+                        }}>
+                            {globalHubs.map((hub) => {
+                                const isActive = activeHub.city === hub.city && activeHub.region === hub.region;
+                                return (
+                                    <motion.div
+                                        key={`${hub.city}-${hub.region}`}
+                                        onClick={() => setActiveHub(hub)}
+                                        whileHover={{ x: 4 }}
+                                        style={{
+                                            background: isActive ? "rgba(59, 130, 246, 0.06)" : "#FFFFFF",
+                                            border: isActive ? "1.5px solid #2563EB" : "1px solid #E2E8F0",
+                                            borderRadius: "16px",
+                                            padding: "20px 22px",
+                                            cursor: "pointer",
+                                            transition: "all 0.25s ease",
+                                            boxShadow: isActive ? "0 8px 24px rgba(37, 99, 235, 0.12)" : "0 2px 10px rgba(0,0,0,0.03)"
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                                            <span style={{
+                                                fontFamily: "var(--font-mono)",
+                                                fontSize: "10px",
+                                                color: isActive ? "#2563EB" : "#64748B",
+                                                textTransform: "uppercase",
+                                                letterSpacing: "0.08em",
+                                                fontWeight: 700
+                                            }}>
+                                                {hub.region}
+                                            </span>
+                                            {isActive && (
+                                                <span style={{
+                                                    width: "8px",
+                                                    height: "8px",
+                                                    borderRadius: "50%",
+                                                    backgroundColor: "#2563EB",
+                                                    boxShadow: "0 0 8px #2563EB"
+                                                }} />
+                                            )}
+                                        </div>
+                                        <h3 style={{ fontSize: "1.2rem", fontWeight: 700, color: "#0B1320", marginBottom: "8px", fontFamily: "var(--font-display)" }}>
+                                            {hub.city} Hub
+                                        </h3>
+                                        <p style={{ fontSize: "0.85rem", color: "#475569", lineHeight: "1.5", marginBottom: "12px", fontFamily: "var(--font-body)" }}>
+                                            {hub.address}
+                                        </p>
+
+                                        <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center" }}>
+                                            {hub.phone && (
+                                                <span style={{ fontSize: "0.78rem", color: "#64748B", fontFamily: "var(--font-mono)" }}>
+                                                    Phone: {hub.phone}
+                                                </span>
+                                            )}
+                                            <a
+                                                href={`mailto:${hub.email}`}
+                                                style={{
+                                                    fontFamily: "var(--font-mono)",
+                                                    fontSize: "0.78rem",
+                                                    color: isActive ? "#2563EB" : "#475569",
+                                                    textDecoration: "underline"
+                                                }}
+                                            >
+                                                {hub.email}
+                                            </a>
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Right Column: Google Maps Interactive Frame */}
+                        <div style={{
+                            position: "relative",
+                            background: "#0F172A",
+                            border: "1px solid #CBD5E1",
+                            borderRadius: "20px",
+                            overflow: "hidden",
+                            display: "flex",
+                            flexDirection: "column",
+                            minHeight: "480px",
+                            boxShadow: "0 20px 45px rgba(15, 23, 42, 0.15)"
+                        }}>
+                            {/* Map Telemetry Header */}
+                            <div style={{
+                                padding: "18px 24px",
+                                background: "#0B1320",
+                                borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                zIndex: 2
+                            }}>
+                                <div>
+                                    <span style={{ fontSize: "0.7rem", color: "#38BDF8", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 700 }}>
+                                        Active Hub Location
+                                    </span>
+                                    <h4 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#ffffff", margin: 0, fontFamily: "var(--font-display)" }}>
+                                        {activeHub.city} — {activeHub.region}
+                                    </h4>
+                                </div>
+                                <div style={{
+                                    fontFamily: "var(--font-mono)",
+                                    fontSize: "11px",
+                                    color: "rgba(255,255,255,0.6)",
+                                    textAlign: "right"
+                                }}>
+                                    <div style={{ color: "#38BDF8", fontWeight: 600 }}>COORDINATES</div>
+                                    <div>{activeHub.coordinates}</div>
+                                </div>
+                            </div>
+
+                            {/* Google Map Embedded iframe */}
+                            <div style={{ flex: 1, position: "relative", width: "100%", height: "100%", background: "#0c111e" }}>
+                                <iframe
+                                    title={`Map of SAMSAN Technische Labs Pvt. Ltd. ${activeHub.city} office`}
+                                    src={`https://maps.google.com/maps?q=${encodeURIComponent(activeHub.mapQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) contrast(1.2)" }}
+                                    allowFullScreen
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Bottom CTA Section (Light Theme) */}
+            <section className="section-light section" style={{ background: "#FAFAFC", borderTop: "1px solid #E2E8F0", padding: "108px 0", position: "relative" }}>
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                    .cta-card-grid {
+                        display: grid;
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 28px;
+                        margin-top: 40px;
+                    }
+                    @media (max-width: 868px) {
+                        .cta-card-grid {
+                            grid-template-columns: 1fr;
+                            gap: 20px;
+                        }
+                    }
+                    .cta-modular-card {
+                        background: #FFFFFF;
+                        border: 1px solid #E2E8F0;
+                        border-radius: 20px;
+                        padding: 36px 32px;
+                        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                        display: flex;
+                        flexDirection: column;
+                        justify-content: space-between;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+                    }
+                    .cta-modular-card:hover {
+                        transform: translateY(-4px);
+                        border-color: #CBD5E1;
+                        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06);
+                    }
+                `}} />
+
+                <div className="container" style={{ maxWidth: "1200px" }}>
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
+                        initial={{ opacity: 0, y: shouldReduce ? 0 : 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: shouldReduce ? 0.01 : 0.5 }}
-                        style={{ display: "flex", flexDirection: "column", gap: "24px", alignItems: "center" }}
+                        style={{ textAlign: "center", marginBottom: "16px" }}
                     >
-                        <h2 style={{ fontSize: "clamp(1.7rem, 2.8vw, 2.2rem)", fontWeight: 700, margin: 0, color: "#ffffff", letterSpacing: "-0.02em" }}>
+                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.25)", background: "rgba(232, 82, 26, 0.06)", fontFamily: "var(--font-mono)" }}>
+                            Next-Gen Mobility Partnership
+                        </span>
+                        <h2 style={{
+                            fontSize: "clamp(2rem, 3.5vw, 2.6rem)",
+                            fontWeight: 700,
+                            margin: "0 0 16px 0",
+                            color: "#0B1320",
+                            letterSpacing: "-0.02em",
+                            fontFamily: "var(--font-display)"
+                        }}>
                             Ready to power your next engineering program?
                         </h2>
-                        <p style={{ fontSize: "1rem", lineHeight: "1.7", color: "#94A3B8", maxWidth: "480px", margin: "0 auto" }}>
+                        <p style={{
+                            fontSize: "1.08rem",
+                            lineHeight: "1.7",
+                            color: "#475569",
+                            maxWidth: "640px",
+                            margin: "0 auto",
+                            fontFamily: "var(--font-body)"
+                        }}>
                             Connect with SAMSAN Technische Labs to establish your dedicated COE or leverage our vehicle systems experts.
                         </p>
-                        <Link href="/contact" className="btn btn-primary" style={{ display: "inline-flex", textDecoration: "none", background: "#E8521A", color: "#FFFFFF" }}>
-                            Get Started
-                        </Link>
                     </motion.div>
+
+                    {/* Modular Engagement Cards */}
+                    <div className="cta-card-grid">
+                        {/* Card 1: Dedicated COE Program */}
+                        <motion.div
+                            initial={{ opacity: 0, y: shouldReduce ? 0 : 24 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: shouldReduce ? 0.01 : 0.5, delay: 0.1 }}
+                            className="cta-modular-card"
+                        >
+                            <div>
+                                <div style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    padding: "6px 14px",
+                                    borderRadius: "20px",
+                                    background: "rgba(37, 99, 235, 0.08)",
+                                    border: "1px solid rgba(37, 99, 235, 0.2)",
+                                    color: "#2563EB",
+                                    fontFamily: "var(--font-mono)",
+                                    fontSize: "11px",
+                                    fontWeight: 700,
+                                    letterSpacing: "0.05em",
+                                    textTransform: "uppercase",
+                                    marginBottom: "20px"
+                                }}>
+                                    AUTOSAR &amp; SDV COE
+                                </div>
+                                <h3 style={{
+                                    fontSize: "1.35rem",
+                                    fontWeight: 700,
+                                    color: "#0B1320",
+                                    marginBottom: "12px",
+                                    fontFamily: "var(--font-display)"
+                                }}>
+                                    Establish a Dedicated COE
+                                </h3>
+                                <p style={{
+                                    fontSize: "0.95rem",
+                                    color: "#475569",
+                                    lineHeight: 1.6,
+                                    marginBottom: "24px",
+                                    fontFamily: "var(--font-body)"
+                                }}>
+                                    Build long-term engineering capacity with dedicated, ISO 26262 certified software teams tailored to your vehicle platform architecture.
+                                </p>
+                            </div>
+                            <div>
+                                <Link
+                                    href="/engagement-models"
+                                    className="btn btn-outline"
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                        width: "100%",
+                                        justifyContent: "center",
+                                        textDecoration: "none",
+                                        borderColor: "#CBD5E1",
+                                        color: "#0B1320",
+                                        fontWeight: 600,
+                                        padding: "12px 20px"
+                                    }}
+                                >
+                                    Explore Engagement Models
+                                    <svg width="14" height="14" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+                                        <path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                                    </svg>
+                                </Link>
+                            </div>
+                        </motion.div>
+
+                        {/* Card 2: Systems Experts Consultation */}
+                        <motion.div
+                            initial={{ opacity: 0, y: shouldReduce ? 0 : 24 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: shouldReduce ? 0.01 : 0.5, delay: 0.2 }}
+                            className="cta-modular-card"
+                            style={{
+                                background: "linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%)",
+                                borderColor: "#CBD5E1"
+                            }}
+                        >
+                            <div>
+                                <div style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    padding: "6px 14px",
+                                    borderRadius: "20px",
+                                    background: "rgba(232, 82, 26, 0.08)",
+                                    border: "1px solid rgba(232, 82, 26, 0.25)",
+                                    color: "#E8521A",
+                                    fontFamily: "var(--font-mono)",
+                                    fontSize: "11px",
+                                    fontWeight: 700,
+                                    letterSpacing: "0.05em",
+                                    textTransform: "uppercase",
+                                    marginBottom: "20px"
+                                }}>
+                                    Expert Technical Advisory
+                                </div>
+                                <h3 style={{
+                                    fontSize: "1.35rem",
+                                    fontWeight: 700,
+                                    color: "#0B1320",
+                                    marginBottom: "12px",
+                                    fontFamily: "var(--font-display)"
+                                }}>
+                                    Leverage Systems Experts
+                                </h3>
+                                <p style={{
+                                    fontSize: "0.95rem",
+                                    color: "#475569",
+                                    lineHeight: 1.6,
+                                    marginBottom: "24px",
+                                    fontFamily: "var(--font-body)"
+                                }}>
+                                    Direct consultation and rapid deployment for embedded software, ADAS sensor fusion, digital cockpit HMI, and AUTOSAR stack validation.
+                                </p>
+                            </div>
+                            <div>
+                                <Link
+                                    href="/contact"
+                                    className="btn btn-primary"
+                                    style={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                        width: "100%",
+                                        justifyContent: "center",
+                                        textDecoration: "none",
+                                        background: "#E8521A",
+                                        color: "#FFFFFF",
+                                        fontWeight: 600,
+                                        padding: "12px 20px",
+                                        boxShadow: "0 4px 14px rgba(232, 82, 26, 0.25)"
+                                    }}
+                                >
+                                    Get Started Immediately
+                                    <svg width="14" height="14" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+                                        <path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                                    </svg>
+                                </Link>
+                            </div>
+                        </motion.div>
+                    </div>
                 </div>
             </section>
         </div>

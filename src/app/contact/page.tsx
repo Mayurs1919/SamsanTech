@@ -18,7 +18,6 @@ const PRODUCT_MAP: Record<string, string> = {
     vemeego: "Vemeego",
     pikniknow: "PiknikNow",
     "digital-cockpit-solution": "Digital Cockpit Solution",
-    tcu: "TCU (Telematics Control Unit)",
     "dms-edge": "DMS Edge",
     cabiniq: "CabinIQ™",
     vseva: "vSeva"

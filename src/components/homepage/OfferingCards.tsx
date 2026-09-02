@@ -197,7 +197,7 @@ export default function OfferingCards() {
                         fontWeight: 700,
                         lineHeight: 1.12,
                         letterSpacing: "-0.01em",
-                        color: "#0F172A",
+                        color: "#FFFFFF",
                         marginBottom: "16px"
                     }}>
                         What We Do
@@ -205,7 +205,7 @@ export default function OfferingCards() {
                     <p className="lead" style={{
                         maxWidth: "600px",
                         margin: "0 auto",
-                        color: "#334155",
+                        color: "#94A3B8",
                         fontSize: "1.1rem",
                         lineHeight: "1.75"
                     }}>

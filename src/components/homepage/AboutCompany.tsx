@@ -101,8 +101,24 @@ export default function AboutCompany() {
                             </h3>
                         </div>
 
+                        <style>{`
+                            .about-stats-grid {
+                                display: grid;
+                                grid-template-columns: repeat(3, 1fr);
+                                gap: 24px;
+                                padding-top: 32px;
+                                border-top: 1px solid rgba(15, 23, 42, 0.1);
+                            }
+                            @media (max-width: 640px) {
+                                .about-stats-grid {
+                                    grid-template-columns: 1fr;
+                                    gap: 20px;
+                                }
+                            }
+                        `}</style>
+
                         {/* Stats grid */}
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "24px", paddingTop: "32px", borderTop: "1px solid rgba(15, 23, 42, 0.1)" }}>
+                        <div className="about-stats-grid">
                             <div>
                                 <div style={{
                                     fontFamily: "var(--font-display)",

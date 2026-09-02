@@ -73,6 +73,21 @@ export default function Locations() {
                 pointerEvents: "none"
             }} />
 
+            <style>{`
+                .locations-grid-container {
+                    display: grid;
+                    grid-template-columns: 1.1fr 1.9fr;
+                    gap: 36px;
+                    align-items: stretch;
+                }
+                @media (max-width: 900px) {
+                    .locations-grid-container {
+                        grid-template-columns: 1fr;
+                        gap: 24px;
+                    }
+                }
+            `}</style>
+
             <div className="container">
                 <div style={{ textAlign: "center", marginBottom: "36px" }}>
                     <span className="badge mint" style={{ marginBottom: "16px" }}>Our Locations</span>
@@ -84,12 +99,7 @@ export default function Locations() {
                     </p>
                 </div>
 
-                <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "1.1fr 1.9fr",
-                    gap: "36px",
-                    alignItems: "stretch",
-                }}>
+                <div className="locations-grid-container">
                     {/* Left: Location Hub Selector Cards */}
                     <div style={{
                         display: "flex",

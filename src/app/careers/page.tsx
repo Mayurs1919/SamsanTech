@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
 import Link from "next/link";
-import { runWorkerTask } from "@/utils/multithreadedWorker";
 
 interface Job {
     id: string;
@@ -223,7 +222,7 @@ export default function CareersPage() {
     const categories = ["All Categories", "Embedded Engineering", "HMI Development", "Connectivity", "Validation & Testing", "Systems Engineering"];
     const types = ["All Types", "Full-time"];
 
-    // Draft / Pending Filter State (for selection before clicking Apply)
+    // Active Filter Controls State
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("All Countries");
     const [selectedCity, setSelectedCity] = useState("All Cities");
@@ -231,7 +230,7 @@ export default function CareersPage() {
     const [selectedCategory, setSelectedCategory] = useState("All Categories");
     const [selectedType, setSelectedType] = useState("All Types");
 
-    // Applied Filter State (triggers job list update)
+    // Applied Filter State (updates on button click or change)
     const [appliedFilters, setAppliedFilters] = useState({
         searchQuery: "",
         selectedCountry: "All Countries",
@@ -241,90 +240,46 @@ export default function CareersPage() {
         selectedType: "All Types"
     });
 
-    const [filteredJobs, setFilteredJobs] = useState<Job[]>(initialJobs);
+    // Pure, synchronous, zero-lag memoized filter computation
+    const filteredJobs = useMemo(() => {
+        const query = appliedFilters.searchQuery.toLowerCase().trim();
+        const countryFilter = appliedFilters.selectedCountry;
+        const cityFilter = appliedFilters.selectedCity;
+        const expFilter = appliedFilters.selectedExp;
+        const catFilter = appliedFilters.selectedCategory;
+        const typeFilter = appliedFilters.selectedType;
 
-    // Filter Triggering Effect
-    useEffect(() => {
-        let isMounted = true;
+        const results = initialJobs.filter((job) => {
+            const matchesSearch = !query ||
+                job.title.toLowerCase().includes(query) ||
+                job.description.toLowerCase().includes(query) ||
+                job.skills.some((s) => s.toLowerCase().includes(query));
 
-        const filterCriteria = {
-            searchQuery: appliedFilters.searchQuery,
-            selectedCountry: appliedFilters.selectedCountry,
-            selectedCity: appliedFilters.selectedCity,
-            selectedExp: appliedFilters.selectedExp,
-            selectedCategory: appliedFilters.selectedCategory,
-            selectedType: appliedFilters.selectedType,
-            jobs: initialJobs
-        };
+            const matchesCountry = countryFilter === "All Countries" || job.country.includes(countryFilter);
+            const matchesCity = cityFilter === "All Cities" || job.city.includes(cityFilter);
+            const matchesExp = expFilter === "All Experience" || job.experience === expFilter;
+            const matchesCategory = catFilter === "All Categories" || job.category === catFilter;
+            const matchesType = typeFilter === "All Types" || job.type === typeFilter;
 
-        runWorkerTask((data) => {
-            const query = data.searchQuery.toLowerCase().trim();
-            const countryFilter = data.selectedCountry;
-            const cityFilter = data.selectedCity;
-            const expFilter = data.selectedExp;
-            const catFilter = data.selectedCategory;
-            const typeFilter = data.selectedType;
-
-            const results = data.jobs.filter((job) => {
-                const matchesSearch = !query ||
-                    job.title.toLowerCase().includes(query) ||
-                    job.description.toLowerCase().includes(query) ||
-                    job.skills.some((s: string) => s.toLowerCase().includes(query));
-
-                const matchesCountry = countryFilter === "All Countries" || job.country.includes(countryFilter);
-                const matchesCity = cityFilter === "All Cities" || job.city.includes(cityFilter);
-                const matchesExp = expFilter === "All Experience" || job.experience === expFilter;
-                const matchesCategory = catFilter === "All Categories" || job.category === catFilter;
-                const matchesType = typeFilter === "All Types" || job.type === typeFilter;
-
-                return matchesSearch && matchesCountry && matchesCity && matchesExp && matchesCategory && matchesType;
-            });
-
-            // Always return sorted alphabetically by job title
-            return results.sort((a: Job, b: Job) => a.title.localeCompare(b.title));
-        }, filterCriteria).then((result) => {
-            if (isMounted) {
-                setFilteredJobs(result);
-            }
-        }).catch(() => {
-            if (isMounted) {
-                const query = appliedFilters.searchQuery.toLowerCase().trim();
-                const results = initialJobs.filter((job) => {
-                    const matchesSearch = !query ||
-                        job.title.toLowerCase().includes(query) ||
-                        job.description.toLowerCase().includes(query) ||
-                        job.skills.some(s => s.toLowerCase().includes(query));
-
-                    const matchesCountry = appliedFilters.selectedCountry === "All Countries" || job.country.includes(appliedFilters.selectedCountry);
-                    const matchesCity = appliedFilters.selectedCity === "All Cities" || job.city.includes(appliedFilters.selectedCity);
-                    const matchesExp = appliedFilters.selectedExp === "All Experience" || job.experience === appliedFilters.selectedExp;
-                    const matchesCategory = appliedFilters.selectedCategory === "All Categories" || job.category === appliedFilters.selectedCategory;
-                    const matchesType = appliedFilters.selectedType === "All Types" || job.type === appliedFilters.selectedType;
-
-                    return matchesSearch && matchesCountry && matchesCity && matchesExp && matchesCategory && matchesType;
-                });
-                setFilteredJobs(results.sort((a, b) => a.title.localeCompare(b.title)));
-            }
+            return matchesSearch && matchesCountry && matchesCity && matchesExp && matchesCategory && matchesType;
         });
 
-        return () => {
-            isMounted = false;
-        };
+        return results.sort((a, b) => a.title.localeCompare(b.title));
     }, [appliedFilters]);
 
-    // Handle Apply Filter Button
-    const handleApplyFilter = () => {
-        setAppliedFilters({
-            searchQuery,
-            selectedCountry,
-            selectedCity,
-            selectedExp,
-            selectedCategory,
-            selectedType
-        });
+    // Apply Filter Button Handler (also auto-syncs state)
+    const handleApplyFilter = (overrideState?: Partial<typeof appliedFilters>) => {
+        setAppliedFilters(prev => ({
+            searchQuery: overrideState?.searchQuery !== undefined ? overrideState.searchQuery : searchQuery,
+            selectedCountry: overrideState?.selectedCountry !== undefined ? overrideState.selectedCountry : selectedCountry,
+            selectedCity: overrideState?.selectedCity !== undefined ? overrideState.selectedCity : selectedCity,
+            selectedExp: overrideState?.selectedExp !== undefined ? overrideState.selectedExp : selectedExp,
+            selectedCategory: overrideState?.selectedCategory !== undefined ? overrideState.selectedCategory : selectedCategory,
+            selectedType: overrideState?.selectedType !== undefined ? overrideState.selectedType : selectedType
+        }));
     };
 
-    // Handle Reset Filter Button
+    // Reset Filter Button Handler
     const handleResetFilter = () => {
         setSearchQuery("");
         setSelectedCountry("All Countries");
@@ -346,78 +301,197 @@ export default function CareersPage() {
     return (
         <div style={{ paddingBottom: "0" }}>
 
-            {/* ── Page Hero (section-light) ── */}
-            <section className="section-dark page-hero" aria-labelledby="careers-heading" style={{ background: "#0A0D11", padding: "80px 0 60px" }}>
-                <div className="container">
+            {/* ── Page Hero (section-dark) ── */}
+            <section
+                className="section-dark page-hero"
+                aria-labelledby="careers-heading"
+                style={{
+                    background: "linear-gradient(180deg, #06080C 0%, var(--midnight) 100%)",
+                    padding: "140px 0 96px",
+                    position: "relative",
+                    overflow: "hidden"
+                }}
+            >
+                {/* Background ambient glow */}
+                <div style={{
+                    position: "absolute",
+                    top: "-20%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "800px",
+                    height: "400px",
+                    background: "radial-gradient(ellipse, rgba(77, 216, 232, 0.08) 0%, rgba(232, 82, 26, 0.04) 40%, transparent 70%)",
+                    pointerEvents: "none"
+                }} />
+
+                <div className="container" style={{ position: "relative", zIndex: 1 }}>
                     <motion.div
                         variants={staggerContainerVariants}
                         initial="hidden"
                         animate="visible"
                     >
-                        <div style={{ display: "flex", gap: "8px", fontSize: "0.85rem", color: "#94A3B8", marginBottom: "16px" }}>
-                            <Link href="/" style={{ color: "#94A3B8", textDecoration: "none" }}>Home</Link>
-                            <span style={{ fontWeight: 700, opacity: 0.6, color: "#94A3B8" }}>//</span>
-                            <span style={{ color: "#FFFFFF", fontWeight: 600 }}>Careers</span>
-                        </div>
+
                         <motion.div variants={fadeUpVariants(shouldReduce)}>
-                            <span className="badge" style={{ marginBottom: "24px", color: "#4DD8E8", background: "rgba(77, 216, 232, 0.08)", border: "1px solid rgba(77, 216, 232, 0.2)" }}>
+                            <span
+                                className="badge"
+                                style={{
+                                    marginBottom: "20px",
+                                    display: "inline-block",
+                                    color: "#4DD8E8",
+                                    background: "rgba(77, 216, 232, 0.08)",
+                                    border: "1px solid rgba(77, 216, 232, 0.2)",
+                                    padding: "6px 14px",
+                                    borderRadius: "20px",
+                                    fontSize: "0.78rem",
+                                    fontFamily: "var(--font-mono)",
+                                    letterSpacing: "0.06em",
+                                    textTransform: "uppercase"
+                                }}
+                            >
                                 Join Our Engineering Team
                             </span>
                         </motion.div>
+
                         <motion.h1
                             id="careers-heading"
                             variants={fadeUpVariants(shouldReduce)}
                             style={{
+                                fontSize: "clamp(2.4rem, 4vw, 3.4rem)",
+                                fontWeight: 800,
+                                fontFamily: "var(--font-display)",
+                                color: "#FFFFFF",
+                                letterSpacing: "-0.02em",
                                 marginBottom: "20px",
-                                color: "#FFFFFF"
+                                lineHeight: 1.15
                             }}
                         >
-                            SAMSAN Careers
+                            Shape the Future of <br />
+                            <span style={{
+                                background: "linear-gradient(90deg, #FFFFFF 30%, #4DD8E8 100%)",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent"
+                            }}>
+                                Software-Defined Vehicles
+                            </span>
                         </motion.h1>
+
                         <motion.p
                             className="lead"
                             variants={fadeUpVariants(shouldReduce)}
                             style={{
                                 color: "#94A3B8",
-                                maxWidth: "580px"
+                                maxWidth: "620px",
+                                fontSize: "1.1rem",
+                                lineHeight: 1.7,
+                                fontFamily: "var(--font-body)",
+                                margin: 0
                             }}
                         >
-                            Explore engineering opportunities, join our domain-led teams, and help build the future of software-defined vehicle mobility.
+                            Join specialized engineering CoEs across SDV, Android Automotive, V2X, AI/ML, and Autonomous Systems. Build high-impact technology with global automotive leaders.
                         </motion.p>
                     </motion.div>
                 </div>
             </section>
 
-            {/* ── Culture & Values Section (section-light) ── */}
-            <section className="section-light section" style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "80px 0" }}>
+            {/* ── Experience Band / Stats Strip (section-dark) ── */}
+            <section className="section-dark" style={{
+                background: "#0D1117",
+                borderTop: "1px solid rgba(255,255,255,0.07)",
+                borderBottom: "1px solid rgba(255,255,255,0.07)",
+                padding: "44px 0"
+            }}>
                 <div className="container">
-                    <div style={{ textAlign: "center", marginBottom: "60px" }}>
-                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", background: "rgba(232, 82, 26, 0.08)", border: "1px solid rgba(232, 82, 26, 0.2)" }}>
-                            Our Culture
+                    <motion.div
+                        variants={staggerContainerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                            gap: "32px",
+                            textAlign: "center"
+                        }}
+                    >
+                        {careerStats.map((s, i) => (
+                            <motion.div key={i} variants={fadeUpVariants(shouldReduce)}>
+                                <div style={{
+                                    fontSize: "2.6rem",
+                                    fontWeight: 800,
+                                    fontFamily: "var(--font-display)",
+                                    color: "#FFFFFF",
+                                    lineHeight: 1.1,
+                                    marginBottom: "6px"
+                                }}>{s.value}</div>
+                                <div style={{
+                                    fontSize: "0.82rem",
+                                    color: "#94A3B8",
+                                    fontFamily: "var(--font-mono)",
+                                    letterSpacing: "0.05em",
+                                    textTransform: "uppercase"
+                                }}>{s.label}</div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ── Culture & Values Section (section-light) ── */}
+            <section className="section-light section" style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "88px 0" }}>
+                <div className="container">
+                    <div style={{ textAlign: "center", marginBottom: "64px" }}>
+                        <span className="badge" style={{
+                            marginBottom: "16px",
+                            display: "inline-block",
+                            color: "#E8521A",
+                            background: "rgba(232, 82, 26, 0.08)",
+                            border: "1px solid rgba(232, 82, 26, 0.2)",
+                            padding: "5px 14px",
+                            borderRadius: "20px",
+                            fontSize: "0.78rem",
+                            fontFamily: "var(--font-mono)",
+                            letterSpacing: "0.06em",
+                            textTransform: "uppercase"
+                        }}>
+                            Our Culture & Ethos
                         </span>
-                        <h2 style={{ fontSize: "2.2rem", fontWeight: 700, color: "#0B1320", marginBottom: "16px" }}>
+                        <h2 style={{
+                            fontSize: "clamp(2rem, 3vw, 2.5rem)",
+                            fontWeight: 800,
+                            fontFamily: "var(--font-display)",
+                            color: "#0B1320",
+                            marginBottom: "16px",
+                            letterSpacing: "-0.01em"
+                        }}>
                             Life at SAMSAN
                         </h2>
-                        <p style={{ color: "#64748B", maxWidth: "600px", margin: "0 auto", lineHeight: "1.7" }}>
-                            We build an environment where engineering excellence, innovation, and career progression thrive.
+                        <p style={{
+                            color: "#64748B",
+                            maxWidth: "620px",
+                            margin: "0 auto",
+                            lineHeight: "1.7",
+                            fontSize: "1.05rem",
+                            fontFamily: "var(--font-body)"
+                        }}>
+                            We build an environment where engineering excellence, domain innovation, and career progression thrive together.
                         </p>
                     </div>
 
                     <style>{`
-                        .culture-card {
+                        .culture-card-enhanced {
                             background: #FFFFFF;
                             border: 1px solid #E2E8F0;
-                            border-radius: 12px;
+                            border-radius: 16px;
                             padding: 32px;
-                            box-shadow: 0 2px 12px rgba(11,19,32,0.06);
-                            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+                            box-shadow: 0 4px 16px rgba(11, 19, 32, 0.04);
+                            transition: all 0.25s ease;
                         }
-                        .culture-card:hover {
-                            border-color: rgba(232,82,26,0.3);
-                            box-shadow: 0 8px 24px rgba(11,19,32,0.1);
-                            transform: translateY(-2px);
+                        .culture-card-enhanced:hover {
+                            border-color: rgba(232, 82, 26, 0.35);
+                            box-shadow: 0 12px 32px rgba(11, 19, 32, 0.08);
+                            transform: translateY(-3px);
                         }
-                        .value-node {
+                        .value-node-item {
                             background: #FFFFFF;
                             border: 1px solid #E2E8F0;
                             border-radius: 12px;
@@ -425,7 +499,12 @@ export default function CareersPage() {
                             display: flex;
                             align-items: center;
                             gap: 16px;
-                            box-shadow: 0 2px 8px rgba(11,19,32,0.04);
+                            box-shadow: 0 2px 8px rgba(11, 19, 32, 0.03);
+                            transition: transform 0.2s ease, border-color 0.2s ease;
+                        }
+                        .value-node-item:hover {
+                            transform: translateX(4px);
+                            border-color: rgba(232, 82, 26, 0.3);
                         }
                     `}</style>
 
@@ -433,7 +512,7 @@ export default function CareersPage() {
                         display: "grid",
                         gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
                         gap: "32px",
-                        alignItems: "center"
+                        alignItems: "stretch"
                     }}>
                         {/* Left Column Culture Cards */}
                         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -443,16 +522,16 @@ export default function CareersPage() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5 }}
-                                className="culture-card"
+                                className="culture-card-enhanced"
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
                                     <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 700, color: "#E8521A" }}>// 01</span>
-                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#0B1320", margin: 0 }}>
+                                    <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: "#0B1320", margin: 0, fontFamily: "var(--font-display)" }}>
                                         Empowering Work Environment
                                     </h3>
                                 </div>
-                                <p style={{ fontSize: "0.88rem", color: "#64748B", lineHeight: "1.7", margin: 0 }}>
-                                    At SAMSAN, we believe in fostering a flexible work environment that empowers our engineering teams. Work on cutting-edge automotive embedded systems for global OEM customers.
+                                <p style={{ fontSize: "0.92rem", color: "#64748B", lineHeight: "1.7", margin: 0, fontFamily: "var(--font-body)" }}>
+                                    At SAMSAN, we foster a flexible work culture that empowers engineering teams to own complex automotive projects. Work directly on cutting-edge embedded software for tier-1 suppliers and global OEMs.
                                 </p>
                             </motion.div>
 
@@ -462,22 +541,22 @@ export default function CareersPage() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: 0.1 }}
-                                className="culture-card"
+                                className="culture-card-enhanced"
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
                                     <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 700, color: "#E8521A" }}>// 02</span>
-                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#0B1320", margin: 0 }}>
+                                    <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: "#0B1320", margin: 0, fontFamily: "var(--font-display)" }}>
                                         Integral Part of Our Growth
                                     </h3>
                                 </div>
-                                <p style={{ fontSize: "0.88rem", color: "#64748B", lineHeight: "1.7", margin: 0 }}>
-                                    As SAMSAN scales its domain CoEs across SDV, Android Automotive, and V2X, you will drive key technological milestones and shape industry solutions.
+                                <p style={{ fontSize: "0.92rem", color: "#64748B", lineHeight: "1.7", margin: 0, fontFamily: "var(--font-body)" }}>
+                                    As SAMSAN scales its domain CoEs across SDV, Android Automotive, and V2X, you will drive key technological milestones and directly influence industry-defining software architecture.
                                 </p>
                             </motion.div>
                         </div>
 
                         {/* Center Column: Core Values Graph */}
-                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "24px" }}>
+                        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                             <div style={{
                                 display: "flex",
                                 flexDirection: "column",
@@ -485,49 +564,49 @@ export default function CareersPage() {
                                 gap: "20px",
                                 background: "#FFFFFF",
                                 border: "1px solid #E2E8F0",
-                                padding: "32px",
-                                borderRadius: "24px",
-                                boxShadow: "0 2px 12px rgba(11,19,32,0.06)",
+                                padding: "36px 28px",
+                                borderRadius: "20px",
+                                boxShadow: "0 4px 20px rgba(11, 19, 32, 0.05)",
                                 width: "100%"
                             }}>
                                 {/* Central Core Values Node */}
                                 <div style={{
-                                    background: "rgba(232, 82, 26, 0.08)",
-                                    border: "1px solid rgba(232, 82, 26, 0.2)",
-                                    padding: "16px 28px",
+                                    background: "rgba(232, 82, 26, 0.07)",
+                                    border: "1px solid rgba(232, 82, 26, 0.22)",
+                                    padding: "14px 28px",
                                     borderRadius: "100px",
                                     textAlign: "center"
                                 }}>
-                                    <span style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#E8521A" }}>Our Core</span>
-                                    <h4 style={{ margin: "2px 0 0 0", color: "#0B1320", fontSize: "1.2rem", fontWeight: 700 }}>VALUES</h4>
+                                    <span style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#E8521A", fontFamily: "var(--font-mono)", fontWeight: 700 }}>Our Engineering</span>
+                                    <h4 style={{ margin: "2px 0 0 0", color: "#0B1320", fontSize: "1.25rem", fontWeight: 800, fontFamily: "var(--font-display)" }}>VALUES</h4>
                                 </div>
 
                                 {/* Nodes Layout */}
                                 <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
                                     {/* Collaboration Node */}
-                                    <div className="value-node">
-                                        <div style={{ fontSize: "1.25rem", fontWeight: 700, color: "#E8521A", fontFamily: "var(--font-mono)" }}>01</div>
+                                    <div className="value-node-item">
+                                        <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#E8521A", fontFamily: "var(--font-mono)" }}>01</div>
                                         <div>
-                                            <h5 style={{ margin: 0, color: "#0B1320", fontSize: "0.95rem", fontWeight: 600 }}>COLLABORATION</h5>
-                                            <p style={{ margin: 0, fontSize: "0.78rem", color: "#64748B" }}>One team, one goal, zero surprises!</p>
+                                            <h5 style={{ margin: 0, color: "#0B1320", fontSize: "0.95rem", fontWeight: 700, fontFamily: "var(--font-display)" }}>COLLABORATION</h5>
+                                            <p style={{ margin: 0, fontSize: "0.8rem", color: "#64748B" }}>One team, clear ownership, zero surprises.</p>
                                         </div>
                                     </div>
 
                                     {/* Aspiration Node */}
-                                    <div className="value-node">
-                                        <div style={{ fontSize: "1.25rem", fontWeight: 700, color: "#E8521A", fontFamily: "var(--font-mono)" }}>02</div>
+                                    <div className="value-node-item">
+                                        <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#E8521A", fontFamily: "var(--font-mono)" }}>02</div>
                                         <div>
-                                            <h5 style={{ margin: 0, color: "#0B1320", fontSize: "0.95rem", fontWeight: 600 }}>ASPIRATION</h5>
-                                            <p style={{ margin: 0, fontSize: "0.78rem", color: "#64748B" }}>Think Big. Deliver Big. Act Big.</p>
+                                            <h5 style={{ margin: 0, color: "#0B1320", fontSize: "0.95rem", fontWeight: 700, fontFamily: "var(--font-display)" }}>ASPIRATION</h5>
+                                            <p style={{ margin: 0, fontSize: "0.8rem", color: "#64748B" }}>Think big. Deliver excellence. Continuous innovation.</p>
                                         </div>
                                     </div>
 
                                     {/* Respect Node */}
-                                    <div className="value-node">
-                                        <div style={{ fontSize: "1.25rem", fontWeight: 700, color: "#E8521A", fontFamily: "var(--font-mono)" }}>03</div>
+                                    <div className="value-node-item">
+                                        <div style={{ fontSize: "1.2rem", fontWeight: 800, color: "#E8521A", fontFamily: "var(--font-mono)" }}>03</div>
                                         <div>
-                                            <h5 style={{ margin: 0, color: "#0B1320", fontSize: "0.95rem", fontWeight: 600 }}>RESPECT</h5>
-                                            <p style={{ margin: 0, fontSize: "0.78rem", color: "#64748B" }}>Respect is earned. Honesty is expected.</p>
+                                            <h5 style={{ margin: 0, color: "#0B1320", fontSize: "0.95rem", fontWeight: 700, fontFamily: "var(--font-display)" }}>RESPECT</h5>
+                                            <p style={{ margin: 0, fontSize: "0.8rem", color: "#64748B" }}>Respect is earned. Transparency is paramount.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -542,16 +621,16 @@ export default function CareersPage() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.3 }}
-                                className="culture-card"
+                                className="culture-card-enhanced"
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
                                     <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 700, color: "#E8521A" }}>// 03</span>
-                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#0B1320", margin: 0 }}>
+                                    <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: "#0B1320", margin: 0, fontFamily: "var(--font-display)" }}>
                                         Continuous Technical Learning
                                     </h3>
                                 </div>
-                                <p style={{ fontSize: "0.88rem", color: "#64748B", lineHeight: "1.7", margin: 0 }}>
-                                    We cultivate a culture of ongoing skill enrichment through domain workshops, platform certifications, and high-tech engineering mentorship.
+                                <p style={{ fontSize: "0.92rem", color: "#64748B", lineHeight: "1.7", margin: 0, fontFamily: "var(--font-body)" }}>
+                                    We cultivate a culture of ongoing skill enrichment through domain workshops, platform certifications, hands-on lab access, and high-tech engineering mentorship.
                                 </p>
                             </motion.div>
 
@@ -561,16 +640,16 @@ export default function CareersPage() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.3, delay: 0.1 }}
-                                className="culture-card"
+                                className="culture-card-enhanced"
                             >
                                 <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
                                     <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 700, color: "#E8521A" }}>// 04</span>
-                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 600, color: "#0B1320", margin: 0 }}>
+                                    <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: "#0B1320", margin: 0, fontFamily: "var(--font-display)" }}>
                                         High Performance Recognition
                                     </h3>
                                 </div>
-                                <p style={{ fontSize: "0.88rem", color: "#64748B", lineHeight: "1.7", margin: 0 }}>
-                                    At SAMSAN, high performance is recognized and rewarded. As you contribute your engineering expertise, you&apos;ll accelerate your career trajectory.
+                                <p style={{ fontSize: "0.92rem", color: "#64748B", lineHeight: "1.7", margin: 0, fontFamily: "var(--font-body)" }}>
+                                    At SAMSAN, exceptional engineering output is recognized and rewarded. As you contribute your domain expertise, you accelerate your leadership trajectory.
                                 </p>
                             </motion.div>
                         </div>
@@ -578,58 +657,56 @@ export default function CareersPage() {
                 </div>
             </section>
 
-            {/* ── Experience Band / Stats Strip (section-dark) ── */}
-            <section className="section-dark" style={{
-                background: "#0A0D11",
-                borderTop: "1px solid rgba(255,255,255,0.06)",
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
-                padding: "48px 0"
-            }}>
-                <div className="container">
-                    <motion.div
-                        variants={staggerContainerVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                        style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "32px", textAlign: "center" }}
-                    >
-                        {careerStats.map((s, i) => (
-                            <motion.div key={i} variants={fadeUpVariants(shouldReduce)}>
-                                <div style={{
-                                    fontSize: "2.8rem", fontWeight: 800,
-                                    color: "#FFFFFF",
-                                    lineHeight: 1.1, marginBottom: "8px"
-                                }}>{s.value}</div>
-                                <div style={{ fontSize: "0.85rem", color: "#94A3B8", letterSpacing: "0.04em" }}>{s.label}</div>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </div>
-            </section>
-
             {/* ── Job Openings Filter Area (section-dark) ── */}
-            <section id="job-openings" className="section-dark section" style={{ background: "#0A0D11", padding: "80px 0" }}>
+            <section
+                id="job-openings"
+                className="section-dark section"
+                style={{
+                    background: "var(--midnight)",
+                    borderTop: "1px solid rgba(255,255,255,0.07)",
+                    padding: "88px 0"
+                }}
+            >
                 <div className="container">
-                    <div style={{ textAlign: "center", marginBottom: "40px" }}>
-                        <span className="badge" style={{ marginBottom: "16px", color: "#4DD8E8", background: "rgba(77, 216, 232, 0.08)", border: "1px solid rgba(77, 216, 232, 0.2)" }}>
+                    <div style={{ textAlign: "center", marginBottom: "48px" }}>
+                        <span className="badge" style={{
+                            marginBottom: "16px",
+                            display: "inline-block",
+                            color: "#4DD8E8",
+                            background: "rgba(77, 216, 232, 0.08)",
+                            border: "1px solid rgba(77, 216, 232, 0.2)",
+                            padding: "5px 14px",
+                            borderRadius: "20px",
+                            fontSize: "0.78rem",
+                            fontFamily: "var(--font-mono)",
+                            letterSpacing: "0.06em",
+                            textTransform: "uppercase"
+                        }}>
                             Current Opportunities
                         </span>
-                        <h2 style={{ fontSize: "2.2rem", fontWeight: 700, color: "#F1F5F9", marginBottom: "12px" }}>
+                        <h2 style={{
+                            fontSize: "clamp(2rem, 3vw, 2.5rem)",
+                            fontWeight: 800,
+                            fontFamily: "var(--font-display)",
+                            color: "#F1F5F9",
+                            marginBottom: "12px",
+                            letterSpacing: "-0.01em"
+                        }}>
                             Explore Job Openings
                         </h2>
-                        <p style={{ color: "#94A3B8", maxWidth: "600px", margin: "0 auto", fontSize: "0.95rem" }}>
+                        <p style={{ color: "#94A3B8", maxWidth: "600px", margin: "0 auto", fontSize: "1rem", fontFamily: "var(--font-body)" }}>
                             Filter by domain, experience, location, or search keywords to find your next engineering role.
                         </p>
                     </div>
 
                     {/* Filter Controls Panel */}
                     <div style={{
-                        background: "#161B22",
-                        padding: "24px",
-                        borderRadius: "16px",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
-                        marginBottom: "32px"
+                        background: "#111622",
+                        padding: "28px",
+                        borderRadius: "20px",
+                        border: "1px solid rgba(255,255,255,0.09)",
+                        boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
+                        marginBottom: "36px"
                     }}>
                         <div style={{
                             display: "grid",
@@ -643,16 +720,21 @@ export default function CareersPage() {
                                     type="text"
                                     placeholder="Search title, skill..."
                                     value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        setSearchQuery(val);
+                                        handleApplyFilter({ searchQuery: val });
+                                    }}
                                     style={{
                                         width: "100%",
-                                        padding: "11px 14px",
-                                        borderRadius: "8px",
-                                        backgroundColor: "#0D1117",
-                                        border: "1px solid rgba(255,255,255,0.12)",
+                                        padding: "12px 16px",
+                                        borderRadius: "10px",
+                                        backgroundColor: "#080B10",
+                                        border: "1px solid rgba(255,255,255,0.14)",
                                         color: "#F1F5F9",
                                         outline: "none",
-                                        fontSize: "0.85rem"
+                                        fontSize: "0.88rem",
+                                        fontFamily: "var(--font-body)"
                                     }}
                                 />
                             </div>
@@ -660,94 +742,124 @@ export default function CareersPage() {
                             {/* Country Filter */}
                             <select
                                 value={selectedCountry}
-                                onChange={(e) => setSelectedCountry(e.target.value)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setSelectedCountry(val);
+                                    handleApplyFilter({ selectedCountry: val });
+                                }}
                                 style={{
-                                    padding: "11px 14px",
-                                    borderRadius: "8px",
-                                    backgroundColor: "#0D1117",
-                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    padding: "12px 16px",
+                                    borderRadius: "10px",
+                                    backgroundColor: "#080B10",
+                                    border: "1px solid rgba(255,255,255,0.14)",
                                     color: "#F1F5F9",
                                     outline: "none",
-                                    fontSize: "0.85rem"
+                                    fontSize: "0.88rem",
+                                    fontFamily: "var(--font-body)",
+                                    cursor: "pointer"
                                 }}
                             >
-                                {countries.map(c => <option key={c} value={c} style={{ background: "#0D1117", color: "#F1F5F9" }}>{c}</option>)}
+                                {countries.map(c => <option key={c} value={c} style={{ background: "#080B10", color: "#F1F5F9" }}>{c}</option>)}
                             </select>
 
                             {/* City Filter */}
                             <select
                                 value={selectedCity}
-                                onChange={(e) => setSelectedCity(e.target.value)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setSelectedCity(val);
+                                    handleApplyFilter({ selectedCity: val });
+                                }}
                                 style={{
-                                    padding: "11px 14px",
-                                    borderRadius: "8px",
-                                    backgroundColor: "#0D1117",
-                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    padding: "12px 16px",
+                                    borderRadius: "10px",
+                                    backgroundColor: "#080B10",
+                                    border: "1px solid rgba(255,255,255,0.14)",
                                     color: "#F1F5F9",
                                     outline: "none",
-                                    fontSize: "0.85rem"
+                                    fontSize: "0.88rem",
+                                    fontFamily: "var(--font-body)",
+                                    cursor: "pointer"
                                 }}
                             >
-                                {cities.map(c => <option key={c} value={c} style={{ background: "#0D1117", color: "#F1F5F9" }}>{c}</option>)}
+                                {cities.map(c => <option key={c} value={c} style={{ background: "#080B10", color: "#F1F5F9" }}>{c}</option>)}
                             </select>
 
                             {/* Experience Filter */}
                             <select
                                 value={selectedExp}
-                                onChange={(e) => setSelectedExp(e.target.value)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setSelectedExp(val);
+                                    handleApplyFilter({ selectedExp: val });
+                                }}
                                 style={{
-                                    padding: "11px 14px",
-                                    borderRadius: "8px",
-                                    backgroundColor: "#0D1117",
-                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    padding: "12px 16px",
+                                    borderRadius: "10px",
+                                    backgroundColor: "#080B10",
+                                    border: "1px solid rgba(255,255,255,0.14)",
                                     color: "#F1F5F9",
                                     outline: "none",
-                                    fontSize: "0.85rem"
+                                    fontSize: "0.88rem",
+                                    fontFamily: "var(--font-body)",
+                                    cursor: "pointer"
                                 }}
                             >
-                                {experiences.map(e => <option key={e} value={e} style={{ background: "#0D1117", color: "#F1F5F9" }}>{e}</option>)}
+                                {experiences.map(e => <option key={e} value={e} style={{ background: "#080B10", color: "#F1F5F9" }}>{e}</option>)}
                             </select>
 
                             {/* Category Filter */}
                             <select
                                 value={selectedCategory}
-                                onChange={(e) => setSelectedCategory(e.target.value)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setSelectedCategory(val);
+                                    handleApplyFilter({ selectedCategory: val });
+                                }}
                                 style={{
-                                    padding: "11px 14px",
-                                    borderRadius: "8px",
-                                    backgroundColor: "#0D1117",
-                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    padding: "12px 16px",
+                                    borderRadius: "10px",
+                                    backgroundColor: "#080B10",
+                                    border: "1px solid rgba(255,255,255,0.14)",
                                     color: "#F1F5F9",
                                     outline: "none",
-                                    fontSize: "0.85rem"
+                                    fontSize: "0.88rem",
+                                    fontFamily: "var(--font-body)",
+                                    cursor: "pointer"
                                 }}
                             >
-                                {categories.map(c => <option key={c} value={c} style={{ background: "#0D1117", color: "#F1F5F9" }}>{c}</option>)}
+                                {categories.map(c => <option key={c} value={c} style={{ background: "#080B10", color: "#F1F5F9" }}>{c}</option>)}
                             </select>
 
                             {/* Type Filter */}
                             <select
                                 value={selectedType}
-                                onChange={(e) => setSelectedType(e.target.value)}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setSelectedType(val);
+                                    handleApplyFilter({ selectedType: val });
+                                }}
                                 style={{
-                                    padding: "11px 14px",
-                                    borderRadius: "8px",
-                                    backgroundColor: "#0D1117",
-                                    border: "1px solid rgba(255,255,255,0.12)",
+                                    padding: "12px 16px",
+                                    borderRadius: "10px",
+                                    backgroundColor: "#080B10",
+                                    border: "1px solid rgba(255,255,255,0.14)",
                                     color: "#F1F5F9",
                                     outline: "none",
-                                    fontSize: "0.85rem"
+                                    fontSize: "0.88rem",
+                                    fontFamily: "var(--font-body)",
+                                    cursor: "pointer"
                                 }}
                             >
-                                {types.map(t => <option key={t} value={t} style={{ background: "#0D1117", color: "#F1F5F9" }}>{t}</option>)}
+                                {types.map(t => <option key={t} value={t} style={{ background: "#080B10", color: "#F1F5F9" }}>{t}</option>)}
                             </select>
                         </div>
 
                         {/* Action Buttons Row: Apply Filter & Reset Filter */}
                         <div style={{
                             marginTop: "20px",
-                            paddingTop: "16px",
-                            borderTop: "1px solid rgba(255,255,255,0.06)",
+                            paddingTop: "18px",
+                            borderTop: "1px solid rgba(255,255,255,0.07)",
                             display: "flex",
                             gap: "12px",
                             justifyContent: "flex-end",
@@ -756,20 +868,20 @@ export default function CareersPage() {
                         }}>
                             <button
                                 type="button"
-                                onClick={handleApplyFilter}
+                                onClick={() => handleApplyFilter()}
                                 style={{
-                                    padding: "10px 22px",
+                                    padding: "11px 24px",
                                     borderRadius: "8px",
                                     backgroundColor: "#E8521A",
                                     color: "#FFFFFF",
                                     border: "none",
                                     fontWeight: 600,
-                                    fontSize: "0.85rem",
+                                    fontSize: "0.88rem",
                                     cursor: "pointer",
                                     display: "inline-flex",
                                     alignItems: "center",
                                     gap: "8px",
-                                    boxShadow: "0 4px 14px rgba(232, 82, 26, 0.3)",
+                                    boxShadow: "0 4px 16px rgba(232, 82, 26, 0.35)",
                                     transition: "all 0.2s ease"
                                 }}
                             >
@@ -780,13 +892,13 @@ export default function CareersPage() {
                                 type="button"
                                 onClick={handleResetFilter}
                                 style={{
-                                    padding: "10px 22px",
+                                    padding: "11px 24px",
                                     borderRadius: "8px",
                                     backgroundColor: "transparent",
                                     color: "#94A3B8",
-                                    border: "1px solid rgba(255, 255, 255, 0.18)",
+                                    border: "1px solid rgba(255, 255, 255, 0.2)",
                                     fontWeight: 600,
-                                    fontSize: "0.85rem",
+                                    fontSize: "0.88rem",
                                     cursor: "pointer",
                                     display: "inline-flex",
                                     alignItems: "center",
@@ -813,25 +925,41 @@ export default function CareersPage() {
                     </div>
 
                     <style>{`
-                        .job-card-item {
-                            background: #161B22;
+                        .job-card-enhanced {
+                            background: #111622;
                             border: 1px solid rgba(255, 255, 255, 0.08);
-                            border-radius: 16px;
+                            border-radius: 18px;
                             padding: 28px;
                             display: flex;
                             flex-direction: column;
                             justify-content: space-between;
+                            position: relative;
+                            overflow: hidden;
                             transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
                         }
-                        .job-card-item:hover {
-                            border-color: rgba(32, 26, 24, 0.35);
-                            box-shadow: 0 10px 30px rgba(229, 220, 220, 0.79);
+                        .job-card-enhanced::before {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            height: 3px;
+                            background: linear-gradient(90deg, #E8521A, #4DD8E8);
+                            opacity: 0;
+                            transition: opacity 0.25s ease;
+                        }
+                        .job-card-enhanced:hover {
+                            border-color: rgba(232, 82, 26, 0.4);
+                            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
                             transform: translateY(-4px);
                         }
-                        .job-card-title {
+                        .job-card-enhanced:hover::before {
+                            opacity: 1;
+                        }
+                        .job-title-text {
                             transition: color 0.2s ease;
                         }
-                        .job-card-item:hover .job-card-title {
+                        .job-card-enhanced:hover .job-title-text {
                             color: #FF8A3D !important;
                         }
                     `}</style>
@@ -841,20 +969,26 @@ export default function CareersPage() {
                         layout
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                            gap: "24px"
+                            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+                            gap: "24px",
+                            minHeight: filteredJobs.length > 0 ? "320px" : "auto",
+                            alignItems: "stretch"
                         }}
                     >
-                        <AnimatePresence mode="popLayout">
+                        <AnimatePresence>
                             {filteredJobs.map((job) => (
                                 <motion.div
                                     key={job.id}
                                     layout
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.95 }}
-                                    transition={{ duration: 0.3, ease: "easeOut" }}
-                                    className="job-card-item"
+                                    initial={{ opacity: 0, scale: 0.96 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.96 }}
+                                    transition={{
+                                        opacity: { duration: 0.2 },
+                                        scale: { duration: 0.2 },
+                                        layout: { duration: 0.25, ease: "easeOut" }
+                                    }}
+                                    className="job-card-enhanced"
                                 >
                                     <div>
                                         {/* Category & Experience Badges */}
@@ -889,18 +1023,22 @@ export default function CareersPage() {
                                         </div>
 
                                         {/* Job Title */}
-                                        <h3 className="job-card-title" style={{ fontSize: "1.25rem", color: "#F1F5F9", fontWeight: 700, marginBottom: "12px", lineHeight: "1.3" }}>
+                                        <h3 className="job-title-text" style={{ fontSize: "1.25rem", color: "#F1F5F9", fontWeight: 700, marginBottom: "12px", lineHeight: "1.3", fontFamily: "var(--font-display)" }}>
                                             {job.title}
                                         </h3>
 
                                         {/* Meta Information */}
                                         <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.82rem", color: "#94A3B8", marginBottom: "16px" }}>
-                                            <div>📍 <strong>Location:</strong> {job.city}, {job.country}</div>
-                                            <div>💼 <strong>Type:</strong> {job.type}</div>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                                <span style={{ color: "#4DD8E8" }}>📍</span> <strong>Location:</strong> {job.city}, {job.country}
+                                            </div>
+                                            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                                <span style={{ color: "#E8521A" }}>💼</span> <strong>Type:</strong> {job.type}
+                                            </div>
                                         </div>
 
                                         {/* Description */}
-                                        <p style={{ fontSize: "0.88rem", color: "#94A3B8", lineHeight: "1.65", margin: "0 0 20px 0" }}>
+                                        <p style={{ fontSize: "0.88rem", color: "#94A3B8", lineHeight: "1.65", margin: "0 0 20px 0", fontFamily: "var(--font-body)" }}>
                                             {job.description}
                                         </p>
 
@@ -915,7 +1053,8 @@ export default function CareersPage() {
                                                         borderRadius: "6px",
                                                         backgroundColor: "rgba(255, 255, 255, 0.04)",
                                                         border: "1px solid rgba(255, 255, 255, 0.08)",
-                                                        color: "#94A3B8"
+                                                        color: "#94A3B8",
+                                                        fontFamily: "var(--font-mono)"
                                                     }}
                                                 >
                                                     {skill}
@@ -937,7 +1076,12 @@ export default function CareersPage() {
                                             color: "#FFFFFF",
                                             fontWeight: 600,
                                             borderRadius: "8px",
-                                            textDecoration: "none"
+                                            textDecoration: "none",
+                                            boxShadow: "0 4px 14px rgba(232, 82, 26, 0.25)",
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            gap: "6px",
+                                            transition: "all 0.2s ease"
                                         }}
                                     >
                                         Apply Now →
@@ -951,8 +1095,8 @@ export default function CareersPage() {
                         <div style={{
                             textAlign: "center",
                             padding: "60px 20px",
-                            background: "#161B22",
-                            borderRadius: "16px",
+                            background: "#111622",
+                            borderRadius: "18px",
                             border: "1px solid rgba(255,255,255,0.08)",
                             color: "#94A3B8",
                             fontSize: "0.95rem"
@@ -963,8 +1107,8 @@ export default function CareersPage() {
                                 <button
                                     onClick={handleResetFilter}
                                     style={{
-                                        padding: "8px 18px",
-                                        borderRadius: "6px",
+                                        padding: "10px 20px",
+                                        borderRadius: "8px",
                                         backgroundColor: "#E8521A",
                                         color: "#FFFFFF",
                                         border: "none",
@@ -981,17 +1125,121 @@ export default function CareersPage() {
                 </div>
             </section>
 
-            {/* ── CTA Band (section-light) ── */}
-            <section className="section-light cta-section" style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "80px 0" }}>
+            {/* ── Standardized Light Bottom CTA ── */}
+            <section
+                className="section-light"
+                style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "80px 0" }}
+                aria-labelledby="careers-cta-heading"
+            >
                 <div className="container">
-                    <div className="cta-inner">
-                        <h2 style={{ color: "#FFFFFF" }}>Don&apos;t see a matching role?</h2>
-                        <p style={{ color: "#CBD5E1" }}>Send your resume directly to our talent acquisition team for upcoming embedded engineering openings.</p>
-                        <div className="cta-actions">
-                            <a href="mailto:india@samsanlabs.com" className="btn btn-primary" style={{ background: "#E8521A", color: "#FFFFFF" }}>Submit General Resume</a>
-                            <Link href="/services" className="btn btn-outline" style={{ border: "1px solid rgba(255, 255, 255, 0.2)", color: "#FFFFFF", background: "transparent" }}>View Engineering Offerings</Link>
+                    <motion.div
+                        initial={{ opacity: 0, y: shouldReduce ? 0 : 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: shouldReduce ? 0.01 : 0.5 }}
+                        style={{
+                            background: "#FFFFFF",
+                            border: "1px solid #E2E8F0",
+                            borderRadius: "20px",
+                            padding: "64px 48px",
+                            textAlign: "center",
+                            boxShadow: "0 4px 24px rgba(11, 19, 32, 0.05)",
+                            position: "relative",
+                            overflow: "hidden"
+                        }}
+                    >
+                        {/* Subtle top accent line */}
+                        <div style={{
+                            position: "absolute",
+                            top: 0, left: "50%",
+                            transform: "translateX(-50%)",
+                            width: "120px", height: "3px",
+                            background: "linear-gradient(90deg, #E8521A, #F59E0B)",
+                            borderRadius: "0 0 4px 4px"
+                        }} />
+
+                        <span style={{
+                            display: "inline-block",
+                            fontFamily: "var(--font-mono)",
+                            fontSize: "11px",
+                            fontWeight: 700,
+                            letterSpacing: "0.1em",
+                            textTransform: "uppercase",
+                            color: "#E8521A",
+                            background: "rgba(232, 82, 26, 0.07)",
+                            border: "1px solid rgba(232, 82, 26, 0.22)",
+                            borderRadius: "20px",
+                            padding: "5px 14px",
+                            marginBottom: "24px"
+                        }}>
+                            Talent Network
+                        </span>
+
+                        <h2
+                            id="careers-cta-heading"
+                            style={{
+                                fontSize: "clamp(1.8rem, 3vw, 2.4rem)",
+                                fontWeight: 700,
+                                color: "#0B1320",
+                                fontFamily: "var(--font-display)",
+                                letterSpacing: "-0.02em",
+                                margin: "0 0 16px 0",
+                                lineHeight: 1.2
+                            }}
+                        >
+                            Don&apos;t see a matching role?
+                        </h2>
+
+                        <p style={{
+                            fontSize: "1.05rem",
+                            lineHeight: 1.7,
+                            color: "#475569",
+                            fontFamily: "var(--font-body)",
+                            maxWidth: "540px",
+                            margin: "0 auto 36px"
+                        }}>
+                            Send your resume directly to our talent acquisition team for upcoming embedded engineering openings.
+                        </p>
+
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", flexWrap: "wrap" }}>
+                            <a
+                                href="mailto:india@samsanlabs.com"
+                                className="btn btn-primary"
+                                style={{
+                                    background: "#E8521A",
+                                    color: "#FFFFFF",
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    textDecoration: "none",
+                                    boxShadow: "0 4px 14px rgba(232, 82, 26, 0.28)",
+                                    padding: "13px 28px",
+                                    fontWeight: 600
+                                }}
+                            >
+                                Submit General Resume
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </a>
+                            <Link
+                                href="/services"
+                                className="btn btn-outline"
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    textDecoration: "none",
+                                    color: "#0B1320",
+                                    borderColor: "#CBD5E1",
+                                    padding: "13px 28px",
+                                    fontWeight: 600
+                                }}
+                            >
+                                View Engineering Offerings
+                            </Link>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
