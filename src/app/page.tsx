@@ -61,7 +61,6 @@ import RingsOfSolution from "@/components/homepage/RingsOfSolution";
 import WhoWeServe from "@/components/homepage/WhoWeServe";
 import Partners from "@/components/homepage/Partners";
 import AboutCompany from "@/components/homepage/AboutCompany";
-import Locations from "@/components/homepage/Locations";
 import CTA from "@/components/homepage/CTA";
 
 export const metadata: Metadata = {
@@ -107,11 +106,6 @@ export default function Home() {
             {/* DARK — We Are SAMSAN / Founder Spotlight */}
             <div className="section-dark">
                 <AboutCompany />
-            </div>
-
-            {/* LIGHT — Global Engineering Footprint */}
-            <div className="section-light">
-                <Locations />
             </div>
 
             {/* DARK — Final CTA */}

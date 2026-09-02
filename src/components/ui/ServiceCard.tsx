@@ -289,6 +289,7 @@ export default function ServiceCard({
                     {brochurePath && (
                         <a
                             href={brochurePath}
+                            download
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn btn-outline"
@@ -316,16 +317,33 @@ export const Logos = {
     python:     `${CDN}python/python-original.svg`,
     docker:     `${CDN}docker/docker-original.svg`,
     aws:        `${CDN}amazonwebservices/amazonwebservices-original-wordmark.svg`,
+    azure:      `${CDN}azure/azure-original.svg`,
+    googlecloud:`${CDN}googlecloud/googlecloud-original.svg`,
     kubernetes: `${CDN}kubernetes/kubernetes-plain.svg`,
     nodejs:     `${CDN}nodejs/nodejs-original.svg`,
     react:      `${CDN}react/react-original.svg`,
+    angular:    `${CDN}angularjs/angularjs-original.svg`,
+    vue:        `${CDN}vuejs/vuejs-original.svg`,
+    html5:      `${CDN}html5/html5-original.svg`,
+    css3:       `${CDN}css3/css3-original.svg`,
+    javascript: `${CDN}javascript/javascript-original.svg`,
+    typescript: `${CDN}typescript/typescript-original.svg`,
+    java:       `${CDN}java/java-original.svg`,
+    cplusplus:  `${CDN}cplusplus/cplusplus-original.svg`,
+    mysql:      `${CDN}mysql/mysql-original.svg`,
+    mongodb:    `${CDN}mongodb/mongodb-original.svg`,
+    pytorch:    `${CDN}pytorch/pytorch-original.svg`,
+    opencv:     `${CDN}opencv/opencv-original.svg`,
     flutter:    `${CDN}flutter/flutter-original.svg`,
     tensorflow: `${CDN}tensorflow/tensorflow-original.svg`,
-    opencv:     `${CDN}opencv/opencv-original.svg`,
     kotlin:     `${CDN}kotlin/kotlin-original.svg`,
     firebase:   `${CDN}firebase/firebase-plain.svg`,
+    git:        `${CDN}git/git-original.svg`,
     github:     `${CDN}github/github-original.svg`,
+    gitlab:     `${CDN}gitlab/gitlab-original.svg`,
     jenkins:    `${CDN}jenkins/jenkins-original.svg`,
+    qt:         `${CDN}qt/qt-original.svg`,
+    figma:      `${CDN}figma/figma-original.svg`,
 };
 
 export { WifiIcon, BluetoothIcon, MapPinIcon, MqttIcon };

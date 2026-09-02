@@ -40,7 +40,6 @@ function ValueRow({ need, response, index, shouldReduce }: { need: string; respo
             onMouseLeave={() => setIsHovered(false)}
             style={{
                 display: "grid",
-                gridTemplateColumns: "minmax(240px, 32%) 1fr",
                 background: isHovered ? "rgba(232, 82, 26, 0.04)" : "#FFFFFF",
                 borderLeft: isHovered ? "3px solid #E8521A" : "3px solid transparent",
                 borderBottom: index < valueData.length - 1 ? "1px solid #E2E8F0" : "none",
@@ -142,7 +141,6 @@ export default function ValueTable() {
                         {/* Table Header Row */}
                         <div className="comparison-row comparison-header" style={{
                             display: "grid",
-                            gridTemplateColumns: "minmax(240px, 32%) 1fr",
                             borderBottom: "2px solid #E2E8F0",
                             background: "#F1F5F9"
                         }}>

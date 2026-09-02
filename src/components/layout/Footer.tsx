@@ -17,7 +17,6 @@ export default function Footer() {
         { label: "Careers",                  href: "/careers", isVisible: true },
         { label: "Contact",                  href: "/contact", isVisible: true },
         // Hidden items not in the approved list
-        { label: "Case Studies",             href: "/case-studies", isVisible: false },
         { label: "Engagement Models",         href: "/engagement-models", isVisible: false },
     ];
 
@@ -34,8 +33,18 @@ export default function Footer() {
                             A specialized design house for Software Defined Vehicles, connected mobility, and AI-driven automotive innovation.
                         </p>
                         <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="footer-social-link">LinkedIn</a>
-                            <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="footer-social-link">GitHub</a>
+                            <a
+                                href="https://www.linkedin.com/company/samsantechlabs"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="SAMSAN Technische Labs on LinkedIn"
+                                className="footer-social-link"
+                            >
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.74a1.65 1.65 0 1 0 0 3.3 1.65 1.65 0 0 0 0-3.3z" />
+                                </svg>
+                                <span>LinkedIn</span>
+                            </a>
                         </div>
                     </div>
 
@@ -63,18 +72,15 @@ export default function Footer() {
                     borderTop: "1px solid var(--border)",
                     padding: "28px 0 0",
                     display: "flex",
-                    justifyContent: "space-between",
+                    justifyContent: "center",
                     alignItems: "center",
-                    fontSize: "0.82rem",
-                    color: "var(--text-muted)",
-                    flexWrap: "wrap",
-                    gap: "12px"
+                    textAlign: "center",
+                    fontSize: "0.88rem",
+                    fontWeight: 500,
+                    color: "#FFFFFF"
                 }}>
-                    <span>© {year} SAMSAN Technische Labs Pvt. Ltd. All rights reserved.</span>
-                    <span style={{ display: "flex", gap: "24px" }}>
-                        <span>DPIIT Recognized Startup</span>
-                        <span>ISO 27001 Certified</span>
-                        <span>MISRA C/C++ Compliant</span>
+                    <span style={{ color: "#FFFFFF", letterSpacing: "0.01em" }}>
+                        © {year} SAMSAN Technische Labs Pvt. Ltd. All rights reserved.
                     </span>
                 </div>
             </div>

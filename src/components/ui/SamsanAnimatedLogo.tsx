@@ -277,6 +277,36 @@ export default function SamsanAnimatedLogo({
             drawDot(leftPos, isLeftMoving);
             drawDot(rightPos, isRightMoving);
 
+            // 4. Render Tagline Light Sweep Highlight ("in step with the NEXT")
+            const TAGLINE_SWEEP_PERIOD = 3600; // 3.6s loop
+            const sweepElapsed = elapsed % TAGLINE_SWEEP_PERIOD;
+            const sweepProgress = sweepElapsed / TAGLINE_SWEEP_PERIOD;
+
+            if (sweepProgress < 0.8) {
+                const sweepU = sweepProgress / 0.8;
+                const sweepX = 300 + sweepU * 720;
+                const sweepWidth = 160;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(330, 240, 650, 65);
+                ctx.clip();
+
+                const sweepGrad = ctx.createLinearGradient(
+                    sweepX - sweepWidth / 2, 0,
+                    sweepX + sweepWidth / 2, 0
+                );
+                sweepGrad.addColorStop(0, "rgba(255, 255, 255, 0)");
+                sweepGrad.addColorStop(0.3, "rgba(255, 255, 255, 0.2)");
+                sweepGrad.addColorStop(0.5, "rgba(77, 216, 232, 0.45)");
+                sweepGrad.addColorStop(0.7, "rgba(255, 255, 255, 0.2)");
+                sweepGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
+
+                ctx.fillStyle = sweepGrad;
+                ctx.fillRect(330, 240, 650, 65);
+                ctx.restore();
+            }
+
             ctx.restore();
             animationFrameId = requestAnimationFrame(render);
         };
@@ -304,6 +334,44 @@ export default function SamsanAnimatedLogo({
                 ...style,
             }}
         >
+            {/* Inline CSS style for smooth Tagline Sweep Overlay */}
+            <style>{`
+                @keyframes samsanTaglineSweep {
+                    0% {
+                        transform: translateX(-100%);
+                        opacity: 0;
+                    }
+                    15% {
+                        opacity: 1;
+                    }
+                    65% {
+                        opacity: 1;
+                    }
+                    80% {
+                        transform: translateX(200%);
+                        opacity: 0;
+                    }
+                    100% {
+                        transform: translateX(200%);
+                        opacity: 0;
+                    }
+                }
+                .samsan-tagline-shimmer-bar {
+                    width: 50%;
+                    height: 100%;
+                    background: linear-gradient(
+                        90deg,
+                        rgba(255, 255, 255, 0) 0%,
+                        rgba(255, 255, 255, 0.15) 30%,
+                        rgba(77, 216, 232, 0.35) 50%,
+                        rgba(255, 255, 255, 0.15) 70%,
+                        rgba(255, 255, 255, 0) 100%
+                    );
+                    animation: samsanTaglineSweep 3.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                    mix-blend-mode: color-dodge;
+                }
+            `}</style>
+
             {/* STATIC BASE LOGO (Transparent Wordmark + Tagline + Underline) */}
             <img
                 src="/images/samsan_logo_base_transparent.png"
@@ -316,7 +384,24 @@ export default function SamsanAnimatedLogo({
                 }}
             />
 
-            {/* OVERLAY CANVAS FOR DOT ANIMATION */}
+            {/* TAGLINE HIGHLIGHT SWEEP OVERLAY ("in step with the NEXT") */}
+            <div
+                aria-hidden="true"
+                style={{
+                    position: "absolute",
+                    left: "33%",
+                    top: "73%",
+                    width: "65%",
+                    height: "20%",
+                    pointerEvents: "none",
+                    overflow: "hidden",
+                    borderRadius: "4px",
+                }}
+            >
+                <div className="samsan-tagline-shimmer-bar" />
+            </div>
+
+            {/* OVERLAY CANVAS FOR DOT & TAGLINE HIGHLIGHT ANIMATION */}
             <canvas
                 ref={canvasRef}
                 style={{

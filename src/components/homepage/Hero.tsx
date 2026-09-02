@@ -158,11 +158,15 @@ export default function Hero() {
                     grid-template-columns: 1fr 1fr;
                     align-items: center;
                     min-height: 100vh;
-                    padding: 0 !important;
-                    gap: 0;
+                    padding-top: calc(var(--header-h) + 48px) !important;
+                    padding-bottom: 56px !important;
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                    gap: 48px;
                     width: 100%;
                     overflow: hidden;
                     position: relative;
+                    box-sizing: border-box;
                 }
                 /* absolute-positioned bg elements don't join the grid */
                 .hero-glow, .hero-bg-grid {
@@ -170,20 +174,19 @@ export default function Hero() {
                     pointer-events: none;
                 }
                 .hero-text-col {
-                    padding: 0 40px 0 64px;
+                    padding: 20px 24px 20px 64px;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
-                    gap: 24px;
+                    gap: 28px;
                     position: relative;
                     z-index: 1;
                 }
                 .hero-video-col {
-                    padding: 32px 48px 32px 0;
+                    padding: 20px 56px 20px 0;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    height: 110%;
                     position: relative;
                     z-index: 1;
                 }
@@ -191,14 +194,17 @@ export default function Hero() {
                 @media (max-width: 1024px) {
                     .hero-section {
                         grid-template-columns: 1fr;
+                        min-height: auto;
+                        padding-top: calc(var(--header-h) + 24px) !important;
+                        padding-bottom: 40px !important;
                     }
                     .hero-text-col {
-                        padding: 56px 32px 32px;
+                        padding: 24px 32px;
                         text-align: center;
                         align-items: center;
                     }
                     .hero-video-col {
-                        padding: 0 72px 48px;
+                        padding: 0 40px 32px;
                         height: auto;
                     }
                     .hero-buttons-container {
@@ -207,14 +213,18 @@ export default function Hero() {
                 }
                 /* Mobile */
                 @media (max-width: 640px) {
+                    .hero-section {
+                        padding-top: calc(var(--header-h) + 20px) !important;
+                        padding-bottom: 36px !important;
+                    }
                     .hero-text-col {
-                        padding: 48px 20px 24px;
+                        padding: 16px 20px;
                     }
                     .hero-video-col {
-                        padding: 0 20px 40px;
+                        padding: 0 20px 24px;
                     }
                     .hero-title {
-                        font-size: clamp(2.2rem, 7vw, 3rem) !important;
+                        font-size: clamp(2rem, 7.5vw, 2.8rem) !important;
                     }
                 }
             `}</style>
@@ -237,7 +247,7 @@ export default function Hero() {
                     <h1
                         className="hero-title"
                         style={{
-                            fontSize: "clamp(3rem, 5.5vw, 4.8rem)",
+                            fontSize: "clamp(2.8rem, 4.8vw, 4.8rem)",
                             fontWeight: 800,
                             lineHeight: 1.06,
                             letterSpacing: "-0.03em",
@@ -252,9 +262,9 @@ export default function Hero() {
                     <p
                         className="hero-lead"
                         style={{
-                            fontSize: "clamp(1rem, 1.4vw, 1.15rem)",
-                            lineHeight: 1.75,
-                            maxWidth: "520px",
+                            fontSize: "clamp(1.05rem, 1.6vw, 1.25rem)",
+                            lineHeight: 1.8,
+                            maxWidth: "540px",
                             marginBottom: 0,
                         }}
                     >
