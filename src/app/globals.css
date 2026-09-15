@@ -101,6 +101,10 @@ html {
      when navigating between pages with/without a scrollbar (e.g. Contact page) */
   scrollbar-gutter: stable;
   overflow-y: scroll;
+  /* Prevent horizontal scroll bleed on mobile */
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -111,9 +115,13 @@ body {
   line-height: 1.75;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
-  /* Do NOT set overflow-x: hidden here — it suppresses scrollbar-gutter on html
-     and causes the header to shift on short pages. Use a scoped wrapper instead. */
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  /* Smooth native scroll on iOS */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: auto;
+  /* Prevent horizontal overflow from breaking layout */
+  overflow-x: hidden;
 }
 
 /* Global ambient radial glows */
@@ -154,9 +162,27 @@ button {
   width: 100%;
 }
 
+@media (max-width: 1280px) {
+  .container {
+    padding: 0 32px;
+  }
+}
+
 @media (max-width: 1024px) {
   .container {
-    padding: 0 28px;
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
   }
 }
 
@@ -329,7 +355,7 @@ p.lead {
   right: 20px;
   max-width: 1600px;
   margin: 0 auto;
-  z-index: 100;
+  z-index: 1000;
   background: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -337,6 +363,13 @@ p.lead {
   box-shadow: none !important;
   pointer-events: none;
   transition: top 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+}
+
+.site-header.menu-open {
+  pointer-events: auto !important;
 }
 
 .site-header.scrolled {
@@ -503,45 +536,87 @@ p.lead {
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(13, 19, 35, 0.75);
+  background: rgba(13, 19, 35, 0.85);
   border: 1px solid var(--border);
   color: var(--text-primary);
-  padding: 8px;
+  /* Ensure minimum 44px tap target for iOS / Android accessibility */
+  width: 44px;
+  height: 44px;
+  padding: 0;
   border-radius: var(--radius-sm);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: border-color 0.2s;
   flex-shrink: 0;
+  cursor: pointer;
+  /* Ensure pointer events always work on the button itself */
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
+  /* Prevent callout on long press (iOS) */
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
 }
 
 .hamburger:hover {
   border-color: var(--border-hov);
 }
 
+.hamburger:active {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: var(--border-hov);
+}
+
 /* ---- Mobile Nav ---- */
 .mobile-nav {
-  background: rgba(13, 19, 35, 0.98);
-  overflow: hidden;
+  /* Full-screen overlay on mobile — sits directly under nav-inner */
+  background: rgba(10, 14, 26, 0.98);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  /* Let framer motion control height */
+  max-height: calc(100dvh - 58px);
 }
 
 .mobile-nav a {
   display: block;
-  padding: 14px 24px;
-  font-size: 0.9rem;
+  /* Minimum 48px touch target */
+  padding: 15px 24px;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--text-secondary);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  transition: color 0.2s;
+  transition: color 0.15s, background 0.15s;
   text-decoration: none;
+  /* Ensure the full row is tappable */
+  width: 100%;
+  cursor: pointer;
+  pointer-events: auto;
+  /* Prevent text selection on tap */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .mobile-nav a:hover,
 .mobile-nav a.active {
-  color: var(--violet-mid);
+  color: #FFFFFF;
+  background: rgba(124, 58, 237, 0.08);
 }
 
 .mobile-nav .nav-cta-mobile {
-  padding: 16px 24px;
+  padding: 20px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Mobile nav button items (for submenus) */
+.mobile-nav button {
+  min-height: 48px;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 /* ---- Hero ---- */
@@ -1372,6 +1447,8 @@ a.contact-link:hover {
     align-items: center;
     height: 60px;
     padding: 0 20px;
+    /* Ensure the entire nav-inner row is clickable */
+    pointer-events: auto;
   }
 
   .nav-links {
@@ -1385,23 +1462,26 @@ a.contact-link:hover {
   .hamburger {
     display: flex;
   }
+
+  /* Ensure brand link is always tappable on mobile */
+  .brand {
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding: 0 20px !important;
-    max-width: 100% !important;
-  }
-
+  /* Header becomes edge-to-edge on mobile */
   .site-header {
-    top: 0;
-    left: 0;
-    right: 0;
-    border-radius: 0;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    border-radius: 0 !important;
   }
 
-  .site-header.menu-open {
-    border-radius: 0;
+  .site-header.scrolled {
+    top: 0 !important;
   }
 
   .nav-inner {
@@ -1413,18 +1493,25 @@ a.contact-link:hover {
     grid-template-columns: 1fr;
   }
 
-  /* Hero mobile — scoped styles in Hero.tsx handle grid/columns.
-     Only override font scale here. */
+  .accelerators-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Hero mobile */
   .hero-title {
     font-size: 2.2rem !important;
   }
 
   h1 {
-    font-size: 2.4rem;
+    font-size: 2rem;
   }
 
   h2 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+
+  h3 {
+    font-size: 1.15rem;
   }
 
   .section {
@@ -1436,11 +1523,12 @@ a.contact-link:hover {
   }
 
   .section.compact {
-    padding: 52px 0;
+    padding: 40px 0;
   }
 
   .footer-grid {
     grid-template-columns: 1fr;
+    gap: 28px;
   }
 
   .footer-bottom {
@@ -1451,25 +1539,62 @@ a.contact-link:hover {
 
   .cta-actions {
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cta-actions .btn {
+    width: 100%;
+    justify-content: center;
   }
 
   .hero-actions {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
   }
 
   .page-hero {
-    padding: 100px 0 60px;
+    padding: 80px 0 48px;
   }
 
   .cta-inner {
-    padding: 48px 28px;
+    padding: 44px 24px;
+  }
+
+  /* Prevent touch callout on interactive elements */
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Minimum 44px touch targets for all interactive elements */
+  .btn {
+    min-height: 48px;
   }
 }
 
 @media (max-width: 520px) {
   .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 380px) {
+  .metrics-grid {
     grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
   }
 }
 
@@ -1653,228 +1778,21 @@ body {
   }
 }
 
-/* Paste this at the bottom of globals.css 
-   Do not modify anything above this line */
+/* ── Viewport meta safety — prevent mobile layout shift ── */
+@media (max-width: 480px) {
+  .hero-section {
+    padding: 80px 0 40px !important;
+  }
 
-/* ========================================
-   LIGHT SECTION THEME
-   Only applies when .section-light 
-   class is present — nothing else changes
-   ======================================== */
+  .page-hero {
+    padding: 75px 0 36px !important;
+  }
 
-.section-light {
-  background: #FFFFFF !important;
-}
+  .section {
+    padding: 40px 0 !important;
+  }
 
-.section-light h1,
-.section-light h2,
-.section-light h3,
-.section-light h4 {
-  color: #0B1320 !important;
-}
-
-.section-light p {
-  color: #64748B !important;
-}
-
-.section-light .eyebrow {
-  color: #E8521A !important;
-}
-
-.section-light .eyebrow::before {
-  background: #E8521A !important;
-}
-
-.section-light .btn-primary {
-  background: #E8521A !important;
-  border-color: #E8521A !important;
-  color: #FFFFFF !important;
-}
-
-.section-light .btn-primary:hover {
-  background: #C94312 !important;
-}
-
-.section-light .btn-ghost,
-.section-light .btn-secondary {
-  color: #0B1320 !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light .btn-ghost:hover,
-.section-light .btn-secondary:hover {
-  border-color: #E8521A !important;
-  color: #E8521A !important;
-}
-
-/* Cards on light background */
-.section-light .service-card,
-.section-light .offering-card,
-.section-light .case-card,
-.section-light .module-card {
-  background: #F7F8FA !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light .service-card h3,
-.section-light .offering-card h3,
-.section-light .case-card h3,
-.section-light .module-card h3 {
-  color: #0B1320 !important;
-}
-
-.section-light .service-card p,
-.section-light .offering-card p,
-.section-light .case-card p,
-.section-light .module-card p {
-  color: #64748B !important;
-}
-
-/* Chips on light background */
-.section-light .chip {
-  background: #F1F5F9 !important;
-  border-color: #E2E8F0 !important;
-  color: #64748B !important;
-}
-
-/* Value table on light background */
-.section-light table {
-  border-color: #E2E8F0 !important;
-}
-
-.section-light thead th {
-  background: #F1F5F9 !important;
-  color: #64748B !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light tbody tr {
-  border-color: #E2E8F0 !important;
-}
-
-.section-light tbody tr:hover {
-  background: rgba(232, 82, 26, 0.04) !important;
-}
-
-.section-light td:first-child {
-  color: #E8521A !important;
-  background: #FAFAFA !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light td:last-child {
-  color: #2D3A4A !important;
-}
-
-/* Paste this at the bottom of globals.css 
-   Do not modify anything above this line */
-
-/* ========================================
-   LIGHT SECTION THEME
-   Only applies when .section-light 
-   class is present — nothing else changes
-   ======================================== */
-
-.section-light {
-  background: #FFFFFF !important;
-}
-
-.section-light h1,
-.section-light h2,
-.section-light h3,
-.section-light h4 {
-  color: #0B1320 !important;
-}
-
-.section-light p {
-  color: #64748B !important;
-}
-
-.section-light .eyebrow {
-  color: #E8521A !important;
-}
-
-.section-light .eyebrow::before {
-  background: #E8521A !important;
-}
-
-.section-light .btn-primary {
-  background: #E8521A !important;
-  border-color: #E8521A !important;
-  color: #FFFFFF !important;
-}
-
-.section-light .btn-primary:hover {
-  background: #C94312 !important;
-}
-
-.section-light .btn-ghost,
-.section-light .btn-secondary {
-  color: #0B1320 !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light .btn-ghost:hover,
-.section-light .btn-secondary:hover {
-  border-color: #E8521A !important;
-  color: #E8521A !important;
-}
-
-/* Cards on light background */
-.section-light .service-card,
-.section-light .offering-card,
-.section-light .case-card,
-.section-light .module-card {
-  background: #F7F8FA !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light .service-card h3,
-.section-light .offering-card h3,
-.section-light .case-card h3,
-.section-light .module-card h3 {
-  color: #0B1320 !important;
-}
-
-.section-light .service-card p,
-.section-light .offering-card p,
-.section-light .case-card p,
-.section-light .module-card p {
-  color: #64748B !important;
-}
-
-/* Chips on light background */
-.section-light .chip {
-  background: #F1F5F9 !important;
-  border-color: #E2E8F0 !important;
-  color: #64748B !important;
-}
-
-/* Value table on light background */
-.section-light table {
-  border-color: #E2E8F0 !important;
-}
-
-.section-light thead th {
-  background: #F1F5F9 !important;
-  color: #64748B !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light tbody tr {
-  border-color: #E2E8F0 !important;
-}
-
-.section-light tbody tr:hover {
-  background: rgba(232, 82, 26, 0.04) !important;
-}
-
-.section-light td:first-child {
-  color: #E8521A !important;
-  background: #FAFAFA !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light td:last-child {
-  color: #2D3A4A !important;
+  .section.compact {
+    padding: 32px 0 !important;
+  }
 }

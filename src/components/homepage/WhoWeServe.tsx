@@ -54,7 +54,7 @@ export default function WhoWeServe() {
 
                 {/* Custom Responsive Grid */}
                 <div className="serve-grid-container">
-                    
+
                     {/* Left Column (Industrial & Infrastructure) */}
                     <div className="serve-col">
                         {serveItems.filter(item => item.gridArea.startsWith("left")).map((item, idx) => (
@@ -150,7 +150,7 @@ export default function WhoWeServe() {
                 .serve-card-overlay {
                     position: absolute;
                     inset: 0;
-                    background: linear-gradient(to top, rgba(10, 15, 28, 0.95) 0%, rgba(10, 15, 28, 0.6) 50%, rgba(10, 15, 28, 0.25) 100%);
+                    background: linear-gradient(to top, rgba(4, 6, 14, 1.0) 0%, rgba(4, 6, 14, 0.80) 45%, rgba(4, 6, 14, 0.20) 100%);
                     display: flex;
                     flex-direction: column;
                     justify-content: flex-end;
@@ -158,24 +158,30 @@ export default function WhoWeServe() {
                     transition: background 0.3s ease;
                 }
                 .serve-card-img:hover .serve-card-overlay {
-                    background: linear-gradient(to top, rgba(10, 15, 28, 0.98) 0%, rgba(10, 15, 28, 0.7) 50%, rgba(10, 15, 28, 0.35) 100%);
+                    background: linear-gradient(to top, rgba(4, 6, 14, 1.0) 0%, rgba(4, 6, 14, 0.88) 48%, rgba(4, 6, 14, 0.28) 100%);
                 }
                 .serve-card-overlay h3 {
-                    font-size: 1.15rem;
-                    color: #ffffff;
+                    font-size: 1.18rem;
+                    color: #ffffff !important;
                     margin-bottom: 8px;
-                    font-weight: 600;
+                    font-weight: 700;
+                    letter-spacing: -0.01em;
+                    line-height: 1.2;
+                    text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 1px 3px rgba(0,0,0,1);
                 }
                 .serve-card-overlay p {
                     font-size: 0.8rem;
                     line-height: 1.5;
-                    color: var(--text-secondary);
+                    color: rgba(203, 213, 225, 0.90) !important;
+                    text-shadow: 0 1px 6px rgba(0,0,0,0.8);
                 }
                 .featured-overlay h3 {
-                    font-size: 1.4rem;
+                    font-size: 1.45rem;
+                    font-weight: 800;
                 }
                 .featured-overlay p {
                     font-size: 0.88rem;
+                    color: rgba(203, 213, 225, 0.92) !important;
                 }
 
                 @media (max-width: 900px) {

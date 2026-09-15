@@ -59,6 +59,24 @@ export default function Header() {
         return () => window.removeEventListener("keydown", onKey);
     }, []);
 
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
+
+    const isItemActive = (href: string) => {
+        if (pathname === href) return true;
+        if (href === "/engineering-offerings" && (pathname.startsWith("/services") || pathname === "/engineering-offerings")) return true;
+        if (href === "/products-and-accelerators" && (pathname.startsWith("/solutions") || pathname === "/products-and-accelerators")) return true;
+        return false;
+    };
+
     return (
         <>
             <a
@@ -80,7 +98,7 @@ export default function Header() {
                     <ul className="nav-links" role="list">
                         {navItems.filter(item => item.isVisible !== false).map((item) => {
                             const hasSubmenu = !!item.submenu;
-                            const isActive = pathname === item.href || (hasSubmenu && pathname.startsWith(item.href));
+                            const isActive = isItemActive(item.href) || (hasSubmenu && pathname.startsWith(item.href));
 
                             return (
                                 <li
@@ -269,7 +287,7 @@ export default function Header() {
                                         ) : (
                                             <Link
                                                 href={item.href}
-                                                className={pathname === item.href ? "active" : ""}
+                                                className={isItemActive(item.href) ? "active" : ""}
                                                 onClick={() => setIsOpen(false)}
                                             >
                                                 {item.label}

@@ -93,12 +93,14 @@ function ProductCard({
     prod,
     idx,
     shouldReduce,
-    onPreviewBrochure
+    onPreviewBrochure,
+    onPreviewVideo
 }: {
     prod: ProductItem;
     idx: number;
     shouldReduce: boolean;
     onPreviewBrochure?: (brochurePath: string, title: string) => void;
+    onPreviewVideo?: (videoPath: string, title: string) => void;
 }) {
     const [flipped, setFlipped] = useState(false);
     const [hovered, setHovered] = useState(false);
@@ -269,26 +271,29 @@ function ProductCard({
                     </div>
 
                     {/* Bottom Action Row */}
-                    <div style={{ display: "flex", gap: "8px", marginTop: "auto", flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", gap: "8px", marginTop: "auto", flexWrap: "nowrap" }}>
                         <button
                             type="button"
                             onClick={() => setFlipped(true)}
+                            title="Turn card for Technical Specs"
+                            aria-label="Turn card for Technical Specs"
                             style={{
-                                flex: "1 1 28%",
-                                padding: "10px 10px",
+                                flex: "1 1 30%",
+                                padding: "10px 8px",
                                 borderRadius: "8px",
                                 background: "#F1F5F9",
                                 border: "1px solid #CBD5E1",
                                 color: "#0F172A",
                                 fontFamily: "var(--font-body)",
                                 fontWeight: 600,
-                                fontSize: "0.82rem",
+                                fontSize: "0.8rem",
                                 display: "inline-flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 gap: "4px",
                                 cursor: "pointer",
-                                transition: "all 0.2s ease"
+                                transition: "all 0.2s ease",
+                                whiteSpace: "nowrap"
                             }}
                             onMouseEnter={e => {
                                 e.currentTarget.style.background = "#E2E8F0";
@@ -297,68 +302,86 @@ function ProductCard({
                                 e.currentTarget.style.background = "#F1F5F9";
                             }}
                         >
-                            Specs
+                            ← Back
                         </button>
 
-                        {prod.brochurePath && (
-                            <button
-                                type="button"
-                                onClick={() => onPreviewBrochure ? onPreviewBrochure(prod.brochurePath!, prod.title) : window.open(prod.brochurePath, '_blank')}
-                                style={{
-                                    flex: "1 1 36%",
-                                    padding: "10px 12px",
-                                    borderRadius: "8px",
-                                    background: "rgba(239, 68, 68, 0.08)",
-                                    border: "1px solid rgba(239, 68, 68, 0.3)",
-                                    color: "#EF4444",
-                                    fontFamily: "var(--font-body)",
-                                    fontWeight: 600,
-                                    fontSize: "0.82rem",
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: "5px",
-                                    cursor: "pointer",
-                                    transition: "all 0.2s ease"
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.background = "rgba(239, 68, 68, 0.14)";
-                                    e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.5)";
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.background = "rgba(239, 68, 68, 0.08)";
-                                    e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.3)";
-                                }}
-                            >
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                    <polyline points="7 10 12 15 17 10" />
-                                    <line x1="12" y1="15" x2="12" y2="3" />
-                                </svg>
-                                Brochure
-                            </button>
-                        )}
-
-                        <Link
-                            href={`/contact?product=${prod.id}`}
-                            className="btn btn-primary"
+                        <button
+                            type="button"
+                            onClick={() => onPreviewBrochure ? onPreviewBrochure(prod.brochurePath || "/brochures/digital-cockpit-brochure.png", prod.title) : window.open(prod.brochurePath || "#", '_blank')}
+                            title="View Brochure"
+                            aria-label="View Brochure"
                             style={{
-                                flex: "1 1 28%",
-                                padding: "10px 10px",
+                                flex: "1 1 35%",
+                                padding: "10px 8px",
                                 borderRadius: "8px",
-                                backgroundColor: "#E8521A",
-                                color: "#FFFFFF",
+                                background: "rgba(239, 68, 68, 0.08)",
+                                border: "1px solid rgba(239, 68, 68, 0.3)",
+                                color: "#EF4444",
                                 fontFamily: "var(--font-body)",
                                 fontWeight: 600,
-                                fontSize: "0.82rem",
-                                textDecoration: "none",
+                                fontSize: "0.8rem",
                                 display: "inline-flex",
                                 alignItems: "center",
-                                justifyContent: "center"
+                                justifyContent: "center",
+                                gap: "5px",
+                                cursor: "pointer",
+                                transition: "all 0.2s ease",
+                                whiteSpace: "nowrap"
+                            }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.background = "rgba(239, 68, 68, 0.14)";
+                                e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.5)";
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.background = "rgba(239, 68, 68, 0.08)";
+                                e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.3)";
                             }}
                         >
-                            Inquire
-                        </Link>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Brochure
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => onPreviewVideo ? onPreviewVideo("/videos/samsan-demo.mp4", prod.title) : window.open("/videos/samsan-demo.mp4", '_blank')}
+                            title="Watch Product Video"
+                            aria-label="Watch Product Video"
+                            style={{
+                                flex: "1 1 35%",
+                                padding: "10px 8px",
+                                borderRadius: "8px",
+                                background: "rgba(124, 58, 237, 0.08)",
+                                border: "1px solid rgba(124, 58, 237, 0.3)",
+                                color: "#7C3AED",
+                                fontFamily: "var(--font-body)",
+                                fontWeight: 600,
+                                fontSize: "0.8rem",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "5px",
+                                cursor: "pointer",
+                                transition: "all 0.2s ease",
+                                whiteSpace: "nowrap"
+                            }}
+                            onMouseEnter={e => {
+                                e.currentTarget.style.background = "rgba(124, 58, 237, 0.16)";
+                                e.currentTarget.style.borderColor = "rgba(124, 58, 237, 0.5)";
+                            }}
+                            onMouseLeave={e => {
+                                e.currentTarget.style.background = "rgba(124, 58, 237, 0.08)";
+                                e.currentTarget.style.borderColor = "rgba(124, 58, 237, 0.3)";
+                            }}
+                        >
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                            Video
+                        </button>
                     </div>
                 </div>
 
@@ -489,59 +512,18 @@ function ProductCard({
                                 justifyContent: "center",
                                 backgroundColor: "#E8521A",
                                 color: "#FFFFFF",
-                                padding: "10px 16px",
-                                fontSize: "0.85rem",
+                                padding: "12px 16px",
+                                fontSize: "0.9rem",
                                 borderRadius: "8px",
-                                fontWeight: 600
+                                fontWeight: 600,
+                                textDecoration: "none",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                boxShadow: "0 4px 14px rgba(232, 82, 26, 0.3)"
                             }}
                         >
-                            Contact For Inquiry
+                            Contact for Inquiry
                         </Link>
-                        {prod.brochurePath ? (
-                            <button
-                                type="button"
-                                onClick={() => onPreviewBrochure ? onPreviewBrochure(prod.brochurePath!, prod.title) : window.open(prod.brochurePath, '_blank')}
-                                className="btn btn-outline"
-                                style={{
-                                    width: "100%",
-                                    justifyContent: "center",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    padding: "9px 16px",
-                                    fontSize: "0.82rem",
-                                    background: "transparent",
-                                    color: "#FFFFFF",
-                                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                                    borderRadius: "8px",
-                                    cursor: "pointer"
-                                }}
-                            >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                    <polyline points="7 10 12 15 17 10" />
-                                    <line x1="12" y1="15" x2="12" y2="3" />
-                                </svg>
-                                View &amp; Download Brochure
-                            </button>
-                        ) : (
-                            <button
-                                type="button"
-                                onClick={() => setFlipped(false)}
-                                style={{
-                                    width: "100%",
-                                    padding: "9px 16px",
-                                    fontSize: "0.82rem",
-                                    background: "transparent",
-                                    color: "#94A3B8",
-                                    border: "1px solid rgba(255, 255, 255, 0.12)",
-                                    borderRadius: "8px",
-                                    cursor: "pointer"
-                                }}
-                            >
-                                ← Back to Overview
-                            </button>
-                        )}
                     </div>
                 </div>
             </div>
@@ -790,6 +772,7 @@ const stats = [
 export default function SolutionsPage() {
     const shouldReduce = useReducedMotion();
     const [previewBrochure, setPreviewBrochure] = useState<{ path: string; title: string } | null>(null);
+    const [previewVideo, setPreviewVideo] = useState<{ path: string; title: string } | null>(null);
 
     return (
         <div style={{ paddingBottom: "0" }}>
@@ -1012,6 +995,7 @@ export default function SolutionsPage() {
                                     idx={idx}
                                     shouldReduce={!!shouldReduce}
                                     onPreviewBrochure={(path, title) => setPreviewBrochure({ path, title })}
+                                    onPreviewVideo={(path, title) => setPreviewVideo({ path, title })}
                                 />
                             ))}
                         </AnimatePresence>
@@ -1350,6 +1334,100 @@ export default function SolutionsPage() {
                                         />
                                     )}
                                 </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* ── Interactive Product Video Modal Lightbox ── */}
+            <AnimatePresence>
+                {previewVideo && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setPreviewVideo(null)}
+                        style={{
+                            position: "fixed",
+                            inset: 0,
+                            zIndex: 9999,
+                            backgroundColor: "rgba(11, 19, 32, 0.88)",
+                            backdropFilter: "blur(12px)",
+                            WebkitBackdropFilter: "blur(12px)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "24px"
+                        }}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.92, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.92, opacity: 0 }}
+                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                            onClick={(e) => e.stopPropagation()}
+                            style={{
+                                backgroundColor: "#0F172A",
+                                border: "1px solid rgba(255, 255, 255, 0.15)",
+                                borderRadius: "20px",
+                                maxWidth: "960px",
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                overflow: "hidden",
+                                boxShadow: "0 30px 70px -15px rgba(0,0,0,0.8)"
+                            }}
+                        >
+                            {/* Modal Header */}
+                            <div style={{
+                                padding: "18px 24px",
+                                borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                background: "rgba(15, 23, 42, 0.95)"
+                            }}>
+                                <div>
+                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#FFFFFF", fontFamily: "var(--font-display)", margin: 0 }}>
+                                        {previewVideo.title} — Product Demonstration
+                                    </h3>
+                                    <span style={{ fontSize: "0.78rem", color: "#94A3B8", fontFamily: "var(--font-mono)" }}>
+                                        SAMSAN Accelerators Live Demonstration
+                                    </span>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setPreviewVideo(null)}
+                                    aria-label="Close video modal"
+                                    style={{
+                                        background: "rgba(255,255,255,0.08)",
+                                        border: "1px solid rgba(255,255,255,0.15)",
+                                        color: "#FFFFFF",
+                                        width: "36px",
+                                        height: "36px",
+                                        borderRadius: "50%",
+                                        cursor: "pointer",
+                                        fontSize: "1.1rem",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        transition: "background 0.2s ease"
+                                    }}
+                                >
+                                    ✕
+                                </button>
+                            </div>
+
+                            {/* Video Player */}
+                            <div style={{ padding: "0", background: "#000000", display: "flex", justifyContent: "center", position: "relative" }}>
+                                <video
+                                    src={previewVideo.path}
+                                    controls
+                                    autoPlay
+                                    style={{ width: "100%", maxHeight: "72vh", objectFit: "contain" }}
+                                />
                             </div>
                         </motion.div>
                     </motion.div>

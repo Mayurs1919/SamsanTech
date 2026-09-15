@@ -313,7 +313,7 @@ export default function AboutPage() {
 
     const leadershipMembers = [
         {
-            name: "V. Shankaran",
+            name: "V. SHANKARAN",
             role: "Engineering Director — Embedded",
             dept: "Embedded Engineering",
             imagePath: "/images/team/v_shankaran.png",
@@ -321,7 +321,7 @@ export default function AboutPage() {
             linkedinUrl: "https://www.linkedin.com/in/shankaran-venugopalan-92759611/"
         },
         {
-            name: "Shridhar Pophali",
+            name: "SHRIDHAR POPHALI ",
             role: "Engineering Director — Cockpit",
             dept: "Digital Cockpit & SDV",
             imagePath: "/images/team/shridhar_pophali.jpg",
@@ -329,7 +329,7 @@ export default function AboutPage() {
             linkedinUrl: "https://www.linkedin.com/in/shridharpophali/"
         },
         {
-            name: "Dr. Pradeep Bilurkar",
+            name: "DR. PRADEEP BILURKAR",
             role: "Chief Data Scientist",
             dept: "Data & AI",
             imagePath: "/images/team/dr_pradeep_bilurkar.png",
@@ -337,7 +337,7 @@ export default function AboutPage() {
             linkedinUrl: "https://www.linkedin.com/in/dr-pradeep-bilurkar-5a72922b/"
         },
         {
-            name: "Pratik Waghmode",
+            name: "PRATIK WAGHMODE",
             role: "Technical Sales",
             dept: "Business Development",
             imagePath: "/images/team/pratik_waghmode.png",
@@ -345,7 +345,7 @@ export default function AboutPage() {
             linkedinUrl: "https://www.linkedin.com/in/pratik-waghmode-742b3440/"
         },
         {
-            name: "Gaurav Joshi",
+            name: "GAURAV JOSHI",
             role: "Accounts & Finance",
             dept: "Finance & Operations",
             imagePath: "/images/team/gaurav_joshi.png",
@@ -1130,7 +1130,7 @@ export default function AboutPage() {
                         <div className="ceo-photo-area">
                             <Image
                                 src="/images/team/prashant_deshpande.png"
-                                alt="Prashant Deshpande"
+                                alt="PRASHANT DESHPANDE"
                                 fill
                                 sizes="(max-width: 1023px) 100vw, 380px"
                                 priority
@@ -1179,7 +1179,7 @@ export default function AboutPage() {
                                 lineHeight: 1.1,
                                 margin: 0
                             }}>
-                                Prashant Deshpande
+                                PRASHANT DESHPANDE
                             </h3>
 
                             {/* C) TITLE */}
@@ -1301,11 +1301,11 @@ export default function AboutPage() {
                                     aria-label="Prashant Deshpande on LinkedIn"
                                     className="lead-linkedin-btn"
                                     style={{
-                                        width: "30px",
-                                        height: "30px",
-                                        borderRadius: "6px",
-                                        background: "rgba(255, 255, 255, 0.06)",
-                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                        width: "36px",
+                                        height: "36px",
+                                        borderRadius: "8px",
+                                        background: "rgba(255, 255, 255, 0.08)",
+                                        border: "1px solid rgba(255, 255, 255, 0.12)",
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
@@ -1313,7 +1313,7 @@ export default function AboutPage() {
                                         textDecoration: "none"
                                     }}
                                 >
-                                    <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                         <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
                                     </svg>
                                 </a>
@@ -1376,7 +1376,7 @@ export default function AboutPage() {
                         >
                             {[
                                 {
-                                    name: "Ashok Saraf",
+                                    name: "ASHOK SARAF",
                                     role: "Senior Advisor — Strategy & Growth",
                                     dept: "Senior Advisor",
                                     imagePath: "/images/team/ashok_saraf.png",
@@ -1384,7 +1384,7 @@ export default function AboutPage() {
                                     linkedinUrl: ""
                                 },
                                 {
-                                    name: "Anil Patwardhan",
+                                    name: "ANIL PATWARDHAN",
                                     role: "Senior Advisor — Technology & Governance",
                                     dept: "Senior Advisor",
                                     imagePath: "/images/team/anil_patwardhan.png",
@@ -1455,67 +1455,54 @@ export default function AboutPage() {
 
                                     {/* Card Body */}
                                     <div style={{
-                                        padding: "20px 22px 22px",
+                                        padding: "22px 24px 24px",
                                         display: "flex",
                                         flexDirection: "column",
-                                        gap: "4px",
-                                        textAlign: "left"
+                                        alignItems: "center",
+                                        textAlign: "center"
                                     }}>
-                                        {/* Department Tag */}
-                                        <span className="advisor-dept-label" style={{
-                                            fontFamily: "var(--font-mono)",
-                                            fontSize: "10px",
-                                            letterSpacing: "0.1em",
-                                            textTransform: "uppercase",
-                                            fontWeight: 600,
-                                            color: "#8B5CF6",
-                                            marginBottom: "6px",
-                                            transition: "filter 0.25s ease"
-                                        }}>
-                                            {member.dept}
-                                        </span>
-
-                                        {/* Name */}
+                                        {/* Centered Name */}
                                         <h4 style={{
                                             fontFamily: "var(--font-display)",
-                                            fontSize: "1.15rem",
+                                            fontSize: "1.25rem",
                                             fontWeight: 700,
-                                            letterSpacing: "-0.01em",
-                                            color: "#F1F5F9",
-                                            lineHeight: 1.2,
-                                            margin: "0 0 4px 0"
+                                            letterSpacing: "-0.015em",
+                                            color: "#F8FAFC",
+                                            lineHeight: 1.25,
+                                            margin: "0 0 6px 0",
+                                            textAlign: "center"
                                         }}>
                                             {member.name}
                                         </h4>
 
-                                        {/* Title */}
+                                        {/* Centered Title / Role */}
                                         <p style={{
-                                            fontFamily: "var(--font-mono)",
-                                            fontSize: "11px",
-                                            letterSpacing: "0.06em",
-                                            textTransform: "uppercase",
+                                            fontFamily: "var(--font-sans)",
+                                            fontSize: "0.9rem",
+                                            fontWeight: 500,
                                             color: "#94A3B8",
-                                            lineHeight: 1.5,
-                                            margin: 0
+                                            lineHeight: 1.45,
+                                            margin: 0,
+                                            textAlign: "center"
                                         }}>
                                             {member.role}
                                         </p>
 
-                                        {/* LinkedIn Link Section */}
+                                        {/* Bottom Action Row: View Profile + LinkedIn Link */}
                                         <div style={{
-                                            marginTop: "16px",
+                                            marginTop: "18px",
                                             paddingTop: "14px",
-                                            borderTop: "1px solid rgba(255, 255, 255, 0.04)",
+                                            borderTop: "1px solid rgba(255, 255, 255, 0.06)",
+                                            width: "100%",
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "space-between"
                                         }}>
                                             <span style={{
-                                                fontFamily: "var(--font-mono)",
-                                                fontSize: "10px",
-                                                letterSpacing: "0.08em",
-                                                textTransform: "uppercase",
-                                                color: "rgba(255, 255, 255, 0.36)"
+                                                fontFamily: "var(--font-sans)",
+                                                fontSize: "0.85rem",
+                                                fontWeight: 500,
+                                                color: "#64748B"
                                             }}>
                                                 View Profile
                                             </span>
@@ -1527,11 +1514,11 @@ export default function AboutPage() {
                                                     aria-label={`${member.name} on LinkedIn`}
                                                     className="lead-linkedin-btn"
                                                     style={{
-                                                        width: "30px",
-                                                        height: "30px",
-                                                        borderRadius: "6px",
-                                                        background: "rgba(255, 255, 255, 0.06)",
-                                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                                        width: "36px",
+                                                        height: "36px",
+                                                        borderRadius: "8px",
+                                                        background: "rgba(255, 255, 255, 0.08)",
+                                                        border: "1px solid rgba(255, 255, 255, 0.12)",
                                                         display: "flex",
                                                         alignItems: "center",
                                                         justifyContent: "center",
@@ -1539,7 +1526,7 @@ export default function AboutPage() {
                                                         textDecoration: "none"
                                                     }}
                                                 >
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                                         <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
                                                     </svg>
                                                 </a>
@@ -1547,11 +1534,11 @@ export default function AboutPage() {
                                                 <div
                                                     title="LinkedIn profile not available"
                                                     style={{
-                                                        width: "30px",
-                                                        height: "30px",
-                                                        borderRadius: "6px",
-                                                        background: "rgba(255, 255, 255, 0.06)",
-                                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                                        width: "36px",
+                                                        height: "36px",
+                                                        borderRadius: "8px",
+                                                        background: "rgba(255, 255, 255, 0.08)",
+                                                        border: "1px solid rgba(255, 255, 255, 0.12)",
                                                         display: "flex",
                                                         alignItems: "center",
                                                         justifyContent: "center",
@@ -1559,7 +1546,7 @@ export default function AboutPage() {
                                                         cursor: "default"
                                                     }}
                                                 >
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                                         <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" />
                                                     </svg>
                                                 </div>
@@ -1690,65 +1677,53 @@ export default function AboutPage() {
 
                                         {/* Card Body */}
                                         <div className="lead-card-body" style={{
-                                            padding: "20px 22px 22px",
+                                            padding: "22px 24px 24px",
                                             display: "flex",
                                             flexDirection: "column",
-                                            gap: "4px",
-                                            textAlign: "left"
+                                            alignItems: "center",
+                                            textAlign: "center"
                                         }}>
-                                            {/* Department Label */}
-                                            <span className="lead-dept-label" style={{
-                                                fontFamily: "var(--font-mono)",
-                                                fontSize: "10px",
-                                                letterSpacing: "0.1em",
-                                                textTransform: "uppercase",
-                                                fontWeight: 600,
-                                                color: member.glowColor,
-                                                marginBottom: "6px",
-                                                transition: "filter 0.25s ease"
-                                            }}>
-                                                {member.dept}
-                                            </span>
-                                            {/* Name */}
+                                            {/* Centered Name */}
                                             <h4 style={{
                                                 fontFamily: "var(--font-display)",
-                                                fontSize: "1.15rem",
+                                                fontSize: "1.25rem",
                                                 fontWeight: 700,
-                                                letterSpacing: "-0.01em",
-                                                color: "#F1F5F9",
-                                                lineHeight: 1.2,
-                                                margin: "0 0 4px 0"
+                                                letterSpacing: "-0.015em",
+                                                color: "#F8FAFC",
+                                                lineHeight: 1.25,
+                                                margin: "0 0 6px 0",
+                                                textAlign: "center"
                                             }}>
                                                 {member.name}
                                             </h4>
-                                            {/* Title */}
+                                            {/* Centered Title / Role */}
                                             <p style={{
-                                                fontFamily: "var(--font-mono)",
-                                                fontSize: "11px",
-                                                letterSpacing: "0.06em",
-                                                textTransform: "uppercase",
+                                                fontFamily: "var(--font-sans)",
+                                                fontSize: "0.9rem",
+                                                fontWeight: 500,
                                                 color: "#94A3B8",
-                                                lineHeight: 1.5,
-                                                margin: 0
+                                                lineHeight: 1.45,
+                                                margin: 0,
+                                                textAlign: "center"
                                             }}>
                                                 {member.role}
                                             </p>
 
-                                            {/* LinkedIn Link Section */}
+                                            {/* Bottom Action Row: View Profile + LinkedIn Link */}
                                             <div style={{
-                                                marginTop: "16px",
+                                                marginTop: "18px",
                                                 paddingTop: "14px",
-                                                borderTop: "1px solid rgba(255, 255, 255, 0.04)",
+                                                borderTop: "1px solid rgba(255, 255, 255, 0.06)",
+                                                width: "100%",
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "space-between"
                                             }}>
                                                 <span style={{
-                                                    fontFamily: "var(--font-mono)",
-                                                    fontSize: "10px",
-                                                    letterSpacing: "0.08em",
-                                                    textTransform: "uppercase",
-                                                    color: "rgba(255, 255, 255, 0.36)"
+                                                    fontFamily: "var(--font-sans)",
+                                                    fontSize: "0.85rem",
+                                                    fontWeight: 500,
+                                                    color: "#64748B"
                                                 }}>
                                                     View Profile
                                                 </span>
@@ -1759,11 +1734,11 @@ export default function AboutPage() {
                                                     aria-label={`${member.name} on LinkedIn`}
                                                     className="lead-linkedin-btn"
                                                     style={{
-                                                        width: "30px",
-                                                        height: "30px",
-                                                        borderRadius: "6px",
-                                                        background: "rgba(255, 255, 255, 0.06)",
-                                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                                        width: "36px",
+                                                        height: "36px",
+                                                        borderRadius: "8px",
+                                                        background: "rgba(255, 255, 255, 0.08)",
+                                                        border: "1px solid rgba(255, 255, 255, 0.12)",
                                                         display: "flex",
                                                         alignItems: "center",
                                                         justifyContent: "center",
@@ -1771,7 +1746,7 @@ export default function AboutPage() {
                                                         textDecoration: "none"
                                                     }}
                                                 >
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                                         <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
                                                     </svg>
                                                 </a>
@@ -1847,65 +1822,53 @@ export default function AboutPage() {
 
                                         {/* Card Body */}
                                         <div className="lead-card-body" style={{
-                                            padding: "20px 22px 22px",
+                                            padding: "22px 24px 24px",
                                             display: "flex",
                                             flexDirection: "column",
-                                            gap: "4px",
-                                            textAlign: "left"
+                                            alignItems: "center",
+                                            textAlign: "center"
                                         }}>
-                                            {/* Department Label */}
-                                            <span className="lead-dept-label" style={{
-                                                fontFamily: "var(--font-mono)",
-                                                fontSize: "10px",
-                                                letterSpacing: "0.1em",
-                                                textTransform: "uppercase",
-                                                fontWeight: 600,
-                                                color: member.glowColor,
-                                                marginBottom: "6px",
-                                                transition: "filter 0.25s ease"
-                                            }}>
-                                                {member.dept}
-                                            </span>
-                                            {/* Name */}
+                                            {/* Centered Name */}
                                             <h4 style={{
                                                 fontFamily: "var(--font-display)",
-                                                fontSize: "1.15rem",
+                                                fontSize: "1.25rem",
                                                 fontWeight: 700,
-                                                letterSpacing: "-0.01em",
-                                                color: "#F1F5F9",
-                                                lineHeight: 1.2,
-                                                margin: "0 0 4px 0"
+                                                letterSpacing: "-0.015em",
+                                                color: "#F8FAFC",
+                                                lineHeight: 1.25,
+                                                margin: "0 0 6px 0",
+                                                textAlign: "center"
                                             }}>
                                                 {member.name}
                                             </h4>
-                                            {/* Title */}
+                                            {/* Centered Title / Role */}
                                             <p style={{
-                                                fontFamily: "var(--font-mono)",
-                                                fontSize: "11px",
-                                                letterSpacing: "0.06em",
-                                                textTransform: "uppercase",
+                                                fontFamily: "var(--font-sans)",
+                                                fontSize: "0.9rem",
+                                                fontWeight: 500,
                                                 color: "#94A3B8",
-                                                lineHeight: 1.5,
-                                                margin: 0
+                                                lineHeight: 1.45,
+                                                margin: 0,
+                                                textAlign: "center"
                                             }}>
                                                 {member.role}
                                             </p>
 
-                                            {/* LinkedIn Link Section */}
+                                            {/* Bottom Action Row: View Profile + LinkedIn Link */}
                                             <div style={{
-                                                marginTop: "16px",
+                                                marginTop: "18px",
                                                 paddingTop: "14px",
-                                                borderTop: "1px solid rgba(255, 255, 255, 0.04)",
+                                                borderTop: "1px solid rgba(255, 255, 255, 0.06)",
+                                                width: "100%",
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "space-between"
                                             }}>
                                                 <span style={{
-                                                    fontFamily: "var(--font-mono)",
-                                                    fontSize: "10px",
-                                                    letterSpacing: "0.08em",
-                                                    textTransform: "uppercase",
-                                                    color: "rgba(255, 255, 255, 0.36)"
+                                                    fontFamily: "var(--font-sans)",
+                                                    fontSize: "0.85rem",
+                                                    fontWeight: 500,
+                                                    color: "#64748B"
                                                 }}>
                                                     View Profile
                                                 </span>
@@ -1916,11 +1879,11 @@ export default function AboutPage() {
                                                     aria-label={`${member.name} on LinkedIn`}
                                                     className="lead-linkedin-btn"
                                                     style={{
-                                                        width: "30px",
-                                                        height: "30px",
-                                                        borderRadius: "6px",
-                                                        background: "rgba(255, 255, 255, 0.06)",
-                                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                                        width: "36px",
+                                                        height: "36px",
+                                                        borderRadius: "8px",
+                                                        background: "rgba(255, 255, 255, 0.08)",
+                                                        border: "1px solid rgba(255, 255, 255, 0.12)",
                                                         display: "flex",
                                                         alignItems: "center",
                                                         justifyContent: "center",
@@ -1928,7 +1891,7 @@ export default function AboutPage() {
                                                         textDecoration: "none"
                                                     }}
                                                 >
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                                         <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
                                                     </svg>
                                                 </a>
@@ -2252,7 +2215,7 @@ export default function AboutPage() {
                                 >
                                     Explore Engagement Models
                                     <svg width="14" height="14" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-                                        <path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                                        <path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </Link>
                             </div>
@@ -2328,7 +2291,7 @@ export default function AboutPage() {
                                 >
                                     Get Started Immediately
                                     <svg width="14" height="14" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-                                        <path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                                        <path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </Link>
                             </div>
