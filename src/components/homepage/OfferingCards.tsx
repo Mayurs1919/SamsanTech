@@ -41,7 +41,7 @@ const pillars = [
     },
     {
         title: "Digital Transformation",
-        desc: "Cloud telemetry platforms, remote fleet diagnostics, OTA pipeline orchestration, and IoT edge integration.",
+        desc: "Cloud telemetry platforms, remote fleet diagnostics, OTA , and IoT edge integration.",
         icon: (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M12 3v18M3 12h18M12 3l4 4M12 3L8 7M12 21l4-4M12 21l-4 4" strokeLinecap="round" strokeLinejoin="round" />
@@ -191,7 +191,6 @@ export default function OfferingCards() {
 
             <div className="container">
                 <div style={{ textAlign: "center", marginBottom: "36px" }}>
-                    <span className="badge" style={{ marginBottom: "16px", fontSize: "12px", letterSpacing: "0.12em", fontWeight: 500 }}>Our Offerings</span>
                     <h2 style={{
                         fontSize: "clamp(1.8rem, 3.2vw, 2.6rem)",
                         fontWeight: 700,

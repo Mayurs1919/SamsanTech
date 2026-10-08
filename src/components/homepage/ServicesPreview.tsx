@@ -66,9 +66,6 @@ export default function ServicesPreview() {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-80px" }}
                 >
-                    <motion.div variants={fadeUp(shouldReduce, 0)}>
-                        <span className="badge">Engineering Offerings</span>
-                    </motion.div>
                     <motion.h2 id="services-heading" variants={fadeUp(shouldReduce, 0.1)} style={{ marginTop: "16px", marginBottom: "14px" }}>
                         Full-stack vehicle software engineering
                     </motion.h2>

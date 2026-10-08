@@ -36,9 +36,6 @@ export default function Features() {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-60px" }}
                 >
-                    <motion.div variants={fadeUp(shouldReduce)}>
-                        <span className="badge rose">Accelerators</span>
-                    </motion.div>
                     <motion.h2 id="accel-heading" variants={fadeUp(shouldReduce, 0.1)} style={{ marginTop: "16px", marginBottom: "14px" }}>
                         Pre-built, not bolted on.
                     </motion.h2>

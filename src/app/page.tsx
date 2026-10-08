@@ -60,7 +60,6 @@ import OfferingCards from "@/components/homepage/OfferingCards";
 import RingsOfSolution from "@/components/homepage/RingsOfSolution";
 import WhoWeServe from "@/components/homepage/WhoWeServe";
 import Partners from "@/components/homepage/Partners";
-import AboutCompany from "@/components/homepage/AboutCompany";
 import CTA from "@/components/homepage/CTA";
 
 export const metadata: Metadata = {
@@ -101,11 +100,6 @@ export default function Home() {
             {/* LIGHT — Platforms & Tools */}
             <div className="section-light">
                 <Partners />
-            </div>
-
-            {/* DARK — We Are SAMSAN / Founder Spotlight */}
-            <div className="section-dark">
-                <AboutCompany />
             </div>
 
             {/* DARK — Final CTA */}

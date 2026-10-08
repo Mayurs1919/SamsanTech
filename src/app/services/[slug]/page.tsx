@@ -22,7 +22,7 @@ export default async function ServiceSlugPage({ params }: PageProps) {
         return (
             <div className="container" style={{ padding: "120px 0", textAlign: "center" }}>
                 <h1 style={{ fontSize: "2rem", marginBottom: "20px" }}>Redirecting...</h1>
-                <Link href="/engagement-models" className="btn btn-primary">Go to Engagement Models</Link>
+                <Link href="/consulting-staffing" className="btn btn-primary">Go to Consulting & Staffing</Link>
             </div>
         );
     }

@@ -455,7 +455,7 @@ p.lead {
     0 8px 32px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  flex-shrink: 0;
+  flex-shrink: 1;
 }
 
 .site-header.scrolled .nav-links {
@@ -474,10 +474,10 @@ p.lead {
 
 .nav-links a {
   font-family: var(--font-body);
-  font-size: 0.94rem;
+  font-size: 0.90rem;
   font-weight: 500;
   color: rgba(230, 238, 250, 0.92);
-  padding: 7px 14px;
+  padding: 6px 12px;
   border-radius: 100px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
@@ -686,7 +686,7 @@ p.lead {
 
 /* ---- Metrics ---- */
 .metrics-strip {
-  padding: 48px 0 64px 0;
+  padding: 56px 0;
   background: transparent;
   border: none;
   width: 100%;
@@ -698,8 +698,8 @@ p.lead {
 
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
   background: transparent;
   border: none;
   border-radius: 0;
@@ -709,62 +709,452 @@ p.lead {
 
 @media (max-width: 1024px) {
   .metrics-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 0;
+  }
+
+  /* Hide dividers on tablet so they don't look odd */
+  .metric-divider {
+    display: none !important;
   }
 }
 
 @media (max-width: 640px) {
   .metrics-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 28px 0;
   }
 }
 
 .metric-item {
-  background: rgba(13, 19, 35, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius);
-  padding: 24px 20px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  background: transparent;
+  backdrop-filter: none;
+  border: none;
+  border-radius: 0;
+  padding: 12px 28px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s ease;
+  box-shadow: none;
 }
 
 .metric-item:hover {
-  background: rgba(22, 30, 53, 0.85);
-  border-color: rgba(139, 92, 246, 0.35);
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(10, 15, 28, 0.5), 0 0 25px rgba(139, 92, 246, 0.15);
+  background: transparent;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+.metric-dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-bottom: 14px;
+  opacity: 0.85;
+  box-shadow: 0 0 10px currentColor;
 }
 
 .metric-value {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
-  margin-bottom: 6px;
-  background: var(--grad-accent);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-rotate 6s ease infinite;
+  margin-bottom: 8px;
 }
 
 .metric-label {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 500;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   line-height: 1.4;
+}
+
+/* Vertical divider between metrics */
+.metric-divider {
+  position: absolute;
+  right: 0;
+  top: 15%;
+  height: 70%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.08) 30%, rgba(255, 255, 255, 0.08) 70%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ---- Ring of Solutions — Interactive Section ---- */
+
+/* Layout: image + side panel */
+.ros-layout {
+  position: relative;
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.ros-image-wrap {
+  width: 100%;
+  position: relative;
+}
+
+.ros-image-container {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  overflow: visible;
+  border: 1px solid rgba(77, 216, 232, 0.12);
+  background: rgba(10, 15, 28, 0.85);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.ros-vehicle-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+  border-radius: 20px;
+}
+
+.ros-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(77, 216, 232, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ros-connection-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ── Hotspot button ───────────────── */
+.ros-hotspot {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+  outline: none;
+}
+
+.ros-hotspot-inner {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.ros-hotspot:hover .ros-hotspot-inner {
+  transform: scale(1.12);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5), 0 0 18px var(--accent, rgba(77, 216, 232, 0.3));
+}
+
+.ros-hotspot-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
+  pointer-events: none;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+.ros-hotspot:hover .ros-hotspot-label {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Pulse ring animation */
+.ros-pulse-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid;
+  transform: translate(-50%, -50%);
+  animation: ros-pulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes ros-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.9);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* ── Detail Panel (Floating Popover) ── */
+.ros-detail-panel {
+  width: 320px;
+  background: rgba(10, 15, 28, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(77, 216, 232, 0.25);
+  border-radius: 16px;
+  padding: 22px 20px;
+  position: absolute;
+  z-index: 30;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(77, 216, 232, 0.15);
+  overflow: hidden;
+}
+
+/* Subtle accent glow at top */
+.ros-detail-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent, #4DD8E8), transparent);
+  opacity: 0.7;
+}
+
+.ros-panel-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.ros-panel-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.ros-panel-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.ros-panel-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ros-panel-number {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.ros-panel-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.ros-panel-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin: 2px 0 0;
+}
+
+.ros-panel-divider {
+  height: 1px;
+  margin: 16px 0;
+}
+
+.ros-panel-desc {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin: 0 0 20px;
+}
+
+.ros-panel-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ros-panel-features-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.ros-panel-features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ros-panel-features-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: #CBD5E1;
+}
+
+.ros-feature-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Quick-nav pills ──────────────── */
+.ros-quick-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 36px;
+}
+
+.ros-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(13, 19, 35, 0.6);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.ros-pill:hover {
+  background: rgba(22, 30, 53, 0.8);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.ros-pill-active {
+  background: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 0 16px color-mix(in srgb, var(--pill-accent, #4DD8E8) 20%, transparent);
+}
+
+.ros-pill-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* ── RoS Responsive ───────────────── */
+@media (max-width: 768px) {
+  .ros-detail-panel {
+    position: absolute !important;
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    top: auto !important;
+    width: auto !important;
+    max-width: none !important;
+    transform: none !important;
+  }
+
+  .ros-hotspot-inner {
+    width: 32px;
+    height: 32px;
+  }
+
+  .ros-pulse-ring {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ros-quick-nav {
+    gap: 6px;
+  }
+
+  .ros-pill {
+    padding: 6px 12px;
+    font-size: 0.7rem;
+  }
+
+  .ros-hotspot-inner {
+    width: 28px;
+    height: 28px;
+  }
+
+  .ros-pulse-ring {
+    width: 28px;
+    height: 28px;
+  }
+
+  .ros-detail-panel {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
 }
 
 /* ---- Section ---- */
@@ -1519,7 +1909,7 @@ a.contact-link:hover {
   }
 
   .metrics-strip {
-    padding: 48px 0;
+    padding: 36px 0;
   }
 
   .section.compact {

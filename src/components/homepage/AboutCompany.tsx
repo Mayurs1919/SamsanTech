@@ -1,6 +1,67 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+
+function CountUpNumber({ target, suffix = "+" }: { target: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { amount: 0.3 });
+  const shouldReduce = useReducedMotion();
+  const animationRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (shouldReduce) {
+      setCount(target);
+      if (ref.current) ref.current.textContent = `${target}${suffix}`;
+      return;
+    }
+
+    if (!isInView) {
+      // Reset count to 0 when out of view so it re-animates smoothly next time it enters
+      setCount(0);
+      if (ref.current) ref.current.textContent = `0${suffix}`;
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      return;
+    }
+
+    let start: number | null = null;
+    const duration = 1200; // 1.2 seconds
+
+    const step = (timestamp: number) => {
+      if (start === null) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      // Smooth custom ease-out curve (2.2 exponent) for continuous progress without final value sticking/lag
+      const ease = 1 - Math.pow(1 - progress, 2.2);
+      const current = Math.min(Math.floor(ease * target), target);
+
+      if (ref.current) {
+        ref.current.textContent = `${current}${suffix}`;
+      }
+
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(step);
+      } else {
+        setCount(target);
+        if (ref.current) {
+          ref.current.textContent = `${target}${suffix}`;
+        }
+      }
+    };
+
+    animationRef.current = requestAnimationFrame(step);
+
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [isInView, target, suffix, shouldReduce]);
+
+  return (
+    <span ref={ref} style={{ display: "inline-block" }}>
+      {count}{suffix}
+    </span>
+  );
+}
 
 export default function AboutCompany() {
     const shouldReduce = useReducedMotion();
@@ -73,7 +134,7 @@ export default function AboutCompany() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: false }}
                         transition={{ duration: 0.6 }}
                         style={{
                             background: "#FFFFFF",
@@ -97,7 +158,7 @@ export default function AboutCompany() {
 
                         <div style={{ marginBottom: "40px" }}>
                             <h3 style={{ fontSize: "1.5rem", fontWeight: 600, color: "#0F172A", lineHeight: "1.3", letterSpacing: "-0.01em" }}>
-                                Focus On Automotive, Cockpit Engineering & Digital Transformation.
+                                Focus On Automotive, Cockpit Engineering &amp; Digital Transformation.
                             </h3>
                         </div>
 
@@ -127,7 +188,7 @@ export default function AboutCompany() {
                                     color: "#0F172A",
                                     lineHeight: 1
                                 }}>
-                                    50+
+                                    <CountUpNumber target={50} suffix="+" />
                                 </div>
                                 <div style={{ fontSize: "0.78rem", color: "#64748B", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
                                     Projects Completed
@@ -141,7 +202,7 @@ export default function AboutCompany() {
                                     color: "#0F172A",
                                     lineHeight: 1
                                 }}>
-                                    6+
+                                    <CountUpNumber target={6} suffix="+" />
                                 </div>
                                 <div style={{ fontSize: "0.78rem", color: "#64748B", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
                                     Countries Served

@@ -329,6 +329,14 @@ export default function AboutPage() {
             linkedinUrl: "https://www.linkedin.com/in/shridharpophali/"
         },
         {
+            name: "SANJAY HEJIB",
+            role: "Chief Operating Officer",
+            dept: "Executive Leadership",
+            imagePath: "/images/team/Sanjay.jpeg",
+            glowColor: "#4DD8E8",
+            linkedinUrl: "https://www.linkedin.com/in/sanjay-hejib-141a4a15/"
+        },
+        {
             name: "DR. PRADEEP BILURKAR",
             role: "Chief Data Scientist",
             dept: "Data & AI",
@@ -386,14 +394,7 @@ export default function AboutPage() {
                             }
                         }}
                     >
-                        <motion.div
-                            variants={{
-                                hidden: { opacity: 0, y: shouldReduce ? 0 : 12 },
-                                visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.4 } }
-                            }}
-                        >
-                            <span className="badge" style={{ marginBottom: "20px", fontSize: "12px", letterSpacing: "0.12em", color: "#4DD8E8", borderColor: "rgba(77, 216, 232, 0.25)", background: "rgba(77, 216, 232, 0.08)", fontFamily: "var(--font-mono)" }}>Company Overview</span>
-                        </motion.div>
+
 
                         <motion.h1
                             id="about-heading"
@@ -493,7 +494,6 @@ export default function AboutPage() {
                 <div className="container" style={{ maxWidth: "1400px" }}>
                     <div className="about-two-col" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "64px", alignItems: "center" }}>
                         <div>
-                            <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)", fontFamily: "var(--font-mono)" }}>Company Overview</span>
                             <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.5rem)", fontWeight: 700, marginBottom: "28px", color: "#0B1320", letterSpacing: "-0.025em", fontFamily: "var(--font-display)" }}>
                                 SAMSAN Technische Labs Pvt. Ltd.
                             </h2>
@@ -537,50 +537,26 @@ export default function AboutPage() {
                             </motion.div>
 
                             {/* Body Paragraphs container */}
-                            <motion.div
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true, margin: "-100px" }}
-                                variants={{
-                                    visible: {
-                                        transition: {
-                                            staggerChildren: shouldReduce ? 0 : 0.15
-                                        }
-                                    }
-                                }}
-                                style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "720px" }}
-                            >
-                                <motion.p
-                                    variants={{
-                                        hidden: { opacity: 0, y: shouldReduce ? 0 : 10 },
-                                        visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.4 } }
-                                    }}
-                                    style={{
-                                        fontSize: "1.05rem",
-                                        lineHeight: "1.8",
-                                        color: "#475569",
-                                        margin: 0,
-                                        fontFamily: "var(--font-body)"
-                                    }}
-                                >
+                            <div style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "720px" }}>
+                                <p style={{
+                                    fontSize: "1.05rem",
+                                    lineHeight: "1.8",
+                                    color: "#475569",
+                                    margin: 0,
+                                    fontFamily: "var(--font-body)"
+                                }}>
                                     SAMSAN Technische Labs Pvt. Ltd. is an automotive engineering and digital transformation company focused on connected mobility, cockpit engineering, embedded systems, SDV platforms, AI-led engineering automation, and strategic engineering capacity for global customers.
-                                </motion.p>
-                                <motion.p
-                                    variants={{
-                                        hidden: { opacity: 0, y: shouldReduce ? 0 : 10 },
-                                        visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.4 } }
-                                    }}
-                                    style={{
-                                        fontSize: "1.05rem",
-                                        lineHeight: "1.8",
-                                        color: "#475569",
-                                        margin: 0,
-                                        fontFamily: "var(--font-body)"
-                                    }}
-                                >
+                                </p>
+                                <p style={{
+                                    fontSize: "1.05rem",
+                                    lineHeight: "1.8",
+                                    color: "#475569",
+                                    margin: 0,
+                                    fontFamily: "var(--font-body)"
+                                }}>
                                     Our focus is to build safety-critical software that is always reliable, secure, and ready for production, bringing systems engineering excellence to automotive megatrends.
-                                </motion.p>
-                            </motion.div>
+                                </p>
+                            </div>
                         </div>
 
                         {/* Interactive Side Graphic */}
@@ -673,7 +649,6 @@ export default function AboutPage() {
                         <div style={{
                             position: "absolute", bottom: "36px", left: "36px", right: "36px"
                         }}>
-                            <span className="badge violet" style={{ marginBottom: "14px", fontFamily: "var(--font-mono)" }}>Automotive Cockpit Systems</span>
                             <h3 style={{ fontSize: "clamp(1.5rem, 2.5vw, 1.85rem)", color: "#ffffff", fontWeight: 700, fontFamily: "var(--font-display)", margin: 0 }}>Next-Gen Hyper-Modern Cockpit Ecosystems</h3>
                         </div>
                     </div>
@@ -712,7 +687,6 @@ export default function AboutPage() {
 
                         {/* Why Choose Us / Delivery Philosophy */}
                         <div>
-                            <span className="badge rose" style={{ marginBottom: "16px", fontFamily: "var(--font-mono)" }}>Our Philosophy</span>
                             <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.2rem)", fontWeight: 700, marginBottom: "28px", color: "#0B1320", fontFamily: "var(--font-display)" }}>Delivery Philosophy</h2>
                             <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
                                 {reasons.map((reason, idx) => (
@@ -796,45 +770,136 @@ export default function AboutPage() {
             <section className="section-dark" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "var(--midnight)", padding: "108px 0" }}>
                 <style dangerouslySetInnerHTML={{
                     __html: `
-                    /* CEO Spotlight Card */
+                    /* CEO Spotlight Card - Ultra Modern Glass & Ambient Glow */
                     .ceo-card {
                         width: 100%;
-                        background: #161B22;
-                        border: 1px solid rgba(255, 255, 255, 0.07);
-                        border-radius: 16px;
+                        background: rgba(18, 24, 38, 0.75);
+                        backdrop-filter: blur(16px);
+                        -webkit-backdrop-filter: blur(16px);
+                        border: 1px solid rgba(77, 216, 232, 0.18);
+                        border-radius: 20px;
                         padding: 0;
                         overflow: hidden;
                         position: relative;
                         display: grid;
-                        grid-template-columns: 380px 1fr;
+                        grid-template-columns: 400px 1fr;
                         align-items: stretch;
-                        transition: box-shadow 0.25s ease, border-color 0.25s ease;
+                        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
                         margin-bottom: 64px;
+                        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+                    }
+
+                    .ceo-card::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: radial-gradient(circle at 10% 20%, rgba(77, 216, 232, 0.08) 0%, transparent 45%),
+                                    radial-gradient(circle at 90% 80%, rgba(255, 138, 61, 0.06) 0%, transparent 45%);
+                        pointer-events: none;
+                        z-index: 0;
                     }
 
                     .ceo-card:hover {
-                        box-shadow: 0 20px 48px rgba(0,0,0,0.35);
+                        transform: translateY(-4px);
+                        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 30px rgba(77, 216, 232, 0.15);
                         border-color: rgba(77, 216, 232, 0.4);
                     }
 
                     .ceo-card:hover .ceo-accent-line {
                         opacity: 1 !important;
+                        box-shadow: 0 0 14px rgba(77, 216, 232, 0.7);
                     }
 
                     .ceo-photo-area {
                         position: relative;
                         overflow: hidden;
-                        min-height: 420px;
-                        background: linear-gradient(180deg, #1a2235 0%, #0f1720 100%);
+                        min-height: 480px;
+                        background: radial-gradient(circle at 50% 35%, rgba(77, 216, 232, 0.15) 0%, rgba(13, 19, 35, 0.95) 85%);
+                        border-right: 1px solid rgba(255, 255, 255, 0.06);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .ceo-photo-glow {
+                        position: absolute;
+                        width: 260px;
+                        height: 260px;
+                        border-radius: 50%;
+                        background: radial-gradient(circle, rgba(77, 216, 232, 0.25) 0%, transparent 70%);
+                        filter: blur(40px);
+                        top: 20%;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        pointer-events: none;
+                    }
+
+                    .ceo-photo-badge {
+                        position: absolute;
+                        top: 20px;
+                        left: 20px;
+                        z-index: 4;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+
+                    .ceo-photo-badge-dot {
+                        width: 7px;
+                        height: 7px;
+                        border-radius: 50%;
+                        background: #4DD8E8;
+                        box-shadow: 0 0 8px #4DD8E8;
+                        animation: pulse-cyan 2s infinite;
+                    }
+
+                    @keyframes pulse-cyan {
+                        0%, 100% { opacity: 1; transform: scale(1); }
+                        50% { opacity: 0.5; transform: scale(1.3); }
                     }
 
                     .ceo-content-area {
-                        padding: 48px 44px;
+                        padding: 44px 48px;
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
-                        gap: 16px;
+                        gap: 18px;
                         text-align: left;
+                        position: relative;
+                        z-index: 1;
+                    }
+
+                    .ceo-vision-quote {
+                        position: relative;
+                        padding: 14px 18px;
+                        background: rgba(255, 255, 255, 0.025);
+                        border-left: 3px solid #4DD8E8;
+                        border-radius: 0 10px 10px 0;
+                        font-style: italic;
+                        font-size: 0.92rem;
+                        line-height: 1.6;
+                        color: #CBD5E1;
+                    }
+
+                    .ceo-stat-card {
+                        flex: 1;
+                        background: rgba(255, 255, 255, 0.03);
+                        border: 1px solid rgba(255, 255, 255, 0.07);
+                        border-radius: 12px;
+                        padding: 14px 16px;
+                        transition: all 0.25s ease;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                    }
+
+                    .ceo-stat-card:hover {
+                        background: rgba(77, 216, 232, 0.06);
+                        border-color: rgba(77, 216, 232, 0.25);
+                        transform: translateY(-2px);
                     }
 
                     @media (max-width: 1023px) {
@@ -842,17 +907,22 @@ export default function AboutPage() {
                             grid-template-columns: 1fr;
                         }
                         .ceo-photo-area {
-                            min-height: 320px;
+                            min-height: 360px;
                             aspect-ratio: 4/3;
+                            border-right: none;
+                            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
                         }
                         .ceo-content-area {
-                            padding: 32px 28px;
+                            padding: 36px 28px;
                         }
                     }
 
                     @media (max-width: 639px) {
                         .ceo-content-area {
                             padding: 28px 20px;
+                        }
+                        .ceo-stats-grid {
+                            grid-template-columns: 1fr !important;
                         }
                     }
 
@@ -1112,15 +1182,15 @@ export default function AboutPage() {
                         transition={{ duration: shouldReduce ? 0.01 : 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
                         className="ceo-card"
                     >
-                        {/* Top Accent Line */}
+                        {/* Top Animated Accent Line */}
                         <div className="ceo-accent-line" style={{
                             position: "absolute",
                             top: 0,
                             left: 0,
                             right: 0,
                             height: "3px",
-                            borderRadius: "16px 16px 0 0",
-                            background: "linear-gradient(90deg, #4DD8E8 0%, #FF8A3D 50%, #4DD8E8 100%)",
+                            borderRadius: "20px 20px 0 0",
+                            background: "linear-gradient(90deg, #4DD8E8 0%, #FF8A3D 50%, #3B82F6 100%)",
                             opacity: 0.85,
                             transition: "opacity 0.25s ease",
                             zIndex: 2
@@ -1128,194 +1198,175 @@ export default function AboutPage() {
 
                         {/* LEFT SIDE — PHOTO AREA */}
                         <div className="ceo-photo-area">
+                            {/* Ambient Light Halo */}
+                            <div className="ceo-photo-glow" />
+
                             <Image
                                 src="/images/team/prashant_deshpande.png"
                                 alt="PRASHANT DESHPANDE"
                                 fill
-                                sizes="(max-width: 1023px) 100vw, 380px"
+                                sizes="(max-width: 1023px) 100vw, 400px"
                                 priority
                                 style={{
                                     objectFit: "cover",
                                     objectPosition: "center top",
                                     display: "block",
                                     mixBlendMode: "luminosity",
-                                    opacity: 0.92
+                                    opacity: 0.94,
+                                    zIndex: 1
                                 }}
                             />
-                            {/* Bottom Gradient Overlay */}
+
+                            {/* Gradient Fade Overlay */}
                             <div style={{
                                 position: "absolute",
                                 bottom: 0,
                                 left: 0,
                                 right: 0,
-                                height: "35%",
-                                background: "linear-gradient(to bottom, transparent, rgba(13, 19, 35, 0.55))",
-                                pointerEvents: "none"
+                                height: "40%",
+                                background: "linear-gradient(to bottom, transparent 0%, rgba(13, 19, 35, 0.85) 100%)",
+                                pointerEvents: "none",
+                                zIndex: 2
                             }} />
                         </div>
 
                         {/* RIGHT SIDE — CONTENT AREA */}
                         <div className="ceo-content-area">
-                            {/* A) DEPARTMENT TAG */}
-                            <span style={{
-                                fontFamily: "var(--font-mono)",
-                                fontSize: "10px",
-                                letterSpacing: "0.12em",
-                                textTransform: "uppercase",
-                                fontWeight: 600,
-                                color: "#4DD8E8",
-                                marginBottom: "4px"
-                            }}>
-                                Chief Executive Officer
-                            </span>
-
-                            {/* B) NAME */}
+                            {/* A) NAME */}
                             <h3 style={{
                                 fontFamily: "var(--font-display)",
-                                fontSize: "clamp(1.8rem, 2.8vw, 2.4rem)",
+                                fontSize: "clamp(2rem, 3vw, 2.6rem)",
                                 fontWeight: 800,
                                 letterSpacing: "-0.02em",
-                                color: "#F1F5F9",
+                                color: "#F8FAFC",
                                 lineHeight: 1.1,
                                 margin: 0
                             }}>
                                 PRASHANT DESHPANDE
                             </h3>
 
-                            {/* C) TITLE */}
+                            {/* B) TITLE */}
                             <p style={{
                                 fontFamily: "var(--font-mono)",
                                 fontSize: "11.5px",
-                                letterSpacing: "0.07em",
+                                letterSpacing: "0.08em",
                                 textTransform: "uppercase",
                                 color: "#FF8A3D",
-                                marginBottom: "4px",
-                                marginTop: 0
-                            }}>
-                                Founder, CEO & Managing Director
-                            </p>
-
-                            {/* D) DIVIDER */}
-                            <div style={{
-                                width: "40px",
-                                height: "2px",
-                                background: "linear-gradient(90deg, #4DD8E8, #FF8A3D)",
-                                borderRadius: "1px",
-                                margin: 0
-                            }} />
-
-                            {/* E) BIO TEXT */}
-                            <p style={{
-                                fontSize: "0.97rem",
-                                lineHeight: 1.75,
-                                color: "#94A3B8",
-                                maxWidth: "500px",
+                                fontWeight: 600,
                                 margin: 0
                             }}>
-                                25+ years in automotive, embedded software, engineering delivery, business development, global customer management, and connected mobility solutions.
+                                Founder, CEO &amp; Managing Director
                             </p>
 
-                            {/* F) STATS ROW */}
-                            <div style={{ display: "flex", gap: "32px", marginTop: "8px" }}>
-                                <div style={{ display: "flex", flexDirection: "column" }}>
+                            {/* C) EXECUTIVE VISION QUOTE */}
+                            <div className="ceo-vision-quote">
+                                &ldquo;Pioneering intelligent automotive software &amp; connected mobility solutions with 25+ years of engineering rigor and global customer vision.&rdquo;
+                            </div>
+
+                            {/* F) STATS GRID */}
+                            <div className="ceo-stats-grid" style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(3, 1fr)",
+                                gap: "12px",
+                                marginTop: "4px"
+                            }}>
+                                <div className="ceo-stat-card">
                                     <span style={{
                                         fontFamily: "var(--font-display)",
-                                        fontSize: "1.7rem",
+                                        fontSize: "1.65rem",
                                         fontWeight: 800,
                                         letterSpacing: "-0.02em",
-                                        color: "#F1F5F9",
+                                        background: "linear-gradient(135deg, #FFFFFF 0%, #4DD8E8 100%)",
+                                        WebkitBackgroundClip: "text",
+                                        WebkitTextFillColor: "transparent",
                                         lineHeight: 1
                                     }}>25+</span>
                                     <span style={{
                                         fontFamily: "var(--font-mono)",
-                                        fontSize: "10px",
+                                        fontSize: "9.5px",
                                         letterSpacing: "0.07em",
                                         textTransform: "uppercase",
                                         color: "#94A3B8",
-                                        display: "block",
-                                        marginTop: "5px"
+                                        marginTop: "4px"
                                     }}>Years Experience</span>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column" }}>
+                                <div className="ceo-stat-card">
                                     <span style={{
                                         fontFamily: "var(--font-display)",
-                                        fontSize: "1.7rem",
+                                        fontSize: "1.65rem",
                                         fontWeight: 800,
                                         letterSpacing: "-0.02em",
-                                        color: "#F1F5F9",
+                                        background: "linear-gradient(135deg, #FFFFFF 0%, #FF8A3D 100%)",
+                                        WebkitBackgroundClip: "text",
+                                        WebkitTextFillColor: "transparent",
                                         lineHeight: 1
                                     }}>50+</span>
                                     <span style={{
                                         fontFamily: "var(--font-mono)",
-                                        fontSize: "10px",
+                                        fontSize: "9.5px",
                                         letterSpacing: "0.07em",
                                         textTransform: "uppercase",
                                         color: "#94A3B8",
-                                        display: "block",
-                                        marginTop: "5px"
+                                        marginTop: "4px"
                                     }}>Engineers Led</span>
                                 </div>
-                                <div style={{ display: "flex", flexDirection: "column" }}>
+                                <div className="ceo-stat-card">
                                     <span style={{
                                         fontFamily: "var(--font-display)",
-                                        fontSize: "1.7rem",
+                                        fontSize: "1.65rem",
                                         fontWeight: 800,
                                         letterSpacing: "-0.02em",
-                                        color: "#F1F5F9",
+                                        background: "linear-gradient(135deg, #FFFFFF 0%, #3B82F6 100%)",
+                                        WebkitBackgroundClip: "text",
+                                        WebkitTextFillColor: "transparent",
                                         lineHeight: 1
                                     }}>3</span>
                                     <span style={{
                                         fontFamily: "var(--font-mono)",
-                                        fontSize: "10px",
+                                        fontSize: "9.5px",
                                         letterSpacing: "0.07em",
                                         textTransform: "uppercase",
                                         color: "#94A3B8",
-                                        display: "block",
-                                        marginTop: "5px"
+                                        marginTop: "4px"
                                     }}>Global Regions</span>
                                 </div>
                             </div>
 
-                            {/* G) LINKEDIN ROW */}
+                            {/* G) LINKEDIN ACTION ROW */}
                             <div style={{
-                                marginTop: "20px",
-                                paddingTop: "18px",
-                                borderTop: "1px solid rgba(255, 255, 255, 0.04)",
+                                marginTop: "8px",
+                                paddingTop: "16px",
+                                borderTop: "1px solid rgba(255, 255, 255, 0.06)",
                                 display: "flex",
                                 alignItems: "center",
-                                justifyContent: "space-between"
+                                justifyContent: "flex-end"
                             }}>
-                                <span style={{
-                                    fontFamily: "var(--font-mono)",
-                                    fontSize: "10px",
-                                    letterSpacing: "0.08em",
-                                    textTransform: "uppercase",
-                                    color: "rgba(255, 255, 255, 0.36)"
-                                }}>
-                                    View Profile
-                                </span>
                                 <a
                                     href="https://www.linkedin.com/in/prashant-deshpande-samsan/"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="Prashant Deshpande on LinkedIn"
-                                    className="lead-linkedin-btn"
+                                    className="linkedin-icon-btn"
                                     style={{
-                                        width: "36px",
-                                        height: "36px",
-                                        borderRadius: "8px",
-                                        background: "rgba(255, 255, 255, 0.08)",
-                                        border: "1px solid rgba(255, 255, 255, 0.12)",
-                                        display: "flex",
+                                        display: "inline-flex",
                                         alignItems: "center",
-                                        justifyContent: "center",
-                                        transition: "all 0.2s ease",
-                                        textDecoration: "none"
+                                        gap: "8px",
+                                        padding: "8px 16px",
+                                        borderRadius: "10px",
+                                        background: "rgba(10, 102, 194, 0.15)",
+                                        border: "1px solid rgba(10, 102, 194, 0.35)",
+                                        color: "#38BDF8",
+                                        fontSize: "12px",
+                                        fontWeight: 600,
+                                        fontFamily: "var(--font-mono)",
+                                        textDecoration: "none",
+                                        transition: "all 0.25s ease"
                                     }}
                                 >
-                                    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                        <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
+                                    <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <path d={LINKEDIN_SVG_PATH} fill="currentColor" />
                                     </svg>
+                                    <span>Connect on LinkedIn</span>
                                 </a>
                             </div>
                         </div>

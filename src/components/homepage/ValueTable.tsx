@@ -5,23 +5,23 @@ import { motion, useReducedMotion } from "framer-motion";
 
 const valueData = [
     {
-        need: "NEED COCKPIT / IVI / CLUSTER ENGINEERING",
-        response: "Android Automotive, QNX/Linux, HMI, middleware, validation"
+        need: "COCKPIT / IVI / CLUSTER ENGINEERING",
+        response: "Android Automotive, QNX/Linux, Virtual SDK Cloud-Based , HMI, middleware, validation"
     },
     {
-        need: "NEED CONNECTED VEHICLE / TELEMATICS PLATFORM",
+        need: "CONNECTED VEHICLE / TELEMATICS PLATFORM",
         response: "TCU, cloud telemetry, OTA, IoT gateway, diagnostics"
     },
     {
-        need: "NEED FASTER ENGINEERING LIFECYCLE",
+        need: "FASTER ENGINEERING LIFECYCLE",
         response: "GenAI requirements, test generation, traceability, code/test acceleration"
     },
     {
-        need: "NEED AUTOMOTIVE-DOMAIN CAPACITY",
+        need: "AUTOMOTIVE-DOMAIN CAPACITY",
         response: "Strategic staffing, CoE, BOT, managed teams"
     },
     {
-        need: "NEED PRODUCTION-GRADE QUALITY",
+        need: "PRODUCTION-GRADE QUALITY",
         response: "ASPICE, ISO 26262, cybersecurity, MISRA, V&V discipline"
     }
 ];
@@ -104,9 +104,6 @@ export default function ValueTable() {
                     transition={{ duration: 0.6 }}
                 >
                     <div style={{ textAlign: "center", marginBottom: "40px" }}>
-                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", background: "rgba(232, 82, 26, 0.08)", border: "1px solid rgba(232, 82, 26, 0.2)" }}>
-                            Value Creation
-                        </span>
                         <h2 id="value-heading" style={{
                             fontSize: "clamp(1.8rem, 3.2vw, 2.6rem)",
                             fontWeight: 700,
@@ -167,7 +164,7 @@ export default function ValueTable() {
                                 padding: "18px 24px",
                                 fontFamily: "var(--font-sans)"
                             }}>
-                                SAMSAN RESPONSE
+                                SAMSAN SOLUTION
                             </div>
                         </div>
 

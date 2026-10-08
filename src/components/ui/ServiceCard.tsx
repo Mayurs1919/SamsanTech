@@ -94,8 +94,9 @@ function TechChipItem({ chip, theme = "dark" }: { chip: TechChip; theme?: "light
                 <img
                     src={chip.logoUrl}
                     alt={chip.label}
+                    width={16}
                     height={16}
-                    style={{ width: "auto", height: "16px", display: "block", flexShrink: 0 }}
+                    style={{ width: "16px", height: "16px", display: "block", flexShrink: 0, objectFit: "contain" }}
                     onError={() => setImgError(true)}
                 />
             )}

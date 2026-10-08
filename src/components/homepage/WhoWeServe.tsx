@@ -43,7 +43,6 @@ export default function WhoWeServe() {
         <section className="section" id="who-we-serve-section" style={{ position: "relative", borderTop: "1px solid var(--border)" }}>
             <div className="container">
                 <div style={{ textAlign: "center", marginBottom: "36px" }}>
-                    <span className="badge mint" style={{ marginBottom: "16px" }}>Who We Serve</span>
                     <h2 style={{ fontSize: "2.5rem", fontWeight: 700, letterSpacing: "-0.025em" }}>
                         Delivering Domain Expertise
                     </h2>
@@ -90,7 +89,6 @@ export default function WhoWeServe() {
                                 style={{ backgroundImage: `url(${item.img})` }}
                             >
                                 <div className="serve-card-overlay featured-overlay">
-                                    <span className="badge" style={{ alignSelf: "flex-start", marginBottom: "12px" }}>Core Expertise</span>
                                     <h3>{item.title}</h3>
                                     <p>{item.desc}</p>
                                 </div>

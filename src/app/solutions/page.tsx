@@ -50,8 +50,9 @@ function TechChipItem({ chip }: { chip: TechChip }) {
                 <img
                     src={chip.logoUrl}
                     alt={chip.label}
+                    width={14}
                     height={14}
-                    style={{ width: "auto", height: "14px", display: "block", flexShrink: 0 }}
+                    style={{ width: "14px", height: "14px", display: "block", flexShrink: 0, objectFit: "contain" }}
                     onError={() => setImgError(true)}
                 />
             )}
