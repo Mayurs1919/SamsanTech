@@ -11,7 +11,7 @@ export default function Footer() {
         { label: "Home",                     href: "/", isVisible: true },
         { label: "Engineering Offerings",     href: "/engineering-offerings", isVisible: true },
         { label: "Products & Accelerators",   href: "/products-and-accelerators", isVisible: true },
-        { label: "Labs & Delivery",           href: "/labs-and-delivery", isVisible: true },
+        { label: "Stories",                  href: "/labs-and-delivery", isVisible: true },
         { label: "Investors / Partners",     href: "/investors", isVisible: true },
         { label: "Consulting & Staffing",     href: "/consulting-staffing", isVisible: true },
         { label: "About",                    href: "/about", isVisible: true },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -22,10 +22,10 @@ const navItems: NavItem[] = [
     { label: "Home", href: "/", isVisible: true },
     { label: "Engineering Offerings", href: "/engineering-offerings", isVisible: true },
     { label: "Products & Accelerators", href: "/products-and-accelerators", isVisible: true },
-    { label: "Labs & Delivery", href: "/labs-and-delivery", isVisible: true },
+    { label: "Stories", href: "/labs-and-delivery", isVisible: true },
     { label: "Investors / Partners", href: "/investors", isVisible: true },
     { label: "Consulting & Staffing", href: "/consulting-staffing", isVisible: true },
-{ label: "About", href: "/about", isVisible: true },
+    { label: "About", href: "/about", isVisible: true },
     { label: "Careers", href: "/careers", isVisible: true },
     // Hidden items not in the approved list
     { label: "Engagement Models", href: "/engagement-models", isVisible: false },
@@ -34,6 +34,8 @@ const navItems: NavItem[] = [
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [navHidden, setNavHidden] = useState(false);
+    const lastScrollY = useRef(0);
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
     const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
 
@@ -48,7 +50,27 @@ export default function Header() {
     }, [pathname]);
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 40);
+        const SCROLL_THRESHOLD = 80;   // px — below this, always show nav
+        const HIDE_DELTA = 40;         // px scrolled down before hiding
+
+        const onScroll = () => {
+            const y = window.scrollY;
+            setScrolled(y > 40);
+
+            if (y < SCROLL_THRESHOLD) {
+                // Near the top — always fully visible
+                setNavHidden(false);
+            } else if (y > lastScrollY.current + HIDE_DELTA) {
+                // Scrolling down — hide nav (logo stays)
+                setNavHidden(true);
+            } else if (y < lastScrollY.current - 10) {
+                // Scrolling up — reveal nav
+                setNavHidden(false);
+            }
+
+            lastScrollY.current = y;
+        };
+
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
@@ -77,6 +99,15 @@ export default function Header() {
         return false;
     };
 
+    // Shared animation variants for nav elements (not the logo)
+    const navAnimate = navHidden && !isOpen
+        ? { opacity: 0, filter: "blur(8px)", y: -10, pointerEvents: "none" as const }
+        : { opacity: 1, filter: "blur(0px)", y: 0, pointerEvents: "auto" as const };
+
+    const navTransition = shouldReduce
+        ? { duration: 0 }
+        : { duration: 0.38, ease: "easeInOut" as const };
+
     return (
         <>
             <a
@@ -89,13 +120,19 @@ export default function Header() {
 
             <header className={`site-header ${scrolled ? "scrolled" : ""} ${isOpen ? "menu-open" : ""}`}>
                 <nav className="nav-inner" aria-label="Primary navigation">
-                    {/* Brand */}
+
+                    {/* ── Brand / Logo — ALWAYS VISIBLE, never hidden ── */}
                     <Link href="/" className="brand" aria-label="Samsan — Home">
                         <SamsanAnimatedLogo height="80px" />
                     </Link>
 
-                    {/* Desktop Links */}
-                    <ul className="nav-links" role="list">
+                    {/* ── Desktop Nav Links — fades/blurs out on scroll-down ── */}
+                    <motion.ul
+                        className="nav-links"
+                        role="list"
+                        animate={navAnimate}
+                        transition={navTransition}
+                    >
                         {navItems.filter(item => item.isVisible !== false).map((item) => {
                             const hasSubmenu = !!item.submenu;
                             const isActive = isItemActive(item.href) || (hasSubmenu && pathname.startsWith(item.href));
@@ -182,11 +219,15 @@ export default function Header() {
                                 </li>
                             );
                         })}
-                    </ul>
+                    </motion.ul>
 
-                        {/* Desktop CTA + hamburger (grid col 3 — right) */}
-                    <div className="nav-actions">
-                        {/* Always reserve the button's space; hide it on the contact page so layout stays stable */}
+                    {/* ── Desktop CTA + Hamburger — fades/blurs out on scroll-down ── */}
+                    <motion.div
+                        className="nav-actions"
+                        animate={navAnimate}
+                        transition={navTransition}
+                    >
+                        {/* Always reserve the button's space; hide it on contact page */}
                         <Link
                             href="/contact"
                             className="btn btn-primary"
@@ -219,7 +260,7 @@ export default function Header() {
                                 )}
                             </svg>
                         </button>
-                    </div>
+                    </motion.div>
                 </nav>
 
                 {/* Mobile menu */}
