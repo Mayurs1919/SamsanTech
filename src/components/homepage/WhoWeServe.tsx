@@ -43,6 +43,10 @@ export default function WhoWeServe() {
         <section className="section" id="who-we-serve-section" style={{ position: "relative", borderTop: "1px solid var(--border)" }}>
             <div className="container">
                 <div style={{ textAlign: "center", marginBottom: "36px" }}>
+<<<<<<< HEAD
+=======
+                    <span className="badge mint" style={{ marginBottom: "16px" }}>Who We Serve</span>
+>>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                     <h2 style={{ fontSize: "2.5rem", fontWeight: 700, letterSpacing: "-0.025em" }}>
                         Delivering Domain Expertise
                     </h2>
@@ -53,7 +57,11 @@ export default function WhoWeServe() {
 
                 {/* Custom Responsive Grid */}
                 <div className="serve-grid-container">
+<<<<<<< HEAD
 
+=======
+                    
+>>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                     {/* Left Column (Industrial & Infrastructure) */}
                     <div className="serve-col">
                         {serveItems.filter(item => item.gridArea.startsWith("left")).map((item, idx) => (
@@ -89,6 +97,10 @@ export default function WhoWeServe() {
                                 style={{ backgroundImage: `url(${item.img})` }}
                             >
                                 <div className="serve-card-overlay featured-overlay">
+<<<<<<< HEAD
+=======
+                                    <span className="badge" style={{ alignSelf: "flex-start", marginBottom: "12px" }}>Core Expertise</span>
+>>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                                     <h3>{item.title}</h3>
                                     <p>{item.desc}</p>
                                 </div>
@@ -148,7 +160,11 @@ export default function WhoWeServe() {
                 .serve-card-overlay {
                     position: absolute;
                     inset: 0;
+<<<<<<< HEAD
                     background: linear-gradient(to top, rgba(4, 6, 14, 1.0) 0%, rgba(4, 6, 14, 0.80) 45%, rgba(4, 6, 14, 0.20) 100%);
+=======
+                    background: linear-gradient(to top, rgba(10, 15, 28, 0.95) 0%, rgba(10, 15, 28, 0.6) 50%, rgba(10, 15, 28, 0.25) 100%);
+>>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                     display: flex;
                     flex-direction: column;
                     justify-content: flex-end;
@@ -156,6 +172,7 @@ export default function WhoWeServe() {
                     transition: background 0.3s ease;
                 }
                 .serve-card-img:hover .serve-card-overlay {
+<<<<<<< HEAD
                     background: linear-gradient(to top, rgba(4, 6, 14, 1.0) 0%, rgba(4, 6, 14, 0.88) 48%, rgba(4, 6, 14, 0.28) 100%);
                 }
                 .serve-card-overlay h3 {
@@ -166,10 +183,20 @@ export default function WhoWeServe() {
                     letter-spacing: -0.01em;
                     line-height: 1.2;
                     text-shadow: 0 2px 12px rgba(0,0,0,0.9), 0 1px 3px rgba(0,0,0,1);
+=======
+                    background: linear-gradient(to top, rgba(10, 15, 28, 0.98) 0%, rgba(10, 15, 28, 0.7) 50%, rgba(10, 15, 28, 0.35) 100%);
+                }
+                .serve-card-overlay h3 {
+                    font-size: 1.15rem;
+                    color: #ffffff;
+                    margin-bottom: 8px;
+                    font-weight: 600;
+>>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                 }
                 .serve-card-overlay p {
                     font-size: 0.8rem;
                     line-height: 1.5;
+<<<<<<< HEAD
                     color: rgba(203, 213, 225, 0.90) !important;
                     text-shadow: 0 1px 6px rgba(0,0,0,0.8);
                 }
@@ -180,6 +207,15 @@ export default function WhoWeServe() {
                 .featured-overlay p {
                     font-size: 0.88rem;
                     color: rgba(203, 213, 225, 0.92) !important;
+=======
+                    color: var(--text-secondary);
+                }
+                .featured-overlay h3 {
+                    font-size: 1.4rem;
+                }
+                .featured-overlay p {
+                    font-size: 0.88rem;
+>>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                 }
 
                 @media (max-width: 900px) {

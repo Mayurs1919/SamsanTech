@@ -22,6 +22,13 @@ export default function CTA() {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-60px" }}
                 >
+<<<<<<< HEAD
+=======
+                    <motion.div variants={fadeUp(shouldReduce, 0)}>
+                        <span className="badge mint" style={{ marginBottom: "24px" }}>Ready to build?</span>
+                    </motion.div>
+
+>>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                     <motion.h2 id="cta-heading" variants={fadeUp(shouldReduce, 0.1)}>
                         Let&apos;s scope your engagement
                     </motion.h2>

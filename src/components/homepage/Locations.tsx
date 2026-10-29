@@ -90,6 +90,10 @@ export default function Locations() {
 
             <div className="container">
                 <div style={{ textAlign: "center", marginBottom: "36px" }}>
+<<<<<<< HEAD
+=======
+                    <span className="badge mint" style={{ marginBottom: "16px" }}>Our Locations</span>
+>>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                     <h2 style={{ fontSize: "2.5rem", fontWeight: 700, letterSpacing: "-0.025em" }}>
                         Global Engineering Footprint
                     </h2>
