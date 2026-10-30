@@ -101,13 +101,10 @@ html {
      when navigating between pages with/without a scrollbar (e.g. Contact page) */
   scrollbar-gutter: stable;
   overflow-y: scroll;
-<<<<<<< HEAD
   /* Prevent horizontal scroll bleed on mobile */
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-=======
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 body {
@@ -118,7 +115,6 @@ body {
   line-height: 1.75;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
-<<<<<<< HEAD
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
   /* Smooth native scroll on iOS */
@@ -126,11 +122,6 @@ body {
   overscroll-behavior-y: auto;
   /* Prevent horizontal overflow from breaking layout */
   overflow-x: hidden;
-=======
-  /* Do NOT set overflow-x: hidden here — it suppresses scrollbar-gutter on html
-     and causes the header to shift on short pages. Use a scoped wrapper instead. */
-  min-height: 100vh;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 /* Global ambient radial glows */
@@ -171,7 +162,6 @@ button {
   width: 100%;
 }
 
-<<<<<<< HEAD
 @media (max-width: 1280px) {
   .container {
     padding: 0 32px;
@@ -193,11 +183,6 @@ button {
 @media (max-width: 480px) {
   .container {
     padding: 0 16px;
-=======
-@media (max-width: 1024px) {
-  .container {
-    padding: 0 28px;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   }
 }
 
@@ -370,11 +355,7 @@ p.lead {
   right: 20px;
   max-width: 1600px;
   margin: 0 auto;
-<<<<<<< HEAD
   z-index: 1000;
-=======
-  z-index: 100;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   background: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
@@ -382,7 +363,6 @@ p.lead {
   box-shadow: none !important;
   pointer-events: none;
   transition: top 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-<<<<<<< HEAD
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
   will-change: transform;
@@ -390,8 +370,6 @@ p.lead {
 
 .site-header.menu-open {
   pointer-events: auto !important;
-=======
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 .site-header.scrolled {
@@ -477,11 +455,7 @@ p.lead {
     0 8px 32px rgba(0, 0, 0, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-<<<<<<< HEAD
   flex-shrink: 1;
-=======
-  flex-shrink: 0;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 .site-header.scrolled .nav-links {
@@ -500,17 +474,10 @@ p.lead {
 
 .nav-links a {
   font-family: var(--font-body);
-<<<<<<< HEAD
   font-size: 0.90rem;
   font-weight: 500;
   color: rgba(230, 238, 250, 0.92);
   padding: 6px 12px;
-=======
-  font-size: 0.94rem;
-  font-weight: 500;
-  color: rgba(230, 238, 250, 0.92);
-  padding: 7px 14px;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   border-radius: 100px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: inline-flex;
@@ -569,7 +536,6 @@ p.lead {
   display: none;
   align-items: center;
   justify-content: center;
-<<<<<<< HEAD
   background: rgba(13, 19, 35, 0.85);
   border: 1px solid var(--border);
   color: var(--text-primary);
@@ -577,18 +543,11 @@ p.lead {
   width: 44px;
   height: 44px;
   padding: 0;
-=======
-  background: rgba(13, 19, 35, 0.75);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  padding: 8px;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   border-radius: var(--radius-sm);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: border-color 0.2s;
   flex-shrink: 0;
-<<<<<<< HEAD
   cursor: pointer;
   /* Ensure pointer events always work on the button itself */
   pointer-events: auto;
@@ -597,15 +556,12 @@ p.lead {
   /* Prevent callout on long press (iOS) */
   -webkit-touch-callout: none;
   touch-action: manipulation;
-=======
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 .hamburger:hover {
   border-color: var(--border-hov);
 }
 
-<<<<<<< HEAD
 .hamburger:active {
   background: rgba(124, 58, 237, 0.15);
   border-color: var(--border-hov);
@@ -623,17 +579,10 @@ p.lead {
   -webkit-overflow-scrolling: touch;
   /* Let framer motion control height */
   max-height: calc(100dvh - 58px);
-=======
-/* ---- Mobile Nav ---- */
-.mobile-nav {
-  background: rgba(13, 19, 35, 0.98);
-  overflow: hidden;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 .mobile-nav a {
   display: block;
-<<<<<<< HEAD
   /* Minimum 48px touch target */
   padding: 15px 24px;
   font-size: 1rem;
@@ -649,20 +598,10 @@ p.lead {
   /* Prevent text selection on tap */
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-=======
-  padding: 14px 24px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  transition: color 0.2s;
-  text-decoration: none;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 .mobile-nav a:hover,
 .mobile-nav a.active {
-<<<<<<< HEAD
   color: #FFFFFF;
   background: rgba(124, 58, 237, 0.08);
 }
@@ -678,13 +617,6 @@ p.lead {
   pointer-events: auto;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-=======
-  color: var(--violet-mid);
-}
-
-.mobile-nav .nav-cta-mobile {
-  padding: 16px 24px;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 /* ---- Hero ---- */
@@ -754,11 +686,7 @@ p.lead {
 
 /* ---- Metrics ---- */
 .metrics-strip {
-<<<<<<< HEAD
   padding: 56px 0;
-=======
-  padding: 48px 0 64px 0;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   background: transparent;
   border: none;
   width: 100%;
@@ -770,13 +698,8 @@ p.lead {
 
 .metrics-grid {
   display: grid;
-<<<<<<< HEAD
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
-=======
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   background: transparent;
   border: none;
   border-radius: 0;
@@ -786,7 +709,6 @@ p.lead {
 
 @media (max-width: 1024px) {
   .metrics-grid {
-<<<<<<< HEAD
     grid-template-columns: repeat(2, 1fr);
     gap: 32px 0;
   }
@@ -794,27 +716,17 @@ p.lead {
   /* Hide dividers on tablet so they don't look odd */
   .metric-divider {
     display: none !important;
-=======
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   }
 }
 
 @media (max-width: 640px) {
   .metrics-grid {
-<<<<<<< HEAD
     grid-template-columns: 1fr;
     gap: 28px 0;
-=======
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   }
 }
 
 .metric-item {
-<<<<<<< HEAD
   background: transparent;
   backdrop-filter: none;
   border: none;
@@ -845,54 +757,19 @@ p.lead {
   margin-bottom: 14px;
   opacity: 0.85;
   box-shadow: 0 0 10px currentColor;
-=======
-  background: rgba(13, 19, 35, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius);
-  padding: 24px 20px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.metric-item:hover {
-  background: rgba(22, 30, 53, 0.85);
-  border-color: rgba(139, 92, 246, 0.35);
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(10, 15, 28, 0.5), 0 0 25px rgba(139, 92, 246, 0.15);
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 .metric-value {
   font-family: var(--font-display);
-<<<<<<< HEAD
   font-size: clamp(2rem, 3.2vw, 2.8rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
   margin-bottom: 8px;
-=======
-  font-size: clamp(1.8rem, 2.8vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin-bottom: 6px;
-  background: var(--grad-accent);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-rotate 6s ease infinite;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 .metric-label {
   font-family: var(--font-mono);
-<<<<<<< HEAD
   font-size: 0.7rem;
   font-weight: 500;
   color: var(--text-secondary);
@@ -1278,14 +1155,6 @@ p.lead {
     padding: 20px 16px;
     border-radius: 12px;
   }
-=======
-  font-size: 0.72rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  line-height: 1.4;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 /* ---- Section ---- */
@@ -1968,11 +1837,8 @@ a.contact-link:hover {
     align-items: center;
     height: 60px;
     padding: 0 20px;
-<<<<<<< HEAD
     /* Ensure the entire nav-inner row is clickable */
     pointer-events: auto;
-=======
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   }
 
   .nav-links {
@@ -1986,7 +1852,6 @@ a.contact-link:hover {
   .hamburger {
     display: flex;
   }
-<<<<<<< HEAD
 
   /* Ensure brand link is always tappable on mobile */
   .brand {
@@ -2007,25 +1872,6 @@ a.contact-link:hover {
 
   .site-header.scrolled {
     top: 0 !important;
-=======
-}
-
-@media (max-width: 768px) {
-  .container {
-    padding: 0 20px !important;
-    max-width: 100% !important;
-  }
-
-  .site-header {
-    top: 0;
-    left: 0;
-    right: 0;
-    border-radius: 0;
-  }
-
-  .site-header.menu-open {
-    border-radius: 0;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   }
 
   .nav-inner {
@@ -2037,22 +1883,16 @@ a.contact-link:hover {
     grid-template-columns: 1fr;
   }
 
-<<<<<<< HEAD
   .accelerators-grid {
     grid-template-columns: 1fr;
   }
 
   /* Hero mobile */
-=======
-  /* Hero mobile — scoped styles in Hero.tsx handle grid/columns.
-     Only override font scale here. */
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   .hero-title {
     font-size: 2.2rem !important;
   }
 
   h1 {
-<<<<<<< HEAD
     font-size: 2rem;
   }
 
@@ -2062,13 +1902,6 @@ a.contact-link:hover {
 
   h3 {
     font-size: 1.15rem;
-=======
-    font-size: 2.4rem;
-  }
-
-  h2 {
-    font-size: 1.8rem;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   }
 
   .section {
@@ -2076,27 +1909,16 @@ a.contact-link:hover {
   }
 
   .metrics-strip {
-<<<<<<< HEAD
     padding: 36px 0;
   }
 
   .section.compact {
     padding: 40px 0;
-=======
-    padding: 48px 0;
-  }
-
-  .section.compact {
-    padding: 52px 0;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   }
 
   .footer-grid {
     grid-template-columns: 1fr;
-<<<<<<< HEAD
     gap: 28px;
-=======
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   }
 
   .footer-bottom {
@@ -2107,20 +1929,16 @@ a.contact-link:hover {
 
   .cta-actions {
     flex-direction: column;
-<<<<<<< HEAD
     align-items: stretch;
   }
 
   .cta-actions .btn {
     width: 100%;
     justify-content: center;
-=======
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   }
 
   .hero-actions {
     flex-direction: column;
-<<<<<<< HEAD
     align-items: stretch;
     width: 100%;
   }
@@ -2147,23 +1965,11 @@ a.contact-link:hover {
   /* Minimum 44px touch targets for all interactive elements */
   .btn {
     min-height: 48px;
-=======
-    align-items: flex-start;
-  }
-
-  .page-hero {
-    padding: 100px 0 60px;
-  }
-
-  .cta-inner {
-    padding: 48px 28px;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
   }
 }
 
 @media (max-width: 520px) {
   .metrics-grid {
-<<<<<<< HEAD
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -2180,10 +1986,6 @@ a.contact-link:hover {
   h2 {
     font-size: 1.4rem;
   }
-=======
-    grid-template-columns: 1fr;
-  }
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }
 
 /* ── Leadership grid responsive breakpoints ─────────────────── */
@@ -2366,7 +2168,6 @@ body {
   }
 }
 
-<<<<<<< HEAD
 /* ── Viewport meta safety — prevent mobile layout shift ── */
 @media (max-width: 480px) {
   .hero-section {
@@ -2384,230 +2185,4 @@ body {
   .section.compact {
     padding: 32px 0 !important;
   }
-=======
-/* Paste this at the bottom of globals.css 
-   Do not modify anything above this line */
-
-/* ========================================
-   LIGHT SECTION THEME
-   Only applies when .section-light 
-   class is present — nothing else changes
-   ======================================== */
-
-.section-light {
-  background: #FFFFFF !important;
-}
-
-.section-light h1,
-.section-light h2,
-.section-light h3,
-.section-light h4 {
-  color: #0B1320 !important;
-}
-
-.section-light p {
-  color: #64748B !important;
-}
-
-.section-light .eyebrow {
-  color: #E8521A !important;
-}
-
-.section-light .eyebrow::before {
-  background: #E8521A !important;
-}
-
-.section-light .btn-primary {
-  background: #E8521A !important;
-  border-color: #E8521A !important;
-  color: #FFFFFF !important;
-}
-
-.section-light .btn-primary:hover {
-  background: #C94312 !important;
-}
-
-.section-light .btn-ghost,
-.section-light .btn-secondary {
-  color: #0B1320 !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light .btn-ghost:hover,
-.section-light .btn-secondary:hover {
-  border-color: #E8521A !important;
-  color: #E8521A !important;
-}
-
-/* Cards on light background */
-.section-light .service-card,
-.section-light .offering-card,
-.section-light .case-card,
-.section-light .module-card {
-  background: #F7F8FA !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light .service-card h3,
-.section-light .offering-card h3,
-.section-light .case-card h3,
-.section-light .module-card h3 {
-  color: #0B1320 !important;
-}
-
-.section-light .service-card p,
-.section-light .offering-card p,
-.section-light .case-card p,
-.section-light .module-card p {
-  color: #64748B !important;
-}
-
-/* Chips on light background */
-.section-light .chip {
-  background: #F1F5F9 !important;
-  border-color: #E2E8F0 !important;
-  color: #64748B !important;
-}
-
-/* Value table on light background */
-.section-light table {
-  border-color: #E2E8F0 !important;
-}
-
-.section-light thead th {
-  background: #F1F5F9 !important;
-  color: #64748B !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light tbody tr {
-  border-color: #E2E8F0 !important;
-}
-
-.section-light tbody tr:hover {
-  background: rgba(232, 82, 26, 0.04) !important;
-}
-
-.section-light td:first-child {
-  color: #E8521A !important;
-  background: #FAFAFA !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light td:last-child {
-  color: #2D3A4A !important;
-}
-
-/* Paste this at the bottom of globals.css 
-   Do not modify anything above this line */
-
-/* ========================================
-   LIGHT SECTION THEME
-   Only applies when .section-light 
-   class is present — nothing else changes
-   ======================================== */
-
-.section-light {
-  background: #FFFFFF !important;
-}
-
-.section-light h1,
-.section-light h2,
-.section-light h3,
-.section-light h4 {
-  color: #0B1320 !important;
-}
-
-.section-light p {
-  color: #64748B !important;
-}
-
-.section-light .eyebrow {
-  color: #E8521A !important;
-}
-
-.section-light .eyebrow::before {
-  background: #E8521A !important;
-}
-
-.section-light .btn-primary {
-  background: #E8521A !important;
-  border-color: #E8521A !important;
-  color: #FFFFFF !important;
-}
-
-.section-light .btn-primary:hover {
-  background: #C94312 !important;
-}
-
-.section-light .btn-ghost,
-.section-light .btn-secondary {
-  color: #0B1320 !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light .btn-ghost:hover,
-.section-light .btn-secondary:hover {
-  border-color: #E8521A !important;
-  color: #E8521A !important;
-}
-
-/* Cards on light background */
-.section-light .service-card,
-.section-light .offering-card,
-.section-light .case-card,
-.section-light .module-card {
-  background: #F7F8FA !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light .service-card h3,
-.section-light .offering-card h3,
-.section-light .case-card h3,
-.section-light .module-card h3 {
-  color: #0B1320 !important;
-}
-
-.section-light .service-card p,
-.section-light .offering-card p,
-.section-light .case-card p,
-.section-light .module-card p {
-  color: #64748B !important;
-}
-
-/* Chips on light background */
-.section-light .chip {
-  background: #F1F5F9 !important;
-  border-color: #E2E8F0 !important;
-  color: #64748B !important;
-}
-
-/* Value table on light background */
-.section-light table {
-  border-color: #E2E8F0 !important;
-}
-
-.section-light thead th {
-  background: #F1F5F9 !important;
-  color: #64748B !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light tbody tr {
-  border-color: #E2E8F0 !important;
-}
-
-.section-light tbody tr:hover {
-  background: rgba(232, 82, 26, 0.04) !important;
-}
-
-.section-light td:first-child {
-  color: #E8521A !important;
-  background: #FAFAFA !important;
-  border-color: #E2E8F0 !important;
-}
-
-.section-light td:last-child {
-  color: #2D3A4A !important;
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 }

@@ -1,10 +1,6 @@
 "use client";
 
-<<<<<<< HEAD
 import { useState, useEffect, useRef } from "react";
-=======
-import { useState, useEffect } from "react";
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -26,19 +22,11 @@ const navItems: NavItem[] = [
     { label: "Home", href: "/", isVisible: true },
     { label: "Engineering Offerings", href: "/engineering-offerings", isVisible: true },
     { label: "Products & Accelerators", href: "/products-and-accelerators", isVisible: true },
-<<<<<<< HEAD
     { label: "Stories", href: "/labs-and-delivery", isVisible: true },
     { label: "Investors / Partners", href: "/investors", isVisible: true },
     { label: "Consulting & Staffing", href: "/consulting-staffing", isVisible: true },
     { label: "About", href: "/about", isVisible: true },
     { label: "Careers", href: "/careers", isVisible: true },
-=======
-    { label: "Labs & Delivery", href: "/labs-and-delivery", isVisible: true },
-    { label: "Investors / Partners", href: "/investors", isVisible: true },
-    { label: "About", href: "/about", isVisible: true },
-    { label: "Careers", href: "/careers", isVisible: true },
-    { label: "Contact", href: "/contact", isVisible: true },
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
     // Hidden items not in the approved list
     { label: "Engagement Models", href: "/engagement-models", isVisible: false },
 ];
@@ -46,11 +34,8 @@ const navItems: NavItem[] = [
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-<<<<<<< HEAD
     const [navHidden, setNavHidden] = useState(false);
     const lastScrollY = useRef(0);
-=======
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
     const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
 
@@ -65,7 +50,6 @@ export default function Header() {
     }, [pathname]);
 
     useEffect(() => {
-<<<<<<< HEAD
         const SCROLL_THRESHOLD = 80;   // px — below this, always show nav
         const HIDE_DELTA = 40;         // px scrolled down before hiding
 
@@ -87,9 +71,6 @@ export default function Header() {
             lastScrollY.current = y;
         };
 
-=======
-        const onScroll = () => setScrolled(window.scrollY > 40);
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
         window.addEventListener("scroll", onScroll, { passive: true });
         return () => window.removeEventListener("scroll", onScroll);
     }, []);
@@ -100,7 +81,6 @@ export default function Header() {
         return () => window.removeEventListener("keydown", onKey);
     }, []);
 
-<<<<<<< HEAD
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
@@ -128,8 +108,6 @@ export default function Header() {
         ? { duration: 0 }
         : { duration: 0.38, ease: "easeInOut" as const };
 
-=======
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
     return (
         <>
             <a
@@ -142,17 +120,12 @@ export default function Header() {
 
             <header className={`site-header ${scrolled ? "scrolled" : ""} ${isOpen ? "menu-open" : ""}`}>
                 <nav className="nav-inner" aria-label="Primary navigation">
-<<<<<<< HEAD
 
                     {/* ── Brand / Logo — ALWAYS VISIBLE, never hidden ── */}
-=======
-                    {/* Brand */}
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                     <Link href="/" className="brand" aria-label="Samsan — Home">
                         <SamsanAnimatedLogo height="80px" />
                     </Link>
 
-<<<<<<< HEAD
                     {/* ── Desktop Nav Links — fades/blurs out on scroll-down ── */}
                     <motion.ul
                         className="nav-links"
@@ -163,13 +136,6 @@ export default function Header() {
                         {navItems.filter(item => item.isVisible !== false).map((item) => {
                             const hasSubmenu = !!item.submenu;
                             const isActive = isItemActive(item.href) || (hasSubmenu && pathname.startsWith(item.href));
-=======
-                    {/* Desktop Links */}
-                    <ul className="nav-links" role="list">
-                        {navItems.filter(item => item.isVisible !== false).map((item) => {
-                            const hasSubmenu = !!item.submenu;
-                            const isActive = pathname === item.href || (hasSubmenu && pathname.startsWith(item.href));
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 
                             return (
                                 <li
@@ -253,7 +219,6 @@ export default function Header() {
                                 </li>
                             );
                         })}
-<<<<<<< HEAD
                     </motion.ul>
 
                     {/* ── Desktop CTA + Hamburger — fades/blurs out on scroll-down ── */}
@@ -263,13 +228,6 @@ export default function Header() {
                         transition={navTransition}
                     >
                         {/* Always reserve the button's space; hide it on contact page */}
-=======
-                    </ul>
-
-                        {/* Desktop CTA + hamburger (grid col 3 — right) */}
-                    <div className="nav-actions">
-                        {/* Always reserve the button's space; hide it on the contact page so layout stays stable */}
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                         <Link
                             href="/contact"
                             className="btn btn-primary"
@@ -302,11 +260,7 @@ export default function Header() {
                                 )}
                             </svg>
                         </button>
-<<<<<<< HEAD
                     </motion.div>
-=======
-                    </div>
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                 </nav>
 
                 {/* Mobile menu */}
@@ -374,11 +328,7 @@ export default function Header() {
                                         ) : (
                                             <Link
                                                 href={item.href}
-<<<<<<< HEAD
                                                 className={isItemActive(item.href) ? "active" : ""}
-=======
-                                                className={pathname === item.href ? "active" : ""}
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                                                 onClick={() => setIsOpen(false)}
                                             >
                                                 {item.label}

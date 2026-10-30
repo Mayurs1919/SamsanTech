@@ -1,6 +1,5 @@
 "use client";
 
-<<<<<<< HEAD
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 
@@ -63,9 +62,6 @@ function CountUpNumber({ target, suffix = "+" }: { target: number; suffix?: stri
     </span>
   );
 }
-=======
-import { motion, useReducedMotion } from "framer-motion";
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
 
 export default function AboutCompany() {
     const shouldReduce = useReducedMotion();
@@ -138,11 +134,7 @@ export default function AboutCompany() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-<<<<<<< HEAD
                         viewport={{ once: false }}
-=======
-                        viewport={{ once: true }}
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                         transition={{ duration: 0.6 }}
                         style={{
                             background: "#FFFFFF",
@@ -166,11 +158,7 @@ export default function AboutCompany() {
 
                         <div style={{ marginBottom: "40px" }}>
                             <h3 style={{ fontSize: "1.5rem", fontWeight: 600, color: "#0F172A", lineHeight: "1.3", letterSpacing: "-0.01em" }}>
-<<<<<<< HEAD
                                 Focus On Automotive, Cockpit Engineering &amp; Digital Transformation.
-=======
-                                Focus On Automotive, Cockpit Engineering & Digital Transformation.
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                             </h3>
                         </div>
 
@@ -200,11 +188,7 @@ export default function AboutCompany() {
                                     color: "#0F172A",
                                     lineHeight: 1
                                 }}>
-<<<<<<< HEAD
                                     <CountUpNumber target={50} suffix="+" />
-=======
-                                    50+
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                                 </div>
                                 <div style={{ fontSize: "0.78rem", color: "#64748B", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
                                     Projects Completed
@@ -218,11 +202,7 @@ export default function AboutCompany() {
                                     color: "#0F172A",
                                     lineHeight: 1
                                 }}>
-<<<<<<< HEAD
                                     <CountUpNumber target={6} suffix="+" />
-=======
-                                    6+
->>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
                                 </div>
                                 <div style={{ fontSize: "0.78rem", color: "#64748B", marginTop: "6px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>
                                     Countries Served
