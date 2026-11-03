@@ -5,23 +5,6 @@ import { motion, useReducedMotion } from "framer-motion";
 
 const pillars = [
     {
-        title: "Vehicle Software Engineering",
-        desc: "Active development in cockpit, telemetry, infotainment systems, functional safety, and AUTOSAR middleware.",
-        icon: (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <rect x="2" y="3" width="20" height="14" rx="2" />
-                <path d="M8 21h8M12 17v4M6 8h12" strokeLinecap="round" />
-            </svg>
-        ),
-        iconBg: "rgba(77, 216, 232, 0.12)",
-        iconBorder: "rgba(77, 216, 232, 0.25)",
-        iconColor: "#4DD8E8",
-        iconGlow: "rgba(77, 216, 232, 0.2)",
-        tags: ["AUTOSAR", "ADAS", "Cockpit"],
-        url: "/engineering-offerings",
-        destLabel: "Engineering Offerings",
-    },
-    {
         title: "AI / ML",
         desc: "Deep model training, computer vision pipelines, synthetic data generation, and autonomous driving simulation.",
         icon: (
@@ -40,6 +23,22 @@ const pillars = [
         destLabel: "Products & Accelerators",
     },
     {
+        title: "Consulting & Strategic Staffing",
+        desc: "Domain-aligned engineers, Build-Operate-Transfer (BOT) hubs, and managed Validation & Verification (V&V) execution.",
+        icon: (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 14v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+        ),
+        iconBg: "rgba(34, 197, 94, 0.12)",
+        iconBorder: "rgba(34, 197, 94, 0.25)",
+        iconColor: "#22C55E",
+        iconGlow: "rgba(34, 197, 94, 0.2)",
+        tags: ["BOT", "CoE", "V&V"],
+        url: "/contact",
+        destLabel: "Contact Us",
+    },
+    {
         title: "Digital Transformation",
         desc: "Cloud telemetry platforms, remote fleet diagnostics, OTA , and IoT edge integration.",
         icon: (
@@ -56,20 +55,21 @@ const pillars = [
         destLabel: "Products & Accelerators",
     },
     {
-        title: "Consulting & Strategic Staffing",
-        desc: "Domain-aligned engineers, Build-Operate-Transfer (BOT) hubs, and managed Validation & Verification (V&V) execution.",
+        title: "Vehicle Software Engineering",
+        desc: "Active development in cockpit, telemetry, infotainment systems, functional safety, and AUTOSAR middleware.",
         icon: (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 14v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <path d="M8 21h8M12 17v4M6 8h12" strokeLinecap="round" />
             </svg>
         ),
-        iconBg: "rgba(34, 197, 94, 0.12)",
-        iconBorder: "rgba(34, 197, 94, 0.25)",
-        iconColor: "#22C55E",
-        iconGlow: "rgba(34, 197, 94, 0.2)",
-        tags: ["BOT", "CoE", "V&V"],
-        url: "/contact",
-        destLabel: "Contact Us",
+        iconBg: "rgba(77, 216, 232, 0.12)",
+        iconBorder: "rgba(77, 216, 232, 0.25)",
+        iconColor: "#4DD8E8",
+        iconGlow: "rgba(77, 216, 232, 0.2)",
+        tags: ["AUTOSAR", "ADAS", "Cockpit"],
+        url: "/engineering-offerings",
+        destLabel: "Engineering Offerings",
     },
 ];
 

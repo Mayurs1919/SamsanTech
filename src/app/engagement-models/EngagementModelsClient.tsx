@@ -124,7 +124,7 @@ export default function EngagementModelsClient() {
 
             {/* ── Models Section ── */}
             <section style={{ padding: "80px 0", backgroundColor: "var(--midnight)" }}>
-                <div className="container" style={{ display: "flex", flexDirection: "column", gap: "96px" }}>
+                <div className="container" style={{ display: "flex", flexDirection: "column", gap: "clamp(48px, 7vw, 96px)" }}>
                     {engagementModels.map((model, index) => {
                         const isEven = index % 2 === 0;
                         return (
@@ -136,10 +136,10 @@ export default function EngagementModelsClient() {
                                 transition={{ duration: 0.6, ease: "easeOut" }}
                                 style={{
                                     display: "grid",
-                                    gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                                    gap: "64px",
+                                    gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
+                                    gap: "clamp(24px, 5vw, 64px)",
                                     alignItems: "center",
-                                    padding: "48px",
+                                    padding: "clamp(22px, 4vw, 48px)",
                                     borderRadius: "24px",
                                     backgroundColor: isEven ? "rgba(13, 19, 35, 0.45)" : "rgba(22, 30, 53, 0.3)",
                                     border: "1px solid var(--border)",
@@ -151,7 +151,7 @@ export default function EngagementModelsClient() {
                                 {/* Left/Right visual asset */}
                                 <div style={{
                                     order: isEven ? 0 : 1,
-                                    height: "360px",
+                                    height: "clamp(220px, 34vw, 360px)",
                                     borderRadius: "16px",
                                     background: `linear-gradient(135deg, rgba(13,19,35,0.85) 0%, rgba(22,30,53,0.55) 100%)`,
                                     border: "1px solid rgba(255,255,255,0.06)",
@@ -161,7 +161,7 @@ export default function EngagementModelsClient() {
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    padding: "40px"
+                                    padding: "clamp(20px, 4vw, 40px)"
                                 }}>
                                     {/* Decorative subtle lines */}
                                     <div style={{

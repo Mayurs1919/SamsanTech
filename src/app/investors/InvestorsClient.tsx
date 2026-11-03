@@ -3,19 +3,20 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
 
 /* ─── Data ─────────────────────────────────────────────────── */
-const metrics = [
-    { label: "Revenue Growth YoY",      value: "+42%",      note: "Consistent ARR Growth" },
-    { label: "Active OEM Engagements",  value: "8",         note: "Global OEM & Tier-1 Programs" },
-    { label: "IP & Accelerators",       value: "3 Patents", note: "Pending Software IP" },
-    { label: "Engineering Headcount",   value: "+30%",      note: "Scalable India Delivery" },
+
+/** The five partner domains, laid out clockwise from the top of the hero orbit. */
+const orbitNodes = [
+    { label: "ADAS", x: 50, y: 12 },
+    { label: "Connectivity", x: 86.1, y: 38.3 },
+    { label: "AI & Perception", x: 72.3, y: 80.7 },
+    { label: "Green Mobility", x: 27.7, y: 80.7 },
+    { label: "Web & Mobile", x: 13.9, y: 38.3 },
 ];
 
 const partners = [
     {
-        initial: "C",
         logo: "/images/coreco.png",
         domain: "Web & Mobile",
         name: "Coreco",
@@ -23,7 +24,6 @@ const partners = [
             "Web and mobile app development experts — building scalable, modern applications for enterprise and consumer platforms.",
     },
     {
-        initial: "D",
         logo: "/images/devanture.png",
         domain: "Connectivity",
         name: "Deventure",
@@ -31,7 +31,6 @@ const partners = [
             "Connectivity experts for automotive — specializing in vehicle communication protocols, telematics, and connected mobility solutions.",
     },
     {
-        initial: "E",
         logo: "/images/edgetensor.png",
         logoDark: true,
         domain: "AI & Perception",
@@ -40,7 +39,6 @@ const partners = [
             "AI-enabled perception stack and solutions for automotive — delivering intelligent sensing and real-time inference at the edge.",
     },
     {
-        initial: "P",
         logo: "/images/pem_technologies.png",
         domain: "ADAS",
         name: "PEM Technologies Pvt Ltd",
@@ -48,7 +46,6 @@ const partners = [
             "ADAS consultants — providing deep expertise in advanced driver assistance systems, sensor fusion, and autonomous driving validation.",
     },
     {
-        initial: "P",
         logo: "/images/prasah.png",
         domain: "Green Mobility",
         name: "Prasah Pvt Ltd",
@@ -80,215 +77,717 @@ const valueDrivers = [
     },
 ];
 
-/* ─── Shared style helpers ──────────────────────────────────── */
-const pillLight = (color: string, bg: string, border: string): React.CSSProperties => ({
-    display: "inline-block",
-    fontFamily: "var(--font-mono)",
-    fontSize: "11px",
-    fontWeight: 700,
-    letterSpacing: "0.1em",
-    textTransform: "uppercase",
-    color,
-    background: bg,
-    border: `1px solid ${border}`,
-    borderRadius: "20px",
-    padding: "5px 14px",
-    marginBottom: "16px",
-});
+/* ─── Reveal-on-scroll wrapper ──────────────────────────────── */
+
+function Reveal({
+    children,
+    delay = 0,
+    className,
+}: {
+    children: React.ReactNode;
+    delay?: number;
+    className?: string;
+}) {
+    const shouldReduce = useReducedMotion();
+    return (
+        <motion.div
+            className={className}
+            initial={{ opacity: 0, y: shouldReduce ? 0 : 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={
+                shouldReduce
+                    ? { duration: 0.05 }
+                    : { duration: 0.55, ease: [0.16, 1, 0.3, 1], delay }
+            }
+        >
+            {children}
+        </motion.div>
+    );
+}
+
+/* ─── Section heading ───────────────────────────────────────── */
+
+function SectionHead({
+    eyebrow,
+    title,
+    blurb,
+    tone,
+}: {
+    eyebrow: string;
+    title: React.ReactNode;
+    blurb?: string;
+    tone: "dark" | "light";
+}) {
+    return (
+        <div className="sp-head">
+            <span className={`sp-pill sp-pill-${tone}`}>{eyebrow}</span>
+            <h2 className={`sp-h2 sp-h2-${tone}`}>{title}</h2>
+            {blurb && <p className={`sp-blurb sp-blurb-${tone}`}>{blurb}</p>}
+        </div>
+    );
+}
+
+/* ─── Hero ecosystem orbit (decorative) ─────────────────────── */
+
+function PartnerOrbit() {
+    return (
+        <div className="sp-orbit" aria-hidden="true">
+            <div className="sp-orbit-ring" />
+
+            <svg className="sp-orbit-lines" viewBox="0 0 100 100">
+                <defs>
+                    <linearGradient id="spLine" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stopColor="rgba(77,216,232,0.5)" />
+                        <stop offset="100%" stopColor="rgba(232,82,26,0.3)" />
+                    </linearGradient>
+                </defs>
+                {orbitNodes.map((n) => (
+                    <line
+                        key={n.label}
+                        x1="50"
+                        y1="50"
+                        x2={n.x}
+                        y2={n.y}
+                        stroke="url(#spLine)"
+                        strokeWidth="0.35"
+                    />
+                ))}
+            </svg>
+
+            <div className="sp-orbit-core">
+                <span className="sp-orbit-core-name">SAMSAN</span>
+                <span className="sp-orbit-core-sub">ecosystem</span>
+            </div>
+
+            {orbitNodes.map((n) => (
+                <span
+                    key={n.label}
+                    className="sp-orbit-node"
+                    style={{ left: `${n.x}%`, top: `${n.y}%` }}
+                >
+                    {n.label}
+                </span>
+            ))}
+        </div>
+    );
+}
 
 /* ─── Client Component ──────────────────────────────────────── */
+
 export default function InvestorsClient() {
     const shouldReduce = useReducedMotion();
-    const partnerRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-    /* Stagger partner cards on scroll */
-    useEffect(() => {
-        if (shouldReduce) {
-            partnerRefs.current.forEach((el) => {
-                if (el) { el.style.opacity = "1"; el.style.transform = "none"; }
-            });
-            return;
-        }
-        const observers: IntersectionObserver[] = [];
-        partnerRefs.current.forEach((el, i) => {
-            if (!el) return;
-            const obs = new IntersectionObserver(
-                ([entry]) => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            if (el) { el.style.opacity = "1"; el.style.transform = "none"; }
-                        }, i * 90);
-                        obs.disconnect();
-                    }
-                },
-                { threshold: 0.15 }
-            );
-            obs.observe(el);
-            observers.push(obs);
-        });
-        return () => observers.forEach((o) => o.disconnect());
-    }, [shouldReduce]);
 
     return (
-        <div>
+        <div className="sp-page">
+            <style>{`
+        .sp-page {
+            --cyan: #4DD8E8;
+            --orange: #E8521A;
+            --amber: #F59E0B;
+            --ink: #0B1320;
+            --ink-soft: #475569;
+            --paper: #F8FAFC;
+            --panel: #111622;
+        }
+
+        /* ---------- Shared type ---------- */
+        .sp-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            border-radius: 999px;
+            padding: 6px 16px;
+            margin-bottom: 20px;
+        }
+        .sp-pill::before {
+            content: "";
+            width: 6px; height: 6px;
+            border-radius: 50%;
+        }
+        .sp-pill-dark {
+            color: var(--cyan);
+            background: rgba(77,216,232,0.07);
+            border: 1px solid rgba(77,216,232,0.24);
+        }
+        .sp-pill-dark::before { background: var(--cyan); box-shadow: 0 0 8px rgba(77,216,232,0.8); }
+        .sp-pill-light {
+            color: var(--orange);
+            background: rgba(232,82,26,0.07);
+            border: 1px solid rgba(232,82,26,0.2);
+        }
+        .sp-pill-light::before { background: var(--orange); box-shadow: 0 0 8px rgba(232,82,26,0.5); }
+
+        .sp-h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 4.6vw, 3.7rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.06;
+            color: #FFFFFF;
+            margin: 0 0 22px;
+        }
+        .sp-h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3.1vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin: 0 0 14px;
+        }
+        .sp-h2-dark { color: #F0F4FF; }
+        .sp-h2-light { color: var(--ink); }
+
+        .sp-blurb {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            line-height: 1.75;
+            max-width: 640px;
+            margin: 0;
+        }
+        .sp-blurb-dark { color: #9CA8C4; }
+        .sp-blurb-light { color: var(--ink-soft); }
+
+        .sp-head { margin-bottom: 44px; }
+
+        /* ---------- Hero ---------- */
+        .sp-hero {
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(700px 420px at 88% 6%, rgba(77,216,232,0.10) 0%, transparent 64%),
+                radial-gradient(560px 420px at 4% 92%, rgba(232,82,26,0.07) 0%, transparent 66%),
+                linear-gradient(180deg, #06080C 0%, var(--midnight) 100%);
+            padding: clamp(118px, 13vw, 168px) 0 clamp(80px, 8vw, 112px);
+        }
+        .sp-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+            background-size: 68px 68px;
+            mask-image: radial-gradient(ellipse 80% 65% at 50% 32%, #000 18%, transparent 100%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 65% at 50% 32%, #000 18%, transparent 100%);
+            pointer-events: none;
+        }
+        .sp-hero-grid {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+            gap: clamp(40px, 5vw, 72px);
+            align-items: center;
+        }
+        .sp-rule {
+            width: 76px; height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--cyan), var(--orange));
+            margin-bottom: 28px;
+        }
+
+        /* Domain chips stand in for the orbit on narrow screens */
+        .sp-chips {
+            display: none;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 32px;
+        }
+        .sp-chip {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #B8C4DC;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 7px 12px;
+        }
+
+        /* ---------- Orbit ---------- */
+        .sp-orbit {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
+        }
+        .sp-orbit-ring {
+            position: absolute;
+            left: 50%; top: 50%;
+            width: 76%; height: 76%;
+            transform: translate(-50%, -50%);
+            border: 1px dashed rgba(255,255,255,0.14);
+            border-radius: 50%;
+            animation: sp-spin 72s linear infinite;
+        }
+        @keyframes sp-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) { .sp-orbit-ring { animation: none; } }
+
+        .sp-orbit-lines {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            overflow: visible;
+        }
+        .sp-orbit-core {
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            width: 118px; height: 118px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 32% 28%, #1B2440 0%, #0C111E 78%);
+            border: 1px solid rgba(77,216,232,0.3);
+            box-shadow: 0 0 44px rgba(77,216,232,0.16), inset 0 0 22px rgba(77,216,232,0.06);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+        .sp-orbit-core-name {
+            font-family: var(--font-display);
+            font-size: 1.02rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: #FFFFFF;
+        }
+        .sp-orbit-core-sub {
+            font-family: var(--font-mono);
+            font-size: 8.5px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(77,216,232,0.78);
+        }
+        .sp-orbit-node {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: #D3DCEB;
+            white-space: nowrap;
+            background: rgba(12,17,30,0.92);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 999px;
+            padding: 7px 13px;
+            transition: color .24s ease, border-color .24s ease, background .24s ease;
+        }
+        .sp-orbit-node:hover {
+            color: var(--cyan);
+            border-color: rgba(77,216,232,0.45);
+            background: rgba(77,216,232,0.08);
+        }
+
+        /* ---------- Partner ecosystem (light) ---------- */
+        .sp-partners {
+            background: var(--paper);
+            border-top: 1px solid #E2E8F0;
+            padding: clamp(80px, 8.5vw, 112px) 0;
+        }
+        .sp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 26px;
+            align-items: stretch;
+        }
+        /* Grid item wrapper — lets each card stretch to the full row height */
+        .sp-cell { display: flex; }
+        .sp-card {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 18px;
+            padding: 30px 28px 32px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(11,19,32,0.04);
+            transition: transform .28s cubic-bezier(.16,1,.3,1), box-shadow .28s ease, border-color .28s ease;
+        }
+        .sp-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--orange), var(--amber));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .34s cubic-bezier(.16,1,.3,1);
+        }
+        .sp-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(232,82,26,0.28);
+            box-shadow: 0 22px 44px rgba(11,19,32,0.11);
+        }
+        .sp-card:hover::after { transform: scaleX(1); }
+
+        .sp-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+        .sp-logo {
+            width: 116px; height: 46px;
+            border-radius: 10px;
+            background: #FFFFFF;
+            border: 1px solid rgba(15,23,42,0.1);
+            display: flex; align-items: center; justify-content: center;
+            padding: 7px 11px;
+            flex-shrink: 0;
+            transition: border-color .24s ease;
+        }
+        .sp-card:hover .sp-logo { border-color: rgba(15,23,42,0.2); }
+        .sp-logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .sp-logo-dark { background: #0E1117; border-color: rgba(15,23,42,0.5); }
+
+        .sp-domain {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--orange);
+            background: rgba(232,82,26,0.07);
+            border: 1px solid rgba(232,82,26,0.18);
+            border-radius: 999px;
+            padding: 5px 11px;
+            white-space: nowrap;
+        }
+        .sp-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin: 0 0 10px;
+            letter-spacing: -0.015em;
+            line-height: 1.3;
+        }
+        .sp-card p {
+            font-family: var(--font-body);
+            font-size: 0.93rem;
+            color: var(--ink-soft);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* ---------- Strategic alignment (dark) ---------- */
+        .sp-alignment {
+            background: linear-gradient(180deg, var(--midnight) 0%, #0D1323 100%);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: clamp(80px, 8.5vw, 112px) 0;
+        }
+        .sp-table {
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 18px;
+            overflow: hidden;
+            background: var(--panel);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.34);
+        }
+        .sp-row {
+            display: grid;
+            grid-template-columns: 56px 1fr 1.15fr;
+            align-items: stretch;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            border-left: 3px solid transparent;
+            transition: background .24s ease, border-left-color .24s ease;
+        }
+        .sp-row:last-child { border-bottom: none; }
+        .sp-row:hover {
+            background: rgba(77,216,232,0.045);
+            border-left-color: var(--cyan);
+        }
+        .sp-row-head {
+            background: rgba(255,255,255,0.025);
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+        .sp-row-head:hover { background: rgba(255,255,255,0.025); border-left-color: transparent; }
+
+        .sp-idx {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(77,216,232,0.62);
+            display: flex; align-items: center; justify-content: center;
+            border-right: 1px solid rgba(255,255,255,0.06);
+        }
+        .sp-adv, .sp-imp {
+            font-family: var(--font-body);
+            padding: 22px 28px;
+            display: flex; align-items: center;
+            line-height: 1.6;
+        }
+        .sp-adv {
+            font-weight: 600;
+            font-size: 0.98rem;
+            color: #F0F4FF;
+            letter-spacing: -0.005em;
+            border-right: 1px solid rgba(255,255,255,0.06);
+        }
+        .sp-imp { font-size: 0.95rem; color: #9CA8C4; }
+
+        .sp-th {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #7A8AA8;
+            padding: 18px 28px;
+            display: flex; align-items: center;
+        }
+
+        /* ---------- CTA (dark, gradient-continuous with alignment) ---------- */
+        .sp-cta {
+            background: linear-gradient(180deg, #0D1323 0%, var(--midnight) 100%);
+            padding: clamp(80px, 8.5vw, 112px) 0;
+        }
+        .sp-cta-card {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(160deg, #131A2B 0%, var(--panel) 100%);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 24px;
+            padding: clamp(44px, 6vw, 72px) clamp(24px, 5vw, 56px);
+            text-align: center;
+            box-shadow: 0 28px 70px rgba(0,0,0,0.36);
+        }
+        .sp-cta-card::before {
+            content: "";
+            position: absolute;
+            top: -40%; left: 50%;
+            transform: translateX(-50%);
+            width: 620px; height: 620px;
+            background: radial-gradient(circle, rgba(77,216,232,0.09) 0%, transparent 68%);
+            pointer-events: none;
+        }
+        .sp-cta-rule {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 168px; height: 3px;
+            background: linear-gradient(90deg, var(--cyan), var(--orange));
+            border-radius: 0 0 4px 4px;
+        }
+        .sp-cta-inner { position: relative; z-index: 1; }
+        .sp-cta h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: -0.025em;
+            line-height: 1.15;
+            margin: 0 0 16px;
+        }
+        .sp-cta p {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: #9CA8C4;
+            max-width: 560px;
+            margin: 0 auto 36px;
+        }
+        .sp-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .sp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-family: var(--font-body);
+            font-size: 0.98rem;
+            font-weight: 600;
+            padding: 14px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: transform .22s ease, box-shadow .22s ease, background .22s ease, border-color .22s ease, color .22s ease;
+        }
+        .sp-btn-primary {
+            background: var(--orange);
+            color: #FFFFFF;
+            box-shadow: 0 6px 20px rgba(232,82,26,0.32);
+        }
+        .sp-btn-primary:hover {
+            transform: translateY(-2px);
+            background: #F2611F;
+            box-shadow: 0 12px 30px rgba(232,82,26,0.42);
+        }
+        .sp-btn-ghost {
+            color: #CBD5E1;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.02);
+        }
+        .sp-btn-ghost:hover {
+            transform: translateY(-2px);
+            color: var(--cyan);
+            border-color: rgba(77,216,232,0.44);
+            background: rgba(77,216,232,0.06);
+        }
+
+        /* ---------- Responsive ---------- */
+        @media (max-width: 1024px) {
+            .sp-hero-grid { grid-template-columns: 1fr; gap: 54px; }
+            .sp-hero-text { max-width: 660px; }
+            .sp-grid { grid-template-columns: repeat(2, 1fr); }
+            .sp-adv, .sp-imp { padding: 20px 22px; }
+            .sp-th { padding: 16px 22px; }
+            .sp-orbit { max-width: 400px; }
+        }
+        @media (max-width: 768px) {
+            .sp-row { grid-template-columns: 44px 1fr; }
+            /* Two column headers no longer fit side-by-side; label each impact cell inline */
+            .sp-row-head { display: none; }
+            .sp-imp {
+                grid-column: 2;
+                display: block;
+                border-top: 1px dashed rgba(255,255,255,0.08);
+                padding-top: 14px;
+                padding-bottom: 22px;
+                color: #8494B2;
+            }
+            .sp-imp::before {
+                content: "Why it matters";
+                display: block;
+                font-family: var(--font-mono);
+                font-size: 9.5px;
+                font-weight: 700;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: #6B7A96;
+                margin-bottom: 6px;
+            }
+            .sp-adv { border-right: none; }
+            .sp-head { margin-bottom: 34px; }
+        }
+        @media (max-width: 640px) {
+            .sp-grid { grid-template-columns: 1fr; gap: 20px; }
+            .sp-h1 { font-size: clamp(2.1rem, 9vw, 2.8rem); }
+            .sp-blurb { font-size: 1rem; }
+            .sp-actions { flex-direction: column; width: 100%; }
+            .sp-btn { width: 100%; justify-content: center; }
+            /* The orbit needs room for its labels; swap it for the chip row */
+            .sp-orbit { display: none; }
+            .sp-hero-grid { gap: 0; }
+            .sp-chips { display: flex; }
+        }
+        @media (max-width: 420px) {
+            .sp-card { padding: 24px 20px 26px; }
+            .sp-card-top { flex-direction: column; align-items: flex-start; }
+            .sp-row { grid-template-columns: 36px 1fr; }
+        }
+      `}</style>
 
             {/* ══════════════════════════════════════════
                 §1  PAGE HERO  —  dark
             ══════════════════════════════════════════ */}
-            <section
-                className="section-dark page-hero"
-                aria-labelledby="investors-heading"
-                style={{
-                    background: "linear-gradient(180deg,#06080C 0%,var(--midnight) 100%)",
-                    padding: "140px 0 96px",
-                    position: "relative",
-                    overflow: "hidden",
-                }}
-            >
-                {/* Decorative glows */}
-                <div style={{
-                    position: "absolute", top: "-20%", right: "10%",
-                    width: "520px", height: "520px",
-                    background: "radial-gradient(circle,rgba(77,216,232,0.07) 0%,transparent 70%)",
-                    pointerEvents: "none",
-                }} />
-                <div style={{
-                    position: "absolute", bottom: "-10%", left: "5%",
-                    width: "400px", height: "400px",
-                    background: "radial-gradient(circle,rgba(232,82,26,0.06) 0%,transparent 70%)",
-                    pointerEvents: "none",
-                }} />
+            <section className="sp-hero" aria-labelledby="strategic-partners-heading">
+                <div className="container">
+                    <div className="sp-hero-grid">
+                        <motion.div
+                            className="sp-hero-text"
+                            variants={staggerContainerVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            <motion.div variants={fadeUpVariants(shouldReduce)}>
+                                <span className="sp-pill sp-pill-dark">
+                                    Corporate Growth &amp; Ecosystem
+                                </span>
+                            </motion.div>
 
-                <div className="container" style={{ position: "relative", zIndex: 1 }}>
-                    <motion.div variants={staggerContainerVariants} initial="hidden" animate="visible">
+                            <motion.h1
+                                id="strategic-partners-heading"
+                                className="sp-h1"
+                                variants={fadeUpVariants(shouldReduce)}
+                            >
+                                Strategic Partners
+                            </motion.h1>
 
-                        <motion.div variants={fadeUpVariants(shouldReduce)}>
-                            <span style={pillLight("#4DD8E8","rgba(77,216,232,0.08)","rgba(77,216,232,0.25)")}>
-                                Corporate Growth &amp; Ecosystem
-                            </span>
+                            <motion.div
+                                className="sp-rule"
+                                variants={fadeUpVariants(shouldReduce)}
+                            />
+
+                            <motion.p
+                                className="sp-blurb sp-blurb-dark"
+                                variants={fadeUpVariants(shouldReduce)}
+                            >
+                                Explore SAMSAN corporate growth, strategic buyer alignment, and
+                                our partnership ecosystem spanning ADAS, connectivity, AI and
+                                green mobility.
+                            </motion.p>
+
+                            <motion.div
+                                className="sp-chips"
+                                variants={fadeUpVariants(shouldReduce)}
+                            >
+                                {orbitNodes.map((n) => (
+                                    <span key={n.label} className="sp-chip">
+                                        {n.label}
+                                    </span>
+                                ))}
+                            </motion.div>
                         </motion.div>
 
-                        <motion.h1
-                            id="investors-heading"
-                            variants={fadeUpVariants(shouldReduce)}
-                            style={{
-                                fontFamily: "var(--font-display)",
-                                fontSize: "clamp(2.4rem,4vw,3.4rem)",
-                                fontWeight: 700,
-                                color: "#FFFFFF",
-                                letterSpacing: "-0.02em",
-                                lineHeight: 1.15,
-                                marginBottom: "20px",
-                            }}
-                        >
-                            Investors &amp; Strategic Partners
-                        </motion.h1>
-
-                        <motion.p
-                            className="lead"
-                            variants={fadeUpVariants(shouldReduce)}
-                            style={{
-                                fontFamily: "var(--font-body)",
-                                fontSize: "clamp(1.05rem,1.5vw,1.2rem)",
-                                lineHeight: 1.7,
-                                color: "#94A3B8",
-                                maxWidth: "620px",
-                                margin: 0,
-                            }}
-                        >
-                            Explore SAMSAN corporate metrics, strategic buyer alignment, and our
-                            partnership ecosystem spanning ADAS, connectivity, AI and green mobility.
-                        </motion.p>
-
-                    </motion.div>
+                        <Reveal delay={0.15}>
+                            <PartnerOrbit />
+                        </Reveal>
+                    </div>
                 </div>
             </section>
 
             {/* ══════════════════════════════════════════
-                §2  FINANCIAL HIGHLIGHTS  —  light
+                §2  PARTNER ECOSYSTEM  —  light
+                    occupies the slot of the removed Financial Highlights band
             ══════════════════════════════════════════ */}
-            <section
-                className="section-light"
-                style={{
-                    background: "#F8FAFC",
-                    borderTop: "1px solid #E2E8F0",
-                    padding: "108px 0",
-                }}
-            >
+            <section className="sp-partners">
                 <div className="container">
-                    <span style={pillLight("#E8521A","rgba(232,82,26,0.08)","rgba(232,82,26,0.2)")}>
-                        // Financial Highlights
-                    </span>
+                    <Reveal>
+                        <SectionHead
+                            tone="light"
+                            eyebrow="Partner Ecosystem"
+                            title="Technology & Domain Partners"
+                            blurb="SAMSAN collaborates with specialised technology and domain partners to deliver end-to-end automotive software and hardware engineering solutions."
+                        />
+                    </Reveal>
 
-                    <h2 style={{
-                        fontFamily: "var(--font-display)",
-                        fontSize: "clamp(1.75rem,2.5vw,2.25rem)",
-                        fontWeight: 700,
-                        color: "#0B1320",
-                        letterSpacing: "-0.01em",
-                        marginBottom: "36px",
-                        lineHeight: 1.2,
-                    }}>
-                        Performance at a Glance
-                    </h2>
+                    <div className="sp-grid">
+                        {partners.map((p, i) => (
+                            <Reveal key={p.name} className="sp-cell" delay={(i % 3) * 0.07}>
+                                <article className="sp-card">
+                                    <div className="sp-card-top">
+                                        <div className={`sp-logo${p.logoDark ? " sp-logo-dark" : ""}`}>
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                                            <img
+                                                src={p.logo}
+                                                alt={`${p.name} logo`}
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                        <span className="sp-domain">{p.domain}</span>
+                                    </div>
 
-                    <div style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
-                        gap: "24px",
-                    }}>
-                        {metrics.map((m) => (
-                            <motion.div
-                                key={m.label}
-                                whileHover={{ y: -4 }}
-                                transition={{ duration: 0.2 }}
-                                style={{
-                                    background: "#FFFFFF",
-                                    border: "1px solid #E2E8F0",
-                                    borderRadius: "16px",
-                                    padding: "32px 24px",
-                                    boxShadow: "0 2px 12px rgba(11,19,32,0.05)",
-                                    position: "relative",
-                                    overflow: "hidden",
-                                }}
-                            >
-                                {/* accent top bar */}
-                                <div style={{
-                                    position: "absolute", top: 0, left: 0, right: 0, height: "3px",
-                                    background: "linear-gradient(90deg,#E8521A,#F59E0B)",
-                                }} />
-
-                                <div style={{
-                                    fontFamily: "var(--font-display)",
-                                    fontSize: "2.6rem",
-                                    fontWeight: 700,
-                                    color: "#E8521A",
-                                    lineHeight: 1,
-                                    letterSpacing: "-0.02em",
-                                    marginBottom: "10px",
-                                }}>
-                                    {m.value}
-                                </div>
-
-                                <div style={{
-                                    fontFamily: "var(--font-display)",
-                                    fontSize: "1.02rem",
-                                    fontWeight: 700,
-                                    color: "#0B1320",
-                                    marginBottom: "6px",
-                                }}>
-                                    {m.label}
-                                </div>
-
-                                <div style={{
-                                    fontFamily: "var(--font-mono)",
-                                    fontSize: "0.78rem",
-                                    color: "#64748B",
-                                    letterSpacing: "0.02em",
-                                }}>
-                                    {m.note}
-                                </div>
-                            </motion.div>
+                                    <h3>{p.name}</h3>
+                                    <p>{p.description}</p>
+                                </article>
+                            </Reveal>
                         ))}
                     </div>
                 </div>
@@ -297,422 +796,93 @@ export default function InvestorsClient() {
             {/* ══════════════════════════════════════════
                 §3  STRATEGIC ALIGNMENT  —  dark
             ══════════════════════════════════════════ */}
-            <section
-                className="section-dark"
-                style={{
-                    background: "var(--midnight)",
-                    borderTop: "1px solid rgba(255,255,255,0.07)",
-                    padding: "108px 0",
-                }}
-            >
+            <section className="sp-alignment">
                 <div className="container">
-                    <span style={pillLight("#4DD8E8","rgba(77,216,232,0.08)","rgba(77,216,232,0.25)")}>
-                        // Strategic Alignment
-                    </span>
+                    <Reveal>
+                        <SectionHead
+                            tone="dark"
+                            eyebrow="Strategic Alignment"
+                            title="Why Strategic Buyers Choose SAMSAN"
+                            blurb="Key value drivers and advantages delivered to OEMs, Tier-1 automotive suppliers, and technology investors."
+                        />
+                    </Reveal>
 
-                    <h2 style={{
-                        fontFamily: "var(--font-display)",
-                        fontSize: "clamp(1.75rem,2.5vw,2.25rem)",
-                        fontWeight: 700,
-                        color: "#F8FAFC",
-                        letterSpacing: "-0.01em",
-                        marginBottom: "12px",
-                        lineHeight: 1.2,
-                    }}>
-                        Why Strategic Buyers Choose SAMSAN
-                    </h2>
-
-                    <p style={{
-                        fontFamily: "var(--font-body)",
-                        fontSize: "1.05rem",
-                        color: "#94A3B8",
-                        maxWidth: "620px",
-                        marginBottom: "40px",
-                        lineHeight: 1.7,
-                    }}>
-                        Key value drivers and advantages delivered to OEMs, Tier-1 automotive
-                        suppliers, and technology investors.
-                    </p>
-
-                    <style>{`
-                        .inv-row {
-                            display: grid;
-                            grid-template-columns: 1fr 1.2fr;
-                            border-bottom: 1px solid rgba(255,255,255,0.07);
-                            transition: background 0.2s ease, border-left-color 0.2s ease;
-                            border-left: 3px solid transparent;
-                        }
-                        .inv-row:not(.inv-header):hover {
-                            background: rgba(77,216,232,0.04) !important;
-                            border-left-color: #4DD8E8;
-                        }
-                        @media (max-width:640px) { .inv-row { grid-template-columns:1fr; } }
-                    `}</style>
-
-                    <div style={{
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        borderRadius: "16px",
-                        overflow: "hidden",
-                        background: "#111622",
-                        boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
-                    }}>
-                        {/* Header */}
-                        <div className="inv-row inv-header" style={{ borderBottom: "2px solid rgba(255,255,255,0.09)" }}>
-                            <div style={{
-                                fontFamily: "var(--font-sans)",
-                                color: "#94A3B8",
-                                fontWeight: 700,
-                                fontSize: "0.8rem",
-                                textTransform: "uppercase",
-                                letterSpacing: "0.07em",
-                                borderRight: "1px solid rgba(255,255,255,0.07)",
-                                padding: "18px 28px",
-                            }}>
-                                Strategic Buyer Gets
+                    <Reveal delay={0.08}>
+                        <div className="sp-table" aria-label="Strategic value drivers" role="list">
+                            <div className="sp-row sp-row-head" aria-hidden="true">
+                                <div />
+                                <div className="sp-th">Strategic Buyer Gets</div>
+                                <div className="sp-th">Why It Matters</div>
                             </div>
-                            <div style={{
-                                fontFamily: "var(--font-sans)",
-                                color: "#94A3B8",
-                                fontWeight: 700,
-                                fontSize: "0.8rem",
-                                textTransform: "uppercase",
-                                letterSpacing: "0.07em",
-                                padding: "18px 28px",
-                            }}>
-                                Why It Matters
-                            </div>
+
+                            {valueDrivers.map((driver, idx) => (
+                                <div className="sp-row" role="listitem" key={driver.advantage}>
+                                    <div className="sp-idx" aria-hidden="true">
+                                        {String(idx + 1).padStart(2, "0")}
+                                    </div>
+                                    <div className="sp-adv">{driver.advantage}</div>
+                                    <div className="sp-imp">{driver.impact}</div>
+                                </div>
+                            ))}
                         </div>
-
-                        {/* Rows */}
-                        {valueDrivers.map((driver, idx) => (
-                            <div
-                                key={driver.advantage}
-                                className="inv-row"
-                                style={{ borderBottom: idx === valueDrivers.length - 1 ? "none" : undefined }}
-                            >
-                                <div style={{
-                                    fontFamily: "var(--font-sans)",
-                                    color: "#F1F5F9",
-                                    borderRight: "1px solid rgba(255,255,255,0.07)",
-                                    padding: "20px 28px",
-                                    fontWeight: 600,
-                                    fontSize: "0.95rem",
-                                    lineHeight: 1.5,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "10px",
-                                }}>
-                                    <span style={{
-                                        width: "6px", height: "6px",
-                                        borderRadius: "50%",
-                                        background: "#4DD8E8",
-                                        display: "inline-block",
-                                        flexShrink: 0,
-                                    }} />
-                                    {driver.advantage}
-                                </div>
-                                <div style={{
-                                    fontFamily: "var(--font-sans)",
-                                    color: "#94A3B8",
-                                    padding: "20px 28px",
-                                    fontSize: "0.95rem",
-                                    fontWeight: 400,
-                                    lineHeight: 1.6,
-                                    display: "flex",
-                                    alignItems: "center",
-                                }}>
-                                    {driver.impact}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    </Reveal>
                 </div>
             </section>
 
             {/* ══════════════════════════════════════════
-                §4  PARTNER ECOSYSTEM  —  light
+                §4  CTA  —  dark, gradient-continuous with §3
             ══════════════════════════════════════════ */}
-            <section
-                className="section-light"
-                style={{
-                    background: "#F8FAFC",
-                    borderTop: "1px solid #E2E8F0",
-                    padding: "108px 0",
-                }}
-            >
+            <section className="sp-cta" aria-labelledby="strategic-partners-cta">
                 <div className="container">
-                    <span style={pillLight("#E8521A","rgba(232,82,26,0.08)","rgba(232,82,26,0.2)")}>
-                        // Partner Ecosystem
-                    </span>
+                    <Reveal>
+                        <div className="sp-cta-card">
+                            <div className="sp-cta-rule" />
+                            <div className="sp-cta-inner">
+                                <span className="sp-pill sp-pill-dark">
+                                    Strategic Partnership
+                                </span>
 
-                    <h2 style={{
-                        fontFamily: "var(--font-display)",
-                        fontSize: "clamp(1.75rem,2.5vw,2.25rem)",
-                        fontWeight: 700,
-                        color: "#0B1320",
-                        letterSpacing: "-0.01em",
-                        marginBottom: "12px",
-                        lineHeight: 1.2,
-                    }}>
-                        Technology &amp; Domain Partners
-                    </h2>
+                                <h2 id="strategic-partners-cta">
+                                    Explore Strategic Opportunities
+                                </h2>
 
-                    <p style={{
-                        fontFamily: "var(--font-body)",
-                        fontSize: "1.05rem",
-                        color: "#475569",
-                        maxWidth: "620px",
-                        marginBottom: "44px",
-                        lineHeight: 1.7,
-                    }}>
-                        SAMSAN collaborates with specialised technology and domain partners to deliver
-                        end-to-end automotive software and hardware engineering solutions.
-                    </p>
-
-                    <style>{`
-                        .partners-grid {
-                            display: grid;
-                            grid-template-columns: repeat(3, 1fr);
-                            gap: 24px;
-                        }
-                        @media (max-width:900px) { .partners-grid { grid-template-columns: repeat(2,1fr); } }
-                        @media (max-width:580px) { .partners-grid { grid-template-columns: 1fr; } }
-                        .partner-card {
-                            background: #FFFFFF;
-                            border: 1px solid #E2E8F0;
-                            border-radius: 16px;
-                            padding: 32px 28px;
-                            opacity: 0;
-                            transform: translateY(20px);
-                            transition: opacity 0.5s ease, transform 0.5s ease,
-                                        border-color 0.22s ease, box-shadow 0.22s ease;
-                        }
-                        .partner-card:hover {
-                            border-color: rgba(232,82,26,0.35);
-                            transform: translateY(-4px) !important;
-                            box-shadow: 0 14px 32px rgba(11,19,32,0.09);
-                        }
-                    `}</style>
-
-                    <div className="partners-grid">
-                        {partners.map((p, i) => (
-                            <div
-                                key={p.name}
-                                className="partner-card"
-                                ref={(el) => { partnerRefs.current[i] = el; }}
-                            >
-                                {/* Top row */}
-                                <div style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "space-between",
-                                    marginBottom: "20px",
-                                }}>
-                                    {/* Avatar / Logo */}
-                                    <div style={{
-                                        width: (p as { logo?: string }).logo ? "120px" : "44px",
-                                        height: "44px",
-                                        borderRadius: "10px",
-                                        background: (p as { logoDark?: boolean }).logoDark
-                                            ? "#0E1117"
-                                            : (p as { logo?: string }).logo
-                                                ? "#F8FAFC"
-                                                : "rgba(0,95,138,0.08)",
-                                        border: (p as { logo?: string }).logo
-                                            ? "1px solid rgba(0,0,0,0.1)"
-                                            : "1px solid rgba(0,95,138,0.2)",
-                                        fontFamily: "var(--font-mono)",
-                                        fontSize: "1rem",
-                                        fontWeight: 700,
-                                        color: "#005F8A",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        flexShrink: 0,
-                                        overflow: "hidden",
-                                        padding: (p as { logo?: string }).logo ? "6px 10px" : "0",
-                                    }}>
-                                        {(p as { logo?: string }).logo ? (
-                                            // eslint-disable-next-line @next/next/no-img-element
-                                            <img
-                                                src={(p as { logo?: string }).logo}
-                                                alt={`${p.name} logo`}
-                                                style={{
-                                                    width: "100%",
-                                                    height: "100%",
-                                                    objectFit: "contain",
-                                                    display: "block",
-                                                }}
-                                            />
-                                        ) : (
-                                            p.initial
-                                        )}
-                                    </div>
-
-                                    {/* Domain pill */}
-                                    <div style={{
-                                        fontFamily: "var(--font-mono)",
-                                        fontSize: "10px",
-                                        fontWeight: 700,
-                                        letterSpacing: "0.08em",
-                                        textTransform: "uppercase",
-                                        color: "#E8521A",
-                                        background: "rgba(232,82,26,0.08)",
-                                        border: "1px solid rgba(232,82,26,0.18)",
-                                        padding: "4px 10px",
-                                        borderRadius: "20px",
-                                    }}>
-                                        {p.domain}
-                                    </div>
-                                </div>
-
-                                <h3 style={{
-                                    fontFamily: "var(--font-display)",
-                                    fontSize: "1.18rem",
-                                    fontWeight: 700,
-                                    color: "#0B1320",
-                                    margin: "0 0 10px 0",
-                                    letterSpacing: "-0.01em",
-                                }}>
-                                    {p.name}
-                                </h3>
-
-                                <p style={{
-                                    fontFamily: "var(--font-body)",
-                                    fontSize: "0.92rem",
-                                    color: "#475569",
-                                    lineHeight: 1.65,
-                                    margin: 0,
-                                }}>
-                                    {p.description}
+                                <p>
+                                    Connect with our corporate leadership team to discuss CoE
+                                    setups, joint ventures, investments, or strategic alliances.
                                 </p>
+
+                                <div className="sp-actions">
+                                    <a
+                                        href="mailto:india@samsanlabs.com"
+                                        className="sp-btn sp-btn-primary"
+                                    >
+                                        Request Investor Materials
+                                        <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 16 16"
+                                            fill="none"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                d="M3 8h10M9 4l4 4-4 4"
+                                                stroke="currentColor"
+                                                strokeWidth="1.7"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            />
+                                        </svg>
+                                    </a>
+
+                                    <Link href="/services" className="sp-btn sp-btn-ghost">
+                                        View Engineering Offerings
+                                    </Link>
+                                </div>
                             </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ══════════════════════════════════════════
-                §5  CTA  —  dark
-            ══════════════════════════════════════════ */}
-            <section
-                className="section-dark"
-                style={{
-                    background: "var(--midnight)",
-                    borderTop: "1px solid rgba(255,255,255,0.07)",
-                    padding: "108px 0",
-                }}
-                aria-labelledby="investors-cta-heading"
-            >
-                <div className="container">
-                    <motion.div
-                        initial={{ opacity: 0, y: shouldReduce ? 0 : 24 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: shouldReduce ? 0.01 : 0.5 }}
-                        style={{
-                            background: "#111622",
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            borderRadius: "20px",
-                            padding: "64px 48px",
-                            textAlign: "center",
-                            boxShadow: "0 8px 40px rgba(0,0,0,0.25)",
-                            position: "relative",
-                            overflow: "hidden",
-                        }}
-                    >
-                        {/* Top accent */}
-                        <div style={{
-                            position: "absolute",
-                            top: 0, left: "50%",
-                            transform: "translateX(-50%)",
-                            width: "140px", height: "3px",
-                            background: "linear-gradient(90deg,#4DD8E8,#E8521A)",
-                            borderRadius: "0 0 4px 4px",
-                        }} />
-
-                        <span style={pillLight("#4DD8E8","rgba(77,216,232,0.08)","rgba(77,216,232,0.25)")}>
-                            Strategic Partnership
-                        </span>
-
-                        <h2
-                            id="investors-cta-heading"
-                            style={{
-                                fontFamily: "var(--font-display)",
-                                fontSize: "clamp(1.8rem,3vw,2.4rem)",
-                                fontWeight: 700,
-                                color: "#FFFFFF",
-                                letterSpacing: "-0.02em",
-                                margin: "0 0 16px 0",
-                                lineHeight: 1.2,
-                            }}
-                        >
-                            Explore Strategic Opportunities
-                        </h2>
-
-                        <p style={{
-                            fontFamily: "var(--font-body)",
-                            fontSize: "1.05rem",
-                            lineHeight: 1.7,
-                            color: "#94A3B8",
-                            maxWidth: "560px",
-                            margin: "0 auto 36px",
-                        }}>
-                            Connect with our corporate leadership team to discuss CoE setups, joint
-                            ventures, investments, or strategic alliances.
-                        </p>
-
-                        <div style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "16px",
-                            flexWrap: "wrap",
-                        }}>
-                            <a
-                                href="mailto:india@samsanlabs.com"
-                                className="btn btn-primary"
-                                style={{
-                                    background: "#E8521A",
-                                    color: "#FFFFFF",
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    textDecoration: "none",
-                                    boxShadow: "0 4px 16px rgba(232,82,26,0.32)",
-                                    padding: "13px 28px",
-                                    fontWeight: 600,
-                                    fontFamily: "var(--font-body)",
-                                }}
-                            >
-                                Request Investor Materials
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </a>
-
-                            <Link
-                                href="/services"
-                                className="btn btn-outline"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    textDecoration: "none",
-                                    color: "#CBD5E1",
-                                    borderColor: "rgba(255,255,255,0.2)",
-                                    padding: "13px 28px",
-                                    fontWeight: 600,
-                                    fontFamily: "var(--font-body)",
-                                }}
-                            >
-                                View Engineering Offerings
-                            </Link>
                         </div>
-                    </motion.div>
+                    </Reveal>
                 </div>
             </section>
-
         </div>
     );
 }

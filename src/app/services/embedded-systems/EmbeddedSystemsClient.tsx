@@ -71,7 +71,7 @@ export default function EmbeddedSystemsClient() {
                         </p>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "24px", marginBottom: "60px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "24px", marginBottom: "60px" }}>
                         {offerings.map((item, idx) => (
                             <motion.div
                                 key={idx}
@@ -112,7 +112,7 @@ export default function EmbeddedSystemsClient() {
                     {/* Cinematic Visuals Grid */}
                     <div style={{ marginBottom: "60px" }}>
                         <h2 style={{ fontSize: "1.6rem", marginBottom: "32px", textAlign: "center" }}>Automotive & Engineering Solutions</h2>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "24px" }}>
                             
                             <div style={{
                                 height: "300px", borderRadius: "var(--radius-lg)",

@@ -446,19 +446,19 @@ export default function ServicesClient() {
                     </div>
 
                     <motion.div
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8"
+                        className="grid grid-cols-1 md:grid-cols-2 gap-6"
                         variants={containerAnimationVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
-                        {embeddedCards.map((card) => {
-                            const colClass = "col-span-1 md:col-span-1 lg:col-span-3";
-
-                            return (
-                                <motion.div key={card.title} className={colClass} variants={cardAnimationVariants(shouldReduce)}>
+                        {embeddedCards
+                            .slice()
+                            .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }))
+                            .map((card, index) => (
+                                <motion.div key={card.title} className="col-span-1" variants={cardAnimationVariants(shouldReduce)} style={{ display: "flex" }}>
                                     <ServiceCard
-                                        number={card.number}
+                                        number={String(index + 1).padStart(2, "0")}
                                         title={card.title}
                                         description={card.description}
                                         icon={card.icon}
@@ -466,10 +466,10 @@ export default function ServicesClient() {
                                         techs={card.techs}
                                         techsLabel="CAPABILITIES"
                                         theme="light"
+                                        compact
                                     />
                                 </motion.div>
-                            );
-                        })}
+                            ))}
                     </motion.div>
                 </div>
             </section>
@@ -498,22 +498,30 @@ export default function ServicesClient() {
 
                     <style>{`
                         .specialized-flex-grid {
-                            display: flex;
-                            flex-wrap: wrap;
-                            gap: 32px;
-                            justify-content: center;
+                            display: grid;
+                            grid-template-columns: repeat(3, minmax(0, 1fr));
+                            align-items: stretch;
+                            gap: 24px;
                         }
                         .specialized-card-wrapper {
-                            width: calc(33.333% - 21.33px);
+                            min-width: 0;
+                            display: flex;
                         }
                         @media (max-width: 1024px) {
+                            .specialized-flex-grid {
+                                grid-template-columns: repeat(2, minmax(0, 1fr));
+                            }
                             .specialized-card-wrapper {
-                                width: calc(50% - 16px);
+                                width: auto;
                             }
                         }
                         @media (max-width: 640px) {
+                            .specialized-flex-grid {
+                                grid-template-columns: minmax(0, 1fr);
+                                gap: 18px;
+                            }
                             .specialized-card-wrapper {
-                                width: 100%;
+                                width: auto;
                             }
                         }
                     `}</style>
@@ -525,20 +533,24 @@ export default function ServicesClient() {
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
-                        {specializedCards.map((card) => (
-                            <motion.div key={card.title} className="specialized-card-wrapper" variants={cardAnimationVariants(shouldReduce)}>
-                                <ServiceCard
-                                    number={card.number}
-                                    title={card.title}
-                                    description={card.description}
-                                    icon={card.icon}
-                                    iconColor={card.iconColor}
-                                    techs={card.techs}
-                                    techsLabel="CAPABILITIES"
-                                    theme="dark"
-                                />
-                            </motion.div>
-                        ))}
+                        {specializedCards
+                            .slice()
+                            .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }))
+                            .map((card, index) => (
+                                <motion.div key={card.title} className="specialized-card-wrapper" variants={cardAnimationVariants(shouldReduce)}>
+                                    <ServiceCard
+                                        number={String(index + 1).padStart(2, "0")}
+                                        title={card.title}
+                                        description={card.description}
+                                        icon={card.icon}
+                                        iconColor={card.iconColor}
+                                        techs={card.techs}
+                                        techsLabel="CAPABILITIES"
+                                        theme="dark"
+                                        compact
+                                    />
+                                </motion.div>
+                            ))}
                     </motion.div>
                 </div>
             </section>

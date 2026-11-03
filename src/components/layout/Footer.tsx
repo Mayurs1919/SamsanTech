@@ -64,7 +64,6 @@ export default function Footer() {
                     <div className="footer-col">
                         <h5>The Company</h5>
                         <p style={{ marginBottom: "6px" }}>india@samsanlabs.com</p>
-                        <p style={{ marginBottom: "6px" }}>+91 89569 27909</p>
                         <p style={{ marginBottom: "6px", lineHeight: "1.5" }}>STPI New Building, Rajiv Gandhi Infotech Park, Phase I, Hinjawadi, Pune 411057, India</p>
                     </div>
                 </div>

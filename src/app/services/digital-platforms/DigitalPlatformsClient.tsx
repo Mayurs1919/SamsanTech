@@ -73,7 +73,7 @@ export default function DigitalPlatformsClient() {
                         </p>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "24px", marginBottom: "80px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "24px", marginBottom: "80px" }}>
                         {techStacks.map((item, idx) => (
                             <motion.div
                                 key={idx}
@@ -118,7 +118,7 @@ export default function DigitalPlatformsClient() {
                             <h2 style={{ fontSize: "2rem", fontWeight: 700 }}>Digital Solutions & Products</h2>
                         </div>
 
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px" }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "24px" }}>
                             {digitalProducts.map((product, idx) => (
                                 <motion.div
                                     key={idx}

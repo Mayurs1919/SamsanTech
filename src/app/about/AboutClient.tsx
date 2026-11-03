@@ -346,7 +346,7 @@ export default function AboutClient() {
         },
         {
             name: "PRATIK WAGHMODE",
-            role: "Technical Sales",
+            role: "System Engineer & Technical Sales",
             dept: "Business Development",
             imagePath: "/images/team/pratik_waghmode.png",
             glowColor: "#4DD8E8",
@@ -532,7 +532,7 @@ export default function AboutClient() {
                                     color: "#0B1320",
                                     fontFamily: "var(--font-display)"
                                 }}>
-                                    To design safe, connected, and intelligent systems that power the vehicle of the future.
+                                    To empower OEMs, Tier-1s, and technology companies with products, accelerators, and engineering expertise for faster development, higher quality, and lasting competitive advantage.
                                 </div>
                             </motion.div>
 
@@ -655,72 +655,346 @@ export default function AboutClient() {
                 </div>
             </section>
 
-            {/* Vision & Delivery Philosophy */}
-            <section className="section-light section" style={{ background: "#FFFFFF", padding: "108px 0" }}>
-                <div className="container" style={{ maxWidth: "1400px" }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: "64px", alignItems: "start" }}>
+            {/* Vision & Mission — Modern Section */}
+            <section
+                className="section-dark"
+                style={{
+                    background: "var(--midnight)",
+                    padding: "108px 0",
+                    position: "relative",
+                    overflow: "hidden"
+                }}
+            >
+                {/* Background ambient glows */}
+                <div style={{
+                    position: "absolute", top: "10%", left: "-10%",
+                    width: "600px", height: "600px",
+                    background: "radial-gradient(ellipse, rgba(77,216,232,0.08) 0%, transparent 70%)",
+                    pointerEvents: "none", zIndex: 0
+                }} />
+                <div style={{
+                    position: "absolute", bottom: "5%", right: "-5%",
+                    width: "500px", height: "500px",
+                    background: "radial-gradient(ellipse, rgba(232,82,26,0.07) 0%, transparent 70%)",
+                    pointerEvents: "none", zIndex: 0
+                }} />
 
-                        {/* Vision Card */}
-                        <div style={{
-                            background: "#F8FAFC",
-                            border: "1px solid #E2E8F0",
-                            borderRadius: "16px",
-                            padding: "44px",
-                            boxShadow: "0 10px 30px rgba(0,0,0,0.03)"
-                        }}>
-                            <span className="badge" style={{ marginBottom: "20px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)", fontFamily: "var(--font-mono)" }}>Our Vision</span>
-                            <h2 style={{ fontSize: "clamp(1.5rem, 2.5vw, 1.85rem)", fontWeight: 700, color: "#0B1320", marginBottom: "20px", lineHeight: "1.35", fontFamily: "var(--font-display)" }}>
-                                To design safe, connected, and intelligent systems that power the vehicle of the future.
-                            </h2>
-                            <p style={{ fontSize: "0.98rem", lineHeight: "1.75", color: "#475569", fontFamily: "var(--font-body)", margin: "0 0 28px 0" }}>
-                                SAMSAN bridges the gap between hardware restrictions and complex software layers. We are committed to engineering platforms that meet the highest functional safety standards while driving agile, digital-first feature delivery.
-                            </p>
+                <div className="container" style={{ maxWidth: "1400px", position: "relative", zIndex: 1 }}>
+
+                    {/* Section header */}
+                    <motion.div
+                        initial={{ opacity: 0, y: shouldReduce ? 0 : 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: shouldReduce ? 0.01 : 0.55, ease: "easeOut" }}
+                        style={{ textAlign: "center", marginBottom: "64px" }}
+                    >
+                        <span className="badge" style={{
+                            marginBottom: "16px",
+                            fontFamily: "var(--font-mono)",
+                            color: "#4DD8E8",
+                            borderColor: "rgba(77,216,232,0.25)",
+                            background: "rgba(77,216,232,0.08)"
+                        }}>Who We Are</span>
+                        <h2 style={{
+                            fontSize: "clamp(2rem, 3.5vw, 2.6rem)",
+                            fontWeight: 800,
+                            color: "#FFFFFF",
+                            letterSpacing: "-0.025em",
+                            fontFamily: "var(--font-display)",
+                            margin: 0
+                        }}>Vision &amp; Mission</h2>
+                        <p style={{
+                            marginTop: "16px",
+                            fontSize: "1.05rem",
+                            color: "#94A3B8",
+                            fontFamily: "var(--font-body)",
+                            maxWidth: "560px",
+                            margin: "16px auto 0"
+                        }}>The principles that guide everything we build, every system we design.</p>
+                    </motion.div>
+
+                    {/* Two-column cards */}
+                    <div style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
+                        gap: "32px"
+                    }}>
+
+                        {/* VISION CARD */}
+                        <motion.div
+                            initial={{ opacity: 0, y: shouldReduce ? 0 : 32 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-80px" }}
+                            transition={{ duration: shouldReduce ? 0.01 : 0.55, delay: shouldReduce ? 0 : 0.05, ease: "easeOut" }}
+                            style={{
+                                background: "rgba(16, 24, 48, 0.65)",
+                                backdropFilter: "blur(20px)",
+                                WebkitBackdropFilter: "blur(20px)",
+                                border: "1px solid rgba(77, 216, 232, 0.18)",
+                                borderRadius: "20px",
+                                overflow: "hidden",
+                                boxShadow: "0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)",
+                                display: "flex",
+                                flexDirection: "column"
+                            }}
+                        >
+                            {/* Image banner */}
                             <div style={{
                                 height: "220px",
-                                borderRadius: "12px",
-                                backgroundImage: "url('/images/embedded_engineering.png')",
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                border: "1px solid #E2E8F0"
-                            }} />
-                        </div>
-
-                        {/* Why Choose Us / Delivery Philosophy */}
-                        <div>
-                            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.2rem)", fontWeight: 700, marginBottom: "28px", color: "#0B1320", fontFamily: "var(--font-display)" }}>Delivery Philosophy</h2>
-                            <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
-                                {reasons.map((reason, idx) => (
-                                    <div
-                                        key={idx}
-                                        style={{
-                                            display: "flex",
-                                            gap: "18px",
-                                            background: "#F8FAFC",
-                                            border: "1px solid #E2E8F0",
-                                            borderRadius: "12px",
-                                            padding: "20px 24px",
-                                            alignItems: "center"
-                                        }}
-                                    >
-                                        <div style={{
-                                            width: "28px", height: "28px",
-                                            borderRadius: "50%",
-                                            background: "rgba(232, 82, 26, 0.12)",
-                                            color: "#E8521A",
-                                            display: "flex", alignItems: "center", justifyContent: "center",
-                                            flexShrink: 0
-                                        }}>
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E8521A" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                                <polyline points="20 6 9 17 4 12" />
-                                            </svg>
-                                        </div>
-                                        <p style={{ fontSize: "0.95rem", color: "#0B1320", lineHeight: "1.5", margin: 0, fontWeight: 500, fontFamily: "var(--font-body)" }}>{reason}</p>
+                                position: "relative",
+                                overflow: "hidden",
+                                flexShrink: 0
+                            }}>
+                                <div style={{
+                                    position: "absolute", inset: 0,
+                                    backgroundImage: "url('/images/vision_globe_connected.jpg')",
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                    transform: "scale(1.04)",
+                                    transition: "transform 0.6s ease"
+                                }} />
+                                <div style={{
+                                    position: "absolute", inset: 0,
+                                    background: "linear-gradient(to bottom, rgba(11,19,32,0.1) 0%, rgba(11,19,32,0.85) 100%)"
+                                }} />
+                                <div style={{
+                                    position: "absolute", bottom: "16px", left: "24px",
+                                    display: "flex", alignItems: "center", gap: "10px"
+                                }}>
+                                    <div style={{
+                                        width: "32px", height: "32px",
+                                        borderRadius: "8px",
+                                        background: "rgba(77, 216, 232, 0.15)",
+                                        border: "1px solid rgba(77,216,232,0.35)",
+                                        display: "flex", alignItems: "center", justifyContent: "center"
+                                    }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4DD8E8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <line x1="2" y1="12" x2="22" y2="12" />
+                                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                        </svg>
                                     </div>
-                                ))}
+                                    <span style={{
+                                        fontFamily: "var(--font-mono)",
+                                        fontSize: "0.72rem",
+                                        fontWeight: 700,
+                                        letterSpacing: "0.1em",
+                                        color: "#4DD8E8",
+                                        textTransform: "uppercase"
+                                    }}>Our Vision</span>
+                                </div>
                             </div>
-                        </div>
+
+                            {/* Text body */}
+                            <div style={{ padding: "32px 36px 40px", display: "flex", flexDirection: "column", gap: "16px", flex: 1 }}>
+                                <div style={{
+                                    width: "40px", height: "3px",
+                                    background: "linear-gradient(90deg, #4DD8E8, rgba(77,216,232,0))",
+                                    borderRadius: "2px",
+                                    marginBottom: "4px"
+                                }} />
+                                <h3 style={{
+                                    fontSize: "clamp(1.3rem, 2.2vw, 1.6rem)",
+                                    fontWeight: 700,
+                                    color: "#FFFFFF",
+                                    lineHeight: "1.4",
+                                    margin: 0,
+                                    fontFamily: "var(--font-display)"
+                                }}>
+                                    To be a globally respected technology organization making products, systems, and business processes more intelligent and connected.
+                                </h3>
+                                <p style={{
+                                    fontSize: "0.94rem",
+                                    lineHeight: "1.75",
+                                    color: "#94A3B8",
+                                    margin: 0,
+                                    fontFamily: "var(--font-body)"
+                                }}>
+                                    We envision a world where every vehicle, system, and enterprise process is powered by intelligent, connected technology — built on precision engineering and lasting trust.
+                                </p>
+                                <div style={{
+                                    marginTop: "auto",
+                                    paddingTop: "20px",
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: "8px"
+                                }}>
+                                    {["Global Respect", "Intelligence", "Connectivity"].map(tag => (
+                                        <span key={tag} style={{
+                                            fontSize: "0.76rem",
+                                            fontFamily: "var(--font-mono)",
+                                            fontWeight: 600,
+                                            letterSpacing: "0.06em",
+                                            padding: "5px 12px",
+                                            borderRadius: "100px",
+                                            background: "rgba(77,216,232,0.08)",
+                                            border: "1px solid rgba(77,216,232,0.2)",
+                                            color: "#4DD8E8"
+                                        }}>{tag}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* MISSION CARD */}
+                        <motion.div
+                            initial={{ opacity: 0, y: shouldReduce ? 0 : 32 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-80px" }}
+                            transition={{ duration: shouldReduce ? 0.01 : 0.55, delay: shouldReduce ? 0 : 0.15, ease: "easeOut" }}
+                            style={{
+                                background: "rgba(16, 24, 48, 0.65)",
+                                backdropFilter: "blur(20px)",
+                                WebkitBackdropFilter: "blur(20px)",
+                                border: "1px solid rgba(232, 82, 26, 0.22)",
+                                borderRadius: "20px",
+                                overflow: "hidden",
+                                boxShadow: "0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06)",
+                                display: "flex",
+                                flexDirection: "column"
+                            }}
+                        >
+                            {/* Image banner */}
+                            <div style={{
+                                height: "220px",
+                                position: "relative",
+                                overflow: "hidden",
+                                flexShrink: 0
+                            }}>
+                                <div style={{
+                                    position: "absolute", inset: 0,
+                                    backgroundImage: "url('/images/mission_engineering_accelerator.jpg')",
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                    transform: "scale(1.04)",
+                                    transition: "transform 0.6s ease"
+                                }} />
+                                <div style={{
+                                    position: "absolute", inset: 0,
+                                    background: "linear-gradient(to bottom, rgba(11,19,32,0.1) 0%, rgba(11,19,32,0.85) 100%)"
+                                }} />
+                                <div style={{
+                                    position: "absolute", bottom: "16px", left: "24px",
+                                    display: "flex", alignItems: "center", gap: "10px"
+                                }}>
+                                    <div style={{
+                                        width: "32px", height: "32px",
+                                        borderRadius: "8px",
+                                        background: "rgba(232, 82, 26, 0.15)",
+                                        border: "1px solid rgba(232,82,26,0.35)",
+                                        display: "flex", alignItems: "center", justifyContent: "center"
+                                    }}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8521A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                                            <polyline points="2 17 12 22 22 17" />
+                                            <polyline points="2 12 12 17 22 12" />
+                                        </svg>
+                                    </div>
+                                    <span style={{
+                                        fontFamily: "var(--font-mono)",
+                                        fontSize: "0.72rem",
+                                        fontWeight: 700,
+                                        letterSpacing: "0.1em",
+                                        color: "#E8521A",
+                                        textTransform: "uppercase"
+                                    }}>Our Mission</span>
+                                </div>
+                            </div>
+
+                            {/* Text body */}
+                            <div style={{ padding: "32px 36px 40px", display: "flex", flexDirection: "column", gap: "16px", flex: 1 }}>
+                                <div style={{
+                                    width: "40px", height: "3px",
+                                    background: "linear-gradient(90deg, #E8521A, rgba(232,82,26,0))",
+                                    borderRadius: "2px",
+                                    marginBottom: "4px"
+                                }} />
+                                <h3 style={{
+                                    fontSize: "clamp(1.3rem, 2.2vw, 1.6rem)",
+                                    fontWeight: 700,
+                                    color: "#FFFFFF",
+                                    lineHeight: "1.4",
+                                    margin: 0,
+                                    fontFamily: "var(--font-display)"
+                                }}>
+                                    To empower OEMs, Tier-1s, and technology companies with products, accelerators, and engineering expertise for faster development, higher quality, and lasting competitive advantage.
+                                </h3>
+                                <p style={{
+                                    fontSize: "0.94rem",
+                                    lineHeight: "1.75",
+                                    color: "#94A3B8",
+                                    margin: 0,
+                                    fontFamily: "var(--font-body)"
+                                }}>
+                                    We deliver precision-engineered systems, proven accelerators, and deep automotive expertise to help global clients ship faster, build better, and compete with confidence.
+                                </p>
+                                <div style={{
+                                    marginTop: "auto",
+                                    paddingTop: "20px",
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: "8px"
+                                }}>
+                                    {["OEMs & Tier-1s", "Accelerators", "Engineering Expertise"].map(tag => (
+                                        <span key={tag} style={{
+                                            fontSize: "0.76rem",
+                                            fontFamily: "var(--font-mono)",
+                                            fontWeight: 600,
+                                            letterSpacing: "0.06em",
+                                            padding: "5px 12px",
+                                            borderRadius: "100px",
+                                            background: "rgba(232,82,26,0.08)",
+                                            border: "1px solid rgba(232,82,26,0.22)",
+                                            color: "#E8521A"
+                                        }}>{tag}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        </motion.div>
 
                     </div>
+
+                    {/* Divider pillars row */}
+                    <motion.div
+                        initial={{ opacity: 0, y: shouldReduce ? 0 : 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: shouldReduce ? 0.01 : 0.5, delay: shouldReduce ? 0 : 0.25, ease: "easeOut" }}
+                        style={{
+                            marginTop: "48px",
+                            display: "grid",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                            gap: "16px"
+                        }}
+                    >
+                        {reasons.map((reason, idx) => (
+                            <div key={idx} style={{
+                                background: "rgba(255,255,255,0.03)",
+                                border: "1px solid rgba(255,255,255,0.07)",
+                                borderRadius: "12px",
+                                padding: "18px 20px",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "12px"
+                            }}>
+                                <div style={{
+                                    width: "8px", height: "8px",
+                                    borderRadius: "50%",
+                                    background: idx % 2 === 0 ? "#4DD8E8" : "#E8521A",
+                                    flexShrink: 0,
+                                    boxShadow: idx % 2 === 0 ? "0 0 8px rgba(77,216,232,0.6)" : "0 0 8px rgba(232,82,26,0.6)"
+                                }} />
+                                <span style={{
+                                    fontSize: "0.88rem",
+                                    color: "#CBD5E1",
+                                    fontWeight: 600,
+                                    fontFamily: "var(--font-body)"
+                                }}>{reason}</span>
+                            </div>
+                        ))}
+                    </motion.div>
+
                 </div>
             </section>
 

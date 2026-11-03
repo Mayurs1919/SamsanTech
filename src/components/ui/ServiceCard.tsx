@@ -38,6 +38,8 @@ export interface ServiceCardProps {
     techsLabel?: string;
     /** Theme variant for card styling */
     theme?: "light" | "dark";
+    /** Tighter spacing for dense catalog grids */
+    compact?: boolean;
 }
 
 // ── Inline SVG icons used in chips ──────────────────────────────
@@ -124,7 +126,8 @@ export default function ServiceCard({
     brochurePath,
     isPending = false,
     techsLabel = "Technologies",
-    theme = "dark"
+    theme = "dark",
+    compact = false
 }: ServiceCardProps) {
     const [hovered, setHovered] = useState(false);
     const isLight = theme === "light";
@@ -150,18 +153,19 @@ export default function ServiceCard({
                 background: cardBg,
                 border: cardBorder,
                 borderRadius: "12px",
-                padding: "28px",
+                padding: compact ? "24px" : "28px",
                 display: "flex",
                 flexDirection: "column",
-                gap: "20px",
+                gap: compact ? "14px" : "20px",
                 height: "100%",
+                width: "100%",
                 transform: hovered ? "translateY(-4px)" : "translateY(0)",
                 transition: "all 0.2s ease",
                 boxShadow: cardShadow,
                 justifyContent: "space-between"
             }}
         >
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: compact ? "14px" : "20px" }}>
 
                 {/* ROW 1 — Icon + Number */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -196,8 +200,8 @@ export default function ServiceCard({
                     fontWeight: 700,
                     color: titleColor,
                     letterSpacing: "0.01em",
-                    marginTop: "14px",
-                    marginBottom: "10px",
+                    marginTop: compact ? "8px" : "14px",
+                    marginBottom: compact ? "6px" : "10px",
                     lineHeight: 1.35,
                     fontFamily: "var(--font-display)"
                 }}>
@@ -244,7 +248,7 @@ export default function ServiceCard({
                 )}
 
                 {/* DIVIDER */}
-                <div style={{ borderTop: `1px solid ${dividerColor}`, marginTop: "18px", marginBottom: "14px" }} />
+                <div style={{ borderTop: `1px solid ${dividerColor}`, marginTop: compact ? "10px" : "18px", marginBottom: compact ? "8px" : "14px" }} />
 
                 {/* ROW 4 — Technologies label */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -255,7 +259,7 @@ export default function ServiceCard({
                         textTransform: "uppercase",
                         color: labelColor,
                         display: "block",
-                        marginBottom: "12px"
+                        marginBottom: compact ? "4px" : "12px"
                     }}>
                         {techsLabel}
                     </span>

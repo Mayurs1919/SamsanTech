@@ -219,7 +219,7 @@ function ContactPageContent() {
                         backgroundImage: "linear-gradient(180deg, rgba(10, 15, 28, 0.45) 0%, rgba(10, 15, 28, 0.85) 100%), url('https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1600&auto=format&fit=crop')",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
-                        padding: "190px 0 110px 0",
+                        padding: "clamp(120px, 18vw, 190px) 0 clamp(72px, 10vw, 110px)",
                         textAlign: "center",
                         overflow: "hidden"
                     }}
@@ -262,7 +262,7 @@ function ContactPageContent() {
                                 variants={fadeUpVariants(shouldReduce)}
                                 style={{
                                     fontFamily: "var(--font-display)",
-                                    fontSize: "clamp(2.8rem, 6vw, 4.2rem)",
+                                    fontSize: "clamp(2.1rem, 6vw, 4.2rem)",
                                     fontWeight: 700,
                                     color: "#FFFFFF",
                                     margin: 0,
@@ -376,7 +376,7 @@ function ContactPageContent() {
                         {/* Main Grid: Map & Form */}
                         <div style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
                             gap: "40px",
                             alignItems: "stretch"
                         }}>
@@ -782,7 +782,7 @@ function ContactPageContent() {
                                                 </div>
 
                                                 {/* Work Email & Phone Row */}
-                                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                                                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))", gap: "12px" }}>
                                                     <div>
                                                         <input
                                                             type="email"

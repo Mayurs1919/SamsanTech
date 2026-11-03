@@ -275,14 +275,15 @@ function ProductCard({
                     </div>
 
                     {/* Bottom Action Row */}
-                    <div style={{ display: "flex", gap: "8px", marginTop: "auto", flexWrap: "nowrap" }}>
+                    <div style={{ display: "flex", gap: "8px", marginTop: "auto", flexWrap: "wrap" }}>
                         <button
                             type="button"
                             onClick={() => setFlipped(true)}
                             title="Turn card for Technical Specs"
                             aria-label="Turn card for Technical Specs"
                             style={{
-                                flex: "1 1 30%",
+                                flex: "1 1 88px",
+                                minWidth: 0,
                                 padding: "10px 8px",
                                 borderRadius: "8px",
                                 background: "#F1F5F9",
@@ -297,7 +298,7 @@ function ProductCard({
                                 gap: "4px",
                                 cursor: "pointer",
                                 transition: "all 0.2s ease",
-                                whiteSpace: "nowrap"
+                                whiteSpace: "normal"
                             }}
                             onMouseEnter={e => {
                                 e.currentTarget.style.background = "#E2E8F0";
@@ -315,7 +316,8 @@ function ProductCard({
                             title="View Brochure"
                             aria-label="View Brochure"
                             style={{
-                                flex: "1 1 35%",
+                                flex: "1 1 88px",
+                                minWidth: 0,
                                 padding: "10px 8px",
                                 borderRadius: "8px",
                                 background: "rgba(239, 68, 68, 0.08)",
@@ -330,7 +332,7 @@ function ProductCard({
                                 gap: "5px",
                                 cursor: "pointer",
                                 transition: "all 0.2s ease",
-                                whiteSpace: "nowrap"
+                                whiteSpace: "normal"
                             }}
                             onMouseEnter={e => {
                                 e.currentTarget.style.background = "rgba(239, 68, 68, 0.14)";
@@ -355,7 +357,8 @@ function ProductCard({
                             title="Watch Product Video"
                             aria-label="Watch Product Video"
                             style={{
-                                flex: "1 1 35%",
+                                flex: "1 1 88px",
+                                minWidth: 0,
                                 padding: "10px 8px",
                                 borderRadius: "8px",
                                 background: "rgba(124, 58, 237, 0.08)",
@@ -370,7 +373,7 @@ function ProductCard({
                                 gap: "5px",
                                 cursor: "pointer",
                                 transition: "all 0.2s ease",
-                                whiteSpace: "nowrap"
+                                whiteSpace: "normal"
                             }}
                             onMouseEnter={e => {
                                 e.currentTarget.style.background = "rgba(124, 58, 237, 0.16)";
@@ -427,8 +430,8 @@ function ProductCard({
                                 border: "1px solid rgba(255,255,255,0.15)",
                                 color: "#FFFFFF",
                                 borderRadius: "50%",
-                                width: "28px",
-                                height: "28px",
+                                width: "44px",
+                                height: "44px",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
@@ -538,8 +541,63 @@ function ProductCard({
 // ── Products master dataset ──────────────────────────────────────
 const products: ProductItem[] = [
     {
-        id: "digital-cockpit-solution",
+        id: "automate-ai",
         number: "01",
+        category: "automotive",
+        categoryLabel: "In-Cabin GenAI",
+        title: "AutoMATE.ai",
+        description: "Contextual, voice-based AI assistant integrated directly into the vehicle cockpit — providing intelligent access to vehicle functionalities, e-manuals, and diagnostics through natural language.",
+        highlights: [
+            "Voice-first natural language vehicle control & setting adjustments",
+            "RAG-enhanced Interactive Digital Vehicle Manual query engine",
+            "Offline edge LLM mode for low-connectivity regions",
+            "Personalized driver preferences memory & habit learning"
+        ],
+        brochurePath: "/brochures/automate-ai-brochure.png",
+        icon: (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v4l3 3" />
+            </svg>
+        ),
+        techs: [
+            { label: "GenAI", isBadge: true },
+            { label: "NLP", isBadge: true },
+            { label: "Voice AI", isBadge: true },
+            { label: "Android", logoUrl: Logos.android },
+            { label: "Cockpit", isBadge: true },
+        ]
+    },
+    {
+        id: "cabiniq",
+        number: "02",
+        category: "automotive",
+        categoryLabel: "In-Cabin Sensing",
+        title: "CabinIQ™",
+        description: "A modular, AI-powered in-cabin intelligence platform unifying Driver Monitoring (DMS), Occupant Monitoring (OMS), Health Monitoring, and Mood-Based Personalization.",
+        highlights: [
+            "Combined Driver (DMS) & Occupant (OMS) multi-camera analytics",
+            "Child Presence Detection (CPD) & forgotten object alerting",
+            "Non-invasive heart-rate & breathing rate estimation",
+            "Dynamic mood-based ambient lighting & HVAC climate adjustment"
+        ],
+        brochurePath: "/brochures/cabiniq-brochure.png",
+        icon: (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+            </svg>
+        ),
+        techs: [
+            { label: "OpenCV", logoUrl: Logos.opencv },
+            { label: "TensorFlow", logoUrl: Logos.tensorflow },
+            { label: "DMS", isBadge: true },
+            { label: "OMS", isBadge: true },
+            { label: "AI Cabin", isBadge: true },
+        ]
+    },
+    {
+        id: "digital-cockpit-solution",
+        number: "03",
         category: "automotive",
         categoryLabel: "Automotive eCockpit",
         title: "Digital Cockpit Solution",
@@ -568,37 +626,8 @@ const products: ProductItem[] = [
         ]
     },
     {
-        id: "twinlnk",
-        number: "02",
-        category: "telematics",
-        categoryLabel: "IoT & Telematics",
-        title: "TwinLnk™",
-        description: "An intelligent telematics and IoT gateway platform enabling secure, seamless data flow between edge devices and cloud applications — built for automotive, industrial, and infrastructure environments.",
-        highlights: [
-            "High-frequency CAN Bus data ingestion & edge decoding",
-            "Secure MQTT / HTTPS telemetry pipeline to AWS & Azure",
-            "GNSS precision location mapping & geo-fencing engine",
-            "Remote diagnostic code reader with automated alerts"
-        ],
-        brochurePath: "/brochures/twinlnk-brochure.png",
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M20 12l-8-8-8 8" />
-            </svg>
-        ),
-        techs: [
-            { label: "MQTT", icon: <MqttIcon /> },
-            { label: "AWS", logoUrl: Logos.aws },
-            { label: "GNSS", isBadge: true },
-            { label: "CAN Bus", isBadge: true },
-            { label: "OTA", isBadge: true },
-            { label: "Edge AI", isBadge: true },
-        ]
-    },
-
-    {
         id: "dms-edge",
-        number: "03",
+        number: "04",
         category: "automotive",
         categoryLabel: "Safety & ADAS",
         title: "DMS Edge",
@@ -627,7 +656,7 @@ const products: ProductItem[] = [
     },
     {
         id: "maestro",
-        number: "04",
+        number: "05",
         category: "telematics",
         categoryLabel: "Fleet & Operations",
         title: "Maestro™",
@@ -654,91 +683,8 @@ const products: ProductItem[] = [
         ]
     },
     {
-        id: "automate-ai",
-        number: "05",
-        category: "automotive",
-        categoryLabel: "In-Cabin GenAI",
-        title: "AutoMATE.ai",
-        description: "Contextual, voice-based AI assistant integrated directly into the vehicle cockpit — providing intelligent access to vehicle functionalities, e-manuals, and diagnostics through natural language.",
-        highlights: [
-            "Voice-first natural language vehicle control & setting adjustments",
-            "RAG-enhanced Interactive Digital Vehicle Manual query engine",
-            "Offline edge LLM mode for low-connectivity regions",
-            "Personalized driver preferences memory & habit learning"
-        ],
-        brochurePath: "/brochures/automate-ai-brochure.png",
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v4l3 3" />
-            </svg>
-        ),
-        techs: [
-            { label: "GenAI", isBadge: true },
-            { label: "NLP", isBadge: true },
-            { label: "Voice AI", isBadge: true },
-            { label: "Android", logoUrl: Logos.android },
-            { label: "Cockpit", isBadge: true },
-        ]
-    },
-    {
-        id: "cabiniq",
-        number: "06",
-        category: "automotive",
-        categoryLabel: "In-Cabin Sensing",
-        title: "CabinIQ™",
-        description: "A modular, AI-powered in-cabin intelligence platform unifying Driver Monitoring (DMS), Occupant Monitoring (OMS), Health Monitoring, and Mood-Based Personalization.",
-        highlights: [
-            "Combined Driver (DMS) & Occupant (OMS) multi-camera analytics",
-            "Child Presence Detection (CPD) & forgotten object alerting",
-            "Non-invasive heart-rate & breathing rate estimation",
-            "Dynamic mood-based ambient lighting & HVAC climate adjustment"
-        ],
-        brochurePath: "/brochures/cabiniq-brochure.png",
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-        ),
-        techs: [
-            { label: "OpenCV", logoUrl: Logos.opencv },
-            { label: "TensorFlow", logoUrl: Logos.tensorflow },
-            { label: "DMS", isBadge: true },
-            { label: "OMS", isBadge: true },
-            { label: "AI Cabin", isBadge: true },
-        ]
-    },
-    {
-        id: "vemeego",
-        number: "07",
-        category: "smart-platforms",
-        categoryLabel: "Digital Collaboration",
-        title: "Vemeego",
-        description: "An intelligent workspace and video conferencing platform built for enhanced remote and corporate collaboration — delivering a rich, structured digital workspace.",
-        highlights: [
-            "End-to-end encrypted WebRTC video conference rooms",
-            "Interactive whiteboarding & live screen collaboration",
-            "AI-powered meeting summary & automated action items generation",
-            "Enterprise directory integration & SSO security"
-        ],
-        brochurePath: "/brochures/VeMee%20Flayer.png",
-        icon: (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-        ),
-        techs: [
-            { label: "React", logoUrl: Logos.react },
-            { label: "Node.js", logoUrl: Logos.nodejs },
-            { label: "WebRTC", isBadge: true },
-            { label: "Make in India", isBadge: true },
-        ]
-    },
-    {
         id: "pikniknow",
-        number: "08",
+        number: "06",
         category: "smart-platforms",
         categoryLabel: "Consumer App Platform",
         title: "PiknikNow",
@@ -765,7 +711,7 @@ const products: ProductItem[] = [
     },
     {
         id: "refacto",
-        number: "09",
+        number: "07",
         category: "smart-platforms",
         categoryLabel: "AI Document Intelligence",
         title: "RefactoFlow",
@@ -790,6 +736,62 @@ const products: ProductItem[] = [
             { label: "React", logoUrl: Logos.react },
             { label: "Node.js", logoUrl: Logos.nodejs },
             { label: "JWT Auth", isBadge: true },
+        ]
+    },
+    {
+        id: "twinlnk",
+        number: "08",
+        category: "telematics",
+        categoryLabel: "IoT & Telematics",
+        title: "TwinLnk™",
+        description: "An intelligent telematics and IoT gateway platform enabling secure, seamless data flow between edge devices and cloud applications — built for automotive, industrial, and infrastructure environments.",
+        highlights: [
+            "High-frequency CAN Bus data ingestion & edge decoding",
+            "Secure MQTT / HTTPS telemetry pipeline to AWS & Azure",
+            "GNSS precision location mapping & geo-fencing engine",
+            "Remote diagnostic code reader with automated alerts"
+        ],
+        brochurePath: "/brochures/twinlnk-brochure.png",
+        icon: (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M20 12l-8-8-8 8" />
+            </svg>
+        ),
+        techs: [
+            { label: "MQTT", icon: <MqttIcon /> },
+            { label: "AWS", logoUrl: Logos.aws },
+            { label: "GNSS", isBadge: true },
+            { label: "CAN Bus", isBadge: true },
+            { label: "OTA", isBadge: true },
+            { label: "Edge AI", isBadge: true },
+        ]
+    },
+    {
+        id: "vemeego",
+        number: "09",
+        category: "smart-platforms",
+        categoryLabel: "Digital Collaboration",
+        title: "Vemeego",
+        description: "An intelligent workspace and video conferencing platform built for enhanced remote and corporate collaboration — delivering a rich, structured digital workspace.",
+        highlights: [
+            "End-to-end encrypted WebRTC video conference rooms",
+            "Interactive whiteboarding & live screen collaboration",
+            "AI-powered meeting summary & automated action items generation",
+            "Enterprise directory integration & SSO security"
+        ],
+        brochurePath: "/brochures/VeMee%20Flayer.png",
+        icon: (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+        ),
+        techs: [
+            { label: "React", logoUrl: Logos.react },
+            { label: "Node.js", logoUrl: Logos.nodejs },
+            { label: "WebRTC", isBadge: true },
+            { label: "Make in India", isBadge: true },
         ]
     },
 ];
@@ -841,7 +843,7 @@ export default function SolutionsClient() {
                     >
                         <div style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
                             gap: "40px",
                             alignItems: "center"
                         }}>
@@ -1015,7 +1017,7 @@ export default function SolutionsClient() {
                         layout
                         style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+                            gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 340px), 1fr))",
                             gap: "32px",
                             alignItems: "stretch"
                         }}
@@ -1207,8 +1209,8 @@ export default function SolutionsClient() {
                                             background: "rgba(255,255,255,0.08)",
                                             border: "1px solid rgba(255,255,255,0.15)",
                                             color: "#FFFFFF",
-                                            width: "36px",
-                                            height: "36px",
+                                            width: "44px",
+                                            height: "44px",
                                             borderRadius: "50%",
                                             cursor: "pointer",
                                             fontSize: "1.1rem",

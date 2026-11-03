@@ -362,10 +362,8 @@ p.lead {
   border: none !important;
   box-shadow: none !important;
   pointer-events: none;
-  transition: top 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  will-change: transform;
+  /* transform and opacity are driven by Framer Motion — no CSS transition here */
+  will-change: transform, opacity;
 }
 
 .site-header.menu-open {
@@ -474,7 +472,7 @@ p.lead {
 
 .nav-links a {
   font-family: var(--font-body);
-  font-size: 0.90rem;
+  font-size: 0.94rem;
   font-weight: 500;
   color: rgba(230, 238, 250, 0.92);
   padding: 6px 12px;
@@ -513,8 +511,8 @@ p.lead {
 }
 
 .nav-actions .btn {
-  padding: 10px 22px;
-  font-size: 0.86rem;
+  padding: 11px 24px;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   border-radius: 100px;
@@ -1762,6 +1760,10 @@ a.contact-link:hover {
     grid-template-columns: 1fr 1fr;
   }
 
+  .footer-grid > div:empty {
+    display: none;
+  }
+
   .contact-layout {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -1829,8 +1831,8 @@ a.contact-link:hover {
   -webkit-overflow-scrolling: touch;
 }
 
-/* hide nav + CTA, show hamburger below 1024px */
-@media (max-width: 1024px) {
+/* Switch to the mobile menu before the full navigation row gets crowded. */
+@media (max-width: 1280px) {
   .nav-inner {
     display: flex;
     justify-content: space-between;
@@ -1859,6 +1861,10 @@ a.contact-link:hover {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
+
+  .brand .samsan-animated-logo-container {
+    height: 64px !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1877,6 +1883,10 @@ a.contact-link:hover {
   .nav-inner {
     height: 58px;
     padding: 0 16px;
+  }
+
+  .brand .samsan-animated-logo-container {
+    height: 54px !important;
   }
 
   .services-grid {
@@ -2127,9 +2137,12 @@ body {
   /* Touch target accessibility & iOS auto-zoom prevention */
   input,
   select,
-  textarea,
-  button {
+  textarea {
     font-size: 16px !important;
+    min-height: 44px;
+  }
+
+  button {
     min-height: 44px;
   }
 
@@ -2139,8 +2152,8 @@ body {
     width: 100% !important;
   }
 
-  img,
-  video {
+  img:not([data-nimg="fill"]),
+  video:not(.ferrari-video-bg) {
     max-width: 100% !important;
     height: auto !important;
   }
@@ -2162,10 +2175,6 @@ body {
     padding: 90px 0 44px !important;
   }
 
-  .btn {
-    width: 100% !important;
-    justify-content: center !important;
-  }
 }
 
 /* ── Viewport meta safety — prevent mobile layout shift ── */

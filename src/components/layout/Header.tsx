@@ -27,21 +27,26 @@ const navItems: NavItem[] = [
     { label: "Consulting & Staffing", href: "/consulting-staffing", isVisible: true },
     { label: "About", href: "/about", isVisible: true },
     { label: "Careers", href: "/careers", isVisible: true },
-    // Hidden items not in the approved list
     { label: "Engagement Models", href: "/engagement-models", isVisible: false },
 ];
 
+// Thresholds — hysteresis prevents flicker at the boundary
+const HIDE_AT  = 80;   // hide  when scrollY crosses above this
+const SHOW_AT  = 50;   // show  when scrollY drops below this
+
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
+    const [hidden, setHidden] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [navHidden, setNavHidden] = useState(false);
-    const lastScrollY = useRef(0);
     const [hoveredItem, setHoveredItem] = useState<string | null>(null);
     const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
 
-    const pathname = usePathname();
+    const pathname   = usePathname();
     const shouldReduce = useReducedMotion();
     const isContactPage = pathname === "/contact";
+
+    // Hysteresis ref — only flip state when we cross the correct boundary
+    const isHiddenRef = useRef(false);
 
     useEffect(() => {
         setIsOpen(false);
@@ -50,25 +55,19 @@ export default function Header() {
     }, [pathname]);
 
     useEffect(() => {
-        const SCROLL_THRESHOLD = 80;   // px — below this, always show nav
-        const HIDE_DELTA = 40;         // px scrolled down before hiding
-
         const onScroll = () => {
             const y = window.scrollY;
+
             setScrolled(y > 40);
 
-            if (y < SCROLL_THRESHOLD) {
-                // Near the top — always fully visible
-                setNavHidden(false);
-            } else if (y > lastScrollY.current + HIDE_DELTA) {
-                // Scrolling down — hide nav (logo stays)
-                setNavHidden(true);
-            } else if (y < lastScrollY.current - 10) {
-                // Scrolling up — reveal nav
-                setNavHidden(false);
+            // Only update hidden state when crossing the hysteresis boundary
+            if (!isHiddenRef.current && y > HIDE_AT) {
+                isHiddenRef.current = true;
+                setHidden(true);
+            } else if (isHiddenRef.current && y < SHOW_AT) {
+                isHiddenRef.current = false;
+                setHidden(false);
             }
-
-            lastScrollY.current = y;
         };
 
         window.addEventListener("scroll", onScroll, { passive: true });
@@ -82,14 +81,8 @@ export default function Header() {
     }, []);
 
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
-        return () => {
-            document.body.style.overflow = "";
-        };
+        document.body.style.overflow = isOpen ? "hidden" : "";
+        return () => { document.body.style.overflow = ""; };
     }, [isOpen]);
 
     const isItemActive = (href: string) => {
@@ -99,14 +92,8 @@ export default function Header() {
         return false;
     };
 
-    // Shared animation variants for nav elements (not the logo)
-    const navAnimate = navHidden && !isOpen
-        ? { opacity: 0, filter: "blur(8px)", y: -10, pointerEvents: "none" as const }
-        : { opacity: 1, filter: "blur(0px)", y: 0, pointerEvents: "auto" as const };
-
-    const navTransition = shouldReduce
-        ? { duration: 0 }
-        : { duration: 0.38, ease: "easeInOut" as const };
+    // When mobile menu is open, override hidden so the menu stays reachable
+    const effectivelyHidden = hidden && !isOpen;
 
     return (
         <>
@@ -118,21 +105,29 @@ export default function Header() {
                 Skip to main content
             </a>
 
-            <header className={`site-header ${scrolled ? "scrolled" : ""} ${isOpen ? "menu-open" : ""}`}>
+            {/* The entire header — logo included — slides up when effectivelyHidden */}
+            <motion.header
+                className={`site-header ${scrolled ? "scrolled" : ""} ${isOpen ? "menu-open" : ""}`}
+                animate={effectivelyHidden
+                    ? { y: "-120%", opacity: 0, pointerEvents: "none" }
+                    : { y: "0%",    opacity: 1, pointerEvents: "auto" }
+                }
+                transition={shouldReduce
+                    ? { duration: 0 }
+                    : { duration: 0.4, ease: "easeInOut" }
+                }
+                // Keep GPU-composited so it never repaints
+                style={{ willChange: "transform, opacity" }}
+            >
                 <nav className="nav-inner" aria-label="Primary navigation">
 
-                    {/* ── Brand / Logo — ALWAYS VISIBLE, never hidden ── */}
+                    {/* Brand */}
                     <Link href="/" className="brand" aria-label="Samsan — Home">
-                        <SamsanAnimatedLogo height="80px" />
+                        <SamsanAnimatedLogo height="86px" />
                     </Link>
 
-                    {/* ── Desktop Nav Links — fades/blurs out on scroll-down ── */}
-                    <motion.ul
-                        className="nav-links"
-                        role="list"
-                        animate={navAnimate}
-                        transition={navTransition}
-                    >
+                    {/* Desktop Nav Links */}
+                    <ul className="nav-links" role="list">
                         {navItems.filter(item => item.isVisible !== false).map((item) => {
                             const hasSubmenu = !!item.submenu;
                             const isActive = isItemActive(item.href) || (hasSubmenu && pathname.startsWith(item.href));
@@ -151,10 +146,7 @@ export default function Header() {
                                         {item.label}
                                         {hasSubmenu && (
                                             <svg
-                                                width="12"
-                                                height="12"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
+                                                width="12" height="12" viewBox="0 0 24 24" fill="none"
                                                 style={{
                                                     transform: hoveredItem === item.label ? "rotate(180deg)" : "rotate(0deg)",
                                                     transition: "transform 0.2s ease"
@@ -174,38 +166,27 @@ export default function Header() {
                                                     exit={{ opacity: 0, y: 10 }}
                                                     transition={{ duration: 0.15 }}
                                                     style={{
-                                                        position: "absolute",
-                                                        top: "100%",
-                                                        left: "50%",
-                                                        transform: "translateX(-50%)",
-                                                        marginTop: "12px",
-                                                        background: "rgba(10, 15, 28, 0.95)",
-                                                        border: "1px solid rgba(255, 255, 255, 0.08)",
-                                                        borderRadius: "16px",
-                                                        padding: "8px",
+                                                        position: "absolute", top: "100%", left: "50%",
+                                                        transform: "translateX(-50%)", marginTop: "12px",
+                                                        background: "rgba(10,15,28,0.95)",
+                                                        border: "1px solid rgba(255,255,255,0.08)",
+                                                        borderRadius: "16px", padding: "8px",
                                                         boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-                                                        zIndex: 1000,
-                                                        minWidth: "260px",
-                                                        display: "flex",
-                                                        flexDirection: "column",
-                                                        gap: "4px",
+                                                        zIndex: 1000, minWidth: "260px",
+                                                        display: "flex", flexDirection: "column", gap: "4px",
                                                         backdropFilter: "blur(20px)"
                                                     }}
                                                 >
                                                     {item.submenu?.map((sub) => (
                                                         <Link
-                                                            key={sub.href}
-                                                            href={sub.href}
+                                                            key={sub.href} href={sub.href}
                                                             style={{
-                                                                padding: "10px 16px",
-                                                                borderRadius: "10px",
+                                                                padding: "10px 16px", borderRadius: "10px",
                                                                 fontSize: "0.82rem",
                                                                 color: pathname === sub.href ? "#fff" : "var(--text-secondary)",
                                                                 background: pathname === sub.href ? "rgba(255,255,255,0.06)" : "transparent",
-                                                                transition: "all 0.2s ease",
-                                                                textDecoration: "none",
-                                                                display: "block",
-                                                                whiteSpace: "nowrap"
+                                                                transition: "all 0.2s ease", textDecoration: "none",
+                                                                display: "block", whiteSpace: "nowrap"
                                                             }}
                                                             className="hover:bg-white/5 hover:text-white"
                                                         >
@@ -219,15 +200,10 @@ export default function Header() {
                                 </li>
                             );
                         })}
-                    </motion.ul>
+                    </ul>
 
-                    {/* ── Desktop CTA + Hamburger — fades/blurs out on scroll-down ── */}
-                    <motion.div
-                        className="nav-actions"
-                        animate={navAnimate}
-                        transition={navTransition}
-                    >
-                        {/* Always reserve the button's space; hide it on contact page */}
+                    {/* Desktop CTA + Hamburger */}
+                    <div className="nav-actions">
                         <Link
                             href="/contact"
                             className="btn btn-primary"
@@ -241,7 +217,6 @@ export default function Header() {
                             </svg>
                         </Link>
 
-                        {/* Hamburger — shown on small screens, hidden on desktop via CSS */}
                         <button
                             className="hamburger"
                             onClick={() => setIsOpen(!isOpen)}
@@ -250,17 +225,13 @@ export default function Header() {
                         >
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                                 {isOpen ? (
-                                    <>
-                                        <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-                                    </>
+                                    <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
                                 ) : (
-                                    <>
-                                        <path d="M3 4h14M3 10h14M3 16h14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-                                    </>
+                                    <path d="M3 4h14M3 10h14M3 16h14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
                                 )}
                             </svg>
                         </button>
-                    </motion.div>
+                    </div>
                 </nav>
 
                 {/* Mobile menu */}
@@ -288,11 +259,7 @@ export default function Header() {
                                                     style={{ color: "var(--text-primary)", background: "transparent", border: "none" }}
                                                 >
                                                     {item.label}
-                                                    <svg
-                                                        width="16"
-                                                        height="16"
-                                                        viewBox="0 0 24 24"
-                                                        fill="none"
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                                                         style={{
                                                             transform: isMobileExpanded ? "rotate(180deg)" : "rotate(0deg)",
                                                             transition: "transform 0.2s ease",
@@ -313,8 +280,7 @@ export default function Header() {
                                                         >
                                                             {item.submenu?.map((sub) => (
                                                                 <Link
-                                                                    key={sub.href}
-                                                                    href={sub.href}
+                                                                    key={sub.href} href={sub.href}
                                                                     className={`block px-6 py-3 text-xs ${pathname === sub.href ? "active" : ""}`}
                                                                     onClick={() => setIsOpen(false)}
                                                                 >
@@ -352,7 +318,7 @@ export default function Header() {
                         </motion.div>
                     )}
                 </AnimatePresence>
-            </header>
+            </motion.header>
         </>
     );
 }

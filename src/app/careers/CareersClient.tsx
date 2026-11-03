@@ -217,10 +217,10 @@ const initialJobs: Job[] = [...rawJobs].sort((a, b) => {
 });
 
 const careerStats = [
-    { value: "15+", label: "Open Positions" },
-    { value: "5", label: "Specialized Engineering Domains" },
-    { value: "4+", label: "Global Innovation Hubs" },
-    { value: "100%", label: "Engineering Excellence" }
+    { value: "15+", label: "Open Positions", sublabel: "Across all domains" },
+    { value: "5", label: "Engineering Domains", sublabel: "SDV, ADAS, Cloud & more" },
+    { value: "4+", label: "Global Offices", sublabel: "India, Korea, Germany, USA" },
+    { value: "48h", label: "Fast Response", sublabel: "Avg. interview scheduling" }
 ];
 
 /* ── Interactive Job Row Component ── */
@@ -430,7 +430,7 @@ function AnimatedCounter({ target, suffix, duration = 1800 }: { target: number; 
 }
 
 function CareersStatsStrip({ stats, shouldReduce }: {
-    stats: { value: string; label: string }[];
+    stats: { value: string; label: string; sublabel: string }[];
     shouldReduce: boolean | null;
 }) {
     const statConfig = [
@@ -438,58 +438,78 @@ function CareersStatsStrip({ stats, shouldReduce }: {
             accentColor: "#4DD8E8",
             accentBg: "rgba(77,216,232,0.1)",
             icon: (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z" stroke="#4DD8E8" strokeWidth="1.5"/>
-                    <path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z" stroke="#4DD8E8" strokeWidth="1.5"/>
-                    <path d="M12 13v2m-2-1h4" stroke="#4DD8E8" strokeWidth="1.5" strokeLinecap="round"/>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4DD8E8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2"/>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
                 </svg>
             ),
             target: 15, suffix: "+"
         },
         {
-            accentColor: "#FF8A3D",
-            accentBg: "rgba(255,138,61,0.1)",
+            accentColor: "#F97316",
+            accentBg: "rgba(249,115,22,0.1)",
             icon: (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="9" stroke="#FF8A3D" strokeWidth="1.5"/>
-                    <path d="M12 8v4l3 3" stroke="#FF8A3D" strokeWidth="1.5" strokeLinecap="round"/>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F97316" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                 </svg>
             ),
             target: 5, suffix: ""
         },
         {
-            accentColor: "#A855F7",
-            accentBg: "rgba(168,85,247,0.1)",
+            accentColor: "#8B5CF6",
+            accentBg: "rgba(139,92,246,0.1)",
             icon: (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="#A855F7" strokeWidth="1.5" strokeLinejoin="round"/>
-                    <circle cx="12" cy="9" r="2.5" stroke="#A855F7" strokeWidth="1.5"/>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                 </svg>
             ),
             target: 4, suffix: "+"
         },
         {
-            accentColor: "#34D399",
-            accentBg: "rgba(52,211,153,0.1)",
+            accentColor: "#10B981",
+            accentBg: "rgba(16,185,129,0.1)",
             icon: (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="#34D399" strokeWidth="1.5" strokeLinejoin="round"/>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
                 </svg>
             ),
-            target: 100, suffix: "%"
+            target: 48, suffix: "h"
         }
     ];
 
     return (
         <section
             style={{
-                background: "#080C12",
-                borderTop: "1px solid rgba(255,255,255,0.06)",
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
-                padding: "72px 0"
+                background: "#F8FAFC",
+                borderTop: "1px solid #E2E8F0",
+                borderBottom: "1px solid #E2E8F0",
+                padding: "80px 0"
             }}
         >
             <div className="container">
+                {/* Section label */}
+                <div style={{ textAlign: "center", marginBottom: "48px" }}>
+                    <span style={{
+                        fontFamily: "var(--font-mono)", fontSize: "0.75rem", fontWeight: 700,
+                        textTransform: "uppercase", letterSpacing: "0.12em",
+                        color: "#4DD8E8", background: "rgba(77,216,232,0.1)",
+                        border: "1px solid rgba(77,216,232,0.25)",
+                        padding: "5px 16px", borderRadius: "100px",
+                        display: "inline-block", marginBottom: "14px",
+                    }}>
+                        By the Numbers
+                    </span>
+                    <h2 style={{
+                        fontSize: "clamp(1.6rem, 2.5vw, 2.1rem)", fontWeight: 800,
+                        color: "#0B1320", letterSpacing: "-0.02em", margin: 0,
+                    }}>
+                        Why Engineers Choose SAMSAN
+                    </h2>
+                </div>
+
                 <motion.div
                     variants={staggerContainerVariants}
                     initial="hidden"
@@ -508,20 +528,35 @@ function CareersStatsStrip({ stats, shouldReduce }: {
                             <motion.div
                                 key={i}
                                 variants={fadeUpVariants(shouldReduce)}
-                                className="stat-card-v2"
-                                style={{ "--accent": cfg.accentColor } as React.CSSProperties}
+                                style={{
+                                    background: "#FFFFFF",
+                                    border: "1.5px solid #E2E8F0",
+                                    borderRadius: "20px",
+                                    padding: "32px 28px",
+                                    textAlign: "left",
+                                    position: "relative",
+                                    overflow: "hidden",
+                                    boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+                                    transition: "transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease",
+                                    cursor: "default",
+                                }}
+                                whileHover={{
+                                    y: -4,
+                                    boxShadow: "0 12px 36px rgba(0,0,0,0.08)",
+                                }}
                             >
-                                {/* Accent bar */}
+                                {/* Top accent bar */}
                                 <div style={{
                                     position: "absolute",
-                                    bottom: 0, left: 0, right: 0, height: "2px",
-                                    background: `linear-gradient(90deg, ${cfg.accentColor}00, ${cfg.accentColor}, ${cfg.accentColor}00)`
+                                    top: 0, left: 0, right: 0, height: "3px",
+                                    background: cfg.accentColor,
+                                    borderRadius: "20px 20px 0 0",
                                 }} />
 
                                 {/* Icon */}
                                 <div style={{
-                                    width: "44px", height: "44px",
-                                    borderRadius: "12px",
+                                    width: "46px", height: "46px",
+                                    borderRadius: "13px",
                                     background: cfg.accentBg,
                                     border: `1px solid ${cfg.accentColor}30`,
                                     display: "flex",
@@ -532,15 +567,15 @@ function CareersStatsStrip({ stats, shouldReduce }: {
                                     {cfg.icon}
                                 </div>
 
-                                {/* Animated number */}
+                                {/* Big number */}
                                 <div style={{
-                                    fontSize: "3rem",
+                                    fontSize: "2.8rem",
                                     fontWeight: 800,
                                     fontFamily: "var(--font-display)",
                                     color: cfg.accentColor,
                                     lineHeight: 1,
-                                    marginBottom: "8px",
-                                    letterSpacing: "-0.02em"
+                                    marginBottom: "10px",
+                                    letterSpacing: "-0.03em"
                                 }}>
                                     {shouldReduce ? s.value : (
                                         <AnimatedCounter
@@ -553,14 +588,22 @@ function CareersStatsStrip({ stats, shouldReduce }: {
 
                                 {/* Label */}
                                 <div style={{
-                                    fontSize: "0.78rem",
-                                    color: "#64748B",
-                                    fontFamily: "var(--font-mono)",
-                                    letterSpacing: "0.08em",
-                                    textTransform: "uppercase",
-                                    lineHeight: 1.4
+                                    fontSize: "0.95rem",
+                                    fontWeight: 700,
+                                    color: "#0B1320",
+                                    marginBottom: "4px",
+                                    lineHeight: 1.3,
                                 }}>
                                     {s.label}
+                                </div>
+
+                                {/* Sub-label */}
+                                <div style={{
+                                    fontSize: "0.8rem",
+                                    color: "#94A3B8",
+                                    lineHeight: 1.5,
+                                }}>
+                                    {s.sublabel}
                                 </div>
                             </motion.div>
                         );
@@ -621,22 +664,6 @@ export default function CareersClient() {
 
             {/* ── Page Hero — Premium Redesign ── */}
             <style>{`
-                @keyframes careers-float-1 {
-                    0%, 100% { transform: translateY(0px) rotate(0deg); }
-                    50% { transform: translateY(-14px) rotate(1.5deg); }
-                }
-                @keyframes careers-float-2 {
-                    0%, 100% { transform: translateY(0px) rotate(0deg); }
-                    50% { transform: translateY(-10px) rotate(-1deg); }
-                }
-                @keyframes careers-float-3 {
-                    0%, 100% { transform: translateY(0px) rotate(0deg); }
-                    50% { transform: translateY(-18px) rotate(2deg); }
-                }
-                @keyframes careers-pulse-ring {
-                    0% { transform: scale(1); opacity: 0.4; }
-                    100% { transform: scale(1.6); opacity: 0; }
-                }
                 @keyframes careers-shimmer {
                     0% { background-position: -200% center; }
                     100% { background-position: 200% center; }
@@ -652,41 +679,32 @@ export default function CareersClient() {
                 }
                 .careers-hero-cta-primary {
                     display: inline-flex; align-items: center; gap: 8px;
-                    padding: 14px 28px;
-                    background: linear-gradient(135deg, #E8521A 0%, #FF8A3D 100%);
-                    color: #fff; border: none; border-radius: 10px;
-                    font-size: 0.95rem; font-weight: 700; cursor: pointer;
+                    padding: 15px 24px;
+                    background: #4DD8E8;
+                    color: #07121A; border: 1px solid #4DD8E8; border-radius: 9px;
+                    font-size: 0.94rem; font-weight: 700; cursor: pointer;
                     font-family: var(--font-body); text-decoration: none;
-                    box-shadow: 0 8px 24px rgba(232,82,26,0.35);
+                    box-shadow: 0 8px 24px rgba(77,216,232,0.18);
                     transition: transform 0.2s, box-shadow 0.2s;
                 }
                 .careers-hero-cta-primary:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 12px 32px rgba(232,82,26,0.45);
+                    box-shadow: 0 12px 30px rgba(77,216,232,0.28);
                 }
                 .careers-hero-cta-secondary {
                     display: inline-flex; align-items: center; gap: 8px;
-                    padding: 14px 28px;
-                    background: rgba(255,255,255,0.05);
-                    color: #E2E8F0; border: 1px solid rgba(255,255,255,0.15);
-                    border-radius: 10px; font-size: 0.95rem; font-weight: 600;
+                    padding: 15px 24px;
+                    background: rgba(255,255,255,0.025);
+                    color: #E2E8F0; border: 1px solid rgba(203,213,225,0.22);
+                    border-radius: 9px; font-size: 0.94rem; font-weight: 600;
                     cursor: pointer; font-family: var(--font-body); text-decoration: none;
                     backdrop-filter: blur(8px);
                     transition: all 0.2s;
                 }
                 .careers-hero-cta-secondary:hover {
-                    background: rgba(255,255,255,0.1);
-                    border-color: rgba(255,255,255,0.3);
+                    background: rgba(255,255,255,0.07);
+                    border-color: rgba(203,213,225,0.4);
                     transform: translateY(-2px);
-                }
-                .careers-domain-chip {
-                    display: inline-flex; align-items: center; gap: 6px;
-                    padding: 8px 14px;
-                    border-radius: 30px; font-size: 0.78rem; font-weight: 600;
-                    font-family: var(--font-mono); letter-spacing: 0.04em;
-                    white-space: nowrap; backdrop-filter: blur(12px);
-                    border: 1px solid; cursor: default;
-                    position: absolute;
                 }
                 .stat-card-v2 {
                     background: rgba(255,255,255,0.03);
@@ -698,23 +716,10 @@ export default function CareersClient() {
                     overflow: hidden;
                     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
                 }
-                .stat-card-v2::before {
-                    content: '';
-                    position: absolute;
-                    bottom: 0; left: 0; right: 0;
-                    height: 2px;
-                }
                 .stat-card-v2:hover {
                     transform: translateY(-4px);
                     border-color: rgba(255,255,255,0.16);
                     box-shadow: 0 20px 48px rgba(0,0,0,0.4);
-                }
-                .stat-card-v2:hover::after {
-                    content: '';
-                    position: absolute;
-                    inset: 0;
-                    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.03), transparent);
-                    pointer-events: none;
                 }
                 .stat-value-shimmer {
                     background: linear-gradient(90deg, #FFFFFF 0%, #4DD8E8 40%, #FFFFFF 60%, #FFFFFF 100%);
@@ -725,12 +730,11 @@ export default function CareersClient() {
                     animation: careers-shimmer 3s linear infinite;
                 }
                 @media (max-width: 900px) {
-                    .careers-hero-two-col { flex-direction: column !important; gap: 48px !important; }
-                    .careers-hero-right { display: none !important; }
                     .careers-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
                 }
                 @media (max-width: 520px) {
                     .careers-stats-grid { grid-template-columns: 1fr !important; }
+                    .careers-hero-cta-primary, .careers-hero-cta-secondary { justify-content: center; width: 100%; }
                 }
             `}</style>
 
@@ -738,11 +742,11 @@ export default function CareersClient() {
                 className="section-dark page-hero"
                 aria-labelledby="careers-heading"
                 style={{
-                    background: "linear-gradient(165deg, #06080C 0%, #090D14 55%, #0B1120 100%)",
-                    padding: "130px 0 100px",
+                    background: "linear-gradient(145deg, #070A0F 0%, #0B121B 58%, #101925 100%)",
+                    padding: "150px 0 112px",
                     position: "relative",
                     overflow: "hidden",
-                    minHeight: "92vh",
+                    minHeight: "min(82vh, 820px)",
                     display: "flex",
                     alignItems: "center"
                 }}
@@ -774,17 +778,18 @@ export default function CareersClient() {
                     <div className="careers-hero-two-col" style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "64px"
+                        justifyContent: "center",
+                        textAlign: "center"
                     }}>
                         {/* ── Left: Content ── */}
                         <motion.div
                             variants={staggerContainerVariants}
                             initial="hidden"
                             animate="visible"
-                            style={{ flex: "0 0 55%", maxWidth: "620px" }}
+                            style={{ width: "100%", maxWidth: "900px", margin: "0 auto" }}
                         >
                             {/* Badge */}
-                            <motion.div variants={fadeUpVariants(shouldReduce)} style={{ marginBottom: "24px" }}>
+                            <motion.div variants={fadeUpVariants(shouldReduce)} style={{ marginBottom: "28px" }}>
                                 <span style={{
                                     display: "inline-flex",
                                     alignItems: "center",
@@ -793,7 +798,7 @@ export default function CareersClient() {
                                     background: "rgba(77,216,232,0.07)",
                                     border: "1px solid rgba(77,216,232,0.22)",
                                     borderRadius: "30px",
-                                    fontSize: "0.73rem",
+                                    fontSize: "0.7rem",
                                     fontFamily: "var(--font-mono)",
                                     letterSpacing: "0.1em",
                                     textTransform: "uppercase",
@@ -814,21 +819,18 @@ export default function CareersClient() {
                                 id="careers-heading"
                                 variants={fadeUpVariants(shouldReduce)}
                                 style={{
-                                    fontSize: "clamp(2.6rem, 4.5vw, 3.8rem)",
+                                    fontSize: "clamp(2.65rem, 6vw, 5rem)",
                                     fontWeight: 800,
                                     fontFamily: "var(--font-display)",
                                     color: "#F1F5F9",
-                                    letterSpacing: "-0.025em",
-                                    marginBottom: "22px",
-                                    lineHeight: 1.1
+                                    letterSpacing: "-0.045em",
+                                    marginBottom: "24px",
+                                    lineHeight: 1.04
                                 }}
                             >
                                 Shape the Future of{" "}
                                 <span style={{
-                                    background: "linear-gradient(100deg, #4DD8E8 0%, #7DD3FC 40%, #E8521A 100%)",
-                                    WebkitBackgroundClip: "text",
-                                    WebkitTextFillColor: "transparent",
-                                    backgroundClip: "text"
+                                    color: "#4DD8E8"
                                 }}>
                                     Software‑Defined
                                 </span>
@@ -841,11 +843,11 @@ export default function CareersClient() {
                                 variants={fadeUpVariants(shouldReduce)}
                                 style={{
                                     color: "#94A3B8",
-                                    fontSize: "1.08rem",
-                                    lineHeight: 1.75,
+                                    fontSize: "1.05rem",
+                                    lineHeight: 1.8,
                                     fontFamily: "var(--font-body)",
-                                    marginBottom: "36px",
-                                    maxWidth: "560px"
+                                    margin: "0 auto 34px",
+                                    maxWidth: "680px"
                                 }}
                             >
                                 Join specialized engineering CoEs across <strong style={{ color: "#CBD5E1" }}>SDV</strong>, <strong style={{ color: "#CBD5E1" }}>Android Automotive</strong>, <strong style={{ color: "#CBD5E1" }}>V2X</strong>, AI/ML, and Autonomous Systems. Build high-impact technology with global automotive leaders.
@@ -854,7 +856,7 @@ export default function CareersClient() {
                             {/* CTAs */}
                             <motion.div
                                 variants={fadeUpVariants(shouldReduce)}
-                                style={{ display: "flex", flexWrap: "wrap", gap: "14px", alignItems: "center" }}
+                                style={{ display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center", justifyContent: "center" }}
                             >
                                 <a href="#job-openings" className="careers-hero-cta-primary">
                                     View Open Positions
@@ -866,101 +868,6 @@ export default function CareersClient() {
                                 </a>
                             </motion.div>
 
-                            {/* Trust line */}
-                            <motion.div
-                                variants={fadeUpVariants(shouldReduce)}
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "10px",
-                                    marginTop: "36px"
-                                }}
-                            >
-                                <div style={{ display: "flex" }}>
-                                    {["#4DD8E8","#E8521A","#A855F7","#34D399"].map((c, i) => (
-                                        <div key={i} style={{
-                                            width: "30px", height: "30px", borderRadius: "50%",
-                                            background: `radial-gradient(circle, ${c}33, ${c}11)`,
-                                            border: `2px solid ${c}66`,
-                                            marginLeft: i > 0 ? "-8px" : "0",
-                                            zIndex: 4 - i,
-                                            position: "relative"
-                                        }} />
-                                    ))}
-                                </div>
-                                <span style={{ fontSize: "0.82rem", color: "#64748B", fontFamily: "var(--font-body)" }}>
-                                    5 engineering domains · India &amp; global delivery
-                                </span>
-                            </motion.div>
-                        </motion.div>
-
-                        {/* ── Right: Visual Card ── */}
-                        <motion.div
-                            className="careers-hero-right"
-                            initial={{ opacity: 0, x: 40 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6, delay: 0.3 }}
-                            style={{ flex: 1, position: "relative", height: "480px" }}
-                        >
-                            {/* Central glow circle */}
-                            <div style={{
-                                position: "absolute",
-                                top: "50%", left: "50%",
-                                transform: "translate(-50%, -50%)",
-                                width: "200px", height: "200px"
-                            }}>
-                                {/* Pulse rings */}
-                                {[1.3, 1.6, 2.0].map((scale, i) => (
-                                    <div key={i} style={{
-                                        position: "absolute",
-                                        inset: 0,
-                                        borderRadius: "50%",
-                                        border: "1px solid rgba(77,216,232,0.2)",
-                                        transform: `scale(${scale})`,
-                                        animation: `careers-pulse-ring ${2 + i * 0.6}s ease-out ${i * 0.4}s infinite`
-                                    }} />
-                                ))}
-                                {/* Central badge */}
-                                <div style={{
-                                    position: "absolute", inset: 0,
-                                    borderRadius: "50%",
-                                    background: "linear-gradient(135deg, rgba(77,216,232,0.12), rgba(232,82,26,0.08))",
-                                    border: "1px solid rgba(77,216,232,0.3)",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    backdropFilter: "blur(12px)"
-                                }}>
-                                    <span style={{ fontSize: "2.2rem", fontWeight: 800, color: "#4DD8E8", fontFamily: "var(--font-mono)", lineHeight: 1 }}>15+</span>
-                                    <span style={{ fontSize: "0.7rem", color: "#64748B", fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: "4px" }}>Open Roles</span>
-                                </div>
-                            </div>
-
-                            {/* Floating domain chips */}
-                            {[
-                                { label: "Embedded Eng.", color: "#4DD8E8", top: "6%", left: "5%", anim: "careers-float-1", delay: "0s", dot: "#4DD8E8" },
-                                { label: "HMI / Android", color: "#FF8A3D", top: "10%", right: "2%", anim: "careers-float-2", delay: "0.5s", dot: "#FF8A3D" },
-                                { label: "V2X / Connectivity", color: "#A855F7", top: "42%", left: "0%", anim: "careers-float-3", delay: "1s", dot: "#A855F7" },
-                                { label: "Validation & Test", color: "#34D399", bottom: "28%", right: "0%", anim: "careers-float-1", delay: "0.8s", dot: "#34D399" },
-                                { label: "Systems Eng.", color: "#FBBF24", bottom: "8%", left: "12%", anim: "careers-float-2", delay: "0.3s", dot: "#FBBF24" },
-                                { label: "SDV Platform", color: "#FB7185", top: "72%", right: "8%", anim: "careers-float-3", delay: "1.2s", dot: "#FB7185" },
-                            ].map((chip, i) => (
-                                <div
-                                    key={i}
-                                    className="careers-domain-chip"
-                                    style={{
-                                        top: chip.top, left: chip.left, right: chip.right, bottom: chip.bottom,
-                                        background: `rgba(${chip.color === "#4DD8E8" ? "77,216,232" : chip.color === "#FF8A3D" ? "255,138,61" : chip.color === "#A855F7" ? "168,85,247" : chip.color === "#34D399" ? "52,211,153" : chip.color === "#FBBF24" ? "251,191,36" : "251,113,133"},0.08)`,
-                                        borderColor: `${chip.color}33`,
-                                        color: chip.color,
-                                        animation: `${chip.anim} ${3 + i * 0.4}s ease-in-out ${chip.delay} infinite`
-                                    }}
-                                >
-                                    <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: chip.dot, boxShadow: `0 0 6px ${chip.dot}` }} />
-                                    {chip.label}
-                                </div>
-                            ))}
                         </motion.div>
                     </div>
                 </div>
@@ -1043,7 +950,7 @@ export default function CareersClient() {
 
                     <div style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
                         gap: "32px",
                         alignItems: "stretch"
                     }}>
@@ -1257,9 +1164,26 @@ export default function CareersClient() {
                             gap: 28px;
                             align-items: start;
                         }
+                        .jobs-mobile-filters { display: none; }
                         @media (max-width: 900px) {
                             .jobs-layout { grid-template-columns: 1fr; }
                             .jobs-sidebar { display: none; }
+                            .jobs-mobile-filters {
+                                display: grid;
+                                grid-template-columns: repeat(2, minmax(0, 1fr));
+                                gap: 10px;
+                                margin-bottom: 16px;
+                            }
+                        }
+                        .jobs-mobile-filters select {
+                            min-width: 0;
+                            width: 100%;
+                            padding: 10px 12px;
+                            border: 1px solid #D8E0E9;
+                            border-radius: 9px;
+                            color: #1E293B;
+                            background: #FFFFFF;
+                            font: 500 0.85rem var(--font-body);
                         }
                         .jobs-sidebar {
                             background: #FFFFFF;
@@ -1380,7 +1304,7 @@ export default function CareersClient() {
                         /* Job Cards */
                         .jobs-grid {
                             display: grid;
-                            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                            grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
                             gap: 18px;
                         }
                         .job-card-v2 {
@@ -1418,6 +1342,12 @@ export default function CareersClient() {
                             margin: 0 0 4px;
                             line-height: 1.3;
                             transition: color 0.15s;
+                        }
+                        @media (max-width: 520px) {
+                            .jobs-mobile-filters { grid-template-columns: minmax(0, 1fr); }
+                            .jobs-search-bar { flex-wrap: wrap; }
+                            .jobs-search-input { min-width: 0; }
+                            .jobs-search-btn { justify-content: center; flex: 1 0 100%; }
                         }
                         .job-card-v2:hover .job-card-title-v2 { color: #E8521A; }
                         .job-apply-btn {
@@ -1623,8 +1553,26 @@ export default function CareersClient() {
 
                         {/* ── Right Content: Search + Cards ── */}
                         <div>
+                            <div className="jobs-mobile-filters" aria-label="Filter open positions">
+                                <select aria-label="Filter by domain" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                                    {categories.map((category) => <option key={category} value={category}>{category === "All Categories" ? "All Domains" : category}</option>)}
+                                </select>
+                                <select aria-label="Filter by experience" value={selectedExp} onChange={(e) => setSelectedExp(e.target.value)}>
+                                    {experiences.map((experience) => <option key={experience} value={experience}>{experience === "All Experience" ? "All Experience Levels" : experience}</option>)}
+                                </select>
+                                <select aria-label="Filter by location" value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
+                                    {cities.map((city) => <option key={city} value={city}>{city === "All Cities" ? "All Locations" : `${city}, India`}</option>)}
+                                </select>
+                                <select aria-label="Filter by job type" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+                                    {types.map((type) => <option key={type} value={type}>{type === "All Types" ? "All Job Types" : type}</option>)}
+                                </select>
+                                <button type="button" onClick={handleResetFilter} style={{ gridColumn: "1 / -1", justifySelf: "start", padding: "6px 0", border: 0, color: "#E8521A", background: "transparent", fontWeight: 700, fontSize: "0.82rem" }}>
+                                    Clear filters
+                                </button>
+                            </div>
+
                             {/* Search Bar */}
-                            <div className="jobs-search-bar">
+                            <form className="jobs-search-bar" onSubmit={(e) => { e.preventDefault(); setSearchQuery((query) => query.trim()); }}>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0, color: "#94A3B8" }}>
                                     <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2"/>
                                     <path d="M16 16l4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -1636,18 +1584,20 @@ export default function CareersClient() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
-                                <button className="jobs-search-btn">
+                                <button type="submit" className="jobs-search-btn">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2"/><path d="M16 16l4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
                                     Search
                                 </button>
-                            </div>
+                            </form>
 
                             {/* Results Header */}
                             <div style={{
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "center",
-                                marginBottom: "16px"
+                                marginBottom: "16px",
+                                flexWrap: "wrap",
+                                gap: "8px"
                             }}>
                                 <p style={{
                                     fontSize: "0.9rem",
@@ -1706,7 +1656,7 @@ export default function CareersClient() {
                                                 transition={{ duration: 0.2, delay: idx * 0.03 }}
                                             >
                                                 {/* Card Top: Category + Type */}
-                                                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px" }}>
+                                                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px", flexWrap: "wrap" }}>
                                                     <span style={{
                                                         fontSize: "0.68rem",
                                                         fontWeight: 700,

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import LabsAndDeliveryClient from "./LabsAndDeliveryClient";
 
 export const metadata: Metadata = {
-    title: "Labs & Delivery | SAMSAN",
+    title: "Stories | SAMSAN",
 };
 
 export default function LabsAndDeliveryPage() {
