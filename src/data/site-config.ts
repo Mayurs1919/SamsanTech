@@ -8,7 +8,6 @@ export const siteConfig: SiteConfig = {
         { label: "Engineering Offerings",     href: "/engineering-offerings" },
         { label: "Products & Accelerators",   href: "/products-and-accelerators" },
         { label: "Labs & Delivery",           href: "/labs-and-delivery" },
-        { label: "Investors / Partners",     href: "/investors" },
         { label: "About",                    href: "/about" },
         { label: "Careers",                  href: "/careers" },
         { label: "Contact",                  href: "/contact" },

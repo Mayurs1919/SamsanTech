@@ -1,98 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
-import ServiceCard, { Logos, WifiIcon, BluetoothIcon, MqttIcon, type TechChip } from "@/components/ui/ServiceCard";
+import ServiceCard, { Logos, type TechChip } from "@/components/ui/ServiceCard";
+import { manrope, inter } from "@/app/solutions/fonts";
+import { Button } from "@/components/theme-light/Button";
+import { CtaBand } from "@/components/theme-light/CtaBand";
+import { Eyebrow } from "@/components/theme-light/Eyebrow";
+import { Hero } from "@/components/theme-light/Hero";
+import { Section } from "@/components/theme-light/Section";
 
-// ── Embedded service card data ───────────────────────────────────
-const embeddedCards = [
-    {
-        number: "01",
-        title: "Embedded Software",
-        iconColor: "#06B6D4",
-        description: "Platform software, OS, and middleware for automotive MCUs and devices.",
-        icon: (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="4" y="4" width="16" height="16" rx="2" />
-                <path d="M9 9h6v6H9z" />
-                <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3" />
-            </svg>
-        ),
-        techs: [
-            { label: "AUTOSAR", isBadge: true },
-            { label: "Linux", logoUrl: Logos.linux },
-            { label: "Android", logoUrl: Logos.android },
-            { label: "QNX", isBadge: true },
-            { label: "Bluetooth", icon: <BluetoothIcon /> },
-            { label: "Wi-Fi", icon: <WifiIcon /> },
-            { label: "CAN Bus", isBadge: true },
-        ] as TechChip[]
-    },
-    {
-        number: "02",
-        title: "Internet of Things (IoT)",
-        iconColor: "#F59E0B",
-        description: "End-to-end IoT development from edge devices to cloud — with AI/ML integration.",
-        icon: (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" />
-            </svg>
-        ),
-        techs: [
-            { label: "MQTT", icon: <MqttIcon /> },
-            { label: "AWS", logoUrl: Logos.aws },
-            { label: "Firebase", logoUrl: Logos.firebase },
-            { label: "TensorFlow", logoUrl: Logos.tensorflow },
-            { label: "Node.js", logoUrl: Logos.nodejs },
-            { label: "Docker", logoUrl: Logos.docker },
-            { label: "Kubernetes", logoUrl: Logos.kubernetes },
-        ] as TechChip[]
-    },
-    {
-        number: "03",
-        title: "Hardware Design",
-        iconColor: "#10B981",
-        description: "Electronic design and simulation across automotive, industrial, IoT, and custom domains.",
-        icon: (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="2" />
-                <path d="M6 14h4v4M6 6h6v4M18 6h-4v4M14 18v-4h4" />
-                <circle cx="10" cy="14" r="1" /><circle cx="12" cy="10" r="1" />
-                <circle cx="14" cy="10" r="1" /><circle cx="14" cy="14" r="1" />
-            </svg>
-        ),
-        techs: [
-            { label: "SoC", isBadge: true },
-            { label: "SaM", isBadge: true },
-            { label: "SBC", isBadge: true },
-            { label: "PCB Layout", isBadge: true },
-            { label: "SPICE Sim", isBadge: true },
-        ] as TechChip[]
-    },
-    {
-        number: "04",
-        title: "Verification & Validation",
-        iconColor: "#8B5CF6",
-        description: "Comprehensive testing from functional to environmental — with industry-standard toolchains.",
-        icon: (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                <path d="m9 11 2 2 4-4" />
-            </svg>
-        ),
-        techs: [
-            { label: "MATLAB", isBadge: true },
-            { label: "LabVIEW", isBadge: true },
-            { label: "Rhapsody", isBadge: true },
-            { label: "Canata++", isBadge: true },
-            { label: "dSpace HIL", isBadge: true },
-            { label: "Jenkins", logoUrl: Logos.jenkins },
-            { label: "GitHub", logoUrl: Logos.github },
-        ] as TechChip[]
-    },
-];
-
+// ── Engineering service data ─────────────────────────────────────
 const specializedCards = [
     {
         number: "01",
@@ -379,15 +298,20 @@ const labelAnimationVariants = (shouldReduce: boolean) => ({
 // ── Page component ───────────────────────────────────────────────
 export default function ServicesClient() {
     const shouldReduce = useReducedMotion() ?? false;
+    const pathname = usePathname();
+
+    if (pathname === "/engineering-offerings") {
+        return <EngineeringOfferingsLight />;
+    }
 
     return (
-        <div style={{ paddingBottom: "100px" }}>
+        <div className="offerings-page">
 
             {/* SECTION 0 — PAGE HEADER */}
-            <section className="section-dark page-hero" aria-labelledby="services-page-heading" style={{ background: "var(--midnight)", padding: "140px 0 96px" }}>
+            <section className="section-dark page-hero offerings-hero" aria-labelledby="services-page-heading" style={{ background: "linear-gradient(135deg, #080D18 0%, #101B30 58%, #0A1322 100%)", padding: "clamp(128px, 15vw, 184px) 0 clamp(72px, 9vw, 112px)" }}>
                 <div className="hero-glow" style={{ opacity: 0.15 }} />
                 <div className="container">
-                    <motion.div
+                    <motion.div className="offerings-hero-content"
                         initial="hidden"
                         animate="visible"
                         variants={{
@@ -406,94 +330,55 @@ export default function ServicesClient() {
                         </motion.div>
                         <motion.h1
                             id="services-page-heading"
-                            style={{ marginBottom: "24px", fontWeight: 700, lineHeight: 1.12, color: "#FFFFFF" }}
+                            style={{ marginBottom: "20px", fontWeight: 750, lineHeight: 1.08, letterSpacing: "-0.035em", color: "#FFFFFF", maxWidth: "900px" }}
                             initial={shouldReduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
                             animate={shouldReduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
                             transition={shouldReduce ? { duration: 0 } : { duration: 0.6, ease: "easeOut", delay: 0.1 }}
                         >
-                            Excellence in Product Design Engineering for High-Tech Industries
+                            Engineering services for the next generation of mobility
                         </motion.h1>
                         <motion.p
                             className="lead"
-                            style={{ maxWidth: "640px", fontSize: "1.1rem", lineHeight: "1.75", color: "#94A3B8" }}
+                            style={{ maxWidth: "700px", fontSize: "clamp(1rem, 1.4vw, 1.15rem)", lineHeight: "1.75", color: "#AAB6C8", margin: "0" }}
                             initial={shouldReduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
                             animate={shouldReduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
                             transition={shouldReduce ? { duration: 0 } : { duration: 0.6, ease: "easeOut", delay: 0.35 }}
                         >
-                            Two core practice areas — Automotive Embedded Engineering and Digital Solutions — delivered by 50+ domain-aligned engineers across global OEM and Tier-1 engagements.
+                            From embedded platforms and hardware to connected systems, cloud, AI, and validation, our teams support global OEM and Tier-1 programs across the full engineering lifecycle.
                         </motion.p>
+                        <div className="offerings-hero-actions">
+                            <Link href="#specialized-services-heading" className="btn btn-primary">Explore capabilities <span aria-hidden="true">↓</span></Link>
+                            <Link href="/contact?product=engineering-offerings" className="offerings-contact-link">Discuss your program <span aria-hidden="true">→</span></Link>
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
-            {/* SECTION 1 — AUTOMOTIVE EMBEDDED SOLUTIONS */}
-            <section className="section-light section" style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "108px 0" }} aria-labelledby="embedded-solutions-heading">
+            {/* ENGINEERING SERVICES */}
+            <section className="section-light section offerings-section" aria-labelledby="specialized-services-heading">
                 <div className="container">
-                    <div style={{ marginBottom: "56px" }}>
+                    <div className="offerings-section-heading">
                         <motion.span
                             className="badge"
                             variants={labelAnimationVariants(shouldReduce)}
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true }}
-                            style={{ marginBottom: "12px", display: "inline-block", color: "#E8521A", background: "rgba(232, 82, 26, 0.08)", border: "1px solid rgba(232, 82, 26, 0.2)" }}
-                        >
-                            Automotive Embedded Solutions &amp; Products
-                        </motion.span>
-                        <h2 id="embedded-solutions-heading" style={{ marginTop: "0", marginBottom: "16px", fontWeight: 700, letterSpacing: "0.01em", color: "#0B1320" }}>
-                            Embedded Engineering, End to End.
-                        </h2>
-                    </div>
-
-                    <motion.div
-                        className="grid grid-cols-1 md:grid-cols-2 gap-6"
-                        variants={containerAnimationVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                    >
-                        {embeddedCards
-                            .slice()
-                            .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }))
-                            .map((card, index) => (
-                                <motion.div key={card.title} className="col-span-1" variants={cardAnimationVariants(shouldReduce)} style={{ display: "flex" }}>
-                                    <ServiceCard
-                                        number={String(index + 1).padStart(2, "0")}
-                                        title={card.title}
-                                        description={card.description}
-                                        icon={card.icon}
-                                        iconColor={card.iconColor}
-                                        techs={card.techs}
-                                        techsLabel="CAPABILITIES"
-                                        theme="light"
-                                        compact
-                                    />
-                                </motion.div>
-                            ))}
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* SECTION 2 — SPECIALIZED SERVICES */}
-            <section className="section-dark section" style={{ background: "var(--midnight)", borderTop: "1px solid rgba(255,255,255,0.07)", padding: "108px 0" }} aria-labelledby="specialized-services-heading">
-                <div className="container">
-                    <div style={{ marginBottom: "56px" }}>
-                        <motion.span
-                            className="badge"
-                            variants={labelAnimationVariants(shouldReduce)}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            style={{ marginBottom: "12px", display: "inline-block", color: "#4DD8E8", background: "rgba(77, 216, 232, 0.08)", border: "1px solid rgba(77, 216, 232, 0.2)" }}
+                            style={{ marginBottom: "14px", display: "inline-block", color: "#0F9FB1", background: "rgba(77, 216, 232, 0.1)", border: "1px solid rgba(77, 216, 232, 0.28)" }}
                         >
                             Engineering Services
                         </motion.span>
-                        <h2 id="specialized-services-heading" style={{ marginTop: "0", marginBottom: "16px", fontWeight: 700, letterSpacing: "0.01em", color: "#F1F5F9" }}>
+                        <h2 id="specialized-services-heading" style={{ marginTop: "0", marginBottom: "16px", fontWeight: 750, letterSpacing: "-0.025em", color: "#0B1320", maxWidth: "780px" }}>
                             Specialized Services Across the Full Engineering Lifecycle
                         </h2>
-                        <p style={{ fontSize: "1.05rem", lineHeight: "1.75", maxWidth: "620px", color: "#94A3B8", margin: "0" }}>
-                            Domain-aligned engineering services delivered by 50+ specialists across automotive, embedded, digital, and AI engineering disciplines.
+                        <p style={{ fontSize: "1.05rem", lineHeight: "1.75", maxWidth: "680px", color: "#526176", margin: "0" }}>
+                            Domain-aligned engineering services delivered by 60+ specialists across automotive, embedded, digital, and AI engineering disciplines.
                         </p>
+                        <div className="offerings-summary" aria-label="Engineering services overview">
+                            <span><strong>10</strong> engineering disciplines</span>
+                            <span><strong>50+</strong> domain specialists</span>
+                            <span><strong>End-to-end</strong> program support</span>
+                        </div>
                     </div>
 
                     <style>{`
@@ -501,33 +386,22 @@ export default function ServicesClient() {
                             display: grid;
                             grid-template-columns: repeat(3, minmax(0, 1fr));
                             align-items: stretch;
-                            gap: 24px;
+                            gap: 22px;
                         }
-                        .specialized-card-wrapper {
-                            min-width: 0;
-                            display: flex;
+                        .specialized-card-wrapper { min-width: 0; display: flex; }
+                        .specialized-card-wrapper > div { min-height: 100%; }
+                        @media (min-width: 1025px) {
+                            .specialized-card-wrapper:last-child:nth-child(3n + 1) { grid-column: 2; }
                         }
                         @media (max-width: 1024px) {
-                            .specialized-flex-grid {
-                                grid-template-columns: repeat(2, minmax(0, 1fr));
-                            }
-                            .specialized-card-wrapper {
-                                width: auto;
-                            }
+                            .specialized-flex-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
                         }
                         @media (max-width: 640px) {
-                            .specialized-flex-grid {
-                                grid-template-columns: minmax(0, 1fr);
-                                gap: 18px;
-                            }
-                            .specialized-card-wrapper {
-                                width: auto;
-                            }
+                            .specialized-flex-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
                         }
                     `}</style>
 
-                    <motion.div
-                        className="specialized-flex-grid"
+                    <motion.div className="specialized-flex-grid"
                         variants={containerAnimationVariants}
                         initial="hidden"
                         whileInView="visible"
@@ -546,7 +420,7 @@ export default function ServicesClient() {
                                         iconColor={card.iconColor}
                                         techs={card.techs}
                                         techsLabel="CAPABILITIES"
-                                        theme="dark"
+                                        theme="light"
                                         compact
                                     />
                                 </motion.div>
@@ -555,14 +429,14 @@ export default function ServicesClient() {
                 </div>
             </section>
 
-            {/* SECTION 4 — BOTTOM CTA */}
+            {/* CONTACT CTA */}
             <section
-                className="section-light"
-                style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "108px 0" }}
+                className="section-light offerings-cta"
+                style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0" }}
                 aria-labelledby="services-cta-heading"
             >
                 <div className="container">
-                    <motion.div
+                    <motion.div className="offerings-cta-card"
                         initial={{ opacity: 0, y: shouldReduce ? 0 : 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -571,7 +445,6 @@ export default function ServicesClient() {
                             background: "#FFFFFF",
                             border: "1px solid #E2E8F0",
                             borderRadius: "20px",
-                            padding: "72px 56px",
                             textAlign: "center",
                             boxShadow: "0 4px 24px rgba(11, 19, 32, 0.05)",
                             position: "relative",
@@ -674,6 +547,78 @@ export default function ServicesClient() {
                 </div>
             </section>
 
+        </div>
+    );
+}
+
+function EngineeringOfferingsLight() {
+    const shouldReduce = useReducedMotion() ?? false;
+    const listVariants = {
+        hidden: {},
+        visible: { transition: { staggerChildren: shouldReduce ? 0 : 0.08 } },
+    };
+    const itemVariants = {
+        hidden: { opacity: 0, y: shouldReduce ? 0 : 24 },
+        visible: { opacity: 1, y: 0, transition: shouldReduce ? { duration: 0 } : { duration: 0.5, ease: "easeOut" as const } },
+    };
+
+    return (
+        <div className={`theme-light-corp engineering-offerings-theme ${inter.variable} ${manrope.variable}`}>
+            <Hero
+                layout="split"
+                eyebrow="Engineering Offerings"
+                title="Engineering services for the next generation of mobility"
+                description="From embedded platforms and hardware to connected systems, cloud, AI, and validation, our teams support global OEM and Tier-1 programs across the full engineering lifecycle."
+                stats={[
+                    { value: "10", label: "Engineering disciplines" },
+                    { value: "50+", label: "Domain specialists" },
+                    { value: "End-to-end", label: "Program support" },
+                ]}
+            >
+                <div className="tl-hero__actions">
+                    <Button href="#specialized-services-heading" variant="primary">Explore capabilities <span aria-hidden="true">↓</span></Button>
+                    <Button href="/contact?product=engineering-offerings" variant="outline-on-dark">Discuss your program <span aria-hidden="true">→</span></Button>
+                </div>
+            </Hero>
+
+            <Section variant="alt" className="tl-service-section" aria-labelledby="specialized-services-heading">
+                <div className="tl-container">
+                    <motion.div className="tl-section-heading tl-section-heading--centered" variants={itemVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                        <Eyebrow>Engineering services</Eyebrow>
+                        <h2 id="specialized-services-heading">Specialized Services Across the Full Engineering Lifecycle</h2>
+                        <p>Domain-aligned engineering services delivered by 60+ specialists across automotive, embedded, digital, and AI engineering disciplines.</p>
+                    </motion.div>
+                    <motion.div className="tl-service-grid" variants={listVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                        {specializedCards
+                            .slice()
+                            .sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }))
+                            .map((card, index) => (
+                                <motion.div key={card.title} className="tl-service-grid__item" variants={itemVariants}>
+                                    <ServiceCard
+                                        number={String(index + 1).padStart(2, "0")}
+                                        title={card.title}
+                                        description={card.description}
+                                        icon={card.icon}
+                                        iconColor={card.iconColor}
+                                        techs={card.techs}
+                                        theme="light-corp"
+                                        compact
+                                    />
+                                </motion.div>
+                            ))}
+                    </motion.div>
+                </div>
+            </Section>
+
+            <CtaBand
+                title="Ready to scope an engineering engagement?"
+                description="Tell us what you’re building — we’ll match the right discipline and team to your program."
+                primaryLabel="Request Capability Walkthrough"
+                primaryHref="/contact?product=engineering-offerings"
+                secondaryLabel="View Engagement Models"
+                secondaryHref="/engagement-models"
+                secondaryVariant="outline-on-dark"
+            />
         </div>
     );
 }

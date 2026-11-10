@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
 import Image from "next/image";
-import Link from "next/link";
+import { Hero } from "@/components/theme-light/Hero";
+import { Section } from "@/components/theme-light/Section";
+import { Card } from "@/components/theme-light/Card";
+import { Eyebrow } from "@/components/theme-light/Eyebrow";
+import { Button } from "@/components/theme-light/Button";
+import { CtaBand } from "@/components/theme-light/CtaBand";
+import { inter, manrope } from "@/app/solutions/fonts";
 
 // Corporate details
 const megatrends = [
@@ -38,12 +43,12 @@ const reasons = [
 ];
 
 const companySpecs = [
-    { key: "HEADQUARTERS", value: "STPI New Building, Hinjawadi Phase I, Pune, India" },
-    { key: "FOUNDED", value: "2023" },
-    { key: "TEAM SIZE", value: "50+ Engineers & Systems Architects" },
-    { key: "REGIONS SERVED", value: "India/APAC, Europe, United States, Japan, South Korea" },
-    { key: "CORE DOMAIN", value: "Automotive Systems, Cockpit Engineering & Connected Mobility" },
-    { key: "COMPLIANCE & SAFETY", value: "ISO 26262 Road Vehicles Functional Safety & Secure Bootloaders" }
+    { key: "Headquarters", value: "STPI New Building, Hinjawadi Phase I, Pune, India" },
+    { key: "Founded", value: "2023" },
+    { key: "Team size", value: "50+ Engineers & Systems Architects" },
+    { key: "Regions served", value: "India/APAC, Europe, United States, Japan, South Korea" },
+    { key: "Core domain", value: "Automotive Systems, Cockpit Engineering & Connected Mobility" },
+    { key: "Compliance & safety", value: "ISO 26262 Road Vehicles Functional Safety & Secure Bootloaders" }
 ];
 
 const globalHubs = [
@@ -106,154 +111,10 @@ const globalHubs = [
     }
 ];
 
-// Profile Avatar Monogram Component to replace static photos with premium neon initials
-function ProfileAvatar({ name, role, imagePath }: { name: string; role: string; imagePath?: string }) {
-    if (imagePath) {
-        return (
-            <div style={{
-                width: "120px",
-                height: "120px",
-                borderRadius: "50%",
-                overflow: "hidden",
-                margin: "0 auto 20px",
-                boxShadow: "0 8px 24px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255,255,255,0.1)",
-                border: "2px solid rgba(255, 255, 255, 0.12)",
-                position: "relative",
-                background: "rgba(10, 15, 28, 0.6)"
-            }}>
-                <img
-                    src={imagePath}
-                    alt={name}
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center"
-                    }}
-                />
-                <div style={{
-                    position: "absolute",
-                    inset: 0,
-                    background: "linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.4) 100%)",
-                    pointerEvents: "none"
-                }} />
-            </div>
-        );
-    }
-
-    const initials = name.split(" ").map(n => n[0]).join("");
-    // Use role to assign a consistent gradient
-    let grad = "var(--grad-violet)";
-    if (role.includes("CEO") || role.includes("Founder")) grad = "linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)";
-    else if (role.includes("Advisor") || role.includes("Board")) grad = "linear-gradient(135deg, #3B82F6 0%, #EC4899 100%)";
-    else grad = "linear-gradient(135deg, #10B981 0%, #3B82F6 100%)";
-
-    return (
-        <div style={{
-            width: "90px",
-            height: "90px",
-            borderRadius: "50%",
-            background: grad,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "1.6rem",
-            fontWeight: 700,
-            color: "#ffffff",
-            margin: "0 auto 20px",
-            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255,255,255,0.1)",
-            border: "2px solid rgba(255, 255, 255, 0.1)",
-            position: "relative"
-        }}>
-            {initials}
-            <div style={{
-                position: "absolute",
-                inset: "-4px",
-                borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,0.06)",
-                pointerEvents: "none"
-            }} />
-        </div>
-    );
-}
-
 // LinkedIn SVG path
 const LINKEDIN_SVG_PATH = "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z";
 
-function LinkedInIcon({ href, name, centered }: { href?: string; name: string; centered?: boolean }) {
-    if (!href) {
-        // Disabled state for people without a LinkedIn URL
-        return (
-            <div
-                title="LinkedIn profile not available"
-                style={{
-                    position: centered ? "relative" : "absolute",
-                    bottom: centered ? "auto" : "12px",
-                    ...(centered
-                        ? {
-                            marginTop: "auto",
-                            marginBottom: "-8px",
-                            alignSelf: "center",
-                        }
-                        : { right: "16px" }),
-                    width: "38px",
-                    height: "38px",
-                    borderRadius: "6px",
-                    background: "rgba(22, 30, 53, 0.6)",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    opacity: 0.35,
-                    cursor: "default",
-                    zIndex: 5
-                }}
-            >
-                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" />
-                </svg>
-            </div>
-        );
-    }
-
-    return (
-        <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${name} on LinkedIn`}
-            className="linkedin-icon-btn"
-            style={{
-                position: centered ? "relative" : "absolute",
-                bottom: centered ? "auto" : "12px",
-                ...(centered
-                    ? {
-                        marginTop: "auto",
-                        marginBottom: "-8px",
-                        alignSelf: "center",
-                    }
-                    : { right: "16px" }),
-                width: "38px",
-                height: "38px",
-                borderRadius: "6px",
-                background: "rgba(22, 30, 53, 0.6)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "background 0.2s, border-color 0.2s",
-                zIndex: 5,
-                textDecoration: "none"
-            }}
-        >
-            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d={LINKEDIN_SVG_PATH} fill="var(--text-secondary)" style={{ transition: "fill 0.2s" }} />
-            </svg>
-        </a>
-    );
-}
-
-function SpecRow({ specKey, specVal, index, shouldReduce }: { specKey: string; specVal: string; index: number; shouldReduce: boolean }) {
+function SpecRow({ specKey, specVal, shouldReduce }: { specKey: string; specVal: string; shouldReduce: boolean }) {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -363,134 +224,30 @@ export default function AboutClient() {
     ];
 
     return (
-        <div style={{ paddingBottom: "0px" }}>
+        <div className={`theme-light-corp about-theme ${inter.variable} ${manrope.variable}`}>
 
             {/* Page Hero */}
-            <section className="section-dark page-hero" aria-labelledby="about-heading" style={{
-                position: "relative",
-                paddingTop: "140px",
-                paddingBottom: "96px",
-                background: "var(--midnight)",
-                overflow: "hidden",
-                borderBottom: "none"
-            }}>
-                {/* Ambient glow effect */}
-                <div style={{
-                    position: "absolute",
-                    top: "30%", left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: "1100px", height: "550px",
-                    background: "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(77, 216, 232, 0.12) 0%, transparent 70%)",
-                    pointerEvents: "none", zIndex: 0
-                }} />
-
-                <div className="container" style={{ position: "relative", zIndex: 1, maxWidth: "1400px" }}>
-                    <motion.div
-                        initial="hidden"
-                        animate="visible"
-                        variants={{
-                            visible: {
-                                transition: { staggerChildren: shouldReduce ? 0 : 0.1 }
-                            }
-                        }}
-                    >
-
-
-                        <motion.h1
-                            id="about-heading"
-                            variants={{
-                                hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },
-                                visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.6 } }
-                            }}
-                            style={{
-                                fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)",
-                                fontWeight: 800,
-                                lineHeight: 1.1,
-                                letterSpacing: "-0.02em",
-                                marginBottom: "24px",
-                                color: "#FFFFFF",
-                                fontFamily: "var(--font-display)"
-                            }}
-                        >
-                            About SAMSAN Technische Labs
-                        </motion.h1>
-
-                        <motion.p
-                            className="lead"
-                            variants={{
-                                hidden: { opacity: 0, y: shouldReduce ? 0 : 16 },
-                                visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.5 } }
-                            }}
-                            style={{
-                                fontSize: "1.12rem",
-                                lineHeight: 1.75,
-                                maxWidth: "760px",
-                                margin: "0 0 40px 0",
-                                color: "#94A3B8",
-                                fontFamily: "var(--font-body)"
-                            }}
-                        >
-                            SAMSAN Technische Labs Pvt. Ltd. is a technology-reimagined systems design house powering global automotive megatrends with safety-critical software, digital cockpit engineering, and software-defined vehicle architectures.
-                        </motion.p>
-
-                        {/* Hero Quick Highlights Row */}
-                        <motion.div
-                            variants={{
-                                hidden: { opacity: 0, y: shouldReduce ? 0 : 20 },
-                                visible: { opacity: 1, y: 0, transition: { duration: shouldReduce ? 0.01 : 0.5 } }
-                            }}
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                                gap: "16px",
-                                marginTop: "24px"
-                            }}
-                        >
-                            {[
-                                { title: "2023 FOUNDED", desc: "Automotive Systems Design" },
-                                { title: "50+ ENGINEERS", desc: "Architects & Systems Experts" },
-                                { title: "3 REGIONS", desc: "India, Europe & Americas" },
-                                { title: "ISO 26262", desc: "Functional Safety Discipline" }
-                            ].map((spec, i) => (
-                                <div
-                                    key={i}
-                                    style={{
-                                        background: "rgba(16, 24, 48, 0.65)",
-                                        backdropFilter: "blur(16px)",
-                                        WebkitBackdropFilter: "blur(16px)",
-                                        border: "1px solid rgba(255, 255, 255, 0.08)",
-                                        borderRadius: "14px",
-                                        padding: "18px 20px",
-                                        boxShadow: "0 10px 24px rgba(0,0,0,0.2)"
-                                    }}
-                                >
-                                    <div style={{
-                                        fontFamily: "var(--font-mono)",
-                                        fontSize: "0.76rem",
-                                        fontWeight: 700,
-                                        color: "#4DD8E8",
-                                        letterSpacing: "0.08em",
-                                        marginBottom: "4px"
-                                    }}>
-                                        {spec.title}
-                                    </div>
-                                    <div style={{
-                                        fontFamily: "var(--font-body)",
-                                        fontSize: "0.92rem",
-                                        color: "#E2E8F0",
-                                        fontWeight: 500
-                                    }}>
-                                        {spec.desc}
-                                    </div>
-                                </div>
-                            ))}
-                        </motion.div>
-                    </motion.div>
+            <Hero
+                className="about-hero"
+                title="About SAMSAN Technische Labs"
+                description="SAMSAN Technische Labs Pvt. Ltd. is a technology-reimagined systems design house powering global automotive megatrends with safety-critical software, digital cockpit engineering, and software-defined vehicle architectures."
+            >
+                <div className="about-hero-highlights">
+                    {[
+                        { title: "2023 FOUNDED", desc: "Automotive Systems Design" },
+                        { title: "50+ ENGINEERS", desc: "Architects & Systems Experts" },
+                        { title: "3 REGIONS", desc: "India, Europe & Americas" },
+                        { title: "ISO 26262", desc: "Functional Safety Discipline" }
+                    ].map((spec) => (
+                        <Card key={spec.title} className="about-hero-stat">
+                            <strong>{spec.title}</strong><span>{spec.desc}</span>
+                        </Card>
+                    ))}
                 </div>
-            </section>
+            </Hero>
 
             {/* SAMSAN Technische Labs Intro Section */}
-            <section className="section-light section" style={{ background: "#FFFFFF", padding: "108px 0" }}>
+            <Section variant="white" className="about-section about-mission-section">
                 <div className="container" style={{ maxWidth: "1400px" }}>
                     <div className="about-two-col" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "64px", alignItems: "center" }}>
                         <div>
@@ -504,30 +261,21 @@ export default function AboutClient() {
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true, margin: "-100px" }}
                                 transition={{ duration: shouldReduce ? 0.01 : 0.5, ease: "easeOut" }}
+                                className="about-mission-quote"
                                 style={{
-                                    borderLeft: "4px solid #E8521A",
+                                    borderLeft: "3px solid var(--teal)",
                                     paddingLeft: "24px",
                                     marginBottom: "32px",
-                                    background: "#F8FAFC",
-                                    paddingTop: "16px",
-                                    paddingBottom: "16px",
-                                    borderRadius: "0 12px 12px 0"
+                                    background: "transparent",
+                                    paddingTop: "0",
+                                    paddingBottom: "0",
+                                    borderRadius: 0
                                 }}
                             >
+                                <span className="about-eyebrow">Mission statement</span>
                                 <div style={{
-                                    fontFamily: "var(--font-mono)",
-                                    fontSize: "11px",
-                                    letterSpacing: "0.1em",
-                                    color: "#E8521A",
-                                    marginBottom: "8px",
-                                    textTransform: "uppercase",
-                                    fontWeight: 700
-                                }}>
-                                    Mission Statement
-                                </div>
-                                <div style={{
-                                    fontSize: "clamp(1.2rem, 2vw, 1.5rem)",
-                                    fontWeight: 600,
+                                    fontSize: "clamp(1.5rem, 2.5vw, 1.875rem)",
+                                    fontWeight: 700,
                                     lineHeight: "1.4",
                                     color: "#0B1320",
                                     fontFamily: "var(--font-display)"
@@ -539,18 +287,18 @@ export default function AboutClient() {
                             {/* Body Paragraphs container */}
                             <div style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "720px" }}>
                                 <p style={{
-                                    fontSize: "1.05rem",
-                                    lineHeight: "1.8",
-                                    color: "#475569",
+                                    fontSize: "17px",
+                                    lineHeight: "1.7",
+                                    color: "var(--body)",
                                     margin: 0,
                                     fontFamily: "var(--font-body)"
                                 }}>
                                     SAMSAN Technische Labs Pvt. Ltd. is an automotive engineering and digital transformation company focused on connected mobility, cockpit engineering, embedded systems, SDV platforms, AI-led engineering automation, and strategic engineering capacity for global customers.
                                 </p>
                                 <p style={{
-                                    fontSize: "1.05rem",
-                                    lineHeight: "1.8",
-                                    color: "#475569",
+                                    fontSize: "17px",
+                                    lineHeight: "1.7",
+                                    color: "var(--body)",
                                     margin: 0,
                                     fontFamily: "var(--font-body)"
                                 }}>
@@ -583,25 +331,26 @@ export default function AboutClient() {
                                 zIndex: 1
                             }} />
                             <div style={{ position: "relative", zIndex: 2, textAlign: "center" }}>
-                                <span className="badge" style={{ background: "rgba(255,255,255,0.2)", color: "#FFFFFF", backdropFilter: "blur(8px)", borderColor: "rgba(255,255,255,0.3)", padding: "8px 16px" }}>AI &amp; Digital Embedded Technologies</span>
+                                <span className="about-eyebrow">AI &amp; digital embedded technologies</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </Section>
 
             {/* Automotive Megatrends / Core Competencies */}
-            <section className="section-light section" style={{ background: "#F8FAFC", padding: "108px 0" }}>
+            <Section variant="alt" className="about-section about-competencies">
                 <div className="container" style={{ maxWidth: "1400px" }}>
                     <div style={{ textAlign: "center", marginBottom: "56px" }}>
-                        <span className="badge mint" style={{ marginBottom: "16px", fontFamily: "var(--font-mono)" }}>Core Competencies</span>
+                        <Eyebrow>Core competencies</Eyebrow>
                         <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.5rem)", fontWeight: 700, color: "#0B1320", fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}>What We Specialize In</h2>
                     </div>
 
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "28px" }}>
                         {megatrends.map((trend) => (
-                            <div
+                            <Card
                                 key={trend.title}
+                                className="about-competency-card"
                                 style={{
                                     background: "#FFFFFF",
                                     border: "1px solid #E2E8F0",
@@ -624,7 +373,7 @@ export default function AboutClient() {
                                 }} />
                                 <h3 style={{ fontSize: "1.25rem", color: "#0B1320", marginBottom: "14px", fontWeight: 700, fontFamily: "var(--font-display)" }}>{trend.title}</h3>
                                 <p style={{ fontSize: "0.92rem", lineHeight: "1.7", color: "#475569", margin: 0, fontFamily: "var(--font-body)" }}>{trend.desc}</p>
-                            </div>
+                            </Card>
                         ))}
                     </div>
 
@@ -653,18 +402,10 @@ export default function AboutClient() {
                         </div>
                     </div>
                 </div>
-            </section>
+            </Section>
 
             {/* Vision & Mission — Modern Section */}
-            <section
-                className="section-dark"
-                style={{
-                    background: "var(--midnight)",
-                    padding: "108px 0",
-                    position: "relative",
-                    overflow: "hidden"
-                }}
-            >
+            <Section variant="white" className="about-section about-vision">
                 {/* Background ambient glows */}
                 <div style={{
                     position: "absolute", top: "10%", left: "-10%",
@@ -689,13 +430,7 @@ export default function AboutClient() {
                         transition={{ duration: shouldReduce ? 0.01 : 0.55, ease: "easeOut" }}
                         style={{ textAlign: "center", marginBottom: "64px" }}
                     >
-                        <span className="badge" style={{
-                            marginBottom: "16px",
-                            fontFamily: "var(--font-mono)",
-                            color: "#4DD8E8",
-                            borderColor: "rgba(77,216,232,0.25)",
-                            background: "rgba(77,216,232,0.08)"
-                        }}>Who We Are</span>
+                        <span className="about-eyebrow">Who we are</span>
                         <h2 style={{
                             fontSize: "clamp(2rem, 3.5vw, 2.6rem)",
                             fontWeight: 800,
@@ -996,13 +731,13 @@ export default function AboutClient() {
                     </motion.div>
 
                 </div>
-            </section>
+            </Section>
 
             {/* Spec Sheet Section */}
-            <section className="section-light section" style={{ background: "#F8FAFC", padding: "108px 0" }}>
+            <Section variant="alt" className="about-section about-facts">
                 <div className="container" style={{ maxWidth: "960px" }}>
                     <div style={{ textAlign: "center", marginBottom: "40px" }}>
-                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.2)", background: "rgba(232, 82, 26, 0.06)", fontFamily: "var(--font-mono)" }}>Company Profile</span>
+                        <span className="about-eyebrow">Company profile</span>
                         <h2 style={{
                             fontSize: "clamp(1.8rem, 3vw, 2.3rem)",
                             fontWeight: 700,
@@ -1033,387 +768,21 @@ export default function AboutClient() {
                             boxShadow: "0 8px 30px rgba(0,0,0,0.03)"
                         }}
                     >
-                        {companySpecs.map((spec, idx) => (
-                            <SpecRow key={spec.key} specKey={spec.key} specVal={spec.value} index={idx} shouldReduce={shouldReduce} />
+                        {companySpecs.map((spec) => (
+                            <SpecRow key={spec.key} specKey={spec.key} specVal={spec.value} shouldReduce={shouldReduce} />
                         ))}
                     </motion.div>
                 </div>
-            </section>
+            </Section>
 
             {/* Leadership & Team Section */}
-            <section className="section-dark" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", background: "var(--midnight)", padding: "108px 0" }}>
-                <style dangerouslySetInnerHTML={{
-                    __html: `
-                    /* CEO Spotlight Card - Ultra Modern Glass & Ambient Glow */
-                    .ceo-card {
-                        width: 100%;
-                        background: rgba(18, 24, 38, 0.75);
-                        backdrop-filter: blur(16px);
-                        -webkit-backdrop-filter: blur(16px);
-                        border: 1px solid rgba(77, 216, 232, 0.18);
-                        border-radius: 20px;
-                        padding: 0;
-                        overflow: hidden;
-                        position: relative;
-                        display: grid;
-                        grid-template-columns: 400px 1fr;
-                        align-items: stretch;
-                        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-                        margin-bottom: 64px;
-                        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.08);
-                    }
+            <Section variant="white" className="about-section about-leadership">
 
-                    .ceo-card::before {
-                        content: '';
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        background: radial-gradient(circle at 10% 20%, rgba(77, 216, 232, 0.08) 0%, transparent 45%),
-                                    radial-gradient(circle at 90% 80%, rgba(255, 138, 61, 0.06) 0%, transparent 45%);
-                        pointer-events: none;
-                        z-index: 0;
-                    }
-
-                    .ceo-card:hover {
-                        transform: translateY(-4px);
-                        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 0 30px rgba(77, 216, 232, 0.15);
-                        border-color: rgba(77, 216, 232, 0.4);
-                    }
-
-                    .ceo-card:hover .ceo-accent-line {
-                        opacity: 1 !important;
-                        box-shadow: 0 0 14px rgba(77, 216, 232, 0.7);
-                    }
-
-                    .ceo-photo-area {
-                        position: relative;
-                        overflow: hidden;
-                        min-height: 480px;
-                        background: radial-gradient(circle at 50% 35%, rgba(77, 216, 232, 0.15) 0%, rgba(13, 19, 35, 0.95) 85%);
-                        border-right: 1px solid rgba(255, 255, 255, 0.06);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-
-                    .ceo-photo-glow {
-                        position: absolute;
-                        width: 260px;
-                        height: 260px;
-                        border-radius: 50%;
-                        background: radial-gradient(circle, rgba(77, 216, 232, 0.25) 0%, transparent 70%);
-                        filter: blur(40px);
-                        top: 20%;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        pointer-events: none;
-                    }
-
-                    .ceo-photo-badge {
-                        position: absolute;
-                        top: 20px;
-                        left: 20px;
-                        z-index: 4;
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 8px;
-                    }
-
-                    .ceo-photo-badge-dot {
-                        width: 7px;
-                        height: 7px;
-                        border-radius: 50%;
-                        background: #4DD8E8;
-                        box-shadow: 0 0 8px #4DD8E8;
-                        animation: pulse-cyan 2s infinite;
-                    }
-
-                    @keyframes pulse-cyan {
-                        0%, 100% { opacity: 1; transform: scale(1); }
-                        50% { opacity: 0.5; transform: scale(1.3); }
-                    }
-
-                    .ceo-content-area {
-                        padding: 44px 48px;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        gap: 18px;
-                        text-align: left;
-                        position: relative;
-                        z-index: 1;
-                    }
-
-                    .ceo-vision-quote {
-                        position: relative;
-                        padding: 14px 18px;
-                        background: rgba(255, 255, 255, 0.025);
-                        border-left: 3px solid #4DD8E8;
-                        border-radius: 0 10px 10px 0;
-                        font-style: italic;
-                        font-size: 0.92rem;
-                        line-height: 1.6;
-                        color: #CBD5E1;
-                    }
-
-                    .ceo-stat-card {
-                        flex: 1;
-                        background: rgba(255, 255, 255, 0.03);
-                        border: 1px solid rgba(255, 255, 255, 0.07);
-                        border-radius: 12px;
-                        padding: 14px 16px;
-                        transition: all 0.25s ease;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 4px;
-                    }
-
-                    .ceo-stat-card:hover {
-                        background: rgba(77, 216, 232, 0.06);
-                        border-color: rgba(77, 216, 232, 0.25);
-                        transform: translateY(-2px);
-                    }
-
-                    @media (max-width: 1023px) {
-                        .ceo-card {
-                            grid-template-columns: 1fr;
-                        }
-                        .ceo-photo-area {
-                            min-height: 360px;
-                            aspect-ratio: 4/3;
-                            border-right: none;
-                            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-                        }
-                        .ceo-content-area {
-                            padding: 36px 28px;
-                        }
-                    }
-
-                    @media (max-width: 639px) {
-                        .ceo-content-area {
-                            padding: 28px 20px;
-                        }
-                        .ceo-stats-grid {
-                            grid-template-columns: 1fr !important;
-                        }
-                    }
-
-                    /* Board of Advisors Grid & Cards */
-                    .advisors-grid {
-                        width: 100%;
-                        display: flex;
-                        justify-content: center;
-                        gap: 24px;
-                        flex-wrap: wrap;
-                    }
-
-                    .advisor-card {
-                        background: #161B22;
-                        border: 1px solid rgba(255, 255, 255, 0.07);
-                        border-radius: 16px;
-                        padding: 0;
-                        overflow: hidden;
-                        position: relative;
-                        width: calc(33.333% - 16px);
-                        max-width: 340px;
-                        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-                        cursor: default;
-                    }
-
-                    .advisor-card:hover {
-                        transform: translateY(-5px);
-                        box-shadow: 0 16px 40px rgba(0,0,0,0.3);
-                        border-color: rgba(139, 92, 246, 0.4);
-                    }
-
-                    .advisor-card:hover .advisor-accent-line {
-                        opacity: 1 !important;
-                    }
-
-                    .advisor-card:hover .advisor-dept-label {
-                        filter: brightness(1.2);
-                    }
-
-                    @media (max-width: 1023px) {
-                        .advisor-card {
-                            width: calc(50% - 12px);
-                        }
-                    }
-
-                    @media (max-width: 639px) {
-                        .advisor-card {
-                            width: 100%;
-                            max-width: 100%;
-                        }
-                    }
-
-                    /* Leadership Section Grid Layout */
-                    .leadership-section-grid {
-                        width: 100%;
-                    }
-
-                    .leadership-grid-top {
-                        display: grid;
-                        grid-template-columns: repeat(3, 1fr);
-                        gap: 24px;
-                    }
-
-                    .leadership-grid-bottom {
-                        display: flex;
-                        justify-content: center;
-                        gap: 24px;
-                        margin-top: 24px;
-                    }
-
-                    .leadership-grid-bottom .lead-card {
-                        width: calc(33.333% - 16px);
-                    }
-
-                    /* Lead Card Container */
-                    .lead-card {
-                        background: #161B22;
-                        border: 1px solid rgba(255, 255, 255, 0.07);
-                        border-radius: 16px;
-                        padding: 0;
-                        overflow: hidden;
-                        position: relative;
-                        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-                        cursor: default;
-                    }
-
-                    .lead-card:hover {
-                        transform: translateY(-5px);
-                        box-shadow: 0 16px 40px rgba(0,0,0,0.3);
-                        border-color: rgba(77, 216, 232, 0.4);
-                    }
-
-                    /* Hover animations */
-                    .lead-card:hover .lead-accent-line {
-                        opacity: 1 !important;
-                    }
-
-                    .lead-card:hover .lead-dept-label {
-                        filter: brightness(1.2);
-                    }
-
-                    /* LinkedIn button hover */
-                    .lead-linkedin-btn:hover {
-                        background: #0A66C2 !important;
-                        border-color: #0A66C2 !important;
-                    }
-                    .lead-linkedin-btn:hover svg path {
-                        fill: #ffffff !important;
-                    }
-
-                    /* Responsive overrides */
-                    @media (max-width: 1023px) {
-                        .leadership-section-grid {
-                            display: flex;
-                            flex-wrap: wrap;
-                            justify-content: center;
-                            gap: 24px;
-                        }
-                        .leadership-grid-top, .leadership-grid-bottom {
-                            display: contents;
-                        }
-                        .leadership-section-grid .lead-card {
-                            width: calc(50% - 12px);
-                            min-width: 280px;
-                        }
-                    }
-
-                    @media (max-width: 639px) {
-                        .leadership-section-grid .lead-card {
-                            width: 100%;
-                            min-width: unset;
-                        }
-                    }
-
-                    @media (prefers-reduced-motion: reduce) {
-                        .lead-card {
-                            transform: none !important;
-                            transition: none !important;
-                        }
-                    }
-
-                    /* Team Card — base */
-                    .team-card {
-                        width: 260px;
-                        min-height: 320px;
-                        box-sizing: border-box;
-                        background: #161B22;
-                        border: 1px solid rgba(255, 255, 255, 0.07);
-                        border-radius: 16px;
-                        padding: 28px 20px;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        text-align: center;
-                        gap: 0;
-                        position: relative;
-                        overflow: hidden;
-                        flex-shrink: 0;
-                        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-                        cursor: default;
-                    }
-
-                    .team-card:hover {
-                        transform: translateY(-5px);
-                        border-color: rgba(77, 216, 232, 0.35);
-                        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-                    }
-
-                    .team-card:hover .team-tooltip {
-                        opacity: 1 !important;
-                    }
-
-                    .team-card:hover .card-accent-line {
-                        opacity: 1 !important;
-                    }
-
-                    .team-tooltip {
-                        position: absolute;
-                        top: -36px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        background: rgba(10, 13, 17, 0.9);
-                        border: 1px solid rgba(255, 255, 255, 0.08);
-                        border-radius: 6px;
-                        padding: 5px 10px;
-                        font-family: var(--font-mono);
-                        font-size: 10px;
-                        letter-spacing: 0.06em;
-                        color: #ffffff;
-                        white-space: nowrap;
-                        opacity: 0;
-                        pointer-events: none;
-                        transition: opacity 0.2s ease;
-                        z-index: 10;
-                    }
-
-                    @media (prefers-reduced-motion: reduce) {
-                        * {
-                            animation: none !important;
-                            transition: none !important;
-                        }
-                    }
-
-                    /* LinkedIn icon hover */
-                    .linkedin-icon-btn:hover {
-                        background: #0A66C2 !important;
-                        border-color: #0A66C2 !important;
-                    }
-                    .linkedin-icon-btn:hover svg path {
-                        fill: #ffffff !important;
-                    }
-                `}} />
                 <div className="container">
 
                     {/* Section Header */}
                     <div style={{ textAlign: "center", marginBottom: "64px" }}>
-                        <span className="badge" style={{ marginBottom: "16px", color: "#4DD8E8", borderColor: "rgba(77, 216, 232, 0.25)", background: "rgba(77, 216, 232, 0.08)", fontFamily: "var(--font-mono)" }}>Our Leadership</span>
+                        <span className="about-eyebrow">Our leadership</span>
                         <motion.h2
                             initial={{ opacity: 0, y: shouldReduce ? 0 : 16 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -1485,14 +854,12 @@ export default function AboutClient() {
                                     objectFit: "cover",
                                     objectPosition: "center top",
                                     display: "block",
-                                    mixBlendMode: "luminosity",
-                                    opacity: 0.94,
                                     zIndex: 1
                                 }}
                             />
 
                             {/* Gradient Fade Overlay */}
-                            <div style={{
+                            <div className="about-image-overlay" style={{
                                 position: "absolute",
                                 bottom: 0,
                                 left: 0,
@@ -1646,13 +1013,13 @@ export default function AboutClient() {
                         </div>
                     </motion.div>
 
-                    {/* Board of Advisors Sub-section */}
+                    {/* Board of advisors Sub-section */}
                     <div style={{ marginBottom: "64px" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "32px", justifyContent: "center" }}>
+                        <div className="about-subsection-heading">
                             {/* Left Decorative Line */}
                             <div style={{ flex: 1, height: "1px", background: "linear-gradient(270deg, rgba(139, 92, 246, 0.3), transparent)" }} />
                             {/* Pill */}
-                            <div style={{
+                            <div className="about-subsection-label" style={{
                                 display: "inline-flex",
                                 alignItems: "center",
                                 gap: "8px",
@@ -1677,7 +1044,7 @@ export default function AboutClient() {
                                     textTransform: "uppercase",
                                     fontWeight: 600
                                 }}>
-                                    Board of Advisors
+                                    Board of advisors
                                 </span>
                             </div>
                             {/* Right Decorative Line */}
@@ -1762,12 +1129,10 @@ export default function AboutClient() {
                                                 objectFit: "cover",
                                                 objectPosition: "center top",
                                                 display: "block",
-                                                mixBlendMode: "luminosity",
-                                                opacity: 0.92
                                             }}
                                         />
                                         {/* Bottom Gradient Overlay */}
-                                        <div style={{
+                                        <div className="about-image-overlay" style={{
                                             position: "absolute",
                                             bottom: 0,
                                             left: 0,
@@ -1883,13 +1248,13 @@ export default function AboutClient() {
                         </motion.div>
                     </div>
 
-                    {/* Leadership Team Sub-section */}
+                    {/* Leadership team Sub-section */}
                     <div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "32px", justifyContent: "center" }}>
+                        <div className="about-subsection-heading">
                             {/* Left Decorative Line */}
                             <div style={{ flex: 1, height: "1px", background: "linear-gradient(270deg, rgba(77, 216, 232, 0.3), transparent)" }} />
                             {/* Pill */}
-                            <div style={{
+                            <div className="about-subsection-label" style={{
                                 display: "inline-flex",
                                 alignItems: "center",
                                 gap: "8px",
@@ -1914,7 +1279,7 @@ export default function AboutClient() {
                                     textTransform: "uppercase",
                                     fontWeight: 600
                                 }}>
-                                    Leadership Team
+                                    Leadership team
                                 </span>
                             </div>
                             {/* Right Decorative Line */}
@@ -1922,342 +1287,51 @@ export default function AboutClient() {
                         </div>
 
                         {/* Leadership Grid */}
-                        <motion.div
-                            variants={{
-                                hidden: {},
-                                visible: {
-                                    transition: {
-                                        staggerChildren: shouldReduce ? 0 : 0.08
-                                    }
-                                }
-                            }}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
-                            className="leadership-section-grid"
-                        >
-                            {/* Top Row (3 cards) */}
-                            <div className="leadership-grid-top">
-                                {leadershipMembers.slice(0, 3).map((member) => (
-                                    <motion.div
-                                        key={member.name}
-                                        variants={{
-                                            hidden: { opacity: 0, y: shouldReduce ? 0 : 24 },
-                                            visible: {
-                                                opacity: 1,
-                                                y: 0,
-                                                transition: {
-                                                    duration: shouldReduce ? 0.01 : 0.5,
-                                                    ease: [0.25, 0.46, 0.45, 0.94]
-                                                }
-                                            }
-                                        }}
-                                        className="lead-card"
-                                    >
-                                        {/* Top Accent Line */}
-                                        <div className="lead-accent-line" style={{
-                                            position: "absolute",
-                                            top: 0,
-                                            left: 0,
-                                            right: 0,
-                                            height: "3px",
-                                            borderRadius: "16px 16px 0 0",
-                                            background: member.glowColor,
-                                            opacity: 0.7,
-                                            transition: "opacity 0.25s ease"
-                                        }} />
-
-                                        {/* Photo Area */}
-                                        <div style={{
-                                            width: "100%",
-                                            aspectRatio: "1/1",
-                                            position: "relative",
-                                            overflow: "hidden",
-                                            background: "linear-gradient(180deg, #1a2235 0%, #0f1720 100%)"
-                                        }}>
-                                            <Image
-                                                src={member.imagePath}
-                                                alt={member.name}
-                                                fill
-                                                sizes="(max-width: 768px) 100vw, 33vw"
-                                                style={{
-                                                    objectFit: "cover",
-                                                    objectPosition: "center top",
-                                                    display: "block",
-                                                    mixBlendMode: "luminosity",
-                                                    opacity: 0.92
-                                                }}
-                                            />
-                                            {/* Bottom Gradient Overlay */}
-                                            <div style={{
-                                                position: "absolute",
-                                                bottom: 0,
-                                                left: 0,
-                                                right: 0,
-                                                height: "40%",
-                                                background: "linear-gradient(to bottom, transparent, rgba(13, 19, 35, 0.55))",
-                                                pointerEvents: "none"
-                                            }} />
+                        <div className="leadership-section-grid">
+                            {leadershipMembers.map((member) => (
+                                <article className="lead-card" key={member.name}>
+                                    <div className="about-person-photo">
+                                        <Image
+                                            src={member.imagePath}
+                                            alt={member.name.trim()}
+                                            fill
+                                            sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                                            style={{ objectFit: "cover", objectPosition: "center top" }}
+                                        />
+                                    </div>
+                                    <div className="lead-card-body">
+                                        <span className="lead-dept-label">{member.dept}</span>
+                                        <h4>{member.name}</h4>
+                                        <p>{member.role}</p>
+                                        <div className="lead-profile-row">
+                                            <span>View Profile</span>
+                                            <a
+                                                href={member.linkedinUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                aria-label={`${member.name.trim()} on LinkedIn`}
+                                                className="lead-linkedin-btn"
+                                            >
+                                                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                    <path d={LINKEDIN_SVG_PATH} fill="currentColor" />
+                                                </svg>
+                                            </a>
                                         </div>
-
-                                        {/* Card Body */}
-                                        <div className="lead-card-body" style={{
-                                            padding: "22px 24px 24px",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            alignItems: "center",
-                                            textAlign: "center"
-                                        }}>
-                                            {/* Centered Name */}
-                                            <h4 style={{
-                                                fontFamily: "var(--font-display)",
-                                                fontSize: "1.25rem",
-                                                fontWeight: 700,
-                                                letterSpacing: "-0.015em",
-                                                color: "#F8FAFC",
-                                                lineHeight: 1.25,
-                                                margin: "0 0 6px 0",
-                                                textAlign: "center"
-                                            }}>
-                                                {member.name}
-                                            </h4>
-                                            {/* Centered Title / Role */}
-                                            <p style={{
-                                                fontFamily: "var(--font-sans)",
-                                                fontSize: "0.9rem",
-                                                fontWeight: 500,
-                                                color: "#94A3B8",
-                                                lineHeight: 1.45,
-                                                margin: 0,
-                                                textAlign: "center"
-                                            }}>
-                                                {member.role}
-                                            </p>
-
-                                            {/* Bottom Action Row: View Profile + LinkedIn Link */}
-                                            <div style={{
-                                                marginTop: "18px",
-                                                paddingTop: "14px",
-                                                borderTop: "1px solid rgba(255, 255, 255, 0.06)",
-                                                width: "100%",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between"
-                                            }}>
-                                                <span style={{
-                                                    fontFamily: "var(--font-sans)",
-                                                    fontSize: "0.85rem",
-                                                    fontWeight: 500,
-                                                    color: "#64748B"
-                                                }}>
-                                                    View Profile
-                                                </span>
-                                                <a
-                                                    href={member.linkedinUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    aria-label={`${member.name} on LinkedIn`}
-                                                    className="lead-linkedin-btn"
-                                                    style={{
-                                                        width: "36px",
-                                                        height: "36px",
-                                                        borderRadius: "8px",
-                                                        background: "rgba(255, 255, 255, 0.08)",
-                                                        border: "1px solid rgba(255, 255, 255, 0.12)",
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        justifyContent: "center",
-                                                        transition: "all 0.2s ease",
-                                                        textDecoration: "none"
-                                                    }}
-                                                >
-                                                    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                        <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-
-                            {/* Bottom Row (2 cards centered) */}
-                            <div className="leadership-grid-bottom">
-                                {leadershipMembers.slice(3).map((member) => (
-                                    <motion.div
-                                        key={member.name}
-                                        variants={{
-                                            hidden: { opacity: 0, y: shouldReduce ? 0 : 24 },
-                                            visible: {
-                                                opacity: 1,
-                                                y: 0,
-                                                transition: {
-                                                    duration: shouldReduce ? 0.01 : 0.5,
-                                                    ease: [0.25, 0.46, 0.45, 0.94]
-                                                }
-                                            }
-                                        }}
-                                        className="lead-card"
-                                    >
-                                        {/* Top Accent Line */}
-                                        <div className="lead-accent-line" style={{
-                                            position: "absolute",
-                                            top: 0,
-                                            left: 0,
-                                            right: 0,
-                                            height: "3px",
-                                            borderRadius: "16px 16px 0 0",
-                                            background: member.glowColor,
-                                            opacity: 0.7,
-                                            transition: "opacity 0.25s ease"
-                                        }} />
-
-                                        {/* Photo Area */}
-                                        <div style={{
-                                            width: "100%",
-                                            aspectRatio: "1/1",
-                                            position: "relative",
-                                            overflow: "hidden",
-                                            background: "linear-gradient(180deg, #1a2235 0%, #0f1720 100%)"
-                                        }}>
-                                            <Image
-                                                src={member.imagePath}
-                                                alt={member.name}
-                                                fill
-                                                sizes="(max-width: 768px) 100vw, 33vw"
-                                                style={{
-                                                    objectFit: "cover",
-                                                    objectPosition: "center top",
-                                                    display: "block",
-                                                    mixBlendMode: "luminosity",
-                                                    opacity: 0.92
-                                                }}
-                                            />
-                                            {/* Bottom Gradient Overlay */}
-                                            <div style={{
-                                                position: "absolute",
-                                                bottom: 0,
-                                                left: 0,
-                                                right: 0,
-                                                height: "40%",
-                                                background: "linear-gradient(to bottom, transparent, rgba(13, 19, 35, 0.55))",
-                                                pointerEvents: "none"
-                                            }} />
-                                        </div>
-
-                                        {/* Card Body */}
-                                        <div className="lead-card-body" style={{
-                                            padding: "22px 24px 24px",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            alignItems: "center",
-                                            textAlign: "center"
-                                        }}>
-                                            {/* Centered Name */}
-                                            <h4 style={{
-                                                fontFamily: "var(--font-display)",
-                                                fontSize: "1.25rem",
-                                                fontWeight: 700,
-                                                letterSpacing: "-0.015em",
-                                                color: "#F8FAFC",
-                                                lineHeight: 1.25,
-                                                margin: "0 0 6px 0",
-                                                textAlign: "center"
-                                            }}>
-                                                {member.name}
-                                            </h4>
-                                            {/* Centered Title / Role */}
-                                            <p style={{
-                                                fontFamily: "var(--font-sans)",
-                                                fontSize: "0.9rem",
-                                                fontWeight: 500,
-                                                color: "#94A3B8",
-                                                lineHeight: 1.45,
-                                                margin: 0,
-                                                textAlign: "center"
-                                            }}>
-                                                {member.role}
-                                            </p>
-
-                                            {/* Bottom Action Row: View Profile + LinkedIn Link */}
-                                            <div style={{
-                                                marginTop: "18px",
-                                                paddingTop: "14px",
-                                                borderTop: "1px solid rgba(255, 255, 255, 0.06)",
-                                                width: "100%",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between"
-                                            }}>
-                                                <span style={{
-                                                    fontFamily: "var(--font-sans)",
-                                                    fontSize: "0.85rem",
-                                                    fontWeight: 500,
-                                                    color: "#64748B"
-                                                }}>
-                                                    View Profile
-                                                </span>
-                                                <a
-                                                    href={member.linkedinUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    aria-label={`${member.name} on LinkedIn`}
-                                                    className="lead-linkedin-btn"
-                                                    style={{
-                                                        width: "36px",
-                                                        height: "36px",
-                                                        borderRadius: "8px",
-                                                        background: "rgba(255, 255, 255, 0.08)",
-                                                        border: "1px solid rgba(255, 255, 255, 0.12)",
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        justifyContent: "center",
-                                                        transition: "all 0.2s ease",
-                                                        textDecoration: "none"
-                                                    }}
-                                                >
-                                                    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                                        <path d={LINKEDIN_SVG_PATH} fill="#94A3B8" style={{ transition: "fill 0.2s" }} />
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </motion.div>
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </section>
+            </Section>
 
-            {/* Global Engineering Footprint & Operating Hubs Section (Light Theme) */}
-            <section className="section-light section" style={{ background: "#FAFAFC", padding: "108px 0", borderTop: "1px solid #E2E8F0", position: "relative" }}>
-                <style dangerouslySetInnerHTML={{
-                    __html: `
-                    @keyframes presencePulseLight {
-                        0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
-                        70% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
-                        100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-                    }
-                    .about-locations-grid {
-                        display: grid;
-                        grid-template-columns: 1.15fr 1.85fr;
-                        gap: 36px;
-                        align-items: stretch;
-                    }
-                    @media (max-width: 991px) {
-                        .about-locations-grid {
-                            grid-template-columns: 1fr;
-                            gap: 28px;
-                        }
-                    }
-                `}} />
+            {/* Global engineering footprint & Operating Hubs Section (Light Theme) */}
+            <Section variant="alt" className="about-section about-footprint">
+
 
                 <div className="container" style={{ maxWidth: "1400px", position: "relative", zIndex: 1 }}>
                     <div style={{ textAlign: "center", marginBottom: "56px" }}>
-                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.25)", background: "rgba(232, 82, 26, 0.06)", fontFamily: "var(--font-mono)" }}>
-                            Global Engineering Footprint
-                        </span>
+                        <Eyebrow>Global engineering footprint</Eyebrow>
                         <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.6rem)", fontWeight: 700, color: "#0B1320", fontFamily: "var(--font-display)", letterSpacing: "-0.02em", marginBottom: "16px" }}>
                             Global Presence &amp; Operating Hubs
                         </h2>
@@ -2395,7 +1469,7 @@ export default function AboutClient() {
                                     src={`https://maps.google.com/maps?q=${encodeURIComponent(activeHub.mapQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
                                     width="100%"
                                     height="100%"
-                                    style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) contrast(1.2)" }}
+                                    style={{ border: 0 }}
                                     allowFullScreen
                                     loading="lazy"
                                     referrerPolicy="no-referrer-when-downgrade"
@@ -2404,75 +1478,15 @@ export default function AboutClient() {
                         </div>
                     </div>
                 </div>
-            </section>
+            </Section>
 
-            {/* Bottom CTA Section (Light Theme) */}
-            <section className="section-light section" style={{ background: "#FAFAFC", borderTop: "1px solid #E2E8F0", padding: "108px 0", position: "relative" }}>
-                <style dangerouslySetInnerHTML={{
-                    __html: `
-                    .cta-card-grid {
-                        display: grid;
-                        grid-template-columns: repeat(2, 1fr);
-                        gap: 28px;
-                        margin-top: 40px;
-                    }
-                    @media (max-width: 868px) {
-                        .cta-card-grid {
-                            grid-template-columns: 1fr;
-                            gap: 20px;
-                        }
-                    }
-                    .cta-modular-card {
-                        background: #FFFFFF;
-                        border: 1px solid #E2E8F0;
-                        border-radius: 20px;
-                        padding: 36px 32px;
-                        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-                        display: flex;
-                        flexDirection: column;
-                        justify-content: space-between;
-                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-                    }
-                    .cta-modular-card:hover {
-                        transform: translateY(-4px);
-                        border-color: #CBD5E1;
-                        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06);
-                    }
-                `}} />
-
-                <div className="container" style={{ maxWidth: "1200px" }}>
-                    <motion.div
-                        initial={{ opacity: 0, y: shouldReduce ? 0 : 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: shouldReduce ? 0.01 : 0.5 }}
-                        style={{ textAlign: "center", marginBottom: "16px" }}
-                    >
-                        <span className="badge" style={{ marginBottom: "16px", color: "#E8521A", borderColor: "rgba(232, 82, 26, 0.25)", background: "rgba(232, 82, 26, 0.06)", fontFamily: "var(--font-mono)" }}>
-                            Next-Gen Mobility Partnership
-                        </span>
-                        <h2 style={{
-                            fontSize: "clamp(2rem, 3.5vw, 2.6rem)",
-                            fontWeight: 700,
-                            margin: "0 0 16px 0",
-                            color: "#0B1320",
-                            letterSpacing: "-0.02em",
-                            fontFamily: "var(--font-display)"
-                        }}>
-                            Ready to power your next engineering program?
-                        </h2>
-                        <p style={{
-                            fontSize: "1.08rem",
-                            lineHeight: "1.7",
-                            color: "#475569",
-                            maxWidth: "640px",
-                            margin: "0 auto",
-                            fontFamily: "var(--font-body)"
-                        }}>
-                            Connect with SAMSAN Technische Labs to establish your dedicated COE or leverage our vehicle systems experts.
-                        </p>
-                    </motion.div>
-
+            {/* Bottom CTA Section */}
+            <CtaBand
+                eyebrow="Next-gen mobility partnership"
+                title="Ready to power your next engineering program?"
+                description="Connect with SAMSAN Technische Labs to establish your dedicated COE or leverage our vehicle systems experts."
+                className="about-cta"
+            >
                     {/* Modular Engagement Cards */}
                     <div className="cta-card-grid">
                         {/* Card 1: Dedicated COE Program */}
@@ -2522,27 +1536,16 @@ export default function AboutClient() {
                                 </p>
                             </div>
                             <div>
-                                <Link
+                                <Button
                                     href="/engagement-models"
-                                    className="btn btn-outline"
-                                    style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "8px",
-                                        width: "100%",
-                                        justifyContent: "center",
-                                        textDecoration: "none",
-                                        borderColor: "#CBD5E1",
-                                        color: "#0B1320",
-                                        fontWeight: 600,
-                                        padding: "12px 20px"
-                                    }}
+                                    variant="outline"
+
                                 >
                                     Explore Engagement Models
                                     <svg width="14" height="14" viewBox="0 0 15 15" fill="none" aria-hidden="true">
                                         <path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
-                                </Link>
+                                </Button>
                             </div>
                         </motion.div>
 
@@ -2597,9 +1600,9 @@ export default function AboutClient() {
                                 </p>
                             </div>
                             <div>
-                                <Link
+                                <Button
                                     href="/contact"
-                                    className="btn btn-primary"
+                                    variant="primary"
                                     style={{
                                         display: "inline-flex",
                                         alignItems: "center",
@@ -2618,12 +1621,11 @@ export default function AboutClient() {
                                     <svg width="14" height="14" viewBox="0 0 15 15" fill="none" aria-hidden="true">
                                         <path d="M2.5 7.5h10M8.5 3.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
-                                </Link>
+                                </Button>
                             </div>
                         </motion.div>
                     </div>
-                </div>
-            </section>
+            </CtaBand>
         </div>
     );
 }

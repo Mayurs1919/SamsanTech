@@ -53,10 +53,11 @@
 // }
 
 import type { Metadata } from "next";
+import "./solutions/theme-light.css";
+import { inter, manrope } from "./solutions/fonts";
 import Hero from "@/components/homepage/Hero";
 import TrustBar from "@/components/homepage/TrustBar";
 import ValueTable from "@/components/homepage/ValueTable";
-import OfferingCards from "@/components/homepage/OfferingCards";
 import RingsOfSolution from "@/components/homepage/RingsOfSolution";
 import WhoWeServe from "@/components/homepage/WhoWeServe";
 import Partners from "@/components/homepage/Partners";
@@ -72,20 +73,11 @@ export const metadata: Metadata = {
 export default function Home() {
     return (
         <>
-            {/* DARK — Hero & Proof Strip */}
-            <div className="section-dark">
+            {/* Home hero, proof strip, and value table use the shared light theme. */}
+            <div className={`theme-light-corp home-theme ${inter.variable} ${manrope.variable}`}>
                 <Hero />
                 <TrustBar />
-            </div>
-
-            {/* LIGHT — Where SAMSAN Creates Value */}
-            <div className="section-light">
                 <ValueTable />
-            </div>
-
-            {/* DARK — 4 Core Offering Cards */}
-            <div className="section-dark">
-                <OfferingCards />
             </div>
 
             {/* LIGHT — Who We Serve */}

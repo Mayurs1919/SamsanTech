@@ -3,7 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
-import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
+import { Hero } from "@/components/theme-light/Hero";
+import { Section } from "@/components/theme-light/Section";
+import { Button } from "@/components/theme-light/Button";
+import { CtaBand } from "@/components/theme-light/CtaBand";
+import { Chip } from "@/components/theme-light/Chip";
+import { Card } from "@/components/theme-light/Card";
+import { inter, manrope } from "@/app/solutions/fonts";
 
 // ── Data ────────────────────────────────────────────────────────────
 
@@ -236,99 +242,26 @@ export default function ConsultingStaffingClient() {
     const shouldReduce = useReducedMotion();
     const [activePillar, setActivePillar] = useState(0);
 
-    const fadeUp = fadeUpVariants(shouldReduce ?? false);
-
     return (
-        <div style={{ backgroundColor: "#FFFFFF", color: "#0B1320" }}>
+        <div className={`theme-light-corp consulting-theme ${inter.variable} ${manrope.variable}`}>
 
-            {/* ══════════════════════════════════════════════════════════
-                1. HERO — Dark gradient with teal accent
-            ══════════════════════════════════════════════════════════ */}
-            <section
-                style={{
-                    position: "relative",
-                    background: "linear-gradient(135deg, #0A0F1C 0%, #0D1932 50%, #0A0F1C 100%)",
-                    padding: "140px 0 100px",
-                    overflow: "hidden",
-                }}
-                aria-labelledby="cs-hero-title"
+            <Hero
+                className="cs-theme-hero"
+                eyebrow="Consulting & strategic staffing"
+                title={<>Expert Engineering Talent & Strategic Advisory</>}
+                description="Empowering automotive OEMs, Tier-1 suppliers, and technology enterprises with expert technical advisory, management consulting, and flexible engineering talent augmentation — from 48-hour shortlisting to full BOT capability."
             >
-                {/* Ambient glows */}
-                <div style={{ position: "absolute", top: "-10%", left: "10%", width: "600px", height: "600px", borderRadius: "50%", background: "radial-gradient(circle, rgba(77,216,232,0.1) 0%, transparent 70%)", pointerEvents: "none", filter: "blur(60px)" }} />
-                <div style={{ position: "absolute", bottom: "-20%", right: "5%", width: "500px", height: "500px", borderRadius: "50%", background: "radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%)", pointerEvents: "none", filter: "blur(80px)" }} />
-
-               
-                <div className="container" style={{ position: "relative", zIndex: 2 }}>
-                    <motion.div variants={staggerContainerVariants} initial="hidden" animate="visible">
-                        {/* Eyebrow */}
-                        <motion.div variants={fadeUp} style={{ marginBottom: "20px" }}>
-                            <span style={{
-                                display: "inline-flex", alignItems: "center", gap: "8px",
-                                fontFamily: "var(--font-mono)", fontSize: "0.78rem", fontWeight: 700,
-                                textTransform: "uppercase", letterSpacing: "0.12em",
-                                color: "#4DD8E8", background: "rgba(77,216,232,0.1)",
-                                border: "1px solid rgba(77,216,232,0.25)",
-                                padding: "6px 16px", borderRadius: "100px",
-                            }}>
-                                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#4DD8E8", display: "inline-block" }} />
-                                // Consulting & Strategic Staffing
-                            </span>
-                        </motion.div>
-
-                        {/* Headline */}
-                        <motion.h1
-                            id="cs-hero-title"
-                            variants={fadeUp}
-                            style={{
-                                fontSize: "clamp(2.6rem, 5vw, 4rem)", fontWeight: 800,
-                                color: "#FFFFFF", letterSpacing: "-0.025em", lineHeight: "1.1",
-                                marginBottom: "24px", maxWidth: "900px",
-                            }}
-                        >
-                            Expert Engineering Talent &{" "}
-                            <span style={{ background: "linear-gradient(90deg, #4DD8E8, #8B5CF6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                                Strategic Advisory
-                            </span>
-                        </motion.h1>
-
-                        {/* Sub */}
-                        <motion.p
-                            variants={fadeUp}
-                            style={{
-                                fontSize: "clamp(1.05rem, 1.8vw, 1.2rem)", color: "#9CA8C4",
-                                maxWidth: "720px", lineHeight: "1.75", marginBottom: "44px",
-                            }}
-                        >
-                            Empowering automotive OEMs, Tier-1 suppliers, and technology enterprises with expert technical advisory, management consulting, and flexible engineering talent augmentation — from 48-hour shortlisting to full BOT capability.
-                        </motion.p>
-
-                        {/* CTA Row */}
-                        <motion.div variants={fadeUp} style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
-                            <Link href="/contact" className="btn btn-primary" style={{ padding: "14px 32px", fontSize: "1rem" }}>
-                                Schedule a Consultation
-                                <svg width="16" height="16" viewBox="0 0 14 14" fill="none" aria-hidden="true" style={{ marginLeft: "4px" }}>
-                                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </Link>
-                            <Link href="/engagement-models" style={{
-                                display: "inline-flex", alignItems: "center", gap: "8px",
-                                padding: "14px 28px", borderRadius: "12px", fontSize: "1rem", fontWeight: 600,
-                                color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.18)",
-                                textDecoration: "none", transition: "border-color 0.2s, background 0.2s",
-                            }}>
-                                View Engagement Models
-                            </Link>
-                        </motion.div>
-                    </motion.div>
-
+                <div className="tl-hero__actions">
+                    <Button href="/contact" variant="primary">Schedule a Consultation <span aria-hidden="true">→</span></Button>
+                    <Button href="/engagement-models" variant="outline-on-dark">View Engagement Models</Button>
                 </div>
-            </section>
+            </Hero>
 
             {/* ══════════════════════════════════════════════════════════
                 2. CONSULTING PILLARS — Light background
             ══════════════════════════════════════════════════════════ */}
-            <section style={{ background: "#F8FAFC", padding: "100px 0", borderBottom: "1px solid #E2E8F0" }}>
-                <div className="container">
+            <Section variant="white" className="cs-section">
+                <div className="container tl-container">
                     {/* Header */}
                     <div style={{ textAlign: "center", maxWidth: "680px", margin: "0 auto 64px" }}>
                         <span style={{
@@ -339,7 +272,7 @@ export default function ConsultingStaffingClient() {
                             padding: "5px 16px", borderRadius: "100px",
                             display: "inline-block", marginBottom: "16px",
                         }}>
-                            // Our Service Areas
+                            Our service areas
                         </span>
                         <h2 style={{ fontSize: "clamp(1.9rem, 3vw, 2.6rem)", fontWeight: 800, color: "#0B1320", letterSpacing: "-0.02em", lineHeight: 1.2, marginBottom: "16px" }}>
                             Technical & Management Consulting
@@ -350,7 +283,7 @@ export default function ConsultingStaffingClient() {
                     </div>
 
                     {/* Interactive Two-Column Layout */}
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "32px", alignItems: "start" }}>
+                    <div className="cs-consulting-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "32px", alignItems: "start" }}>
                         {/* Left: Clickable Pillar Cards */}
                         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                             {consultingPillars.map((pillar, idx) => {
@@ -359,7 +292,7 @@ export default function ConsultingStaffingClient() {
                                     <motion.div
                                         key={pillar.id}
                                         onClick={() => setActivePillar(idx)}
-                                        whileHover={{ x: 4 }}
+                                        whileHover={{ y: -4 }}
                                         transition={{ duration: 0.18 }}
                                         style={{
                                             cursor: "pointer", padding: "22px 24px", borderRadius: "16px",
@@ -471,13 +404,13 @@ export default function ConsultingStaffingClient() {
                         </AnimatePresence>
                     </div>
                 </div>
-            </section>
+            </Section>
 
             {/* ══════════════════════════════════════════════════════════
                 3. DOMAIN EXPERTISE STRIP — Dark band
             ══════════════════════════════════════════════════════════ */}
-            <section style={{ background: "#0A0F1C", padding: "60px 0", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-                <div className="container">
+            <Section variant="alt" className="cs-section cs-domain-section">
+                <div className="container tl-container">
                     <div style={{ textAlign: "center", marginBottom: "36px" }}>
                         <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#9CA8C4", textTransform: "uppercase", letterSpacing: "0.1em", fontFamily: "var(--font-mono)" }}>
                             Domain Competencies We Staff For
@@ -485,24 +418,17 @@ export default function ConsultingStaffingClient() {
                     </div>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", justifyContent: "center" }}>
                         {domainSkills.map((skill) => (
-                            <span key={skill} style={{
-                                padding: "8px 18px", borderRadius: "100px", fontSize: "0.85rem", fontWeight: 500,
-                                color: "#CBD5E1", border: "1px solid rgba(255,255,255,0.1)",
-                                background: "rgba(255,255,255,0.04)",
-                                transition: "all 0.2s",
-                            }}>
-                                {skill}
-                            </span>
+                            <Chip key={skill} className="cs-skill-chip">{skill}</Chip>
                         ))}
                     </div>
                 </div>
-            </section>
+            </Section>
 
             {/* ══════════════════════════════════════════════════════════
                 4. ENGAGEMENT & STAFFING MODELS — Light background
             ══════════════════════════════════════════════════════════ */}
-            <section style={{ background: "#FFFFFF", padding: "100px 0", borderBottom: "1px solid #E2E8F0" }}>
-                <div className="container">
+            <Section variant="white" className="cs-section">
+                <div className="container tl-container">
                     <div style={{ textAlign: "center", maxWidth: "700px", margin: "0 auto 64px" }}>
                         <span style={{
                             fontFamily: "var(--font-mono)", fontSize: "0.78rem", fontWeight: 700,
@@ -512,7 +438,7 @@ export default function ConsultingStaffingClient() {
                             padding: "5px 16px", borderRadius: "100px",
                             display: "inline-block", marginBottom: "16px",
                         }}>
-                            // Flexible Commercial Models
+                            Flexible commercial models
                         </span>
                         <h2 style={{ fontSize: "clamp(1.9rem, 3vw, 2.6rem)", fontWeight: 800, color: "#0B1320", letterSpacing: "-0.02em", lineHeight: 1.2, marginBottom: "16px" }}>
                             Our Engagement & Staffing Models
@@ -522,11 +448,11 @@ export default function ConsultingStaffingClient() {
                         </p>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "24px" }}>
+                    <div className="cs-staffing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "24px" }}>
                         {staffingModels.map((model) => (
                             <motion.div
                                 key={model.id}
-                                whileHover={{ y: -6 }}
+                                whileHover={{ y: -4 }}
                                 transition={{ duration: 0.22, ease: "easeOut" }}
                                 style={{
                                     background: "#FFFFFF", borderRadius: "20px",
@@ -534,14 +460,6 @@ export default function ConsultingStaffingClient() {
                                     boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
                                     overflow: "hidden", display: "flex", flexDirection: "column",
                                     transition: "box-shadow 0.25s, border-color 0.25s",
-                                }}
-                                onMouseEnter={(e) => {
-                                    (e.currentTarget as HTMLElement).style.borderColor = model.accent + "50";
-                                    (e.currentTarget as HTMLElement).style.boxShadow = `0 16px 48px rgba(0,0,0,0.1), 0 0 0 1px ${model.accent}20`;
-                                }}
-                                onMouseLeave={(e) => {
-                                    (e.currentTarget as HTMLElement).style.borderColor = "#E2E8F0";
-                                    (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.06)";
                                 }}
                             >
                                 {/* Colour Header Band */}
@@ -602,13 +520,13 @@ export default function ConsultingStaffingClient() {
                         ))}
                     </div>
                 </div>
-            </section>
+            </Section>
 
             {/* ══════════════════════════════════════════════════════════
                 5. WHY SAMSAN — Soft light grey
             ══════════════════════════════════════════════════════════ */}
-            <section style={{ background: "#F8FAFC", padding: "100px 0", borderBottom: "1px solid #E2E8F0" }}>
-                <div className="container">
+            <Section variant="alt" className="cs-section">
+                <div className="container tl-container">
                     <div style={{ textAlign: "center", maxWidth: "640px", margin: "0 auto 60px" }}>
                         <span style={{
                             fontFamily: "var(--font-mono)", fontSize: "0.78rem", fontWeight: 700,
@@ -618,14 +536,14 @@ export default function ConsultingStaffingClient() {
                             padding: "5px 16px", borderRadius: "100px",
                             display: "inline-block", marginBottom: "16px",
                         }}>
-                            // The SAMSAN Advantage
+                            The SAMSAN advantage
                         </span>
                         <h2 style={{ fontSize: "clamp(1.9rem, 3vw, 2.5rem)", fontWeight: 800, color: "#0B1320", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
                             Why Top Automotive & Tech Companies Choose Us
                         </h2>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px" }}>
+                    <div className="cs-value-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "24px" }}>
                         {valuePillars.map((v, idx) => (
                             <motion.div
                                 key={idx}
@@ -655,13 +573,13 @@ export default function ConsultingStaffingClient() {
                         ))}
                     </div>
                 </div>
-            </section>
+            </Section>
 
             {/* ══════════════════════════════════════════════════════════
                 6. HOW IT WORKS — White with numbered steps
             ══════════════════════════════════════════════════════════ */}
-            <section style={{ background: "#FFFFFF", padding: "100px 0", borderBottom: "1px solid #E2E8F0" }}>
-                <div className="container">
+            <Section variant="white" className="cs-section">
+                <div className="container tl-container">
                     <div style={{ textAlign: "center", maxWidth: "620px", margin: "0 auto 64px" }}>
                         <span style={{
                             fontFamily: "var(--font-mono)", fontSize: "0.78rem", fontWeight: 700,
@@ -671,14 +589,14 @@ export default function ConsultingStaffingClient() {
                             padding: "5px 16px", borderRadius: "100px",
                             display: "inline-block", marginBottom: "16px",
                         }}>
-                            // Our Process
+                            Our process
                         </span>
                         <h2 style={{ fontSize: "clamp(1.9rem, 3vw, 2.5rem)", fontWeight: 800, color: "#0B1320", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
                             How We Work With You
                         </h2>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2px", background: "#E2E8F0", borderRadius: "20px", overflow: "hidden" }}>
+                    <div className="cs-process-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2px", background: "#E2E8F0", borderRadius: "20px", overflow: "hidden" }}>
                         {[
                             { step: "01", title: "Discovery Call", desc: "We understand your technical requirements, team gaps, and timelines." },
                             { step: "02", title: "Talent Mapping", desc: "We identify and map the best-fit engineers from our vetted talent pool." },
@@ -686,7 +604,7 @@ export default function ConsultingStaffingClient() {
                             { step: "04", title: "Interview & Select", desc: "You interview, assess, and select. We coordinate everything end-to-end." },
                             { step: "05", title: "Onboarding", desc: "Seamless integration with full admin, compliance, and payroll support." },
                         ].map((s, i) => (
-                            <div key={i} style={{ background: "#FFFFFF", padding: "32px 24px", textAlign: "center" }}>
+                            <Card key={i} className="cs-process-card" style={{ background: "#FFFFFF", padding: "32px 24px", textAlign: "center" }}>
                                 <div style={{
                                     width: "48px", height: "48px", borderRadius: "14px",
                                     background: "linear-gradient(135deg, #0A0F1C, #161E35)",
@@ -698,56 +616,23 @@ export default function ConsultingStaffingClient() {
                                 </div>
                                 <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#0B1320", marginBottom: "8px" }}>{s.title}</h3>
                                 <p style={{ fontSize: "0.85rem", color: "#64748B", lineHeight: "1.6", margin: 0 }}>{s.desc}</p>
-                            </div>
+                            </Card>
                         ))}
                     </div>
                 </div>
-            </section>
+            </Section>
 
-            {/* ══════════════════════════════════════════════════════════
-                7. CTA — Dark gradient
-            ══════════════════════════════════════════════════════════ */}
-            <section style={{
-                background: "linear-gradient(135deg, #0A0F1C 0%, #0D1932 60%, #0A0F1C 100%)",
-                padding: "100px 0", position: "relative", overflow: "hidden",
-            }}>
-                <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "600px", height: "600px", borderRadius: "50%", background: "radial-gradient(circle, rgba(77,216,232,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
-
-                <div className="container" style={{ textAlign: "center", maxWidth: "720px", position: "relative", zIndex: 2 }}>
-                    <span style={{
-                        fontFamily: "var(--font-mono)", fontSize: "0.78rem", fontWeight: 700,
-                        textTransform: "uppercase", letterSpacing: "0.1em",
-                        color: "#4DD8E8", background: "rgba(77,216,232,0.1)",
-                        border: "1px solid rgba(77,216,232,0.25)",
-                        padding: "5px 16px", borderRadius: "100px",
-                        display: "inline-block", marginBottom: "24px",
-                    }}>
-                        Let's Build Together
-                    </span>
-                    <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", fontWeight: 800, color: "#FFFFFF", marginBottom: "18px", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-                        Need Specialized Technical Guidance or Talent?
-                    </h2>
-                    <p style={{ color: "#9CA8C4", fontSize: "1.05rem", lineHeight: "1.75", marginBottom: "40px" }}>
-                        Partner with SAMSAN to scale your engineering bandwidth, deploy domain-expert contract resources, or establish dedicated Centers of Excellence — globally.
-                    </p>
-                    <div style={{ display: "flex", justifyContent: "center", gap: "14px", flexWrap: "wrap" }}>
-                        <Link href="/contact" className="btn btn-primary" style={{ padding: "14px 32px", fontSize: "1rem" }}>
-                            Schedule Staffing Consultation
-                            <svg width="16" height="16" viewBox="0 0 14 14" fill="none" aria-hidden style={{ marginLeft: "4px" }}>
-                                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </Link>
-                        <Link href="/engineering-offerings" style={{
-                            display: "inline-flex", alignItems: "center", gap: "8px",
-                            padding: "14px 28px", borderRadius: "12px", fontSize: "1rem", fontWeight: 600,
-                            color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.18)",
-                            textDecoration: "none", transition: "border-color 0.2s",
-                        }}>
-                            Explore Engineering Offerings
-                        </Link>
-                    </div>
-                </div>
-            </section>
+            <CtaBand
+                eyebrow="Let's build together"
+                title="Need Specialized Technical Guidance or Talent?"
+                description="Partner with SAMSAN to scale your engineering bandwidth, deploy domain-expert contract resources, or establish dedicated Centers of Excellence — globally."
+                primaryLabel="Schedule Staffing Consultation"
+                primaryHref="/contact"
+                secondaryLabel="Explore Engineering Offerings"
+                secondaryHref="/engineering-offerings"
+                secondaryVariant="outline-on-dark"
+                className="cs-theme-cta"
+            />
         </div>
     );
 }

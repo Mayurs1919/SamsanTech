@@ -226,9 +226,10 @@ function DetailPanel({
     // Position: place popover near the hotspot, offset to the right
     // If hotspot is on right side of image (>55%), flip to the left
     const flipLeft = point.x > 55;
+    const panelTop = `clamp(12px, ${Math.max(point.y - 5, 2)}%, calc(100% - 380px))`;
     const positionStyle: React.CSSProperties = flipLeft
-        ? { right: `${100 - point.x + 4}%`, top: `${Math.max(point.y - 5, 2)}%` }
-        : { left: `${point.x + 4}%`, top: `${Math.max(point.y - 5, 2)}%` };
+        ? { right: `${100 - point.x + 4}%`, top: panelTop }
+        : { left: `${point.x + 4}%`, top: panelTop };
 
     return (
         <motion.div
@@ -363,7 +364,7 @@ export default function RingsOfSolution() {
                 >
                     <div className="ros-image-container">
                         <img
-                            src="/images/samsan-vehicle-schematic.png"
+                            src="/images/samsan-vehicle-schematic-custom.png"
                             alt="SAMSAN Software Defined Vehicle Engineering Architecture"
                             className="ros-vehicle-img"
                             draggable={false}
@@ -415,6 +416,29 @@ export default function RingsOfSolution() {
                                 />
                             )}
                         </AnimatePresence>
+                    </div>
+
+                    <div className="ros-quick-nav" role="group" aria-label="Explore vehicle engineering solutions">
+                        {solutions.map((point) => {
+                            const isActive = activeId === point.id;
+                            return (
+                                <button
+                                    key={point.id}
+                                    type="button"
+                                    className={`ros-pill${isActive ? " ros-pill-active" : ""}`}
+                                    aria-pressed={isActive}
+                                    onClick={() => handleToggle(point.id)}
+                                    style={{
+                                        "--pill-accent": point.accent,
+                                        borderColor: isActive ? `${point.accent}80` : "rgba(255,255,255,0.12)",
+                                        color: isActive ? "#FFFFFF" : "#CBD5E1",
+                                    } as React.CSSProperties}
+                                >
+                                    <span className="ros-pill-num" style={{ color: point.accent }}>0{point.id}</span>
+                                    <span>{point.title}</span>
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

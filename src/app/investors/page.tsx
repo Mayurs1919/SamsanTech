@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import InvestorsClient from "./InvestorsClient";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Strategic Partners | SAMSAN",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function InvestorsPage() {
-    return <InvestorsClient />;
+    notFound();
 }

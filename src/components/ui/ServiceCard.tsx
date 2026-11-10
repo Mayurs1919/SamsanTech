@@ -37,7 +37,7 @@ export interface ServiceCardProps {
     /** Label for the tech chips section, defaults to Technologies */
     techsLabel?: string;
     /** Theme variant for card styling */
-    theme?: "light" | "dark";
+    theme?: "light" | "dark" | "dark-slate" | "light-corp";
     /** Tighter spacing for dense catalog grids */
     compact?: boolean;
 }
@@ -69,24 +69,26 @@ const MqttIcon = () => (
 );
 
 // ── Single tech chip ─────────────────────────────────────────────
-function TechChipItem({ chip, theme = "dark" }: { chip: TechChip; theme?: "light" | "dark" }) {
+function TechChipItem({ chip, theme = "dark" }: { chip: TechChip; theme?: "light" | "dark" | "dark-slate" | "light-corp" }) {
     const [imgError, setImgError] = useState(false);
     const isLight = theme === "light";
+    const isSlate = theme === "dark-slate";
+    const isCorp = theme === "light-corp";
 
-    const chipBg = isLight ? "#F1F5F9" : "rgba(255, 255, 255, 0.05)";
-    const chipBorder = isLight ? "1px solid #E2E8F0" : "1px solid rgba(255, 255, 255, 0.08)";
-    const chipTextColor = isLight ? "#64748B" : "#94A3B8";
+    const chipBg = isCorp ? "var(--bg-alt)" : isSlate ? "rgba(148,163,184,0.12)" : isLight ? "#F1F5F9" : "rgba(255, 255, 255, 0.05)";
+    const chipBorder = isCorp || isSlate ? "1px solid var(--border)" : isLight ? "1px solid #E2E8F0" : "1px solid rgba(255, 255, 255, 0.08)";
+    const chipTextColor = isCorp || isSlate ? "var(--body)" : isLight ? "#64748B" : "#94A3B8";
 
     return (
-        <span style={{
+        <span className={isCorp ? "tl-service-chip" : isSlate ? "tds-service-chip" : undefined} style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "6px",
+            gap: isCorp ? "8px" : "6px",
             background: chipBg,
             border: chipBorder,
             borderRadius: "20px",
-            padding: "5px 11px",
-            fontSize: "12px",
+            padding: isCorp ? "4px 10px" : "5px 11px",
+            fontSize: isCorp || isSlate ? "13px" : "12px",
             color: chipTextColor,
             fontFamily: "var(--font-body)",
             whiteSpace: "nowrap"
@@ -98,7 +100,7 @@ function TechChipItem({ chip, theme = "dark" }: { chip: TechChip; theme?: "light
                     alt={chip.label}
                     width={16}
                     height={16}
-                    style={{ width: "16px", height: "16px", display: "block", flexShrink: 0, objectFit: "contain" }}
+                    style={{ width: "16px", height: "16px", display: "block", flexShrink: 0, objectFit: "contain", ...(isSlate ? { padding: "2px", borderRadius: "6px", background: "#F8FAFC", boxSizing: "content-box" as const } : {}) }}
                     onError={() => setImgError(true)}
                 />
             )}
@@ -131,28 +133,56 @@ export default function ServiceCard({
 }: ServiceCardProps) {
     const [hovered, setHovered] = useState(false);
     const isLight = theme === "light";
+    const isSlate = theme === "dark-slate";
+    const isCorp = theme === "light-corp";
 
-    const cardBg = isLight ? "#FFFFFF" : "#161B22";
-    const cardBorder = isLight
+    const cardBg = isSlate ? (hovered ? "var(--surface-hover)" : "var(--surface)") : isLight ? "#FFFFFF" : "#161B22";
+    const cardBorder = isSlate
+        ? `1px ${isPending ? "dashed" : "solid"} ${hovered ? "var(--teal)" : "var(--border)"}`
+        : isLight
         ? `1px solid ${hovered ? "rgba(232, 82, 26, 0.3)" : "#E2E8F0"}`
         : `1px solid ${hovered ? "rgba(77, 216, 232, 0.4)" : "rgba(255, 255, 255, 0.07)"}`;
-    const cardShadow = isLight
+    const cardShadow = isSlate
+        ? "0 8px 24px rgba(0,0,0,0.25)"
+        : isLight
         ? (hovered ? "0 8px 24px rgba(11, 19, 32, 0.1)" : "0 2px 12px rgba(11, 19, 32, 0.06)")
         : (hovered ? "0 8px 24px rgba(0,0,0,0.3)" : "0 4px 16px rgba(0,0,0,0.15)");
-    const numberColor = isLight ? "rgba(11, 19, 32, 0.15)" : "rgba(255, 255, 255, 0.1)";
-    const titleColor = isLight ? "#0B1320" : "#FFFFFF";
-    const descColor = isLight ? "#475569" : "#CBD5E1";
-    const labelColor = isLight ? "#64748B" : "#94A3B8";
-    const dividerColor = isLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.12)";
+    const numberColor = isSlate ? "rgba(248,250,252,0.35)" : isLight ? "rgba(11, 19, 32, 0.15)" : "rgba(255, 255, 255, 0.1)";
+    const titleColor = isSlate ? "var(--navy)" : isLight ? "#0B1320" : "#FFFFFF";
+    const descColor = isSlate ? "var(--body)" : isLight ? "#475569" : "#CBD5E1";
+    const labelColor = isSlate ? "var(--muted)" : isLight ? "#64748B" : "#94A3B8";
+    const dividerColor = isSlate ? "var(--border)" : isLight ? "#E2E8F0" : "rgba(255, 255, 255, 0.12)";
+
+    if (isCorp) {
+        return (
+            <article className="tl-service-card">
+                <div className="tl-service-card__header">
+                    <span className="tl-service-card__icon" aria-hidden="true">{icon}</span>
+                    <span className="tl-service-card__number">{number}</span>
+                </div>
+                <h3>{title}</h3>
+                <div className="tl-service-card__description">
+                    {typeof description === "string" ? <p>{description}</p> : description}
+                </div>
+                <div className="tl-service-card__capabilities">
+                    <span className="tl-service-card__label">Capabilities</span>
+                    <div className="tl-service-card__chips">
+                        {techs.map((chip, index) => <TechChipItem key={`${chip.label}-${index}`} chip={chip} theme="light-corp" />)}
+                    </div>
+                </div>
+            </article>
+        );
+    }
 
     return (
-        <div
+            <div
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
+                className={isSlate ? "tds-service-card" : undefined}
             style={{
                 background: cardBg,
                 border: cardBorder,
-                borderRadius: "12px",
+                borderRadius: isSlate ? "16px" : "12px",
                 padding: compact ? "24px" : "28px",
                 display: "flex",
                 flexDirection: "column",
@@ -169,23 +199,23 @@ export default function ServiceCard({
 
                 {/* ROW 1 — Icon + Number */}
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <div style={{
+                    <div className={isSlate ? "tds-service-icon" : undefined} style={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         width: "44px",
                         height: "44px",
                         borderRadius: "10px",
-                        background: `${iconColor}1A`,
-                        border: `1px solid ${iconColor}30`,
-                        color: iconColor,
+                        background: isSlate ? "rgba(56,189,248,0.12)" : `${iconColor}1A`,
+                        border: isSlate ? "1px solid rgba(56,189,248,0.25)" : `1px solid ${iconColor}30`,
+                        color: isSlate ? "var(--teal)" : iconColor,
                         flexShrink: 0
                     }}>
                         {icon}
                     </div>
-                    <span style={{
+                    <span className={isSlate ? "tds-service-number" : undefined} style={{
                         fontFamily: "var(--font-mono)",
-                        fontSize: "12px",
+                        fontSize: isSlate ? "13px" : "12px",
                         color: numberColor,
                         letterSpacing: "0.1em",
                         fontWeight: 400
@@ -196,7 +226,7 @@ export default function ServiceCard({
 
                 {/* ROW 2 — Title */}
                 <h3 style={{
-                    fontSize: "1.15rem",
+                    fontSize: isSlate ? "20px" : "1.15rem",
                     fontWeight: 700,
                     color: titleColor,
                     letterSpacing: "0.01em",
@@ -211,8 +241,8 @@ export default function ServiceCard({
                 {/* ROW 3 — Description */}
                 {typeof description === "string" ? (
                     <p style={{
-                        fontSize: "0.92rem",
-                        color: isPending ? "var(--text-muted)" : descColor,
+                        fontSize: isSlate ? "16px" : "0.92rem",
+                        color: isPending ? (isSlate ? "var(--muted)" : "var(--text-muted)") : descColor,
                         lineHeight: 1.65,
                         margin: 0,
                         fontStyle: isPending ? "italic" : "normal"
@@ -252,7 +282,7 @@ export default function ServiceCard({
 
                 {/* ROW 4 — Technologies label */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                    <span style={{
+                    <span className={isSlate ? "tds-tech-label" : undefined} style={{
                         fontFamily: "var(--font-mono)",
                         fontSize: "10.5px",
                         letterSpacing: "0.1em",

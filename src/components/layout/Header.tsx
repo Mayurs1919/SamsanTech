@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import SamsanAnimatedLogo from "@/components/ui/SamsanAnimatedLogo";
+import { Navbar as ThemeLightNavbar } from "@/components/theme-light/Navbar";
+import { LIGHT_THEME_ROUTES } from "@/components/theme-light/routes";
 
 interface SubmenuItem {
     label: string;
@@ -23,7 +25,6 @@ const navItems: NavItem[] = [
     { label: "Engineering Offerings", href: "/engineering-offerings", isVisible: true },
     { label: "Products & Accelerators", href: "/products-and-accelerators", isVisible: true },
     { label: "Stories", href: "/labs-and-delivery", isVisible: true },
-    { label: "Investors / Partners", href: "/investors", isVisible: true },
     { label: "Consulting & Staffing", href: "/consulting-staffing", isVisible: true },
     { label: "About", href: "/about", isVisible: true },
     { label: "Careers", href: "/careers", isVisible: true },
@@ -34,7 +35,7 @@ const navItems: NavItem[] = [
 const HIDE_AT  = 80;   // hide  when scrollY crosses above this
 const SHOW_AT  = 50;   // show  when scrollY drops below this
 
-export default function Header() {
+function LegacyHeader() {
     const [isOpen, setIsOpen] = useState(false);
     const [hidden, setHidden] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -44,6 +45,8 @@ export default function Header() {
     const pathname   = usePathname();
     const shouldReduce = useReducedMotion();
     const isContactPage = pathname === "/contact";
+    const isProductsPage = false;
+    const navLabel = (label: string) => isProductsPage ? label.charAt(0) + label.slice(1).toLowerCase() : label;
 
     // Hysteresis ref — only flip state when we cross the correct boundary
     const isHiddenRef = useRef(false);
@@ -143,7 +146,7 @@ export default function Header() {
                                         href={item.href}
                                         className={`${isActive ? "active" : ""} flex items-center gap-1.5`}
                                     >
-                                        {item.label}
+                                        {navLabel(item.label)}
                                         {hasSubmenu && (
                                             <svg
                                                 width="12" height="12" viewBox="0 0 24 24" fill="none"
@@ -211,7 +214,7 @@ export default function Header() {
                             aria-hidden={isContactPage}
                             tabIndex={isContactPage ? -1 : undefined}
                         >
-                            Get Started
+                            {isProductsPage ? "Get started" : "Get Started"}
                             <svg width="15" height="15" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                                 <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
@@ -258,7 +261,7 @@ export default function Header() {
                                                     className="w-full text-left flex justify-between items-center px-6 py-4 text-sm font-medium"
                                                     style={{ color: "var(--text-primary)", background: "transparent", border: "none" }}
                                                 >
-                                                    {item.label}
+                                                    {navLabel(item.label)}
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                                                         style={{
                                                             transform: isMobileExpanded ? "rotate(180deg)" : "rotate(0deg)",
@@ -297,7 +300,7 @@ export default function Header() {
                                                 className={isItemActive(item.href) ? "active" : ""}
                                                 onClick={() => setIsOpen(false)}
                                             >
-                                                {item.label}
+                                                {navLabel(item.label)}
                                             </Link>
                                         )}
                                     </div>
@@ -311,7 +314,7 @@ export default function Header() {
                                         onClick={() => setIsOpen(false)}
                                         style={{ width: "100%", justifyContent: "center" }}
                                     >
-                                        Get Started
+                                        {isProductsPage ? "Get started" : "Get Started"}
                                     </Link>
                                 </div>
                             )}
@@ -321,4 +324,19 @@ export default function Header() {
             </motion.header>
         </>
     );
+}
+
+const productsNavItems = navItems
+    .filter((item) => item.isVisible !== false)
+    .map((item) => ({
+        ...item,
+        label: item.label.charAt(0) + item.label.slice(1).toLowerCase(),
+    }));
+
+export default function Header() {
+    const pathname = usePathname();
+    if (LIGHT_THEME_ROUTES.includes(pathname as (typeof LIGHT_THEME_ROUTES)[number])) {
+        return <ThemeLightNavbar links={productsNavItems} showGetStarted={pathname !== "/contact"} />;
+    }
+    return <LegacyHeader />;
 }

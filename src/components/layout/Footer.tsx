@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import SamsanAnimatedLogo from "@/components/ui/SamsanAnimatedLogo";
+import { Footer as ThemeLightFooter } from "@/components/theme-light/Footer";
+import { LIGHT_THEME_ROUTES } from "@/components/theme-light/routes";
 
-export default function Footer() {
+function LegacyFooter() {
     const year = new Date().getFullYear();
 
     const navigateLinks = [
@@ -12,7 +15,6 @@ export default function Footer() {
         { label: "Engineering Offerings",     href: "/engineering-offerings", isVisible: true },
         { label: "Products & Accelerators",   href: "/products-and-accelerators", isVisible: true },
         { label: "Stories",                  href: "/labs-and-delivery", isVisible: true },
-        { label: "Investors / Partners",     href: "/investors", isVisible: true },
         { label: "Consulting & Staffing",     href: "/consulting-staffing", isVisible: true },
         { label: "About",                    href: "/about", isVisible: true },
         { label: "Careers",                  href: "/careers", isVisible: true },
@@ -86,4 +88,30 @@ export default function Footer() {
             </div>
         </footer>
     );
+}
+
+const productsFooterLinks = [
+    { label: "Home", href: "/" },
+    { label: "Engineering Offerings", href: "/engineering-offerings" },
+    { label: "Products & Accelerators", href: "/products-and-accelerators" },
+    { label: "Stories", href: "/labs-and-delivery" },
+    { label: "Consulting & Staffing", href: "/consulting-staffing" },
+    { label: "About", href: "/about" },
+    { label: "Careers", href: "/careers" },
+    { label: "Contact", href: "/contact" },
+];
+
+export default function Footer() {
+    const pathname = usePathname();
+    if (LIGHT_THEME_ROUTES.includes(pathname as (typeof LIGHT_THEME_ROUTES)[number])) {
+        return <ThemeLightFooter
+            description="A specialized design house for Software Defined Vehicles, connected mobility, and AI-driven automotive innovation."
+            navigationLinks={productsFooterLinks}
+            contactDetails={pathname === "/engineering-offerings"
+                ? ["india@samsanlabs.com", "+91 89569 27909", "STPI New Building, Rajiv Gandhi Infotech Park, Phase I, Hinjawadi, Pune 411057, India"]
+                : ["india@samsanlabs.com", "STPI New Building, Rajiv Gandhi Infotech Park, Phase I, Hinjawadi, Pune 411057, India"]}
+            copyright={`© ${new Date().getFullYear()} SAMSAN Technische Labs Pvt. Ltd. All rights reserved.`}
+        />;
+    }
+    return <LegacyFooter />;
 }

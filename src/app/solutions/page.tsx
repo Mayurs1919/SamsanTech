@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import "./theme-light.css";
+import { inter, manrope } from "./fonts";
 import SolutionsClient from "./SolutionsClient";
 
 export const metadata: Metadata = {
@@ -6,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function SolutionsPage() {
-    return <SolutionsClient />;
+    return <SolutionsClient fontClassName={`${inter.variable} ${manrope.variable}`} />;
 }

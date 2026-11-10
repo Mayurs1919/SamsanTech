@@ -1,51 +1,44 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useCallback } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
-import { fadeUpVariants, staggerContainerVariants } from "@/lib/motion";
-import Link from "next/link";
-import ServiceCard, { Logos, WifiIcon, BluetoothIcon, MqttIcon, type TechChip } from "@/components/ui/ServiceCard";
+import { Logos, WifiIcon, BluetoothIcon, MqttIcon, type TechChip } from "@/components/ui/ServiceCard";
+import { Button } from "@/components/theme-light/Button";
+import { CtaBand } from "@/components/theme-light/CtaBand";
+import { Eyebrow } from "@/components/theme-light/Eyebrow";
+import { ProductCard } from "@/components/theme-light/ProductCard";
+import { Section } from "@/components/theme-light/Section";
 
-function getCardColor(title: string) {
-    if (title.startsWith("Digital Cockpit")) return "#06B6D4";
-    if (title.startsWith("TwinLnk")) return "#FF8A3D";
-    if (title.startsWith("DMS Edge")) return "#EF4444";
-    if (title.startsWith("Maestro")) return "#8B5CF6";
-    if (title.startsWith("AutoMATE")) return "#EC4899";
-    if (title.startsWith("CabinIQ")) return "#06B6D4";
-    if (title.startsWith("Vemeego")) return "#8B5CF6";
-    if (title.startsWith("PiknikNow")) return "#10B981";
-    if (title.startsWith("RefactoFlow")) return "#6366F1";
-    return "#06B6D4";
-}
+const fadeUp = (reduced: boolean) => ({
+    hidden: reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: reduced ? { duration: 0 } : { duration: 0.5, ease: "easeOut" as const },
+    },
+});
 
-function getRgbString(color: string) {
-    if (color === "#06B6D4") return "6, 182, 212";
-    if (color === "#FF8A3D") return "255, 138, 61";
-    if (color === "#8B5CF6") return "139, 92, 246";
-    if (color === "#EF4444") return "239, 68, 68";
-    if (color === "#EC4899") return "236, 72, 153";
-    if (color === "#10B981") return "16, 185, 129";
-    if (color === "#6366F1") return "99, 102, 241";
-    return "6, 182, 212";
-}
+const stagger = (reduced: boolean) => ({
+    hidden: {},
+    visible: { transition: { staggerChildren: reduced ? 0 : 0.08 } },
+});
 
 function TechChipItem({ chip }: { chip: TechChip }) {
     const [imgError, setImgError] = useState(false);
 
     return (
-        <span style={{
+        <span className="tl-chip" style={{
             display: "inline-flex",
             alignItems: "center",
             gap: "5px",
-            background: "#F1F5F9",
-            border: "1px solid #E2E8F0",
+            background: "var(--bg-alt)",
+            border: "1px solid var(--border)",
             borderRadius: "100px",
             padding: "4px 10px",
-            fontSize: "11px",
+            fontSize: "13px",
             fontWeight: 500,
-            color: "#334155",
-            fontFamily: "var(--font-mono)",
+            color: "var(--body)",
+            fontFamily: "var(--font-corp-inter)",
             whiteSpace: "nowrap"
         }}>
             {chip.logoUrl && !imgError && (
@@ -59,7 +52,7 @@ function TechChipItem({ chip }: { chip: TechChip }) {
                 />
             )}
             {chip.icon && (
-                <span style={{ color: "#64748B", display: "flex", alignItems: "center", flexShrink: 0 }}>
+                <span style={{ color: "var(--muted)", display: "flex", alignItems: "center", flexShrink: 0 }}>
                     {chip.icon}
                 </span>
             )}
@@ -91,451 +84,6 @@ interface ProductItem {
     icon: React.ReactElement;
     techs: TechChip[];
     brochurePath?: string;
-}
-
-function ProductCard({
-    prod,
-    idx,
-    shouldReduce,
-    onPreviewBrochure,
-    onPreviewVideo
-}: {
-    prod: ProductItem;
-    idx: number;
-    shouldReduce: boolean;
-    onPreviewBrochure?: (brochurePath: string, title: string) => void;
-    onPreviewVideo?: (videoPath: string, title: string) => void;
-}) {
-    const [flipped, setFlipped] = useState(false);
-    const [hovered, setHovered] = useState(false);
-    const accentColor = getCardColor(prod.title);
-    const rgbStr = getRgbString(accentColor);
-    const productImg = productImages[prod.id];
-
-    const clonedIcon = React.cloneElement(prod.icon as React.ReactElement<React.SVGProps<SVGSVGElement>>, {
-        width: 32,
-        height: 32,
-        stroke: accentColor,
-        strokeWidth: 1.75,
-        fill: "none"
-    });
-
-    return (
-        <motion.div
-            layout
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.4, delay: shouldReduce ? 0 : idx * 0.05 }}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-            style={{
-                perspective: "1000px",
-                height: "100%"
-            }}
-        >
-            <div
-                style={{
-                    position: "relative",
-                    width: "100%",
-                    minHeight: "520px",
-                    height: "100%",
-                    transformStyle: "preserve-3d",
-                    transition: "transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)",
-                    transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
-                    borderRadius: "20px"
-                }}
-            >
-                {/* ── FRONT FACE ── */}
-                <div
-                    style={{
-                        position: "absolute",
-                        inset: 0,
-                        backfaceVisibility: "hidden",
-                        WebkitBackfaceVisibility: "hidden",
-                        background: "#FFFFFF",
-                        border: hovered ? `1px solid rgba(${rgbStr}, 0.5)` : "1px solid rgba(15, 23, 42, 0.08)",
-                        borderRadius: "20px",
-                        padding: "28px 24px",
-                        display: "flex",
-                        flexDirection: "column",
-                        boxShadow: hovered
-                            ? `0 20px 40px -12px rgba(${rgbStr}, 0.2), 0 8px 16px -8px rgba(15, 23, 42, 0.08)`
-                            : "0 4px 20px rgba(15, 23, 42, 0.05)",
-                        transition: "border 0.3s ease, box-shadow 0.3s ease",
-                        overflow: "hidden"
-                    }}
-                >
-                    {/* Top Header Row */}
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", marginBottom: "18px" }}>
-                        <span style={{
-                            fontFamily: "var(--font-mono)",
-                            fontSize: "12px",
-                            fontWeight: 700,
-                            color: "#94A3B8"
-                        }}>
-                            {prod.number}
-                        </span>
-                    </div>
-
-                    {/* Product Image / Icon Banner */}
-                    {(() => {
-                        const isLightImage = ["maestro", "vemeego", "cabiniq", "refacto", "dms-edge", "automate-ai"].includes(prod.id);
-                        return (
-                            <div style={{
-                                width: "100%",
-                                height: "160px",
-                                borderRadius: "14px",
-                                background: productImg
-                                    ? (isLightImage ? "#FFFFFF" : "#0F172A")
-                                    : `rgba(${rgbStr}, 0.05)`,
-                                border: productImg
-                                    ? (isLightImage ? "1px solid #E2E8F0" : "1px solid rgba(255,255,255,0.08)")
-                                    : `1px solid rgba(${rgbStr}, 0.15)`,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                marginBottom: "20px",
-                                padding: "8px 12px",
-                                overflow: "hidden",
-                                position: "relative"
-                            }}>
-                                {productImg ? (
-                                    <img
-                                        src={productImg}
-                                        alt={prod.title}
-                                        style={{
-                                            maxWidth: "100%",
-                                            maxHeight: "144px",
-                                            width: "auto",
-                                            height: "auto",
-                                            objectFit: "contain",
-                                            filter: isLightImage ? "none" : "drop-shadow(0 8px 16px rgba(0,0,0,0.5))"
-                                        }}
-                                    />
-                                ) : (
-                                    <div style={{
-                                        width: "64px",
-                                        height: "64px",
-                                        borderRadius: "16px",
-                                        background: "#FFFFFF",
-                                        border: `1px solid rgba(${rgbStr}, 0.25)`,
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        boxShadow: `0 8px 24px rgba(${rgbStr}, 0.15)`
-                                    }}>
-                                        {clonedIcon}
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })()}
-
-                    {/* Title */}
-                    <h3 style={{
-                        fontFamily: "var(--font-display)",
-                        fontSize: "1.2rem",
-                        fontWeight: 700,
-                        color: "#0F172A",
-                        lineHeight: 1.3,
-                        marginBottom: "10px"
-                    }}>
-                        {prod.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p style={{
-                        fontFamily: "var(--font-body)",
-                        fontSize: "0.9rem",
-                        lineHeight: 1.65,
-                        color: "#475569",
-                        marginBottom: "20px",
-                        flexGrow: 1
-                    }}>
-                        {prod.description}
-                    </p>
-
-                    {/* Tech Stack Chips */}
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "24px" }}>
-                        {prod.techs.slice(0, 5).map((chip, i) => (
-                            <TechChipItem key={i} chip={chip} />
-                        ))}
-                        {prod.techs.length > 5 && (
-                            <span style={{
-                                fontFamily: "var(--font-mono)",
-                                fontSize: "10px",
-                                color: "#64748B",
-                                alignSelf: "center",
-                                paddingLeft: "2px"
-                            }}>
-                                +{prod.techs.length - 5} more
-                            </span>
-                        )}
-                    </div>
-
-                    {/* Bottom Action Row */}
-                    <div style={{ display: "flex", gap: "8px", marginTop: "auto", flexWrap: "wrap" }}>
-                        <button
-                            type="button"
-                            onClick={() => setFlipped(true)}
-                            title="Turn card for Technical Specs"
-                            aria-label="Turn card for Technical Specs"
-                            style={{
-                                flex: "1 1 88px",
-                                minWidth: 0,
-                                padding: "10px 8px",
-                                borderRadius: "8px",
-                                background: "#F1F5F9",
-                                border: "1px solid #CBD5E1",
-                                color: "#0F172A",
-                                fontFamily: "var(--font-body)",
-                                fontWeight: 600,
-                                fontSize: "0.8rem",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: "4px",
-                                cursor: "pointer",
-                                transition: "all 0.2s ease",
-                                whiteSpace: "normal"
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.background = "#E2E8F0";
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.background = "#F1F5F9";
-                            }}
-                        >
-                            ← Back
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => onPreviewBrochure ? onPreviewBrochure(prod.brochurePath || "/brochures/digital-cockpit-brochure.png", prod.title) : window.open(prod.brochurePath || "#", '_blank')}
-                            title="View Brochure"
-                            aria-label="View Brochure"
-                            style={{
-                                flex: "1 1 88px",
-                                minWidth: 0,
-                                padding: "10px 8px",
-                                borderRadius: "8px",
-                                background: "rgba(239, 68, 68, 0.08)",
-                                border: "1px solid rgba(239, 68, 68, 0.3)",
-                                color: "#EF4444",
-                                fontFamily: "var(--font-body)",
-                                fontWeight: 600,
-                                fontSize: "0.8rem",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: "5px",
-                                cursor: "pointer",
-                                transition: "all 0.2s ease",
-                                whiteSpace: "normal"
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.background = "rgba(239, 68, 68, 0.14)";
-                                e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.5)";
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.background = "rgba(239, 68, 68, 0.08)";
-                                e.currentTarget.style.borderColor = "rgba(239, 68, 68, 0.3)";
-                            }}
-                        >
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                <polyline points="7 10 12 15 17 10" />
-                                <line x1="12" y1="15" x2="12" y2="3" />
-                            </svg>
-                            Brochure
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => onPreviewVideo ? onPreviewVideo("/videos/samsan-demo.mp4", prod.title) : window.open("/videos/samsan-demo.mp4", '_blank')}
-                            title="Watch Product Video"
-                            aria-label="Watch Product Video"
-                            style={{
-                                flex: "1 1 88px",
-                                minWidth: 0,
-                                padding: "10px 8px",
-                                borderRadius: "8px",
-                                background: "rgba(124, 58, 237, 0.08)",
-                                border: "1px solid rgba(124, 58, 237, 0.3)",
-                                color: "#7C3AED",
-                                fontFamily: "var(--font-body)",
-                                fontWeight: 600,
-                                fontSize: "0.8rem",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: "5px",
-                                cursor: "pointer",
-                                transition: "all 0.2s ease",
-                                whiteSpace: "normal"
-                            }}
-                            onMouseEnter={e => {
-                                e.currentTarget.style.background = "rgba(124, 58, 237, 0.16)";
-                                e.currentTarget.style.borderColor = "rgba(124, 58, 237, 0.5)";
-                            }}
-                            onMouseLeave={e => {
-                                e.currentTarget.style.background = "rgba(124, 58, 237, 0.08)";
-                                e.currentTarget.style.borderColor = "rgba(124, 58, 237, 0.3)";
-                            }}
-                        >
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M8 5v14l11-7z" />
-                            </svg>
-                            Video
-                        </button>
-                    </div>
-                </div>
-
-                {/* ── BACK FACE (Full Specs) ── */}
-                <div
-                    style={{
-                        position: "absolute",
-                        inset: 0,
-                        backfaceVisibility: "hidden",
-                        WebkitBackfaceVisibility: "hidden",
-                        transform: "rotateY(180deg)",
-                        background: "#0D1117",
-                        border: `1px solid rgba(${rgbStr}, 0.4)`,
-                        borderRadius: "20px",
-                        padding: "24px 22px",
-                        display: "flex",
-                        flexDirection: "column",
-                        boxShadow: `0 20px 48px rgba(${rgbStr}, 0.25)`,
-                        overflow: "hidden"
-                    }}
-                >
-                    {/* Header */}
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
-                        <h4 style={{
-                            fontFamily: "var(--font-display)",
-                            fontSize: "1rem",
-                            fontWeight: 700,
-                            color: accentColor,
-                            margin: 0
-                        }}>
-                            {prod.title} — Technical Specs
-                        </h4>
-                        <button
-                            type="button"
-                            onClick={() => setFlipped(false)}
-                            aria-label="Close specs view"
-                            style={{
-                                background: "rgba(255,255,255,0.08)",
-                                border: "1px solid rgba(255,255,255,0.15)",
-                                color: "#FFFFFF",
-                                borderRadius: "50%",
-                                width: "44px",
-                                height: "44px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                cursor: "pointer"
-                            }}
-                        >
-                            ✕
-                        </button>
-                    </div>
-
-                    {/* Highlights */}
-                    <div style={{ marginBottom: "16px", flexGrow: 1 }}>
-                        <span style={{
-                            fontFamily: "var(--font-mono)",
-                            fontSize: "9px",
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            color: "var(--text-muted)",
-                            display: "block",
-                            marginBottom: "8px"
-                        }}>
-                            Key Capabilities
-                        </span>
-                        <ul style={{
-                            listStyle: "none",
-                            padding: 0,
-                            margin: 0,
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "8px"
-                        }}>
-                            {prod.highlights.map((h, i) => (
-                                <li key={i} style={{
-                                    display: "flex",
-                                    alignItems: "flex-start",
-                                    gap: "8px",
-                                    fontSize: "0.82rem",
-                                    color: "#CBD5E1",
-                                    lineHeight: 1.4
-                                }}>
-                                    <span style={{ color: accentColor, fontWeight: 700, marginTop: "1px" }}>✓</span>
-                                    <span>{h}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* All Tech Stack Tags */}
-                    <div style={{ marginBottom: "18px" }}>
-                        <span style={{
-                            fontFamily: "var(--font-mono)",
-                            fontSize: "9px",
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            color: "var(--text-muted)",
-                            display: "block",
-                            marginBottom: "8px"
-                        }}>
-                            Supported Technologies &amp; Protocols
-                        </span>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
-                            {prod.techs.map((chip, i) => (
-                                <span key={i} style={{
-                                    fontFamily: "var(--font-mono)",
-                                    fontSize: "10px",
-                                    color: "#94A3B8",
-                                    background: "rgba(255,255,255,0.06)",
-                                    border: "1px solid rgba(255,255,255,0.1)",
-                                    padding: "3px 8px",
-                                    borderRadius: "100px"
-                                }}>
-                                    {chip.label}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "auto" }}>
-                        <Link
-                            href={`/contact?product=${prod.id}`}
-                            className="btn btn-primary"
-                            style={{
-                                width: "100%",
-                                justifyContent: "center",
-                                backgroundColor: "#E8521A",
-                                color: "#FFFFFF",
-                                padding: "12px 16px",
-                                fontSize: "0.9rem",
-                                borderRadius: "8px",
-                                fontWeight: 600,
-                                textDecoration: "none",
-                                display: "inline-flex",
-                                alignItems: "center",
-                                boxShadow: "0 4px 14px rgba(232, 82, 26, 0.3)"
-                            }}
-                        >
-                            Contact for Inquiry
-                        </Link>
-                    </div>
-                </div>
-            </div>
-        </motion.div>
-    );
 }
 
 // ── Products master dataset ──────────────────────────────────────
@@ -799,362 +347,196 @@ const products: ProductItem[] = [
 
 
 const stats = [
-    { value: "9+", label: "Production Accelerators" },
-    { value: "Global", label: "OEM & Tier-1 Deployment" },
-    { value: "9+", label: "Industry Verticals" }
+    { value: "9", label: "Products" },
+    { value: "Global", label: "OEM & Tier-1 delivery" }
 ];
 
-export default function SolutionsClient() {
+function ProductBackPanel({ product, onClose }: { product: ProductItem; onClose: () => void }) {
+    return (
+        <div className="tl-product-back">
+            <div className="tl-product-back__header">
+                <h3>{product.title} — Technical Specs</h3>
+                <Button variant="outline" type="button" className="tl-product-back__close" onClick={onClose} ariaLabel="Close specs view">×</Button>
+            </div>
+            <div className="tl-product-back__capabilities">
+                <span className="tl-product-back__label">Key Capabilities</span>
+                <ul>{product.highlights.map((highlight, index) => <li key={index}><span aria-hidden="true">✓</span>{highlight}</li>)}</ul>
+            </div>
+            <div className="tl-product-back__technologies">
+                <span className="tl-product-back__label">Supported Technologies &amp; Protocols</span>
+                <div>{product.techs.map((chip, index) => <span className="tl-chip" key={`${chip.label}-${index}`}>{chip.label}</span>)}</div>
+            </div>
+            <Button href={`/contact?product=${product.id}`} variant="primary" className="tl-product-back__contact">Contact for inquiry</Button>
+        </div>
+    );
+}
+
+// ── Brochure form field types ───────────────────────────────────────────
+interface BrochureModal {
+    product: ProductItem;
+    step: "preview" | "form" | "success";
+    pendingAction: "view" | "download";
+}
+
+const PRODUCT_DISPLAY_MAP: Record<string, string> = {
+    "automate-ai": "AutoMATE.ai",
+    cabiniq: "CabinIQ™",
+    "digital-cockpit-solution": "Digital Cockpit Solution",
+    "dms-edge": "DMS Edge",
+    maestro: "Maestro™",
+    pikniknow: "PiknikNow",
+    refacto: "RefactoFlow",
+    twinlnk: "TwinLnk™",
+    vemeego: "Vemeego",
+};
+
+export default function SolutionsClient({ fontClassName = "" }: { fontClassName?: string }) {
     const shouldReduce = useReducedMotion();
-    const [previewBrochure, setPreviewBrochure] = useState<{ path: string; title: string } | null>(null);
-    const [previewVideo, setPreviewVideo] = useState<{ path: string; title: string } | null>(null);
+
+    // ── Brochure modal state ─────────────────────────────────────────────
+    const [brochureModal, setBrochureModal] = useState<BrochureModal | null>(null);
+
+    // ── Inline enquiry form state ────────────────────────────────────────
+    const [bName, setBName] = useState("");
+    const [bCompany, setBCompany] = useState("");
+    const [bEmail, setBEmail] = useState("");
+    const [bPhone, setBPhone] = useState("");
+    const [bMessage, setBMessage] = useState("");
+    const [bErrors, setBErrors] = useState<Record<string, string>>({});
+    const [bSubmitting, setBSubmitting] = useState(false);
+    const [bServerError, setBServerError] = useState("");
+
+    const resetBrochureForm = useCallback(() => {
+        setBName(""); setBCompany(""); setBEmail(""); setBPhone(""); setBMessage("");
+        setBErrors({}); setBSubmitting(false); setBServerError("");
+    }, []);
+
+    const openBrochureModal = useCallback((product: ProductItem) => {
+        resetBrochureForm();
+        setBMessage(`I'd like to access the official ${product.title} brochure.`);
+        setBrochureModal({ product, step: "preview", pendingAction: "download" });
+    }, [resetBrochureForm]);
+
+    const closeBrochureModal = useCallback(() => {
+        setBrochureModal(null);
+        resetBrochureForm();
+    }, [resetBrochureForm]);
+
+    const validateBrochureForm = () => {
+        const errs: Record<string, string> = {};
+        if (!bName.trim() || bName.trim().length < 2) errs.name = "Full name is required (min 2 characters).";
+        if (!bEmail.trim()) { errs.email = "Email address is required."; }
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bEmail)) errs.email = "Please enter a valid email.";
+        if (!bCompany.trim()) errs.company = "Company name is required.";
+        if (!bMessage.trim() || bMessage.trim().length < 10) errs.message = "Please describe your enquiry (min 10 characters).";
+        setBErrors(errs);
+        return Object.keys(errs).length === 0;
+    };
+
+    const handleBrochureSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!brochureModal) return;
+        if (!validateBrochureForm()) return;
+
+        setBSubmitting(true);
+        setBServerError("");
+
+        try {
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    type: "brochure_request",
+                    name: bName.trim(),
+                    email: bEmail.trim(),
+                    company: bCompany.trim(),
+                    phone: bPhone.trim(),
+                    message: bMessage.trim(),
+                    product: brochureModal.product.id,
+                    productDisplayName: PRODUCT_DISPLAY_MAP[brochureModal.product.id] || brochureModal.product.title,
+                }),
+            });
+
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+                throw new Error(data.error || "Submission failed. Please try again.");
+            }
+
+            setBrochureModal(prev => prev ? { ...prev, step: "success" } : null);
+        } catch (err: unknown) {
+            setBServerError(err instanceof Error ? err.message : "Submission failed. Please try again.");
+        } finally {
+            setBSubmitting(false);
+        }
+    };
 
     return (
-        <div style={{ paddingBottom: "0" }}>
-
-            {/* ── Page Hero — Dark Theme ── */}
-            <section
-                className="section-dark page-hero"
-                aria-labelledby="solutions-heading"
-                style={{
-                    background: "var(--midnight)",
-                    paddingTop: "140px",
-                    paddingBottom: "96px",
-                    position: "relative",
-                    overflow: "hidden",
-                    borderBottom: "none"
-                }}
-            >
-                {/* Ambient violet background glow */}
-                <div style={{
-                    position: "absolute",
-                    top: "30%", left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: "1100px", height: "550px",
-                    background: "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(124, 58, 237, 0.15) 0%, transparent 70%)",
-                    pointerEvents: "none", zIndex: 0
-                }} />
-
-                <div className="container" style={{ position: "relative", zIndex: 1, maxWidth: "1400px" }}>
-                    <motion.div
-                        variants={staggerContainerVariants}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        <div style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
-                            gap: "40px",
-                            alignItems: "center"
-                        }}>
-                            {/* Left Column: Title & Intro */}
-                            <div>
-                                <motion.div variants={fadeUpVariants(shouldReduce)}>
-                                    <span
-                                        className="badge"
-                                        style={{
-                                            marginBottom: "20px",
-                                            color: "var(--violet-mid)",
-                                            background: "rgba(139, 92, 246, 0.1)",
-                                            border: "1px solid rgba(139, 92, 246, 0.25)",
-                                            fontFamily: "var(--font-mono)",
-                                            letterSpacing: "0.1em"
-                                        }}
-                                    >
-                                        Products &amp; Accelerators
-                                    </span>
-                                </motion.div>
-
-                                <motion.h1
-                                    id="solutions-heading"
-                                    variants={fadeUpVariants(shouldReduce)}
-                                    style={{
-                                        marginBottom: "20px",
-                                        color: "#FFFFFF",
-                                        fontFamily: "var(--font-display)",
-                                        fontWeight: 700,
-                                        lineHeight: 1.1,
-                                        fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)",
-                                        letterSpacing: "-0.02em"
-                                    }}
-                                >
-                                    SAMSAN Products &amp; Accelerators
-                                </motion.h1>
-
-                                <motion.p
-                                    className="lead"
-                                    variants={fadeUpVariants(shouldReduce)}
-                                    style={{
-                                        maxWidth: "680px",
-                                        color: "var(--text-secondary)",
-                                        lineHeight: 1.7,
-                                        fontFamily: "var(--font-body)",
-                                        fontSize: "1.08rem",
-                                        marginBottom: "0"
-                                    }}
-                                >
-                                    Production-proven software platforms and hardware accelerators across automotive eCockpit, Telematics, ADAS, and Smart IoT environments. Engineered for safety, scale, and immediate deployment.
-                                </motion.p>
-                            </div>
-
-                            {/* Right Column: 3 Glassmorphic Metric Cards */}
-                            <motion.div
-                                variants={fadeUpVariants(shouldReduce)}
-                                style={{
-                                    display: "grid",
-                                    gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-                                    gap: "16px"
-                                }}
-                            >
-                                {stats.map((s, i) => (
-                                    <motion.div
-                                        key={i}
-                                        whileHover={shouldReduce ? undefined : { y: -4, scale: 1.02 }}
-                                        transition={{ duration: 0.25, ease: "easeOut" }}
-                                        style={{
-                                            background: "rgba(16, 24, 48, 0.7)",
-                                            backdropFilter: "blur(20px)",
-                                            WebkitBackdropFilter: "blur(20px)",
-                                            border: "1px solid rgba(255, 255, 255, 0.08)",
-                                            borderRadius: "16px",
-                                            padding: "24px 20px",
-                                            textAlign: "center",
-                                            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.25)"
-                                        }}
-                                    >
-                                        <div style={{
-                                            fontFamily: "var(--font-display)",
-                                            fontSize: "clamp(1.8rem, 2.5vw, 2.4rem)",
-                                            fontWeight: 700,
-                                            letterSpacing: "-0.03em",
-                                            lineHeight: 1.1,
-                                            marginBottom: "8px",
-                                            background: "var(--grad-accent)",
-                                            backgroundSize: "200% auto",
-                                            WebkitBackgroundClip: "text",
-                                            WebkitTextFillColor: "transparent",
-                                            backgroundClip: "text"
-                                        }}>
-                                            {s.value}
-                                        </div>
-                                        <div style={{
-                                            fontFamily: "var(--font-mono)",
-                                            fontSize: "0.72rem",
-                                            fontWeight: 500,
-                                            color: "var(--text-secondary)",
-                                            textTransform: "uppercase",
-                                            letterSpacing: "0.08em",
-                                            lineHeight: 1.35
-                                        }}>
-                                            {s.label}
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </motion.div>
-                        </div>
-                    </motion.div>
+        <div className={`theme-light-corp ${fontClassName}`}>
+            <Section variant="navy" className="solutions-hero" aria-labelledby="solutions-heading">
+                <div className="tl-container">
+                    <div className="solutions-hero-layout">
+                        <motion.div className="solutions-hero-copy" variants={fadeUp(!!shouldReduce)} initial={shouldReduce ? false : "hidden"} whileInView="visible" viewport={{ once: true }}>
+                            <Eyebrow tone="dark">Products &amp; Accelerators</Eyebrow>
+                            <h1 className="solutions-h1" id="solutions-heading">SAMSAN Products &amp; Accelerators</h1>
+                            <p className="solutions-lead">Production-proven software platforms and hardware accelerators across automotive eCockpit, Telematics, ADAS, and Smart IoT environments. Engineered for safety, scale, and immediate deployment.</p>
+                        </motion.div>
+                        <motion.div className="solutions-stats" variants={stagger(!!shouldReduce)} initial={shouldReduce ? false : "hidden"} whileInView="visible" viewport={{ once: true }}>
+                            {stats.map(stat => <div className="solutions-stat-tile" key={stat.value}><span className="solutions-stat-value">{stat.value}</span><span className="solutions-stat-label">{stat.label}</span></div>)}
+                        </motion.div>
+                    </div>
                 </div>
-            </section>
+            </Section>
 
-            {/* ── Product Showcase Grid — Light Theme ── */}
-            <section
-                className="section-light section"
-                style={{
-                    background: "#F8FAFC",
-                    padding: "108px 0",
-                    position: "relative"
-                }}
-            >
-                <div className="container" style={{ position: "relative", zIndex: 2, maxWidth: "1400px" }}>
-                    {/* Section Header */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
-                        style={{ textAlign: "center", marginBottom: "48px" }}
-                    >
-                        <span
-                            className="badge"
-                            style={{
-                                marginBottom: "16px",
-                                color: "#E8521A",
-                                background: "rgba(232, 82, 26, 0.08)",
-                                border: "1px solid rgba(232, 82, 26, 0.2)",
-                                fontFamily: "var(--font-mono)",
-                                letterSpacing: "0.1em"
-                            }}
-                        >
-                            Our Portfolio
-                        </span>
-                        <h2 style={{
-                            fontSize: "clamp(1.8rem, 3vw, 2.5rem)",
-                            marginBottom: "16px",
-                            color: "#0B1320",
-                            fontFamily: "var(--font-display)",
-                            fontWeight: 700,
-                            letterSpacing: "-0.02em"
-                        }}>
-                            Production-Ready Accelerators &amp; Platforms
-                        </h2>
-                        <p style={{
-                            color: "#64748B",
-                            maxWidth: "620px",
-                            margin: "0 auto",
-                            lineHeight: "1.75",
-                            fontFamily: "var(--font-body)",
-                            fontSize: "1rem"
-                        }}>
-                            Each accelerator is engineered with production-grade reliability, open architecture interfaces,
-                            and comprehensive documentation to drastically reduce your time-to-market.
-                        </p>
+            <Section variant="white" className="solutions-portfolio">
+                <div className="tl-container">
+                    <motion.div className="solutions-section-header" variants={fadeUp(!!shouldReduce)} initial={shouldReduce ? false : "hidden"} whileInView="visible" viewport={{ once: true }}>
+                        <Eyebrow>Our portfolio</Eyebrow>
+                        <h2>Production-Ready Accelerators &amp; Platforms</h2>
+                        <p>Each accelerator is engineered with production-grade reliability, open architecture interfaces, and comprehensive documentation to drastically reduce your time-to-market.</p>
                     </motion.div>
-
-
-
-                    {/* Product Cards Grid */}
-                    <motion.div
-                        layout
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 340px), 1fr))",
-                            gap: "32px",
-                            alignItems: "stretch"
-                        }}
-                    >
-                        <AnimatePresence>
-                            {products.map((prod, idx) => (
-                                <ProductCard
-                                    key={prod.id}
-                                    prod={prod}
-                                    idx={idx}
-                                    shouldReduce={!!shouldReduce}
-                                    onPreviewBrochure={(path, title) => setPreviewBrochure({ path, title })}
-                                    onPreviewVideo={(path, title) => setPreviewVideo({ path, title })}
-                                />
-                            ))}
-                        </AnimatePresence>
-                    </motion.div>
+                    <div className="solutions-grid">
+                        {products.map((product, index) => (
+                            <ProductCard
+                                key={product.id}
+                                number={product.number}
+                                title={product.title}
+                                description={product.description}
+                                imageSrc={productImages[product.id]}
+                                imageAlt={product.title}
+                                imageKind={["maestro", "refacto", "vemeego"].includes(product.id) ? "logo" : ["digital-cockpit-solution", "twinlnk"].includes(product.id) ? "dark-banner" : "banner"}
+                                index={index}
+                                chips={<>{product.techs.slice(0, 4).map((chip, chipIndex) => <TechChipItem key={`${chip.label}-${chipIndex}`} chip={chip} />)}{product.techs.length > 4 && <span className="tl-chip-more">+{product.techs.length - 4} more</span>}</>}
+                                onBrochure={() => openBrochureModal(product)}
+                                renderBack={(close) => <ProductBackPanel product={product} onClose={close} />}
+                            />
+                        ))}
+                    </div>
                 </div>
-            </section>
+            </Section>
 
-            {/* ── Standardized Light Bottom CTA ── */}
-            <section
-                className="section-light"
-                style={{ background: "#F8FAFC", borderTop: "1px solid #E2E8F0", padding: "108px 0" }}
-                aria-labelledby="solutions-cta-heading"
-            >
-                <div className="container">
-                    <motion.div
-                        initial={{ opacity: 0, y: shouldReduce ? 0 : 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: shouldReduce ? 0.01 : 0.5 }}
-                        style={{
-                            background: "#FFFFFF",
-                            border: "1px solid #E2E8F0",
-                            borderRadius: "20px",
-                            padding: "64px 48px",
-                            textAlign: "center",
-                            boxShadow: "0 4px 24px rgba(11, 19, 32, 0.05)",
-                            position: "relative",
-                            overflow: "hidden"
-                        }}
-                    >
-                        <span
-                            className="badge"
-                            style={{
-                                marginBottom: "16px",
-                                color: "#E8521A",
-                                background: "rgba(232, 82, 26, 0.08)",
-                                border: "1px solid rgba(232, 82, 26, 0.2)",
-                                fontFamily: "var(--font-mono)",
-                                letterSpacing: "0.1em"
-                            }}
-                        >
-                            Next Steps
-                        </span>
-                        <h2
-                            id="solutions-cta-heading"
-                            style={{
-                                fontSize: "clamp(1.8rem, 3vw, 2.4rem)",
-                                fontWeight: 700,
-                                color: "#0B1320",
-                                fontFamily: "var(--font-display)",
-                                letterSpacing: "-0.02em",
-                                margin: "0 0 16px 0",
-                                lineHeight: 1.2
-                            }}
-                        >
-                            Ready to Accelerate Your Product Roadmap?
-                        </h2>
+            <CtaBand
+                title="Ready to Accelerate Your Product Roadmap?"
+                description="Our engineering teams can customize, integrate, and scale these IP accelerators for your specific vehicle architecture or enterprise requirements."
+                primaryLabel="Evaluate SAMSAN accelerators"
+                primaryHref="/contact"
+                secondaryLabel="View engineering services"
+                secondaryHref="/services"
+            />
 
-                        <p style={{
-                            fontSize: "1.05rem",
-                            lineHeight: 1.7,
-                            color: "#475569",
-                            fontFamily: "var(--font-body)",
-                            maxWidth: "580px",
-                            margin: "0 auto 36px"
-                        }}>
-                            Our engineering teams can customize, integrate, and scale these IP accelerators for your specific vehicle architecture or enterprise requirements.
-                        </p>
-
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", flexWrap: "wrap" }}>
-                            <Link
-                                href="/contact"
-                                className="btn btn-primary"
-                                style={{
-                                    background: "#E8521A",
-                                    color: "#FFFFFF",
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    textDecoration: "none",
-                                    boxShadow: "0 4px 14px rgba(232, 82, 26, 0.28)",
-                                    padding: "13px 28px",
-                                    fontWeight: 600
-                                }}
-                            >
-                                Evaluate SAMSAN Accelerators
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </Link>
-                            <Link
-                                href="/services"
-                                className="btn btn-outline"
-                                style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: "8px",
-                                    textDecoration: "none",
-                                    color: "#0B1320",
-                                    borderColor: "#CBD5E1",
-                                    padding: "13px 28px",
-                                    fontWeight: 600
-                                }}
-                            >
-                                View Engineering Services
-                            </Link>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* ── Interactive Product Brochure Modal Lightbox ── */}
+            {/* ── Brochure Modal — multi-step gated workflow ── */}
             <AnimatePresence>
-                {previewBrochure && (
+                {brochureModal && (
                     <motion.div
+                        key="brochure-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        onClick={() => setPreviewBrochure(null)}
+                        onClick={closeBrochureModal}
                         style={{
                             position: "fixed",
                             inset: 0,
                             zIndex: 9999,
-                            backgroundColor: "rgba(11, 19, 32, 0.88)",
+                            backgroundColor: "rgba(11, 19, 32, 0.90)",
                             backdropFilter: "blur(12px)",
                             WebkitBackdropFilter: "blur(12px)",
                             display: "flex",
@@ -1164,6 +546,7 @@ export default function SolutionsClient() {
                         }}
                     >
                         <motion.div
+                            key="brochure-modal"
                             initial={{ scale: 0.92, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.92, opacity: 0 }}
@@ -1171,303 +554,548 @@ export default function SolutionsClient() {
                             onClick={(e) => e.stopPropagation()}
                             style={{
                                 backgroundColor: "#0F172A",
-                                border: "1px solid rgba(255, 255, 255, 0.15)",
+                                border: "1px solid rgba(255,255,255,0.15)",
                                 borderRadius: "20px",
-                                maxWidth: "1050px",
+                                maxWidth: brochureModal.step === "preview" ? "1050px" : "600px",
                                 width: "100%",
                                 maxHeight: "92vh",
                                 display: "flex",
                                 flexDirection: "column",
                                 overflow: "hidden",
-                                boxShadow: "0 30px 70px -15px rgba(0,0,0,0.8)"
+                                boxShadow: "0 30px 70px -15px rgba(0,0,0,0.8)",
+                                transition: "max-width 0.35s ease"
                             }}
                         >
-                            {/* Modal Header Bar */}
+                            {/* ── Modal Header ── */}
                             <div style={{
                                 padding: "18px 24px",
-                                borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                                borderBottom: "1px solid rgba(255,255,255,0.1)",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "space-between",
-                                background: "rgba(15, 23, 42, 0.95)"
+                                background: "rgba(15,23,42,0.95)",
+                                flexShrink: 0
                             }}>
                                 <div>
                                     <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#FFFFFF", fontFamily: "var(--font-display)", margin: 0 }}>
-                                        {previewBrochure.title} — Official Brochure
+                                        {brochureModal.product.title} — Official Brochure
                                     </h3>
                                     <span style={{ fontSize: "0.78rem", color: "#94A3B8", fontFamily: "var(--font-mono)" }}>
-                                        SAMSAN Technische Labs Enterprise Documentation
+                                        {brochureModal.step === "preview"
+                                            ? "SAMSAN Technische Labs Enterprise Documentation"
+                                            : brochureModal.step === "form"
+                                            ? "Complete the enquiry form to unlock brochure access"
+                                            : "Brochure access granted — enquiry sent to our team"}
                                     </span>
                                 </div>
-
-                                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                    {brochureModal.step === "form" && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setBrochureModal(prev => prev ? { ...prev, step: "preview" } : null)}
+                                            aria-label="Back to preview"
+                                            style={{
+                                                background: "rgba(255,255,255,0.06)",
+                                                border: "1px solid rgba(255,255,255,0.12)",
+                                                color: "#94A3B8",
+                                                padding: "8px 14px",
+                                                borderRadius: "8px",
+                                                cursor: "pointer",
+                                                fontSize: "0.8rem",
+                                                fontWeight: 500,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: "6px",
+                                                transition: "all 0.2s"
+                                            }}
+                                        >
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><polyline points="15 18 9 12 15 6" /></svg>
+                                            Back
+                                        </button>
+                                    )}
                                     <button
                                         type="button"
-                                        onClick={() => setPreviewBrochure(null)}
+                                        onClick={closeBrochureModal}
                                         aria-label="Close brochure modal"
                                         style={{
                                             background: "rgba(255,255,255,0.08)",
                                             border: "1px solid rgba(255,255,255,0.15)",
                                             color: "#FFFFFF",
-                                            width: "44px",
-                                            height: "44px",
+                                            width: "40px",
+                                            height: "40px",
                                             borderRadius: "50%",
                                             cursor: "pointer",
-                                            fontSize: "1.1rem",
+                                            fontSize: "1rem",
                                             display: "flex",
                                             alignItems: "center",
-                                            justifyContent: "center",
-                                            transition: "background 0.2s ease"
+                                            justifyContent: "center"
                                         }}
-                                    >
-                                        ✕
-                                    </button>
+                                    >✕</button>
                                 </div>
                             </div>
 
-                            {/* Modal Content / Protected Preview Area */}
-                            <div
-                                onContextMenu={(e) => e.preventDefault()}
-                                style={{
-                                    padding: "24px",
-                                    position: "relative",
-                                    overflow: "hidden",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    background: "#020617",
-                                    flexGrow: 1,
-                                    userSelect: "none",
-                                    WebkitUserSelect: "none"
-                                }}
-                            >
-                                {/* Diagonal Translucent Watermark Overlay Layer */}
-                                <div style={{
-                                    position: "absolute",
-                                    inset: 0,
-                                    zIndex: 10,
-                                    pointerEvents: "none",
-                                    opacity: 0.28,
-                                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='380' height='200'%3E%3Ctext x='50%25' y='50%25' fill='%23FFFFFF' font-size='11' font-family='sans-serif' font-weight='bold' text-anchor='middle' transform='rotate(-25 190 100)' opacity='0.75'%3ESAMSAN TECH LABS %E2%80%A2 PROTECTED PREVIEW%3C/text%3E%3C/svg%3E")`,
-                                    backgroundRepeat: "repeat"
-                                }} />
-
-                                {/* Floating Glassmorphic Restricted-View Overlay CTA */}
-                                <div style={{
-                                    position: "absolute",
-                                    top: "50%",
-                                    left: "50%",
-                                    transform: "translate(-50%, -50%)",
-                                    zIndex: 20,
-                                    background: "rgba(15, 23, 42, 0.92)",
-                                    backdropFilter: "blur(20px)",
-                                    WebkitBackdropFilter: "blur(20px)",
-                                    border: "1px solid rgba(232, 82, 26, 0.45)",
-                                    borderRadius: "20px",
-                                    padding: "36px 44px",
-                                    textAlign: "center",
-                                    maxWidth: "580px",
-                                    width: "90%",
-                                    boxShadow: "0 25px 60px rgba(0,0,0,0.75)",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    gap: "18px"
-                                }}>
-                                    <div style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: "6px",
-                                        padding: "6px 14px",
-                                        borderRadius: "100px",
-                                        background: "rgba(232, 82, 26, 0.15)",
-                                        border: "1px solid rgba(232, 82, 26, 0.35)",
-                                        color: "#FF8C5A",
-                                        fontSize: "0.8rem",
-                                        fontWeight: 700,
-                                        fontFamily: "var(--font-mono)",
-                                        letterSpacing: "0.1em",
-                                        textTransform: "uppercase"
-                                    }}>
-                                        🔒 Restricted Preview Mode
-                                    </div>
-
-                                    <h4 style={{
-                                        color: "#FFFFFF",
-                                        fontSize: "1.45rem",
-                                        fontWeight: 700,
-                                        fontFamily: "var(--font-display)",
-                                        lineHeight: 1.3,
-                                        margin: 0
-                                    }}>
-                                        Full Spec Content Protected
-                                    </h4>
-
-                                    <p style={{
-                                        color: "#94A3B8",
-                                        fontSize: "0.95rem",
-                                        lineHeight: 1.65,
-                                        fontFamily: "var(--font-body)",
-                                        maxWidth: "480px",
-                                        margin: 0
-                                    }}>
-                                        This preview is restricted to low-resolution blurred mode. Download the official brochure for full unblurred high-resolution diagrams &amp; specifications.
-                                    </p>
-
-                                    <a
-                                        href={previewBrochure.path}
-                                        download
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{
-                                            marginTop: "4px",
-                                            padding: "13px 30px",
-                                            borderRadius: "10px",
-                                            background: "#E8521A",
-                                            color: "#FFFFFF",
-                                            fontWeight: 600,
-                                            fontSize: "0.95rem",
-                                            textDecoration: "none",
-                                            display: "inline-flex",
-                                            alignItems: "center",
-                                            gap: "8px",
-                                            boxShadow: "0 4px 18px rgba(232, 82, 26, 0.45)",
-                                            transition: "all 0.2s ease"
-                                        }}
-                                    >
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                            <polyline points="7 10 12 15 17 10" />
-                                            <line x1="12" y1="15" x2="12" y2="3" />
-                                        </svg>
-                                        Download Full Brochure
-                                    </a>
-                                </div>
-
-                                {/* Blurred Content (PDF iframe or image) */}
-                                <div style={{
-                                    width: "100%",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    filter: "blur(6px) brightness(0.9)",
-                                    pointerEvents: "none",
-                                    userSelect: "none"
-                                }}>
-                                    {previewBrochure.path.toLowerCase().endsWith(".pdf") ? (
-                                        <iframe
-                                            src={previewBrochure.path}
-                                            style={{ width: "100%", height: "72vh", border: "none", borderRadius: "12px", pointerEvents: "none" }}
-                                            title={previewBrochure.title}
-                                        />
-                                    ) : (
-                                        <img
-                                            src={previewBrochure.path}
-                                            alt={previewBrochure.title}
-                                            draggable={false}
-                                            style={{ maxWidth: "100%", maxHeight: "75vh", objectFit: "contain", borderRadius: "12px", boxShadow: "0 10px 40px rgba(0,0,0,0.5)" }}
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* ── Interactive Product Video Modal Lightbox ── */}
-            <AnimatePresence>
-                {previewVideo && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setPreviewVideo(null)}
-                        style={{
-                            position: "fixed",
-                            inset: 0,
-                            zIndex: 9999,
-                            backgroundColor: "rgba(11, 19, 32, 0.88)",
-                            backdropFilter: "blur(12px)",
-                            WebkitBackdropFilter: "blur(12px)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            padding: "24px"
-                        }}
-                    >
-                        <motion.div
-                            initial={{ scale: 0.92, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.92, opacity: 0 }}
-                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                            onClick={(e) => e.stopPropagation()}
-                            style={{
-                                backgroundColor: "#0F172A",
-                                border: "1px solid rgba(255, 255, 255, 0.15)",
-                                borderRadius: "20px",
-                                maxWidth: "960px",
-                                width: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                overflow: "hidden",
-                                boxShadow: "0 30px 70px -15px rgba(0,0,0,0.8)"
-                            }}
-                        >
-                            {/* Modal Header */}
-                            <div style={{
-                                padding: "18px 24px",
-                                borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                background: "rgba(15, 23, 42, 0.95)"
-                            }}>
-                                <div>
-                                    <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#FFFFFF", fontFamily: "var(--font-display)", margin: 0 }}>
-                                        {previewVideo.title} — Product Demonstration
-                                    </h3>
-                                    <span style={{ fontSize: "0.78rem", color: "#94A3B8", fontFamily: "var(--font-mono)" }}>
-                                        SAMSAN Accelerators Live Demonstration
-                                    </span>
-                                </div>
-
-                                <button
-                                    type="button"
-                                    onClick={() => setPreviewVideo(null)}
-                                    aria-label="Close video modal"
+                            {/* ══════════════════════════════════════════════
+                                STEP 1 — RESTRICTED PREVIEW
+                            ══════════════════════════════════════════════ */}
+                            {brochureModal.step === "preview" && (
+                                <div
+                                    onContextMenu={(e) => e.preventDefault()}
                                     style={{
-                                        background: "rgba(255,255,255,0.08)",
-                                        border: "1px solid rgba(255,255,255,0.15)",
-                                        color: "#FFFFFF",
-                                        width: "36px",
-                                        height: "36px",
-                                        borderRadius: "50%",
-                                        cursor: "pointer",
-                                        fontSize: "1.1rem",
+                                        padding: "24px",
+                                        position: "relative",
+                                        overflow: "hidden",
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        transition: "background 0.2s ease"
+                                        background: "#020617",
+                                        flexGrow: 1,
+                                        minHeight: "420px",
+                                        userSelect: "none",
+                                        WebkitUserSelect: "none"
                                     }}
                                 >
-                                    ✕
-                                </button>
-                            </div>
+                                    {/* Watermark overlay */}
+                                    <div style={{
+                                        position: "absolute", inset: 0, zIndex: 10,
+                                        pointerEvents: "none", opacity: 0.28,
+                                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='380' height='200'%3E%3Ctext x='50%25' y='50%25' fill='%23FFFFFF' font-size='11' font-family='sans-serif' font-weight='bold' text-anchor='middle' transform='rotate(-25 190 100)' opacity='0.75'%3ESAMSAN TECH LABS %E2%80%A2 PROTECTED PREVIEW%3C/text%3E%3C/svg%3E")`,
+                                        backgroundRepeat: "repeat"
+                                    }} />
 
-                            {/* Video Player */}
-                            <div style={{ padding: "0", background: "#000000", display: "flex", justifyContent: "center", position: "relative" }}>
-                                <video
-                                    src={previewVideo.path}
-                                    controls
-                                    autoPlay
-                                    style={{ width: "100%", maxHeight: "72vh", objectFit: "contain" }}
-                                />
-                            </div>
+                                    {/* Floating restricted-access CTA overlay */}
+                                    <div style={{
+                                        position: "absolute", top: "50%", left: "50%",
+                                        transform: "translate(-50%, -50%)",
+                                        zIndex: 20,
+                                        background: "rgba(15,23,42,0.92)",
+                                        backdropFilter: "blur(20px)",
+                                        WebkitBackdropFilter: "blur(20px)",
+                                        border: "1px solid rgba(232,82,26,0.45)",
+                                        borderRadius: "20px",
+                                        padding: "36px 44px",
+                                        textAlign: "center",
+                                        maxWidth: "580px",
+                                        width: "90%",
+                                        boxShadow: "0 25px 60px rgba(0,0,0,0.75)",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        gap: "18px"
+                                    }}>
+                                        {/* Badge */}
+                                        <div style={{
+                                            display: "inline-flex", alignItems: "center", gap: "6px",
+                                            padding: "6px 14px", borderRadius: "100px",
+                                            background: "rgba(232,82,26,0.15)",
+                                            border: "1px solid rgba(232,82,26,0.35)",
+                                            color: "#FF8C5A", fontSize: "0.8rem", fontWeight: 700,
+                                            fontFamily: "var(--font-mono)", letterSpacing: "0.1em",
+                                            textTransform: "uppercase"
+                                        }}>
+                                            🔒 Restricted Preview Mode
+                                        </div>
+
+                                        <h4 style={{
+                                            color: "#FFFFFF", fontSize: "1.45rem", fontWeight: 700,
+                                            fontFamily: "var(--font-display)", lineHeight: 1.3, margin: 0
+                                        }}>
+                                            Full Spec Content Protected
+                                        </h4>
+
+                                        <p style={{
+                                            color: "#94A3B8", fontSize: "0.95rem", lineHeight: 1.65,
+                                            fontFamily: "var(--font-body)", maxWidth: "480px", margin: 0
+                                        }}>
+                                            This preview is restricted to low-resolution blurred mode.
+                                            Submit a quick enquiry to get instant access to the full
+                                            high-resolution brochure &amp; specifications.
+                                        </p>
+
+                                        {/* CTA Buttons */}
+                                        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => setBrochureModal(prev => prev ? { ...prev, step: "form", pendingAction: "view" } : null)}
+                                                style={{
+                                                    padding: "12px 24px", borderRadius: "10px",
+                                                    background: "rgba(255,255,255,0.08)",
+                                                    border: "1px solid rgba(255,255,255,0.2)",
+                                                    color: "#FFFFFF", fontWeight: 600, fontSize: "0.9rem",
+                                                    cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "8px",
+                                                    transition: "all 0.2s ease"
+                                                }}
+                                            >
+                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                    <circle cx="12" cy="12" r="3" />
+                                                </svg>
+                                                View Brochure
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setBrochureModal(prev => prev ? { ...prev, step: "form", pendingAction: "download" } : null)}
+                                                style={{
+                                                    padding: "12px 24px", borderRadius: "10px",
+                                                    background: "#E8521A",
+                                                    border: "none",
+                                                    color: "#FFFFFF", fontWeight: 600, fontSize: "0.9rem",
+                                                    cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "8px",
+                                                    boxShadow: "0 4px 18px rgba(232,82,26,0.45)",
+                                                    transition: "all 0.2s ease"
+                                                }}
+                                            >
+                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                                    <polyline points="7 10 12 15 17 10" />
+                                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                                </svg>
+                                                Download Full Brochure
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Blurred brochure content in background */}
+                                    <div style={{
+                                        width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+                                        filter: "blur(6px) brightness(0.9)",
+                                        pointerEvents: "none", userSelect: "none"
+                                    }}>
+                                        {brochureModal.product.brochurePath?.toLowerCase().endsWith(".pdf") ? (
+                                            <iframe
+                                                src={brochureModal.product.brochurePath}
+                                                style={{ width: "100%", height: "72vh", border: "none", borderRadius: "12px", pointerEvents: "none" }}
+                                                title={brochureModal.product.title}
+                                            />
+                                        ) : (
+                                            <img
+                                                src={brochureModal.product.brochurePath || "/brochures/digital-cockpit-brochure.png"}
+                                                alt={brochureModal.product.title}
+                                                draggable={false}
+                                                style={{ maxWidth: "100%", maxHeight: "75vh", objectFit: "contain", borderRadius: "12px", boxShadow: "0 10px 40px rgba(0,0,0,0.5)" }}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ══════════════════════════════════════════════
+                                STEP 2 — ENQUIRY FORM
+                            ══════════════════════════════════════════════ */}
+                            {brochureModal.step === "form" && (
+                                <div style={{ padding: "32px", overflowY: "auto", flexGrow: 1 }}>
+                                    {/* Context banner */}
+                                    <div style={{
+                                        display: "flex", alignItems: "center", gap: "12px",
+                                        padding: "14px 18px", borderRadius: "12px",
+                                        background: "rgba(232,82,26,0.08)",
+                                        border: "1px solid rgba(232,82,26,0.2)",
+                                        marginBottom: "24px"
+                                    }}>
+                                        <span style={{ fontSize: "1.4rem" }}>📄</span>
+                                        <div>
+                                            <p style={{ margin: 0, color: "#FF8C5A", fontWeight: 600, fontSize: "0.85rem", fontFamily: "var(--font-mono)", letterSpacing: "0.05em", textTransform: "uppercase" }}>Brochure Access Request</p>
+                                            <p style={{ margin: 0, color: "#94A3B8", fontSize: "0.88rem", marginTop: "2px" }}>Unlocking access to <strong style={{ color: "#FFFFFF" }}>{brochureModal.product.title}</strong> official brochure</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Error banner */}
+                                    {bServerError && (
+                                        <div style={{
+                                            padding: "12px 16px", borderRadius: "10px",
+                                            background: "rgba(239,68,68,0.1)",
+                                            border: "1px solid rgba(239,68,68,0.3)",
+                                            color: "#FCA5A5", fontSize: "0.88rem", marginBottom: "20px"
+                                        }}>
+                                            {bServerError}
+                                        </div>
+                                    )}
+
+                                    <form onSubmit={handleBrochureSubmit} noValidate style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                                        {/* Name */}
+                                        <div>
+                                            <label style={{ display: "block", color: "#CBD5E1", fontSize: "0.84rem", fontWeight: 500, marginBottom: "6px" }}>
+                                                Full Name <span style={{ color: "#E8521A" }}>*</span>
+                                            </label>
+                                            <input
+                                                type="text" placeholder="Your full name"
+                                                value={bName}
+                                                onChange={e => { setBName(e.target.value); setBErrors(p => ({ ...p, name: "" })); }}
+                                                disabled={bSubmitting}
+                                                style={{
+                                                    width: "100%", padding: "11px 14px", borderRadius: "9px", fontSize: "0.9rem",
+                                                    background: "rgba(255,255,255,0.05)",
+                                                    border: `1px solid ${bErrors.name ? "rgba(239,68,68,0.6)" : "rgba(255,255,255,0.12)"}`,
+                                                    color: "#FFFFFF", outline: "none", boxSizing: "border-box"
+                                                }}
+                                            />
+                                            {bErrors.name && <p style={{ margin: "4px 0 0", color: "#FCA5A5", fontSize: "0.8rem" }}>{bErrors.name}</p>}
+                                        </div>
+
+                                        {/* Company */}
+                                        <div>
+                                            <label style={{ display: "block", color: "#CBD5E1", fontSize: "0.84rem", fontWeight: 500, marginBottom: "6px" }}>
+                                                Company Name <span style={{ color: "#E8521A" }}>*</span>
+                                            </label>
+                                            <input
+                                                type="text" placeholder="Your company or organisation"
+                                                value={bCompany}
+                                                onChange={e => { setBCompany(e.target.value); setBErrors(p => ({ ...p, company: "" })); }}
+                                                disabled={bSubmitting}
+                                                style={{
+                                                    width: "100%", padding: "11px 14px", borderRadius: "9px", fontSize: "0.9rem",
+                                                    background: "rgba(255,255,255,0.05)",
+                                                    border: `1px solid ${bErrors.company ? "rgba(239,68,68,0.6)" : "rgba(255,255,255,0.12)"}`,
+                                                    color: "#FFFFFF", outline: "none", boxSizing: "border-box"
+                                                }}
+                                            />
+                                            {bErrors.company && <p style={{ margin: "4px 0 0", color: "#FCA5A5", fontSize: "0.8rem" }}>{bErrors.company}</p>}
+                                        </div>
+
+                                        {/* Email + Phone side-by-side */}
+                                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+                                            <div>
+                                                <label style={{ display: "block", color: "#CBD5E1", fontSize: "0.84rem", fontWeight: 500, marginBottom: "6px" }}>
+                                                    Email Address <span style={{ color: "#E8521A" }}>*</span>
+                                                </label>
+                                                <input
+                                                    type="email" placeholder="Work email"
+                                                    value={bEmail}
+                                                    onChange={e => { setBEmail(e.target.value); setBErrors(p => ({ ...p, email: "" })); }}
+                                                    disabled={bSubmitting}
+                                                    style={{
+                                                        width: "100%", padding: "11px 14px", borderRadius: "9px", fontSize: "0.9rem",
+                                                        background: "rgba(255,255,255,0.05)",
+                                                        border: `1px solid ${bErrors.email ? "rgba(239,68,68,0.6)" : "rgba(255,255,255,0.12)"}`,
+                                                        color: "#FFFFFF", outline: "none", boxSizing: "border-box"
+                                                    }}
+                                                />
+                                                {bErrors.email && <p style={{ margin: "4px 0 0", color: "#FCA5A5", fontSize: "0.8rem" }}>{bErrors.email}</p>}
+                                            </div>
+                                            <div>
+                                                <label style={{ display: "block", color: "#CBD5E1", fontSize: "0.84rem", fontWeight: 500, marginBottom: "6px" }}>
+                                                    Phone Number
+                                                </label>
+                                                <input
+                                                    type="tel" placeholder="Optional"
+                                                    value={bPhone}
+                                                    onChange={e => setBPhone(e.target.value)}
+                                                    disabled={bSubmitting}
+                                                    style={{
+                                                        width: "100%", padding: "11px 14px", borderRadius: "9px", fontSize: "0.9rem",
+                                                        background: "rgba(255,255,255,0.05)",
+                                                        border: "1px solid rgba(255,255,255,0.12)",
+                                                        color: "#FFFFFF", outline: "none", boxSizing: "border-box"
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Product of interest (read-only) */}
+                                        <div>
+                                            <label style={{ display: "block", color: "#CBD5E1", fontSize: "0.84rem", fontWeight: 500, marginBottom: "6px" }}>
+                                                Product of Interest
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={PRODUCT_DISPLAY_MAP[brochureModal.product.id] || brochureModal.product.title}
+                                                readOnly
+                                                style={{
+                                                    width: "100%", padding: "11px 14px", borderRadius: "9px", fontSize: "0.9rem",
+                                                    background: "rgba(255,255,255,0.03)",
+                                                    border: "1px solid rgba(255,255,255,0.08)",
+                                                    color: "#64748B", outline: "none", cursor: "not-allowed", boxSizing: "border-box"
+                                                }}
+                                            />
+                                        </div>
+
+                                        {/* Message */}
+                                        <div>
+                                            <label style={{ display: "block", color: "#CBD5E1", fontSize: "0.84rem", fontWeight: 500, marginBottom: "6px" }}>
+                                                Enquiry Message <span style={{ color: "#E8521A" }}>*</span>
+                                            </label>
+                                            <textarea
+                                                placeholder="Describe your use case or project context..."
+                                                rows={4}
+                                                value={bMessage}
+                                                onChange={e => { setBMessage(e.target.value); setBErrors(p => ({ ...p, message: "" })); }}
+                                                disabled={bSubmitting}
+                                                style={{
+                                                    width: "100%", padding: "11px 14px", borderRadius: "9px", fontSize: "0.9rem",
+                                                    background: "rgba(255,255,255,0.05)",
+                                                    border: `1px solid ${bErrors.message ? "rgba(239,68,68,0.6)" : "rgba(255,255,255,0.12)"}`,
+                                                    color: "#FFFFFF", outline: "none", resize: "vertical",
+                                                    fontFamily: "inherit", boxSizing: "border-box"
+                                                }}
+                                            />
+                                            {bErrors.message && <p style={{ margin: "4px 0 0", color: "#FCA5A5", fontSize: "0.8rem" }}>{bErrors.message}</p>}
+                                        </div>
+
+                                        {/* Submit */}
+                                        <button
+                                            type="submit"
+                                            disabled={bSubmitting}
+                                            style={{
+                                                padding: "14px 28px", borderRadius: "10px",
+                                                background: bSubmitting ? "rgba(232,82,26,0.5)" : "#E8521A",
+                                                border: "none", color: "#FFFFFF", fontWeight: 700,
+                                                fontSize: "0.95rem", cursor: bSubmitting ? "not-allowed" : "pointer",
+                                                display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                                                boxShadow: bSubmitting ? "none" : "0 4px 18px rgba(232,82,26,0.4)",
+                                                transition: "all 0.2s ease", marginTop: "4px"
+                                            }}
+                                        >
+                                            {bSubmitting ? (
+                                                <>
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: "spin 1s linear infinite" }}>
+                                                        <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                                                    </svg>
+                                                    Submitting Enquiry...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                                        <path d="M9 12l2 2 4-4" />
+                                                        <path d="M21 12V7l-9-4L3 7v10l9 4 2.5-1.1" />
+                                                    </svg>
+                                                    Submit Enquiry &amp; Unlock Brochure →
+                                                </>
+                                            )}
+                                        </button>
+
+                                        <p style={{ margin: 0, color: "#64748B", fontSize: "0.78rem", textAlign: "center" }}>
+                                            Your enquiry will be sent to the SAMSAN engineering team. Brochure access is granted immediately after submission.
+                                        </p>
+                                    </form>
+                                </div>
+                            )}
+
+                            {/* ══════════════════════════════════════════════
+                                STEP 3 — SUCCESS / BROCHURE ACCESS
+                            ══════════════════════════════════════════════ */}
+                            {brochureModal.step === "success" && (
+                                <div style={{
+                                    padding: "40px 36px", display: "flex", flexDirection: "column",
+                                    alignItems: "center", textAlign: "center", gap: "20px", flexGrow: 1
+                                }}>
+                                    {/* Animated success ring */}
+                                    <div style={{
+                                        width: "72px", height: "72px", borderRadius: "50%",
+                                        background: "rgba(16,185,129,0.12)",
+                                        border: "2px solid rgba(16,185,129,0.4)",
+                                        display: "flex", alignItems: "center", justifyContent: "center"
+                                    }}>
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                    </div>
+
+                                    <div>
+                                        <h3 style={{ margin: 0, color: "#FFFFFF", fontSize: "1.4rem", fontWeight: 700, fontFamily: "var(--font-display)" }}>
+                                            Brochure Access Granted! 🎉
+                                        </h3>
+                                        <p style={{ margin: "8px 0 0", color: "#94A3B8", fontSize: "0.92rem", lineHeight: 1.6 }}>
+                                            Thank you, <strong style={{ color: "#FFFFFF" }}>{bName}</strong>. Your enquiry has been sent to the SAMSAN team.
+                                            Access the <strong style={{ color: "#FFFFFF" }}>{brochureModal.product.title}</strong> official brochure below.
+                                        </p>
+                                    </div>
+
+                                    {/* Brochure card */}
+                                    <div style={{
+                                        width: "100%", padding: "20px", borderRadius: "14px",
+                                        background: "rgba(255,255,255,0.04)",
+                                        border: "1px solid rgba(255,255,255,0.1)",
+                                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                                        gap: "16px", flexWrap: "wrap"
+                                    }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                                            <div style={{
+                                                width: "46px", height: "46px", borderRadius: "10px",
+                                                background: "rgba(16,185,129,0.1)",
+                                                border: "1px solid rgba(16,185,129,0.25)",
+                                                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
+                                            }}>
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                                    <polyline points="14 2 14 8 20 8" />
+                                                    <line x1="16" y1="13" x2="8" y2="13" />
+                                                    <line x1="16" y1="17" x2="8" y2="17" />
+                                                </svg>
+                                            </div>
+                                            <div style={{ textAlign: "left" }}>
+                                                <strong style={{ display: "block", color: "#FFFFFF", fontSize: "0.9rem" }}>
+                                                    {PRODUCT_DISPLAY_MAP[brochureModal.product.id] || brochureModal.product.title} — Technical Brochure
+                                                </strong>
+                                                <small style={{ color: "#64748B", fontSize: "0.78rem" }}>Official Documentation · Access Granted</small>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+                                            {brochureModal.product.brochurePath && (
+                                                <>
+                                                    <a
+                                                        href={brochureModal.product.brochurePath}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        style={{
+                                                            padding: "10px 18px", borderRadius: "8px",
+                                                            background: "rgba(255,255,255,0.07)",
+                                                            border: "1px solid rgba(255,255,255,0.15)",
+                                                            color: "#FFFFFF", fontWeight: 600, fontSize: "0.85rem",
+                                                            textDecoration: "none", display: "inline-flex",
+                                                            alignItems: "center", gap: "6px"
+                                                        }}
+                                                    >
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
+                                                        View
+                                                    </a>
+                                                    <a
+                                                        href={brochureModal.product.brochurePath}
+                                                        download={`SAMSAN-${(PRODUCT_DISPLAY_MAP[brochureModal.product.id] || brochureModal.product.title).replace(/[™©®]/g, "").trim()}-Brochure`}
+                                                        style={{
+                                                            padding: "10px 18px", borderRadius: "8px",
+                                                            background: "#E8521A",
+                                                            border: "none",
+                                                            color: "#FFFFFF", fontWeight: 600, fontSize: "0.85rem",
+                                                            textDecoration: "none", display: "inline-flex",
+                                                            alignItems: "center", gap: "6px",
+                                                            boxShadow: "0 4px 14px rgba(232,82,26,0.4)"
+                                                        }}
+                                                    >
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                                            <polyline points="7 10 12 15 17 10" />
+                                                            <line x1="12" y1="15" x2="12" y2="3" />
+                                                        </svg>
+                                                        Download
+                                                    </a>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <p style={{ margin: 0, color: "#64748B", fontSize: "0.8rem" }}>
+                                        ✓ Enquiry sent to <strong style={{ color: "#94A3B8" }}>info@samsanlabs.com</strong> &amp; <strong style={{ color: "#94A3B8" }}>india@samsanlabs.com</strong>.
+                                        Our team will follow up with you shortly.
+                                    </p>
+
+                                    <button
+                                        type="button"
+                                        onClick={closeBrochureModal}
+                                        style={{
+                                            padding: "10px 22px", borderRadius: "8px",
+                                            background: "transparent",
+                                            border: "1px solid rgba(255,255,255,0.15)",
+                                            color: "#94A3B8", fontSize: "0.85rem", cursor: "pointer"
+                                        }}
+                                    >Close</button>
+                                </div>
+                            )}
+
                         </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
+
+
 
         </div>
     );
