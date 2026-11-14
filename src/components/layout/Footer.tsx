@@ -66,12 +66,13 @@ function LegacyFooter() {
                     <div className="footer-col">
                         <h5>The Company</h5>
                         <p style={{ marginBottom: "6px" }}>india@samsanlabs.com</p>
+                        <p style={{ marginBottom: "6px" }}>+91 89569 27909</p>
                         <p style={{ marginBottom: "6px", lineHeight: "1.5" }}>STPI New Building, Rajiv Gandhi Infotech Park, Phase I, Hinjawadi, Pune 411057, India</p>
                     </div>
                 </div>
 
                 <div style={{
-                    borderTop: "1px solid var(--border)",
+                    borderTop: "1px solid rgba(255,255,255,0.12)",
                     padding: "28px 0 0",
                     display: "flex",
                     justifyContent: "center",
@@ -107,9 +108,7 @@ export default function Footer() {
         return <ThemeLightFooter
             description="A specialized design house for Software Defined Vehicles, connected mobility, and AI-driven automotive innovation."
             navigationLinks={productsFooterLinks}
-            contactDetails={pathname === "/engineering-offerings"
-                ? ["india@samsanlabs.com", "+91 89569 27909", "STPI New Building, Rajiv Gandhi Infotech Park, Phase I, Hinjawadi, Pune 411057, India"]
-                : ["india@samsanlabs.com", "STPI New Building, Rajiv Gandhi Infotech Park, Phase I, Hinjawadi, Pune 411057, India"]}
+            contactDetails={["india@samsanlabs.com", "+91 89569 27909", "STPI New Building, Rajiv Gandhi Infotech Park, Phase I, Hinjawadi, Pune 411057, India"]}
             copyright={`© ${new Date().getFullYear()} SAMSAN Technische Labs Pvt. Ltd. All rights reserved.`}
         />;
     }

@@ -11,16 +11,17 @@ type CtaBandProps = {
   secondaryHref?: string;
   eyebrow?: string;
   secondaryVariant?: ButtonVariant;
+  showEyebrow?: boolean;
   children?: ReactNode;
   className?: string;
 };
 
-export function CtaBand({ title, description, primaryLabel, primaryHref, secondaryLabel, secondaryHref, eyebrow = "Next steps", secondaryVariant = "ghost-on-dark", children, className = "" }: CtaBandProps) {
+export function CtaBand({ title, description, primaryLabel, primaryHref, secondaryLabel, secondaryHref, eyebrow = "Next steps", secondaryVariant = "ghost-on-dark", showEyebrow = true, children, className = "" }: CtaBandProps) {
   return (
     <section className={`tl-cta-band ${className}`.trim()} aria-labelledby="solutions-cta-heading">
       <div className="tl-container">
         <div className="tl-cta-band__content">
-          <Eyebrow tone="dark">{eyebrow}</Eyebrow>
+          {showEyebrow && <Eyebrow tone="dark">{eyebrow}</Eyebrow>}
           <h2 id="solutions-cta-heading">{title}</h2>
           <p>{description}</p>
           {primaryLabel && primaryHref && secondaryLabel && secondaryHref && <div className="tl-cta-band__actions">

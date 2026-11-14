@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { inter, manrope } from "@/app/solutions/fonts";
+import SamsanAnimatedLogo from "@/components/ui/SamsanAnimatedLogo";
 
 export type ThemeLightFooterLink = { label: string; href: string };
 
@@ -17,7 +18,7 @@ export function Footer({ logoSrc = "/images/samsan_logo_base_transparent.png", d
       <div className="tl-container">
         <div className="tl-footer__grid">
           <div className="tl-footer__brand">
-            <Link href="/" aria-label="SAMSAN home"><img src={logoSrc} alt="SAMSAN — in step with the NEXT" /></Link>
+            <Link href="/" aria-label="SAMSAN home"><SamsanAnimatedLogo height="48px" /></Link>
             <p>{description}</p>
             <a className="tl-footer__social" href="https://www.linkedin.com/company/samsantechlabs" target="_blank" rel="noopener noreferrer" aria-label="SAMSAN Technische Labs on LinkedIn">in&nbsp; LinkedIn</a>
           </div>

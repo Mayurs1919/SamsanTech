@@ -62,6 +62,7 @@ import RingsOfSolution from "@/components/homepage/RingsOfSolution";
 import WhoWeServe from "@/components/homepage/WhoWeServe";
 import Partners from "@/components/homepage/Partners";
 import AboutCompany from "@/components/homepage/AboutCompany";
+import Locations from "@/components/homepage/Locations";
 import CTA from "@/components/homepage/CTA";
 
 export const metadata: Metadata = {
@@ -70,40 +71,28 @@ export const metadata: Metadata = {
         "SAMSAN Technische Labs Pvt. Ltd. delivers vehicle-grade embedded software, advanced artificial intelligence modeling, digital transformation architectures, and strategic validation programs.",
 };
 
+// Shared theme class applied to every section wrapper.
+// Each component is responsible for its own section background color.
+const T = `theme-light-corp home-theme ${inter.variable} ${manrope.variable}`;
+
 export default function Home() {
     return (
         <>
-            {/* Home hero, proof strip, and value table use the shared light theme. */}
-            <div className={`theme-light-corp home-theme ${inter.variable} ${manrope.variable}`}>
-                <Hero />
-                <TrustBar />
-                <ValueTable />
-            </div>
-
-            {/* LIGHT — Who We Serve */}
-            <div className="section-light">
-                <WhoWeServe />
-            </div>
-
-            {/* DARK — Ring of Solution */}
-            <div className="section-dark">
-                <RingsOfSolution />
-            </div>
-
-            {/* LIGHT — Platforms & Tools */}
-            <div className="section-light">
-                <Partners />
-            </div>
-
-            {/* DARK — We Are SAMSAN / Founder Spotlight */}
-            <div className="section-dark">
-                <AboutCompany />
-            </div>
-
-            {/* DARK — Final CTA */}
-            <div className="section-dark">
-                <CTA />
-            </div>
+            <div className={T}><Hero /></div>
+            <div className={T}><TrustBar /></div>
+            <div className={T}><ValueTable /></div>
+            {/* WhoWeServe: var(--bg) white */}
+            <div className={T}><WhoWeServe /></div>
+            {/* RingsOfSolution: var(--bg-alt) light gray */}
+            <div className={T}><RingsOfSolution /></div>
+            {/* Platforms: var(--bg) white */}
+            <div className={T}><Partners /></div>
+            {/* AboutCompany: var(--bg-alt) light gray */}
+            <div className={T}><AboutCompany /></div>
+            {/* Locations: var(--bg) white */}
+            <Locations />
+            {/* CTA: teal */}
+            <div className={T}><CTA /></div>
         </>
     );
 }

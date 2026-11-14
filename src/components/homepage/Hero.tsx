@@ -3,10 +3,12 @@
 import Link from "next/link";
 
 const capabilities = [
-    "Cockpit & ADAS HUD",
-    "Vehicle-Grade SDV",
-    "Embedded AI & Cloud",
-    "AUTOSAR & ISO 26262",
+    "HMI Development",
+    "System Engineering",
+    "V&V Services",
+    "Platform Engineering",
+    "Embedded Engineering",
+    "Cloud Engineering",
 ];
 
 export default function Hero() {
@@ -19,7 +21,7 @@ export default function Hero() {
                         <span>for Software-Defined Mobility</span>
                     </h1>
                     <p className="home-hero__description">
-                        SAMSAN Technische Labs helps <strong>OEMs, Tier-1s, and semiconductor leaders</strong> design, develop, validate, and scale next-generation <strong>digital cockpit, connected mobility, SDV, embedded, cloud</strong>, and AI engineering solutions.
+                        SAMSAN Technische Labs helps <strong>OEMs, Tier-1s, and semiconductor leaders</strong> design, develop, validate, and scale next-generation <strong>digital cockpit, connected mobility .</strong>
                     </p>
                     <ul className="home-hero__chips" aria-label="Engineering capabilities">
                         {capabilities.map((capability) => (

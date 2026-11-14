@@ -26,7 +26,7 @@ export function Navbar({ links, logoSrc, getStartedHref = "/contact", getStarted
     <header className={`${themeClassName} tl-navbar ${inter.variable} ${manrope.variable}`}>
       <nav className="tl-navbar__inner" aria-label="Primary navigation">
         <Link className="tl-navbar__brand" href="/" aria-label="SAMSAN home">
-          {logoSrc ? <img src={logoSrc} alt="SAMSAN — in step with the NEXT" /> : <SamsanAnimatedLogo width="176px" height="57px" />}
+          {logoSrc ? <img src={logoSrc} alt="SAMSAN — in step with the NEXT" /> : <SamsanAnimatedLogo width="190px" height="62px" />}
         </Link>
         <ul className="tl-navbar__links">
           {links.map(link => <li key={link.href}><Link href={link.href} className={isActive(link.href) ? "is-active" : undefined} aria-current={isActive(link.href) ? "page" : undefined}>{link.label}</Link></li>)}

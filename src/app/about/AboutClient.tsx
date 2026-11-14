@@ -36,19 +36,16 @@ const megatrends = [
 ];
 
 const reasons = [
-    "Systems thinking",
-    "Automotive discipline",
-    "AI-led acceleration",
-    "Production accountability"
-];
+]
 
 const companySpecs = [
     { key: "Headquarters", value: "STPI New Building, Hinjawadi Phase I, Pune, India" },
     { key: "Founded", value: "2023" },
-    { key: "Team size", value: "50+ Engineers & Systems Architects" },
-    { key: "Regions served", value: "India/APAC, Europe, United States, Japan, South Korea" },
-    { key: "Core domain", value: "Automotive Systems, Cockpit Engineering & Connected Mobility" },
-    { key: "Compliance & safety", value: "ISO 26262 Road Vehicles Functional Safety & Secure Bootloaders" }
+    { key: "Founder", value: "Prashant Deshpande"},
+    { key: "Team size", value: "60+ Engineers & Systems Architects" },
+    { key: "Regions served", value: "India/APAC, South Korea" },
+    { key: "Core domain", value: "Automotive Systems, Cockpit Engineering, Connected Mobility, Embedded Engineering" },
+    // { key: "Compliance & safety", value: "ISO 26262 Road Vehicles Functional Safety & Secure Bootloaders" }
 ];
 
 const globalHubs = [
@@ -65,40 +62,14 @@ const globalHubs = [
     {
         region: "India",
         city: "Bengaluru",
-        address: "MSRIT Post, M S Ramaiah Nagar, MSR Nagar, Bengaluru, Karnataka - 560054",
-        phone: "+91-895-692-7909",
+        address: "Novel TechPark, Bengaluru, Karnataka",
+        // phone: "+91-895-692-7909",
         email: "india@samsanlabs.com",
-        mapQuery: "M. S. Ramaiah Institute of Technology, Bengaluru, Karnataka 560054",
+        mapQuery: "46 4, Hosur Rd, Kudlu Gate, Krishna Reddy Industrial Area, Hosapalaya, Muneshwara Nagar, Bengaluru, Karnataka 560068",
         coordinates: "13.0305° N, 77.5649° E",
         tagColor: "#4DD8E8"
     },
-    {
-        region: "United States",
-        city: "Detroit",
-        address: "Detroit Hub, Michigan, USA",
-        email: "usa@samsanlabs.com",
-        mapQuery: "Detroit, Michigan, USA",
-        coordinates: "42.3314° N, 83.0458° W",
-        tagColor: "#E8521A"
-    },
-    {
-        region: "Europe / Germany",
-        city: "Munich",
-        address: "Europe / Germany Hub, Leopoldstraße, Germany",
-        email: "europe@samsanlabs.com",
-        mapQuery: "Leopoldstraße 244, 80807 München, Germany",
-        coordinates: "48.1764° N, 11.5901° E",
-        tagColor: "#3B82F6"
-    },
-    {
-        region: "Japan",
-        city: "Tokyo",
-        address: "Tokyo Hub, Shibuya, Japan",
-        email: "japan@samsanlabs.com",
-        mapQuery: "Shibuya, Tokyo, Japan",
-        coordinates: "35.6580° N, 139.7016° E",
-        tagColor: "#10B981"
-    },
+
     {
         region: "South Korea",
         city: "Seongnam",
@@ -474,9 +445,9 @@ export default function AboutClient() {
                                 flexDirection: "column"
                             }}
                         >
-                            {/* Image banner */}
+                            {/* Image banner — full image, no overlay */}
                             <div style={{
-                                height: "220px",
+                                height: "280px",
                                 position: "relative",
                                 overflow: "hidden",
                                 flexShrink: 0
@@ -485,40 +456,8 @@ export default function AboutClient() {
                                     position: "absolute", inset: 0,
                                     backgroundImage: "url('/images/vision_globe_connected.jpg')",
                                     backgroundSize: "cover",
-                                    backgroundPosition: "center",
-                                    transform: "scale(1.04)",
-                                    transition: "transform 0.6s ease"
+                                    backgroundPosition: "center"
                                 }} />
-                                <div style={{
-                                    position: "absolute", inset: 0,
-                                    background: "linear-gradient(to bottom, rgba(11,19,32,0.1) 0%, rgba(11,19,32,0.85) 100%)"
-                                }} />
-                                <div style={{
-                                    position: "absolute", bottom: "16px", left: "24px",
-                                    display: "flex", alignItems: "center", gap: "10px"
-                                }}>
-                                    <div style={{
-                                        width: "32px", height: "32px",
-                                        borderRadius: "8px",
-                                        background: "rgba(77, 216, 232, 0.15)",
-                                        border: "1px solid rgba(77,216,232,0.35)",
-                                        display: "flex", alignItems: "center", justifyContent: "center"
-                                    }}>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4DD8E8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <circle cx="12" cy="12" r="10" />
-                                            <line x1="2" y1="12" x2="22" y2="12" />
-                                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                                        </svg>
-                                    </div>
-                                    <span style={{
-                                        fontFamily: "var(--font-mono)",
-                                        fontSize: "0.72rem",
-                                        fontWeight: 700,
-                                        letterSpacing: "0.1em",
-                                        color: "#4DD8E8",
-                                        textTransform: "uppercase"
-                                    }}>Our Vision</span>
-                                </div>
                             </div>
 
                             {/* Text body */}
@@ -590,9 +529,9 @@ export default function AboutClient() {
                                 flexDirection: "column"
                             }}
                         >
-                            {/* Image banner */}
+                            {/* Image banner — full image, no overlay */}
                             <div style={{
-                                height: "220px",
+                                height: "280px",
                                 position: "relative",
                                 overflow: "hidden",
                                 flexShrink: 0
@@ -601,40 +540,8 @@ export default function AboutClient() {
                                     position: "absolute", inset: 0,
                                     backgroundImage: "url('/images/mission_engineering_accelerator.jpg')",
                                     backgroundSize: "cover",
-                                    backgroundPosition: "center",
-                                    transform: "scale(1.04)",
-                                    transition: "transform 0.6s ease"
+                                    backgroundPosition: "center"
                                 }} />
-                                <div style={{
-                                    position: "absolute", inset: 0,
-                                    background: "linear-gradient(to bottom, rgba(11,19,32,0.1) 0%, rgba(11,19,32,0.85) 100%)"
-                                }} />
-                                <div style={{
-                                    position: "absolute", bottom: "16px", left: "24px",
-                                    display: "flex", alignItems: "center", gap: "10px"
-                                }}>
-                                    <div style={{
-                                        width: "32px", height: "32px",
-                                        borderRadius: "8px",
-                                        background: "rgba(232, 82, 26, 0.15)",
-                                        border: "1px solid rgba(232,82,26,0.35)",
-                                        display: "flex", alignItems: "center", justifyContent: "center"
-                                    }}>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8521A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                                            <polyline points="2 17 12 22 22 17" />
-                                            <polyline points="2 12 12 17 22 12" />
-                                        </svg>
-                                    </div>
-                                    <span style={{
-                                        fontFamily: "var(--font-mono)",
-                                        fontSize: "0.72rem",
-                                        fontWeight: 700,
-                                        letterSpacing: "0.1em",
-                                        color: "#E8521A",
-                                        textTransform: "uppercase"
-                                    }}>Our Mission</span>
-                                </div>
                             </div>
 
                             {/* Text body */}
@@ -1014,7 +921,7 @@ export default function AboutClient() {
                     </motion.div>
 
                     {/* Board of advisors Sub-section */}
-                    <div style={{ marginBottom: "64px" }}>
+                    <div style={{ marginTop: "72px", marginBottom: "64px" }}>
                         <div className="about-subsection-heading">
                             {/* Left Decorative Line */}
                             <div style={{ flex: 1, height: "1px", background: "linear-gradient(270deg, rgba(139, 92, 246, 0.3), transparent)" }} />

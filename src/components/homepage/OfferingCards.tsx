@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
 
 const pillars = [
     {
@@ -74,172 +73,71 @@ const pillars = [
 ];
 
 export default function OfferingCards() {
-    const shouldReduce = useReducedMotion();
-
     return (
         <section
+            className="home-offerings-section"
             style={{
                 width: "100%",
                 display: "block",
                 position: "relative",
-                overflow: "hidden",
-                padding: "64px 0",
-                borderTop: "1px solid rgba(15, 23, 42, 0.1)",
+                padding: "96px 24px",
             }}
         >
             <style>{`
                 .pillar-card {
                     position: relative;
-                    background: #0F172A;
-                    border: none;
+                    height: 100%;
+                    background: #FFFFFF;
+                    border: 1px solid var(--border);
                     border-radius: 16px;
-                    padding: 28px 24px;
-                    overflow: hidden;
-                    cursor: pointer;
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    padding: 24px;
+                    transition: transform 180ms ease, border-color 160ms ease, box-shadow 160ms ease;
                     display: flex;
                     flex-direction: column;
-                }
-                .pillar-card::before {
-                    content: "";
-                    position: absolute;
-                    inset: 0;
-                    border-radius: 16px;
-                    padding: 1px;
-                    background: linear-gradient(
-                        135deg,
-                        rgba(77, 216, 232, 0.3),
-                        rgba(255, 138, 61, 0.0),
-                        rgba(77, 216, 232, 0.1)
-                    );
-                    -webkit-mask:
-                        linear-gradient(#fff 0 0) content-box,
-                        linear-gradient(#fff 0 0);
-                    -webkit-mask-composite: xor;
-                    mask-composite: exclude;
-                    pointer-events: none;
-                    transition: background 0.3s ease;
-                }
-                .pillar-card:hover::before {
-                    background: linear-gradient(
-                        135deg,
-                        rgba(77, 216, 232, 0.6),
-                        rgba(255, 138, 61, 0.2),
-                        rgba(77, 216, 232, 0.3)
-                    );
-                }
-                .pillar-card::after {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    width: 120px;
-                    height: 120px;
-                    background: radial-gradient(
-                        circle at top right,
-                        rgba(77, 216, 232, 0.08) 0%,
-                        transparent 70%
-                    );
-                    border-radius: 0 16px 0 100%;
-                    pointer-events: none;
+                    box-shadow: 0 1px 2px rgba(11,19,32,.06), 0 8px 24px rgba(11,19,32,.06);
                 }
                 .pillar-card:hover {
                     transform: translateY(-4px);
-                    box-shadow: 0 20px 48px rgba(0,0,0,0.45);
+                    border-color: var(--teal);
+                    box-shadow: 0 12px 32px rgba(11,19,32,.12);
                 }
-                .pillar-card:hover .arrow-btn {
-                    background: #4DD8E8 !important;
-                    border-color: #4DD8E8 !important;
-                }
-                .pillar-card:hover .arrow-btn svg path {
-                    stroke: #ffffff !important;
-                }
-                /* Force card text colors — prevents global h3/p vars from .section-light bleeding in */
                 .pillar-card h3 {
-                    color: #F1F5F9 !important;
-                    -webkit-text-fill-color: #F1F5F9 !important;
-                    font-size: 1.2rem;
+                    color: var(--navy);
+                    font-size: 20px;
                     font-weight: 700;
-                    line-height: 1.3;
-                    letter-spacing: -0.01em;
+                    line-height: 1.35;
                     margin-top: 20px;
-                    margin-bottom: 10px;
+                    margin-bottom: 8px;
                 }
-                .pillar-card p {
-                    color: #94A3B8 !important;
-                    -webkit-text-fill-color: #94A3B8 !important;
-                    font-size: 0.93rem;
-                    line-height: 1.7;
+                .pillar-card p { color: var(--body); font-size: 16px; line-height: 1.6; }
+                .pillar-card .arrow-btn { color: var(--teal); border-color: var(--border); background: var(--bg-alt); }
+                .pillar-card:hover .arrow-btn { color: #FFFFFF; border-color: var(--teal); background: var(--teal); }
+                .home-offerings-section .container { width: min(100%, 1200px); max-width: 1200px; margin-inline: auto; padding: 0; }
+                .home-offerings-section h2 { color: var(--navy) !important; font-family: var(--font-corp-manrope), Manrope, sans-serif !important; text-wrap: balance; }
+                .home-offerings-section .lead { color: var(--body) !important; font-size: 16px !important; }
+                .home-offerings-section .pillars-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 24px; }
+                .home-offerings-section .pillar-card > a { color: var(--body) !important; }
+                .home-offerings-section .dest-label { color: var(--muted) !important; font: 600 13px/1.4 var(--font-corp-inter), Inter, sans-serif !important; letter-spacing: 0 !important; text-transform: none !important; }
+                .home-offerings-section .pillar-card .capability-tag { color: var(--body) !important; background: var(--bg-alt) !important; border-color: var(--border) !important; font: 500 13px/1.35 var(--font-corp-inter), Inter, sans-serif !important; letter-spacing: 0 !important;
                 }
-                @media (max-width: 639px) {
-                    .dest-label {
-                        display: none !important;
-                    }
-                }
-                .pillars-grid {
-                    display: grid;
-                    grid-template-columns: 1fr;
-                    gap: 20px;
-                    width: 100%;
-                }
-                @media (min-width: 640px) {
-                    .pillars-grid {
-                        grid-template-columns: repeat(2, 1fr);
-                    }
+                @media (max-width: 760px) {
+                    .home-offerings-section { padding: 64px 20px !important; }
+                    .home-offerings-section .pillars-grid { grid-template-columns: 1fr; }
                 }
             `}</style>
 
             <div className="container">
-                <div style={{ textAlign: "center", marginBottom: "36px" }}>
-                    <h2 style={{
-                        fontSize: "clamp(1.8rem, 3.2vw, 2.6rem)",
-                        fontWeight: 700,
-                        lineHeight: 1.12,
-                        letterSpacing: "-0.01em",
-                        color: "#FFFFFF",
-                        marginBottom: "16px"
-                    }}>
-                        What We Do
-                    </h2>
-                    <p className="lead" style={{
-                        maxWidth: "600px",
-                        margin: "0 auto",
-                        color: "#94A3B8",
-                        fontSize: "1.1rem",
-                        lineHeight: "1.75"
-                    }}>
-                        Four core capabilities that power the full software-defined vehicle lifecycle.
-                    </p>
-                </div>
-
                 <div
                     style={{
                         position: "relative",
                         zIndex: 2
                     }}
                 >
-                    {/* Subtle radial glow behind the grid */}
-                    <div style={{
-                        position: "absolute",
-                        inset: 0,
-                        zIndex: 0,
-                        pointerEvents: "none",
-                        background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(77, 216, 232, 0.04) 0%, transparent 70%)"
-                    }} />
-
                     <div className="pillars-grid" style={{ position: "relative", zIndex: 1 }}>
                         {pillars.map((p, idx) => (
-                            <motion.div
+                            <div
                                 key={p.title}
                                 className="pillar-card"
-                                initial={shouldReduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={shouldReduce ? { duration: 0 } : {
-                                    duration: 0.5,
-                                    ease: [0.25, 0.46, 0.45, 0.94],
-                                    delay: idx * 0.12
-                                }}
                             >
                                 <Link
                                     href={p.url}
@@ -257,10 +155,10 @@ export default function OfferingCards() {
                                         position: "absolute",
                                         top: "28px",
                                         right: "28px",
-                                        fontFamily: "var(--font-mono)",
-                                        fontSize: "11px",
-                                        letterSpacing: "0.1em",
-                                        color: "rgba(255,255,255,0.2)",
+                                        fontFamily: "var(--font-corp-inter), Inter, sans-serif",
+                                        fontSize: "14px",
+                                        letterSpacing: "0.02em",
+                                        color: "rgba(11,19,32,0.35)",
                                         fontWeight: 400,
                                         zIndex: 2
                                     }}>
@@ -269,17 +167,16 @@ export default function OfferingCards() {
 
                                     {/* Icon */}
                                     <div style={{
-                                        width: "52px",
-                                        height: "52px",
+                                        width: "44px",
+                                        height: "44px",
                                         borderRadius: "12px",
-                                        background: p.iconBg,
-                                        border: `1px solid ${p.iconBorder}`,
-                                        color: p.iconColor,
+                                        background: "rgba(0,95,138,0.08)",
+                                        border: "1px solid rgba(0,95,138,0.16)",
+                                        color: "var(--teal)",
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
                                         flexShrink: 0,
-                                        boxShadow: `0 0 16px ${p.iconGlow}`,
                                         position: "relative",
                                         zIndex: 2
                                     }}>
@@ -288,11 +185,11 @@ export default function OfferingCards() {
 
                                     {/* Title */}
                                     <h3 style={{
-                                        fontSize: "1.2rem",
+                                        fontSize: "20px",
                                         fontWeight: 700,
                                         lineHeight: 1.3,
                                         letterSpacing: "-0.01em",
-                                        color: "#F1F5F9",
+                                        color: "var(--navy)",
                                         marginTop: "20px",
                                         marginBottom: "10px",
                                         position: "relative",
@@ -301,9 +198,9 @@ export default function OfferingCards() {
 
                                     {/* Description */}
                                     <p style={{
-                                        fontSize: "0.93rem",
-                                        lineHeight: "1.7",
-                                        color: "#94A3B8",
+                                        fontSize: "16px",
+                                        lineHeight: "1.6",
+                                        color: "var(--body)",
                                         margin: 0,
                                         marginBottom: "20px",
                                         flexGrow: 1,
@@ -320,15 +217,15 @@ export default function OfferingCards() {
                                         zIndex: 2
                                     }}>
                                         {p.tags.map(tag => (
-                                            <span key={tag} style={{
-                                                fontFamily: "var(--font-mono)",
-                                                fontSize: "11px",
-                                                letterSpacing: "0.05em",
+                                            <span key={tag} className="capability-tag" style={{
+                                                fontFamily: "var(--font-corp-inter), Inter, sans-serif",
+                                                fontSize: "13px",
+                                                letterSpacing: "0",
                                                 padding: "4px 10px",
                                                 borderRadius: "20px",
-                                                background: "rgba(255,255,255,0.08)",
-                                                border: "1px solid rgba(255,255,255,0.12)",
-                                                color: "#CBD5E1"
+                                                background: "var(--bg-alt)",
+                                                border: "1px solid var(--border)",
+                                                color: "var(--body)"
                                             }}>
                                                 {tag}
                                             </span>
@@ -339,7 +236,7 @@ export default function OfferingCards() {
                                     <div style={{
                                         marginTop: "20px",
                                         paddingTop: "16px",
-                                        borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+                                        borderTop: "1px solid var(--border)",
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "space-between",
@@ -347,11 +244,11 @@ export default function OfferingCards() {
                                         zIndex: 2
                                     }}>
                                         <span className="dest-label" style={{
-                                            fontFamily: "var(--font-mono)",
-                                            fontSize: "10px",
-                                            letterSpacing: "0.08em",
-                                            textTransform: "uppercase",
-                                            color: "#94A3B8"
+                                            fontFamily: "var(--font-corp-inter), Inter, sans-serif",
+                                            fontSize: "13px",
+                                            letterSpacing: "0",
+                                            textTransform: "none",
+                                            color: "var(--muted)"
                                         }}>
                                             {p.destLabel}
                                         </span>
@@ -360,8 +257,8 @@ export default function OfferingCards() {
                                             width: "32px",
                                             height: "32px",
                                             borderRadius: "50%",
-                                            background: "rgba(255,255,255,0.08)",
-                                            border: "1px solid rgba(255, 255, 255, 0.15)",
+                                            background: "var(--bg-alt)",
+                                            border: "1px solid var(--border)",
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "center",
@@ -371,7 +268,7 @@ export default function OfferingCards() {
                                                 <path
                                                     d="M2 7h10M7 2l5 5-5 5"
                                                     style={{
-                                                        stroke: "#94A3B8",
+                                                        stroke: "var(--teal)",
                                                         fill: "none",
                                                         strokeWidth: 1.8,
                                                         strokeLinecap: "round",
@@ -383,7 +280,7 @@ export default function OfferingCards() {
                                         </div>
                                     </div>
                                 </Link>
-                            </motion.div>
+                            </div>
                         ))}
                     </div>
                 </div>

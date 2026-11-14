@@ -1,28 +1,24 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, useInView, type Variants } from "framer-motion";
 
-// ── Solution data ────────────────────────────────────────────────
+// ── Solution data (untouched) ────────────────────────────────────────────────
 interface SolutionPoint {
     id: number;
     title: string;
     subtitle: string;
     description: string;
     features: string[];
-    /** Position as % of image width/height */
+    /** Position as % of panel width/height */
     x: number;
     y: number;
-    /** Accent color */
-    accent: string;
-    /** SVG icon path(s) */
-    iconPath: React.ReactNode;
 }
 
 const solutions: SolutionPoint[] = [
     {
         id: 1,
-        title: "IVI Cockpit",
+        title: "Digital Cockpit",
         subtitle: "In-Vehicle Infotainment",
         description: "Digital Cluster & Infotainment for seamless and connected driving experience.",
         features: [
@@ -33,14 +29,6 @@ const solutions: SolutionPoint[] = [
         ],
         x: 50.2,
         y: 37.5,
-        accent: "#4DD8E8",
-        iconPath: (
-            <>
-                <rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="12" y1="18" x2="12" y2="21" stroke="currentColor" strokeWidth="1.5" />
-            </>
-        ),
     },
     {
         id: 2,
@@ -55,13 +43,6 @@ const solutions: SolutionPoint[] = [
         ],
         x: 25.9,
         y: 61.8,
-        accent: "#3B82F6",
-        iconPath: (
-            <>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z" stroke="currentColor" strokeWidth="1.5" fill="none" />
-            </>
-        ),
     },
     {
         id: 3,
@@ -76,13 +57,6 @@ const solutions: SolutionPoint[] = [
         ],
         x: 52.4,
         y: 26.6,
-        accent: "#8B5CF6",
-        iconPath: (
-            <>
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="1.5" fill="none" />
-            </>
-        ),
     },
     {
         id: 4,
@@ -97,14 +71,6 @@ const solutions: SolutionPoint[] = [
         ],
         x: 58.6,
         y: 43.5,
-        accent: "#10B981",
-        iconPath: (
-            <>
-                <path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                <path d="M8.53 16.11a6 6 0 0 1 6.95 0" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                <circle cx="12" cy="20" r="1" fill="currentColor" />
-            </>
-        ),
     },
     {
         id: 5,
@@ -119,329 +85,483 @@ const solutions: SolutionPoint[] = [
         ],
         x: 37.8,
         y: 32.1,
-        accent: "#EC4899",
-        iconPath: (
-            <>
-                <rect x="2" y="2" width="20" height="20" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                <line x1="2" y1="12" x2="8" y2="12" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-                <line x1="16" y1="12" x2="22" y2="12" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-                <line x1="12" y1="2" x2="12" y2="8" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-                <line x1="12" y1="16" x2="12" y2="22" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-            </>
-        ),
     },
 ];
 
-// ── Pulsing "+" Hotspot ──────────────────────────────────────────
+// ── Fade-up animation (once, 24px, 0.5s) ────────────────────────────────────
+const fadeUp: Variants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
+
+// ── Hotspot ──────────────────────────────────────────────────────────────────
 function Hotspot({
     point,
     isActive,
+    anyOpen,
     onClick,
     shouldReduce,
 }: {
     point: SolutionPoint;
     isActive: boolean;
+    anyOpen: boolean;
     onClick: () => void;
     shouldReduce: boolean;
 }) {
+    const showPulse = !shouldReduce && !anyOpen;
+
     return (
         <button
+            type="button"
             onClick={onClick}
-            aria-label={`Explore ${point.title}`}
+            aria-label={`${point.title} — click to explore`}
             aria-expanded={isActive}
-            className="ros-hotspot"
             style={{
                 position: "absolute",
                 left: `${point.x}%`,
                 top: `${point.y}%`,
                 transform: "translate(-50%, -50%)",
                 zIndex: isActive ? 20 : 10,
+                /* 44×44 hit area, 40px visible circle */
+                width: "44px",
+                height: "44px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                outline: "none",
+                borderRadius: "50%",
             }}
+            className={`ros-hs${isActive ? " ros-hs--open" : ""}`}
         >
-            {/* Outer pulse ring */}
-            {!shouldReduce && !isActive && (
+            {/* Pulse ring — only while nothing is open */}
+            {showPulse && (
                 <span
-                    className="ros-pulse-ring"
-                    style={{ borderColor: point.accent }}
+                    aria-hidden="true"
+                    style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "50%",
+                        border: "2px solid rgba(255,255,255,0.6)",
+                        transform: "translate(-50%,-50%)",
+                        animation: "ros-pulse 2.4s ease-out infinite",
+                        pointerEvents: "none",
+                    }}
                 />
             )}
 
-            {/* Inner circle */}
+            {/* Visible circle */}
             <span
-                className="ros-hotspot-inner"
                 style={{
-                    background: isActive ? point.accent : "rgba(10, 15, 28, 0.85)",
-                    borderColor: point.accent,
-                    color: isActive ? "#0A0F1C" : point.accent,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    background: isActive ? "var(--cta, #E8491D)" : "#FFFFFF",
+                    boxShadow: "0 0 0 4px rgba(255,255,255,0.28), 0 6px 16px rgba(0,0,0,0.35)",
+                    transition: "background 0.2s ease, transform 0.2s ease",
+                    color: isActive ? "#FFFFFF" : "#005F8A",
+                    flexShrink: 0,
                 }}
             >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                    {isActive ? (
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                    ) : (
-                        <>
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                        </>
-                    )}
+                <svg
+                    width="20" height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    aria-hidden="true"
+                    style={{
+                        transform: isActive ? "rotate(45deg)" : "none",
+                        transition: "transform 0.2s ease",
+                    }}
+                >
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
                 </svg>
             </span>
         </button>
     );
 }
 
-// ── Detail Panel (Floating Popover) ──────────────────────────────
-function DetailPanel({
+// ── Popup card ───────────────────────────────────────────────────────────────
+function Popup({
     point,
     onClose,
+    isMobile,
 }: {
     point: SolutionPoint;
     onClose: () => void;
+    isMobile: boolean;
 }) {
-    const panelRef = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement>(null);
 
     // Close on outside click
     useEffect(() => {
-        function handleClick(e: MouseEvent) {
-            if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
-                const target = e.target as HTMLElement;
-                if (target.closest(".ros-hotspot")) return;
+        function onDown(e: MouseEvent) {
+            if (ref.current && !ref.current.contains(e.target as Node)) {
+                if ((e.target as HTMLElement).closest(".ros-hs")) return;
                 onClose();
             }
         }
-        document.addEventListener("mousedown", handleClick);
-        return () => document.removeEventListener("mousedown", handleClick);
+        document.addEventListener("mousedown", onDown);
+        return () => document.removeEventListener("mousedown", onDown);
     }, [onClose]);
 
     // Close on Escape
     useEffect(() => {
-        function handleKey(e: KeyboardEvent) {
-            if (e.key === "Escape") onClose();
-        }
-        document.addEventListener("keydown", handleKey);
-        return () => document.removeEventListener("keydown", handleKey);
+        function onKey(e: KeyboardEvent) { if (e.key === "Escape") onClose(); }
+        document.addEventListener("keydown", onKey);
+        return () => document.removeEventListener("keydown", onKey);
     }, [onClose]);
 
-    // Position: place popover near the hotspot, offset to the right
-    // If hotspot is on right side of image (>55%), flip to the left
+    // Focus trap: move focus into popup on open
+    useEffect(() => {
+        const el = ref.current?.querySelector<HTMLElement>("button, [tabindex]");
+        el?.focus();
+    }, []);
+
+    // Position: flip toward centre near edges. Mobile → pinned bottom.
     const flipLeft = point.x > 55;
-    const panelTop = `clamp(12px, ${Math.max(point.y - 5, 2)}%, calc(100% - 380px))`;
-    const positionStyle: React.CSSProperties = flipLeft
-        ? { right: `${100 - point.x + 4}%`, top: panelTop }
-        : { left: `${point.x + 4}%`, top: panelTop };
+    const positionStyle: React.CSSProperties = isMobile
+        ? { left: "12px", right: "12px", bottom: "12px", top: "auto", width: "auto", maxWidth: "none" }
+        : flipLeft
+            ? { right: `${100 - point.x + 5}%`, top: `clamp(8px, ${Math.max(point.y - 6, 2)}%, calc(100% - 340px))` }
+            : { left: `${point.x + 5}%`, top: `clamp(8px, ${Math.max(point.y - 6, 2)}%, calc(100% - 340px))` };
 
     return (
         <motion.div
-            ref={panelRef}
-            className="ros-detail-panel"
+            ref={ref}
+            role="dialog"
+            aria-modal="true"
+            aria-label={point.title}
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.95 }}
-            transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-            style={{ "--accent": point.accent, ...positionStyle } as React.CSSProperties}
+            transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+            style={{
+                position: "absolute",
+                zIndex: 40,
+                width: "280px",
+                maxWidth: "280px",
+                background: "#FFFFFF",
+                border: "1px solid var(--border, #E2E8F0)",
+                borderRadius: "12px",
+                padding: "16px 18px",
+                boxShadow: "0 12px 32px rgba(0,0,0,0.3)",
+                ...positionStyle,
+            }}
         >
-            {/* Close button */}
+            {/* Caret */}
+            {!isMobile && (
+                <span
+                    aria-hidden="true"
+                    style={{
+                        position: "absolute",
+                        top: "18px",
+                        ...(flipLeft ? { right: "-9px", borderLeft: "10px solid #FFFFFF" } : { left: "-9px", borderRight: "10px solid #FFFFFF" }),
+                        borderTop: "7px solid transparent",
+                        borderBottom: "7px solid transparent",
+                        width: 0,
+                        height: 0,
+                    }}
+                />
+            )}
+
+            {/* Close */}
             <button
+                type="button"
                 onClick={onClose}
-                className="ros-panel-close"
-                aria-label="Close details"
+                aria-label="Close"
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "28px",
+                    height: "28px",
+                    borderRadius: "6px",
+                    border: "1px solid var(--border, #E2E8F0)",
+                    background: "transparent",
+                    cursor: "pointer",
+                    color: "var(--muted, #64748B)",
+                }}
             >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
             </button>
 
-            {/* Header */}
-            <div className="ros-panel-header">
-                <div className="ros-panel-icon" style={{ background: `${point.accent}18`, borderColor: `${point.accent}40` }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ color: point.accent }}>
-                        {point.iconPath}
-                    </svg>
+            {/* Title */}
+            <div style={{ paddingRight: "24px", marginBottom: "8px" }}>
+                <div style={{
+                    fontFamily: "var(--font-corp-manrope, Manrope, sans-serif)",
+                    fontSize: "16px",
+                    fontWeight: 700,
+                    color: "var(--navy, #0A1628)",
+                    marginBottom: "2px",
+                }}>
+                    {point.title}
                 </div>
-                <div>
-                    <span className="ros-panel-number" style={{ color: point.accent }}>
-                        0{point.id}
-                    </span>
-                    <h3 className="ros-panel-title">{point.title}</h3>
-                    <p className="ros-panel-subtitle">{point.subtitle}</p>
+                <div style={{
+                    fontFamily: "var(--font-corp-inter, Inter, sans-serif)",
+                    fontSize: "13px",
+                    color: "var(--muted, #64748B)",
+                }}>
+                    {point.subtitle}
                 </div>
             </div>
 
-            {/* Divider */}
-            <div className="ros-panel-divider" style={{ background: `linear-gradient(90deg, ${point.accent}30, transparent)` }} />
-
-            {/* Description */}
-            <p className="ros-panel-desc">{point.description}</p>
+            {/* Body */}
+            <p style={{
+                fontFamily: "var(--font-corp-inter, Inter, sans-serif)",
+                fontSize: "14px",
+                lineHeight: 1.55,
+                color: "var(--body, #374151)",
+                margin: "0 0 12px",
+            }}>
+                {point.description}
+            </p>
 
             {/* Features */}
-            <div className="ros-panel-features">
-                <span className="ros-panel-features-label">Key Capabilities</span>
-                <ul className="ros-panel-features-list">
-                    {point.features.map((f, i) => (
-                        <motion.li
-                            key={f}
-                            initial={{ opacity: 0, x: 10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.15 + i * 0.06, duration: 0.25 }}
-                        >
-                            <span className="ros-feature-dot" style={{ background: point.accent }} />
-                            {f}
-                        </motion.li>
-                    ))}
-                </ul>
-            </div>
+            <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
+                {point.features.map((f) => (
+                    <li key={f} style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        fontFamily: "var(--font-corp-inter, Inter, sans-serif)",
+                        fontSize: "13px",
+                        color: "var(--body, #374151)",
+                    }}>
+                        <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "var(--teal, #005F8A)", flexShrink: 0 }} />
+                        {f}
+                    </li>
+                ))}
+            </ul>
         </motion.div>
     );
 }
 
-// ── Main Component ───────────────────────────────────────────────
+// ── Main Component ───────────────────────────────────────────────────────────
 export default function RingsOfSolution() {
     const [activeId, setActiveId] = useState<number | null>(null);
     const shouldReduce = useReducedMotion() ?? false;
-    const containerRef = useRef<HTMLDivElement>(null);
+    const sectionRef = useRef<HTMLElement>(null);
+    const inView = useInView(sectionRef, { once: true, margin: "-80px" });
+    const [isMobile, setIsMobile] = useState(false);
 
-    const handleToggle = useCallback((id: number) => {
-        setActiveId((prev) => (prev === id ? null : id));
+    useEffect(() => {
+        const mq = window.matchMedia("(max-width: 767px)");
+        setIsMobile(mq.matches);
+        const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+        mq.addEventListener("change", handler);
+        return () => mq.removeEventListener("change", handler);
     }, []);
 
-    const handleClose = useCallback(() => {
-        setActiveId(null);
-    }, []);
-
+    const toggle = useCallback((id: number) => setActiveId((prev) => (prev === id ? null : id)), []);
+    const close = useCallback(() => setActiveId(null), []);
     const activePoint = solutions.find((s) => s.id === activeId) ?? null;
 
     return (
         <section
-            className="rings-section"
+            ref={sectionRef}
+            id="rings-of-solution"
             style={{
+                background: "var(--bg-alt)",
+                padding: "96px 0",
                 position: "relative",
-                padding: "80px 0 100px",
-                background: "linear-gradient(180deg, var(--midnight) 0%, var(--navy) 100%)",
-                overflow: "hidden",
             }}
         >
-            <div className="container" style={{ maxWidth: "1240px", margin: "0 auto", padding: "0 24px" }}>
-                {/* Section Header */}
+            {/* Scoped keyframes + styles */}
+            <style>{`
+                @keyframes ros-pulse {
+                    0%   { transform: translate(-50%,-50%) scale(1);   opacity: 0.7; }
+                    70%  { transform: translate(-50%,-50%) scale(1.65); opacity: 0;   }
+                    100% { transform: translate(-50%,-50%) scale(1.65); opacity: 0;   }
+                }
+                .ros-hs:hover span:last-child,
+                .ros-hs:focus-visible span:last-child { transform: scale(1.08); }
+                .ros-hs:focus-visible { outline: 2px solid #A7E3FF; outline-offset: 3px; }
+                @media (max-width: 767px) {
+                    #rings-of-solution { padding: 64px 0 !important; }
+                }
+                @media (prefers-reduced-motion: reduce) {
+                    #rings-of-solution [style*="animation"] { animation: none !important; }
+                }
+            `}</style>
+
+            <motion.div
+                variants={fadeUp}
+                initial={shouldReduce ? "visible" : "hidden"}
+                animate={inView ? "visible" : "hidden"}
+                style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}
+            >
+                {/* ── Section heading ── */}
                 <div style={{ textAlign: "center", marginBottom: "48px" }}>
-                    <motion.h2
-                        initial={shouldReduce ? {} : { opacity: 0, y: 14 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
-                        style={{
-                            fontSize: "clamp(2rem, 3.5vw, 2.8rem)",
-                            fontWeight: 800,
-                            color: "#FFFFFF",
-                            letterSpacing: "-0.02em",
-                            lineHeight: 1.15,
-                        }}
-                    >
-                        The SAMSAN <span style={{ color: "#4DD8E8" }}>Ring of Solution</span>
-                    </motion.h2>
-                    <motion.p
-                        initial={shouldReduce ? {} : { opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.12 }}
-                        style={{
-                            maxWidth: "560px",
-                            margin: "14px auto 0",
-                            fontSize: "1.05rem",
-                            lineHeight: "1.75",
-                            color: "var(--text-secondary)",
-                        }}
-                    >
+                    <h2 style={{
+                        fontFamily: "var(--font-corp-manrope, Manrope, sans-serif)",
+                        fontSize: "clamp(1.9rem, 3vw, 2.6rem)",
+                        fontWeight: 700,
+                        color: "var(--navy, #0A1628)",
+                        letterSpacing: "-0.025em",
+                        lineHeight: 1.15,
+                        textWrap: "balance" as React.CSSProperties["textWrap"],
+                        margin: "0 0 16px",
+                    }}>
+                        The SAMSAN <span style={{ color: "var(--teal, #005F8A)" }}>Ring of Solution</span>
+                    </h2>
+                    <p style={{
+                        maxWidth: "640px",
+                        margin: "0 auto",
+                        fontSize: "17px",
+                        lineHeight: 1.7,
+                        color: "var(--body, #374151)",
+                    }}>
                         Our integrated engineering capability spans every domain of the Software Defined Vehicle — from silicon to cloud.
-                    </motion.p>
+                    </p>
                 </div>
 
-                {/* Interactive Image + Floating Popover */}
+                {/* ── Single diagram panel ── */}
+                {/*
+                  Double-frame diagnosis: the baked-in vehicle image file contains
+                  its own rounded-rectangle border. Because objectFit:contain leaves
+                  letterbox space the CSS wrapper border showed as a second frame.
+                  Fix: inner scaling layer (scale 1.08) so the outer overflow:hidden
+                  crops the image's built-in border. Hotspots live in the same layer
+                  so their % positions stay correctly mapped to the car parts.
+                */}
                 <div
-                    ref={containerRef}
-                    className="ros-layout"
+                    style={{
+                        maxWidth: "1000px",
+                        margin: "0 auto",
+                        borderRadius: "20px",
+                        overflow: "hidden",
+                        border: "1px solid var(--border, #E2E8F0)",
+                        boxShadow: "0 24px 60px rgba(11,19,32,0.18)",
+                        background: "#020D1A",
+                        position: "relative",
+                        aspectRatio: "16 / 9",
+                    }}
                 >
-                    <div className="ros-image-container">
+                    {/* Inner layer scaled up to crop the baked-in image border */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            transform: "scale(1.08)",
+                            transformOrigin: "center center",
+                        }}
+                    >
+                        {/* Vehicle image */}
                         <img
                             src="/images/samsan-vehicle-schematic-custom.png"
                             alt="SAMSAN Software Defined Vehicle Engineering Architecture"
-                            className="ros-vehicle-img"
                             draggable={false}
+                            style={{
+                                display: "block",
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "contain",
+                                userSelect: "none",
+                                filter: "none",
+                            }}
                         />
 
-                        {/* Subtle radial ambient glow */}
-                        <div className="ros-image-overlay" />
-
-                        {/* Connection lines / glow indicators */}
-                        <svg
-                            className="ros-connection-lines"
-                            viewBox="0 0 100 100"
-                            preserveAspectRatio="none"
-                            aria-hidden="true"
-                        >
-                            {solutions.map((pt) => {
-                                const isActive = activeId === pt.id;
-                                return (
-                                    <circle
-                                        key={pt.id}
-                                        cx={pt.x}
-                                        cy={pt.y}
-                                        r={isActive ? "1.8" : "0.6"}
-                                        fill={isActive ? pt.accent : `${pt.accent}60`}
-                                        style={{ transition: "all 0.3s ease" }}
-                                    />
-                                );
-                            })}
-                        </svg>
-
-                        {/* Hotspot markers */}
+                        {/* Hotspots — inside the scaled layer so % coords still map to the car */}
                         {solutions.map((pt) => (
                             <Hotspot
                                 key={pt.id}
                                 point={pt}
                                 isActive={activeId === pt.id}
-                                onClick={() => handleToggle(pt.id)}
+                                anyOpen={activeId !== null}
+                                onClick={() => toggle(pt.id)}
                                 shouldReduce={shouldReduce}
                             />
                         ))}
-
-                        {/* Floating popover panel (positioned near hotspot) */}
-                        <AnimatePresence mode="wait">
-                            {activePoint && (
-                                <DetailPanel
-                                    key={activePoint.id}
-                                    point={activePoint}
-                                    onClose={handleClose}
-                                />
-                            )}
-                        </AnimatePresence>
                     </div>
 
-                    <div className="ros-quick-nav" role="group" aria-label="Explore vehicle engineering solutions">
-                        {solutions.map((point) => {
-                            const isActive = activeId === point.id;
-                            return (
-                                <button
-                                    key={point.id}
-                                    type="button"
-                                    className={`ros-pill${isActive ? " ros-pill-active" : ""}`}
-                                    aria-pressed={isActive}
-                                    onClick={() => handleToggle(point.id)}
-                                    style={{
-                                        "--pill-accent": point.accent,
-                                        borderColor: isActive ? `${point.accent}80` : "rgba(255,255,255,0.12)",
-                                        color: isActive ? "#FFFFFF" : "#CBD5E1",
-                                    } as React.CSSProperties}
-                                >
-                                    <span className="ros-pill-num" style={{ color: point.accent }}>0{point.id}</span>
-                                    <span>{point.title}</span>
-                                </button>
-                            );
-                        })}
-                    </div>
+                    {/* Popup rendered in the outer panel so it isn't clipped by inner scale */}
+                    <AnimatePresence mode="wait">
+                        {activePoint && (
+                            <Popup
+                                key={activePoint.id}
+                                point={activePoint}
+                                onClose={close}
+                                isMobile={isMobile}
+                            />
+                        )}
+                    </AnimatePresence>
                 </div>
-            </div>
+
+                {/* ── Legend chips ── */}
+                <div
+                    role="group"
+                    aria-label="Explore vehicle engineering solutions"
+                    style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        justifyContent: "center",
+                        gap: "12px",
+                        marginTop: "24px",
+                    }}
+                >
+                    {solutions.map((pt) => {
+                        const isActive = activeId === pt.id;
+                        return (
+                            <button
+                                key={pt.id}
+                                type="button"
+                                onClick={() => toggle(pt.id)}
+                                aria-pressed={isActive}
+                                style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    padding: "8px 16px",
+                                    borderRadius: "20px",
+                                    border: `1px solid ${isActive ? "var(--teal, #005F8A)" : "var(--border, #E2E8F0)"}`,
+                                    background: isActive ? "var(--teal, #005F8A)" : "#FFFFFF",
+                                    cursor: "pointer",
+                                    fontFamily: "var(--font-corp-inter, Inter, sans-serif)",
+                                    fontSize: "14px",
+                                    fontWeight: 500,
+                                    color: isActive ? "#FFFFFF" : "var(--body, #374151)",
+                                    transition: "all 0.2s ease",
+                                    whiteSpace: "nowrap",
+                                    flexShrink: 0,
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (!isActive) (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--teal, #005F8A)";
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!isActive) (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border, #E2E8F0)";
+                                }}
+                            >
+                                <span style={{
+                                    fontWeight: 600,
+                                    color: isActive ? "#FFFFFF" : "var(--teal, #005F8A)",
+                                    minWidth: "20px",
+                                }}>
+                                    0{pt.id}
+                                </span>
+                                {pt.title}
+                            </button>
+                        );
+                    })}
+                </div>
+            </motion.div>
         </section>
     );
 }

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useCallback, useRef } from "react";
+import { motion, useInView, type Variants } from "framer-motion";
 
+/* ─── Hub data — untouched ────────────────────────────────────────────────── */
 const hubs = [
     {
         region: "India",
@@ -16,40 +17,15 @@ const hubs = [
     {
         region: "India",
         city: "Bengaluru",
-        address: "MSRIT Post, M S Ramaiah Nagar, MSR Nagar, Bengaluru, Karnataka - 560054",
-        phone: "+91-895-692-7909",
+        address: "Novel TechPark , Bengaluru, Karnataka",    
         email: "india@samsanlabs.com",
-        mapQuery: "M. S. Ramaiah Institute of Technology, Bengaluru, Karnataka 560054",
+        mapQuery: "46 4, Hosur Rd, Kudlu Gate, Krishna Reddy Industrial Area, Hosapalaya, Muneshwara Nagar, Bengaluru, Karnataka 560068",
         coordinates: "13.0305° N, 77.5649° E",
-    },
-    {
-        region: "USA",
-        city: "Detroit",
-        address: "Detroit Hub, Michigan, USA",
-        email: "usa@samsanlabs.com",
-        mapQuery: "Detroit, Michigan, USA",
-        coordinates: "42.3314° N, 83.0458° W",
-    },
-    {
-        region: "Japan",
-        city: "Tokyo",
-        address: "Tokyo Hub, Shibuya, Japan",
-        email: "japan@samsanlabs.com",
-        mapQuery: "Shibuya, Tokyo, Japan",
-        coordinates: "35.6580° N, 139.7016° E",
-    },
-    {
-        region: "Europe / Germany",
-        city: "Munich",
-        address: "Europe / Germany Hub, Leopoldstraße, Germany",
-        email: "europe@samsanlabs.com",
-        mapQuery: "Leopoldstraße 244, 80807 München, Germany",
-        coordinates: "48.1764° N, 11.5901° E",
     },
     {
         region: "South Korea",
         city: "Seongnam",
-        address: "28, hwangsaeul-ro 200 beAon-gil, Bundang-gu, Seongnam-si, Gyeonggi-do, Korea",
+        address: "28, hwangsaeul-ro 200 beon-gil, Bundang-gu, Seongnam-si, Gyeonggi-do, Korea",
         phone: "+82-10-9779-5698",
         email: "india@samsanlabs.com",
         mapQuery: "28, Hwangsaeul-ro 200beon-gil, Bundang-gu, Seongnam-si, Gyeonggi-do, South Korea",
@@ -57,180 +33,336 @@ const hubs = [
     },
 ];
 
+/* ─── Fade-up animation (once, 24 px, 0.5 s) ─────────────────────────────── */
+const fadeUp: Variants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
+
 export default function Locations() {
     const [activeHub, setActiveHub] = useState(hubs[0]);
+    const sectionRef = useRef<HTMLElement>(null);
+    const inView = useInView(sectionRef, { once: true, margin: "-80px" });
+
+    const selectHub = useCallback((hub: typeof hubs[0]) => setActiveHub(hub), []);
 
     return (
-        <section className="section" id="locations-section" style={{ position: "relative", borderTop: "1px solid var(--border)" }}>
-            {/* Ambient Background Glow */}
-            <div style={{
-                position: "absolute",
-                top: "20%",
-                left: "10%",
-                width: "600px",
-                height: "600px",
-                background: "radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%)",
-                pointerEvents: "none"
-            }} />
-
+        <section
+            ref={sectionRef}
+            id="locations-section"
+            style={{
+                background: "var(--bg, #ffffff)",
+                padding: "96px 0",
+                borderTop: "1px solid var(--border, #e2e8f0)",
+            }}
+        >
+            {/* ── Scoped styles ── */}
             <style>{`
-                .locations-grid-container {
-                    display: grid;
-                    grid-template-columns: 1.1fr 1.9fr;
-                    gap: 36px;
-                    align-items: stretch;
+                /* Section container */
+                #locations-section .loc-container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 0 24px;
                 }
+
+                /* Two-column grid */
+                #locations-section .loc-grid {
+                    display: grid;
+                    grid-template-columns: 38% 1fr;
+                    gap: 32px;
+                    align-items: start;
+                    height: 560px;
+                }
+
+                /* Hub list column */
+                #locations-section .loc-hub-list {
+                    height: 560px;
+                    overflow-y: auto;
+                    padding-right: 8px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    /* Hide native scrollbar, show thin styled one */
+                    scrollbar-width: thin;
+                    scrollbar-color: #CBD5E1 transparent;
+                }
+                #locations-section .loc-hub-list::-webkit-scrollbar {
+                    width: 6px;
+                }
+                #locations-section .loc-hub-list::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                #locations-section .loc-hub-list::-webkit-scrollbar-thumb {
+                    background: #CBD5E1;
+                    border-radius: 6px;
+                }
+
+                /* Hub card */
+                #locations-section .loc-card {
+                    background: #ffffff;
+                    border: 1px solid var(--border, #e2e8f0);
+                    border-radius: 16px;
+                    padding: 20px;
+                    cursor: pointer;
+                    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+                    text-align: left;
+                    width: 100%;
+                    outline: none;
+                }
+                #locations-section .loc-card:hover {
+                    border-color: var(--teal, #005F8A);
+                }
+                #locations-section .loc-card:focus-visible {
+                    outline: 2px solid var(--teal, #005F8A);
+                    outline-offset: 2px;
+                }
+                #locations-section .loc-card.active {
+                    border: 2px solid var(--teal, #005F8A);
+                    background: rgba(0, 95, 138, 0.05);
+                }
+
+                /* Map panel */
+                #locations-section .loc-map-panel {
+                    height: 560px;
+                    display: flex;
+                    flex-direction: column;
+                    border: 1px solid var(--border, #e2e8f0);
+                    border-radius: 16px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+                    background: #ffffff;
+                }
+
+                /* Map header */
+                #locations-section .loc-map-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 16px 20px;
+                    background: #ffffff;
+                    border-bottom: 1px solid var(--border, #e2e8f0);
+                    flex-shrink: 0;
+                }
+
+                /* Map iframe wrapper */
+                #locations-section .loc-map-iframe-wrap {
+                    flex: 1;
+                    min-height: 0;
+                    position: relative;
+                }
+                #locations-section .loc-map-iframe-wrap iframe {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    border: 0;
+                    /* NO filter — keep the default light Google Maps style */
+                }
+
+                /* Responsive: tablet & mobile */
                 @media (max-width: 900px) {
-                    .locations-grid-container {
+                    #locations-section {
+                        padding: 64px 0 !important;
+                    }
+                    #locations-section .loc-grid {
                         grid-template-columns: 1fr;
-                        gap: 24px;
+                        height: auto;
+                    }
+                    #locations-section .loc-hub-list {
+                        height: auto;
+                        max-height: 320px;
+                    }
+                    #locations-section .loc-map-panel {
+                        height: 360px;
+                    }
+                }
+
+                /* Reduced motion */
+                @media (prefers-reduced-motion: reduce) {
+                    #locations-section .loc-fade {
+                        opacity: 1 !important;
+                        transform: none !important;
                     }
                 }
             `}</style>
 
-            <div className="container">
-                <div style={{ textAlign: "center", marginBottom: "36px" }}>
-                    <h2 style={{ fontSize: "2.5rem", fontWeight: 700, letterSpacing: "-0.025em" }}>
+            <motion.div
+                className="loc-container"
+                variants={fadeUp}
+                initial="hidden"
+                animate={inView ? "visible" : "hidden"}
+            >
+                {/* Section heading */}
+                <div style={{ textAlign: "center", marginBottom: "48px" }}>
+                    <h2 style={{
+                        fontFamily: "var(--font-corp-manrope, Manrope, sans-serif)",
+                        fontSize: "clamp(1.9rem, 3vw, 2.6rem)",
+                        fontWeight: 700,
+                        letterSpacing: "-0.025em",
+                        color: "var(--navy, #0A1628)",
+                        textWrap: "balance" as React.CSSProperties["textWrap"],
+                        margin: "0 0 16px",
+                    }}>
                         Global Engineering Footprint
                     </h2>
-                    <p className="lead" style={{ maxWidth: "600px", margin: "12px auto 0", color: "var(--text-secondary)" }}>
+                    <p style={{
+                        fontSize: "17px",
+                        lineHeight: 1.7,
+                        color: "var(--body, #374151)",
+                        maxWidth: "720px",
+                        margin: "0 auto",
+                    }}>
                         Delivering high-integrity vehicle software architectures and digital platforms from our worldwide hubs.
                     </p>
                 </div>
 
-                <div className="locations-grid-container">
-                    {/* Left: Location Hub Selector Cards */}
-                    <div style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "14px",
-                        maxHeight: "600px",
-                        overflowY: "auto",
-                        paddingRight: "6px",
-                    }}>
+                {/* Two-column grid */}
+                <div className="loc-grid">
+
+                    {/* ── LEFT: Hub list ── */}
+                    <div className="loc-hub-list" role="listbox" aria-label="Office locations">
                         {hubs.map((hub) => {
                             const isActive = activeHub.city === hub.city && activeHub.region === hub.region;
                             return (
-                                <motion.div
+                                <button
                                     key={`${hub.city}-${hub.region}`}
-                                    onClick={() => setActiveHub(hub)}
-                                    whileHover={{ x: 4 }}
-                                    style={{
-                                        background: isActive ? "rgba(59, 130, 246, 0.08)" : "rgba(13, 19, 35, 0.45)",
-                                        border: isActive ? "1px solid rgba(59, 130, 246, 0.3)" : "1px solid rgba(255, 255, 255, 0.05)",
-                                        borderRadius: "14px",
-                                        padding: "20px",
-                                        cursor: "pointer",
-                                        transition: "all 0.3s ease",
-                                        boxShadow: isActive ? "0 4px 20px rgba(59, 130, 246, 0.08)" : "none",
-                                    }}
+                                    className={`loc-card${isActive ? " active" : ""}`}
+                                    role="option"
+                                    aria-selected={isActive}
+                                    onClick={() => selectHub(hub)}
+                                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectHub(hub); } }}
                                 >
-                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                                    {/* Country label + active dot */}
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
                                         <span style={{
-                                            fontFamily: "var(--font-mono)",
-                                            fontSize: "10px",
-                                            color: isActive ? "var(--blue)" : "rgba(255, 255, 255, 0.4)",
-                                            textTransform: "uppercase",
-                                            letterSpacing: "0.08em",
-                                            fontWeight: 600
+                                            fontFamily: "var(--font-corp-inter, Inter, sans-serif)",
+                                            fontSize: "13px",
+                                            fontWeight: 600,
+                                            color: "var(--teal, #005F8A)",
+                                            letterSpacing: 0,
+                                            textTransform: "none",
                                         }}>
                                             {hub.region}
                                         </span>
                                         {isActive && (
-                                            <span style={{
-                                                width: "8px",
-                                                height: "8px",
-                                                borderRadius: "50%",
-                                                backgroundColor: "var(--blue)",
-                                                boxShadow: "0 0 10px var(--blue)"
-                                            }} />
+                                            <span
+                                                aria-hidden="true"
+                                                style={{
+                                                    width: "10px",
+                                                    height: "10px",
+                                                    borderRadius: "50%",
+                                                    backgroundColor: "var(--teal, #005F8A)",
+                                                    flexShrink: 0,
+                                                }}
+                                            />
                                         )}
                                     </div>
-                                    <h3 style={{ fontSize: "1.15rem", fontWeight: 700, color: "#ffffff", marginBottom: "8px" }}>
+
+                                    {/* Hub name */}
+                                    <h3 style={{
+                                        fontFamily: "var(--font-corp-manrope, Manrope, sans-serif)",
+                                        fontSize: "20px",
+                                        fontWeight: 700,
+                                        color: "var(--navy, #0A1628)",
+                                        margin: "0 0 8px",
+                                        textAlign: "left",
+                                    }}>
                                         {hub.city} Hub
                                     </h3>
-                                    <p style={{ fontSize: "0.82rem", color: "rgba(240, 244, 255, 0.6)", lineHeight: "1.5", marginBottom: "12px" }}>
+
+                                    {/* Address */}
+                                    <p style={{
+                                        fontSize: "15px",
+                                        lineHeight: 1.6,
+                                        color: "var(--body, #374151)",
+                                        margin: "0 0 6px",
+                                        textAlign: "left",
+                                    }}>
                                         {hub.address}
                                     </p>
-                                    
+
+                                    {/* Phone */}
                                     {hub.phone && (
-                                        <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.4)", margin: "0 0 4px 0" }}>
-                                            Phone: {hub.phone}
+                                        <p style={{
+                                            fontSize: "15px",
+                                            lineHeight: 1.6,
+                                            color: "var(--body, #374151)",
+                                            margin: "0 0 6px",
+                                            textAlign: "left",
+                                        }}>
+                                            {hub.phone}
                                         </p>
                                     )}
+
+                                    {/* Email */}
                                     <a
                                         href={`mailto:${hub.email}`}
+                                        onClick={(e) => e.stopPropagation()}
                                         style={{
-                                            fontFamily: "var(--font-mono)",
-                                            fontSize: "0.78rem",
-                                            color: isActive ? "var(--blue)" : "rgba(255, 255, 255, 0.4)",
+                                            fontFamily: "var(--font-corp-inter, Inter, sans-serif)",
+                                            fontSize: "15px",
+                                            fontWeight: 600,
+                                            color: "var(--teal, #005F8A)",
                                             textDecoration: "underline",
+                                            display: "inline-block",
                                         }}
                                     >
                                         {hub.email}
                                     </a>
-                                </motion.div>
+                                </button>
                             );
                         })}
                     </div>
 
-                    {/* Right: Premium Google Maps Embed Card */}
-                    <div style={{
-                        position: "relative",
-                        background: "rgba(10, 15, 28, 0.5)",
-                        border: "1px solid rgba(255, 255, 255, 0.08)",
-                        borderRadius: "20px",
-                        overflow: "hidden",
-                        display: "flex",
-                        flexDirection: "column",
-                        minHeight: "450px",
-                        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.4)",
-                    }}>
-                        {/* Map Header Overlay */}
-                        <div style={{
-                            padding: "16px 24px",
-                            background: "rgba(13, 19, 35, 0.8)",
-                            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            zIndex: 2,
-                        }}>
+                    {/* ── RIGHT: Map panel ── */}
+                    <div className="loc-map-panel">
+                        {/* Header bar */}
+                        <div className="loc-map-header">
                             <div>
-                                <span style={{ fontSize: "0.7rem", color: "var(--blue)", fontFamily: "var(--font-mono)", textTransform: "uppercase" }}>
-                                    Active Target
-                                </span>
-                                <h4 style={{ fontSize: "1.05rem", fontWeight: 600, color: "#ffffff", margin: 0 }}>
+                                <div style={{
+                                    fontFamily: "var(--font-corp-inter, Inter, sans-serif)",
+                                    fontSize: "13px",
+                                    fontWeight: 600,
+                                    color: "var(--teal, #005F8A)",
+                                    marginBottom: "4px",
+                                }}>
+                                    Active target
+                                </div>
+                                <div style={{
+                                    fontFamily: "var(--font-corp-manrope, Manrope, sans-serif)",
+                                    fontSize: "18px",
+                                    fontWeight: 700,
+                                    color: "var(--navy, #0A1628)",
+                                    lineHeight: 1.2,
+                                }}>
                                     {activeHub.city} — {activeHub.region}
-                                </h4>
+                                </div>
                             </div>
                             <div style={{
-                                fontFamily: "var(--font-mono)",
-                                fontSize: "10px",
-                                color: "rgba(255,255,255,0.4)",
+                                fontFamily: "var(--font-corp-inter, Inter, sans-serif)",
+                                fontSize: "14px",
+                                color: "var(--muted, #64748b)",
                                 textAlign: "right",
                             }}>
-                                <div>LAT/LONG</div>
+                                <div style={{ fontSize: "11px", marginBottom: "2px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Lat / Long</div>
                                 <div>{activeHub.coordinates}</div>
                             </div>
                         </div>
 
-                        {/* Map iframe Container */}
-                        <div style={{ flex: 1, position: "relative", width: "100%", height: "100%", background: "#0c111e" }}>
+                        {/* Light map iframe — NO CSS filter applied */}
+                        <div className="loc-map-iframe-wrap">
                             <iframe
-                                title={`Map of SAMSAN Technische Labs Pvt. Ltd. ${activeHub.city} office`}
+                                key={activeHub.mapQuery}
+                                title={`Map of SAMSAN Technische Labs – ${activeHub.city} office`}
                                 src={`https://maps.google.com/maps?q=${encodeURIComponent(activeHub.mapQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                                width="100%"
-                                height="100%"
-                                style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) contrast(1.2)" }}
                                 allowFullScreen
                                 loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"
                             />
                         </div>
                     </div>
+
                 </div>
-            </div>
+            </motion.div>
         </section>
     );
 }
