@@ -1,12 +1,63 @@
 "use client";
 
+import { useRef } from "react";
+import { useInView, useReducedMotion } from "framer-motion";
+
 const serveItems = [
-    { title: "Industrial Sectors",    desc: "High-reliability control loops, sensor telemetry, and safety-critical edge processing.",                                                img: "/images/serve_industrial.png"    },
-    { title: "Smart Infrastructure",  desc: "Connected V2X nodes, cloud routing, intelligent traffic hubs, and network telemetry.",                                                img: "/images/serve_infrastructure.png" },
-    { title: "Automotive Embedded",   desc: "Cockpit architectures, advanced ADAS modeling, infotainment layers, and AUTOSAR integrations.",                                       img: "/images/serve_automotive.png"    },
-    { title: "Semiconductor Domain",  desc: "Silicon validation, firmware adaptation, hardware abstraction layers, and compiler tooling.",                                          img: "/images/serve_semiconductor.png" },
-    { title: "OEMs & Tier-1s",        desc: "Production scale deployments, validation verification programs, and strategic Build-Operate-Transfer centers.",                        img: "/images/serve_oems.png"          },
-];
+    { title: "Industrial Sectors", img: "/images/domain-industrial-sectors.png", icon: "factory" },
+    { title: "Smart Infrastructure", img: "/images/domain-smart-infrastructure.png", icon: "network" },
+    { title: "Automotive Embedded", img: "/images/domain-automotive-embedded.png", icon: "car" },
+    { title: "Semiconductor Domain", img: "/images/domain-semiconductor.png", icon: "chip" },
+    { title: "OEMs & Tier-1s", img: "/images/domain-oem-tier1.png", icon: "building" },
+] as const;
+
+function DomainIcon({ name }: { name: (typeof serveItems)[number]["icon"] }) {
+    const common = {
+        width: 20,
+        height: 20,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: 1.75,
+        strokeLinecap: "round" as const,
+        strokeLinejoin: "round" as const,
+        "aria-hidden": true as const,
+    };
+
+    switch (name) {
+        case "factory":
+            return <svg {...common}><path d="M3 21V9l6 3V9l6 3V5h5v16H3Z" /><path d="M7 16h.01M11 16h.01M15 16h.01M18 9h.01M1 21h22" /></svg>;
+        case "network":
+            return <svg {...common}><circle cx="12" cy="5" r="2.5" /><circle cx="5" cy="18" r="2.5" /><circle cx="19" cy="18" r="2.5" /><path d="m10.8 7.2-4.6 8.6m7-8.6 4.6 8.6M7.5 18h9" /></svg>;
+        case "car":
+            return <svg {...common}><path d="m5 11 1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11l2 2v5h-2v-2H5v2H3v-5l2-2Z" /><path d="M5 11h14M7 14h.01M17 14h.01" /></svg>;
+        case "chip":
+            return <svg {...common}><rect x="6" y="6" width="12" height="12" rx="2" /><path d="M9 9h6v6H9zM9 2v4m6-4v4m-6 12v4m6-4v4M2 9h4m-4 6h4m12-6h4m-4 6h4" /></svg>;
+        case "building":
+            return <svg {...common}><path d="M4 21V5l8-3v19M12 9h8v12M2 21h20M7 7h1m-1 4h1m-1 4h1m-1 4h1m8-5h1m-1 4h1" /></svg>;
+    }
+}
+
+function DomainCard({ item, index }: { item: (typeof serveItems)[number]; index: number }) {
+    const ref = useRef<HTMLElement>(null);
+    const isInView = useInView(ref, { once: true, amount: 0.15 });
+    const shouldReduceMotion = useReducedMotion();
+    const revealClass = isInView && !shouldReduceMotion ? " home-domain-card--revealed" : "";
+
+    return (
+        <article
+            ref={ref}
+            className={`home-domain-card${revealClass}`}
+            style={{ "--reveal-delay": `${index * 0.08}s` } as React.CSSProperties}
+        >
+            <img src={item.img} alt={item.title} loading="lazy" />
+            <div className="home-domain-card__label">
+                <span className="home-domain-card__icon"><DomainIcon name={item.icon} /></span>
+                <h3>{item.title}</h3>
+            </div>
+        </article>
+    );
+}
 
 export default function WhoWeServe() {
     return (
@@ -17,46 +68,38 @@ export default function WhoWeServe() {
                     <p>We design specialized technology architectures and high-integrity systems across primary embedded and digital mobility domains.</p>
                 </header>
                 <div className="home-domain-grid">
-                    {serveItems.map((item, i) => (
-                        <article className={`home-domain-card home-domain-card--${i + 1}`} key={item.title}>
-                            <img src={item.img} alt={item.title} loading="lazy" />
-                            <div className="home-domain-card__overlay">
-                                <h3>{item.title}</h3>
-                                <p>{item.desc}</p>
-                            </div>
-                        </article>
-                    ))}
+                    {serveItems.map((item, index) => <DomainCard key={item.title} item={item} index={index} />)}
                 </div>
             </div>
             <style jsx global>{`
-                .home-theme .home-domain-section { padding: 96px 24px; background: var(--bg); }
+                .home-theme .home-domain-section { padding: 96px 24px; background: var(--bg-alt); }
                 .home-theme .home-domain-section .container { width: min(100%, 1200px); max-width: 1200px; margin-inline: auto; padding: 0; }
                 .home-theme .home-domain-heading { max-width: 720px; margin: 0 auto 40px; text-align: center; }
                 .home-theme .home-domain-heading h2 { margin: 0 0 14px; color: var(--navy); font-family: var(--font-corp-manrope), Manrope, sans-serif; font-size: clamp(30px, 3vw, 40px); font-weight: 700; line-height: 1.2; text-wrap: balance; }
                 .home-theme .home-domain-heading p { max-width: 640px; margin: 0 auto; color: var(--body); font-size: 16px; line-height: 1.65; }
-                .home-theme .home-domain-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; }
-                .home-theme .home-domain-card--1, .home-theme .home-domain-card--2, .home-theme .home-domain-card--3 { grid-column: span 2; }
-                .home-theme .home-domain-card--4, .home-theme .home-domain-card--5 { grid-column: span 3; }
-                .home-theme .home-domain-card { position: relative; aspect-ratio: 16 / 10; min-width: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 16px; background: #0B1320; box-shadow: 0 1px 2px rgba(11,19,32,.06), 0 8px 24px rgba(11,19,32,.06); transition: transform 180ms ease, box-shadow 180ms ease; }
-                .home-theme .home-domain-card:hover { z-index: 1; transform: translateY(-4px); box-shadow: 0 12px 32px rgba(11,19,32,.16); }
-                .home-theme .home-domain-card > img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 240ms ease; }
-                .home-theme .home-domain-card:hover > img { transform: scale(1.03); }
-                .home-theme .home-domain-card__overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background: linear-gradient(to top, rgba(0,58,87,.92) 0%, rgba(0,58,87,.35) 55%, rgba(0,58,87,0) 100%); }
-                .home-theme .home-domain-card__overlay h3 { margin: 0 0 8px; color: #FFFFFF; font-family: var(--font-corp-manrope), Manrope, sans-serif; font-size: 20px; font-weight: 700; line-height: 1.3; text-wrap: balance; }
-                .home-theme .home-domain-card__overlay p { margin: 0; color: rgba(255,255,255,.92); font-size: 15px; line-height: 1.5; }
-                @media (max-width: 900px) and (min-width: 601px) {
-                    .home-theme .home-domain-grid { grid-template-columns: repeat(2, 1fr); }
-                    .home-theme .home-domain-card--1, .home-theme .home-domain-card--2, .home-theme .home-domain-card--3, .home-theme .home-domain-card--4 { grid-column: span 1; }
-                    .home-theme .home-domain-card--5 { grid-column: span 2; }
-                }
-                @media (max-width: 600px) {
+                .home-theme .home-domain-grid { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 20px; }
+                .home-theme .home-domain-card { box-sizing: border-box; display: flex; flex: 0 0 calc((100% - 80px) / 5); flex-direction: column; min-width: 0; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; color: var(--navy); background: #FFFFFF; box-shadow: 0 1px 2px rgba(11,19,32,.06), 0 8px 24px rgba(11,19,32,.06); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+                .home-theme .home-domain-card:hover { transform: translateY(-4px); border-color: var(--teal); box-shadow: 0 12px 32px rgba(11,19,32,.12); }
+                .home-theme .home-domain-card > img { display: block; width: 100%; aspect-ratio: 4 / 3; flex: 0 0 auto; object-fit: cover; object-position: center; }
+                .home-theme .home-domain-card__label { box-sizing: border-box; display: flex; height: 104px; min-height: 104px; flex: 0 0 104px; align-items: center; gap: 12px; padding: 16px 20px; }
+                .home-theme .home-domain-card__icon { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border-radius: 10px; color: var(--teal); background: rgba(0,95,138,.08); }
+                .home-theme .home-domain-card__icon svg { display: block; }
+                .home-theme .home-domain-card__label h3 { min-width: 0; margin: 0; color: var(--navy); font-family: var(--font-corp-manrope), Manrope, sans-serif; font-size: 17px; font-weight: 700; line-height: 1.3; text-wrap: balance; hyphens: auto; overflow-wrap: anywhere; }
+                .home-theme .home-domain-card--revealed { animation: home-domain-fade-up .5s ease-out var(--reveal-delay, 0s); }
+                @keyframes home-domain-fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+                @media (max-width: 1023px) and (min-width: 640px) { .home-theme .home-domain-card { flex-basis: calc((100% - 40px) / 3); } }
+                @media (max-width: 639px) {
                     .home-theme .home-domain-section { padding: 64px 20px; }
-                    .home-theme .home-domain-grid { grid-template-columns: 1fr; }
-                    .home-theme .home-domain-card--1, .home-theme .home-domain-card--2, .home-theme .home-domain-card--3, .home-theme .home-domain-card--4, .home-theme .home-domain-card--5 { grid-column: span 1; }
+                    .home-theme .home-domain-card { flex-basis: calc((100% - 20px) / 2); }
+                    .home-theme .home-domain-card__label { gap: 8px; padding-inline: 12px; }
+                }
+                @media (max-width: 390px) {
+                    .home-theme .home-domain-section { padding-inline: 12px; }
+                    .home-theme .home-domain-card__label { padding-inline: 10px; }
                 }
                 @media (prefers-reduced-motion: reduce) {
-                    .home-theme .home-domain-card, .home-theme .home-domain-card > img { transition: none; }
-                    .home-theme .home-domain-card:hover, .home-theme .home-domain-card:hover > img { transform: none; }
+                    .home-theme .home-domain-card, .home-theme .home-domain-card--revealed { animation: none; transition: none; }
+                    .home-theme .home-domain-card:hover { transform: none; }
                 }
             `}</style>
         </section>

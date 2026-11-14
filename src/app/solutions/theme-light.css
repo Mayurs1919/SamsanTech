@@ -411,41 +411,14 @@ body:has(.theme-light-corp) { background: #FFFFFF; }
 /* Home sections below the proof strip use the shared corporate theme. */
 .theme-light-corp.home-theme.home-section--white { background: var(--bg); }
 .theme-light-corp.home-theme.home-section--alt { background: var(--bg-alt); }
-.theme-light-corp.home-theme .home-offerings-section { background: var(--bg); }
+.theme-light-corp.home-theme .home-offerings-section { background: var(--bg-alt); }
 .theme-light-corp.home-theme .home-offerings-section .pillar-card:focus-within { outline: 2px solid var(--teal); outline-offset: 3px; }
 .theme-light-corp.home-theme .home-offerings-section .capability-tag { min-height: 28px; }
-
-/* Ring of Solution section uses white background to match the page. */
-.home-ring-theme .rings-section { background: var(--bg, #ffffff) !important; }
-.home-ring-theme .ros-image-container,
-.home-ring-theme .ros-layout { background: transparent; }
-.home-ring-theme .ros-pill {
-  min-height: 44px;
-  padding: 8px 14px;
-  border-color: rgba(255,255,255,.25) !important;
-  border-radius: 20px;
-  color: rgba(255,255,255,.9) !important;
-  background: rgba(255,255,255,.08);
-  font-family: var(--font-corp-inter), Inter, sans-serif !important;
-  font-size: 14px;
-  line-height: 1.4;
-}
-.home-ring-theme .ros-pill:hover,
-.home-ring-theme .ros-pill-active { border-color: rgba(255,255,255,.5) !important; color: #FFFFFF !important; background: rgba(255,255,255,.14) !important; }
-.home-ring-theme .ros-pill-num { color: #A7E3FF !important; font-family: var(--font-corp-inter), Inter, sans-serif !important; font-size: 14px; }
-.home-ring-theme .ros-hotspot-inner { border-color: #FFFFFF !important; color: #FFFFFF !important; background: #005F8A !important; }
-.home-ring-theme .ros-detail-panel { border-color: rgba(255,255,255,.28); color: #FFFFFF; background: #0F172A; backdrop-filter: none; -webkit-backdrop-filter: none; }
-.home-ring-theme .ros-detail-panel::before { display: none; }
-.home-ring-theme .ros-panel-close { border-color: rgba(255,255,255,.35); color: #FFFFFF; background: #243449; }
-.home-ring-theme .ros-panel-number { color: #A7E3FF !important; font-family: var(--font-corp-inter), Inter, sans-serif !important; font-size: 14px; }
-.home-ring-theme .ros-panel-title { color: #FFFFFF; font-family: var(--font-corp-manrope), Manrope, sans-serif !important; font-size: 20px; }
-.home-ring-theme .ros-panel-subtitle,
-.home-ring-theme .ros-panel-desc,
-.home-ring-theme .ros-panel-features-list li { color: rgba(255,255,255,.9); font-family: var(--font-corp-inter), Inter, sans-serif !important; font-size: 14px; }
-.home-ring-theme .ros-panel-features-label { color: #D6E4F0; font-family: var(--font-corp-inter), Inter, sans-serif !important; font-size: 14px; letter-spacing: 0; text-transform: none; }
-.home-ring-theme .ros-hotspot:focus-visible,
-.home-ring-theme .ros-panel-close:focus-visible,
-.home-ring-theme .ros-pill:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
+.theme-light-corp.home-theme .home-cta-band { color: var(--body); background: var(--bg-alt); }
+.theme-light-corp.home-theme .home-cta-band h2 { color: var(--navy); }
+.theme-light-corp.home-theme .home-cta-band p { color: var(--body); }
+.theme-light-corp.home-theme .home-cta-band .tl-button--outline-on-dark { border-color: var(--teal); color: var(--teal); }
+.theme-light-corp.home-theme .home-cta-band .tl-button--outline-on-dark:hover { color: #FFFFFF; background: var(--teal); }
 
 @media (max-width: 760px) {
   .theme-light-corp.home-theme.home-section--white,

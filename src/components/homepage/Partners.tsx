@@ -33,7 +33,7 @@ export default function Partners() {
                 </div>
             </div>
             <style jsx global>{`
-                .home-theme .home-platforms-section { padding: 96px 24px; background: var(--bg); }
+                .home-theme .home-platforms-section { padding: 96px 24px; background: var(--bg-alt); }
                 .home-theme .home-platforms-section .container { width: min(100%, 1200px); max-width: 1200px; margin-inline: auto; padding: 0; }
                 .home-theme .home-platforms-heading { max-width: 800px; margin: 0 auto 32px; text-align: center; }
                 .home-theme .home-platforms-heading .tl-eyebrow { justify-content: center; margin-bottom: 12px; }

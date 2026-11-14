@@ -51,7 +51,7 @@ export default function Locations() {
             ref={sectionRef}
             id="locations-section"
             style={{
-                background: "var(--bg, #ffffff)",
+                background: "var(--bg-alt, #f1f5f9)",
                 padding: "96px 0",
                 borderTop: "1px solid var(--border, #e2e8f0)",
             }}
@@ -117,8 +117,8 @@ export default function Locations() {
                     outline-offset: 2px;
                 }
                 #locations-section .loc-card.active {
-                    border: 2px solid var(--teal, #005F8A);
-                    background: rgba(0, 95, 138, 0.05);
+                    border: 1px solid var(--teal, #005F8A);
+                    background: #ffffff;
                 }
 
                 /* Map panel */

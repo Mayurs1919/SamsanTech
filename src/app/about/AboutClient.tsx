@@ -35,7 +35,7 @@ const megatrends = [
     }
 ];
 
-const reasons = [
+const reasons: string[] = [
 ]
 
 const companySpecs = [

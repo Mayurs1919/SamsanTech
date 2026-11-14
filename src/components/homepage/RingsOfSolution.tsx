@@ -532,7 +532,7 @@ export default function RingsOfSolution() {
                                     padding: "8px 16px",
                                     borderRadius: "20px",
                                     border: `1px solid ${isActive ? "var(--teal, #005F8A)" : "var(--border, #E2E8F0)"}`,
-                                    background: isActive ? "var(--teal, #005F8A)" : "#FFFFFF",
+                                    background: isActive ? "var(--teal, #005F8A)" : "var(--bg-alt)",
                                     cursor: "pointer",
                                     fontFamily: "var(--font-corp-inter, Inter, sans-serif)",
                                     fontSize: "14px",
