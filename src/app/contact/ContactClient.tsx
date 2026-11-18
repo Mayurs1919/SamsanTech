@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { inter, manrope } from "@/app/solutions/fonts";
 import { Hero } from "@/components/theme-light/Hero";
@@ -10,6 +9,7 @@ import { Section } from "@/components/theme-light/Section";
 import { Card } from "@/components/theme-light/Card";
 import { Chip } from "@/components/theme-light/Chip";
 import { Button } from "@/components/theme-light/Button";
+import { CAREER_JOBS } from "@/data/careers";
 
 const PRODUCT_MAP: Record<string, string> = {
     maestro: "Maestro™",
@@ -27,22 +27,6 @@ const PRODUCT_MAP: Record<string, string> = {
     "dms-edge": "DMS Edge",
     cabiniq: "CabinIQ™",
     vseva: "vSeva"
-};
-
-const ROLE_MAP: Record<string, string> = {
-    "linux-bsp-developer": "Linux BSP Developer",
-    "multimedia-middleware-engineer": "Multimedia & Middleware Engineer",
-    "multimedia-middleware-engineer-ota": "Multimedia & Middleware Engineer — OTA",
-    "android-hmi-engineer": "Android HMI Engineer",
-    "connectivity-engineer": "Connectivity Engineer",
-    "media-projection-engineer": "Media Projection Engineer",
-    "android-hmi-engineer-unreal": "Android HMI Engineer — Unreal",
-    "automotive-ivi-testing-engineer": "Automotive IVI Testing Engineer",
-    "hmi-tester": "HMI Tester",
-    "spoc-v2x": "SPOC — V2X",
-    "spoc-rd-ecu": "SPOC — RD ECU",
-    "android-hal-engineer": "Android HAL Engineer",
-    "systems-engineer": "Systems Engineer"
 };
 
 interface HubInfo {
@@ -137,12 +121,14 @@ const getInterestFromProduct = (slug: string): string => {
 function ContactPageContent() {
     const searchParams = useSearchParams();
     const productParam = searchParams.get("product") || "";
-    const roleParam = searchParams.get("role") || "";
+    const typeParam = searchParams.get("type") || "";
+    const roleParam = (searchParams.get("role") || "").toLowerCase().trim();
     const productSlug = productParam.toLowerCase().trim();
-    const isCareers = productSlug === "careers";
-    const isValidProduct = productSlug && (PRODUCT_MAP.hasOwnProperty(productSlug) || isCareers);
-    const productDisplayName = isValidProduct && !isCareers ? PRODUCT_MAP[productSlug] : "";
-    const roleDisplayName = ROLE_MAP[roleParam] || (roleParam ? roleParam.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") : "");
+    const isCareers = typeParam.toLowerCase() === "careers" || productSlug === "careers";
+    const role = CAREER_JOBS.find(job => job.slug === roleParam);
+    const roleDisplayName = role?.title || "General Application";
+    const productDisplayName = PRODUCT_MAP[productSlug] || "";
+    const isValidProduct = Boolean(productDisplayName) && !isCareers;
 
     const [activeHubId, setActiveHubId] = useState<string>("pune");
     const [currentState, setCurrentState] = useState<"form" | "submitted">("form");
@@ -153,62 +139,78 @@ function ContactPageContent() {
     const [email, setEmail] = useState("");
     const [company, setCompany] = useState("");
     const [phone, setPhone] = useState("");
-    const [interest, setInterest] = useState("");
+    const [selectedInterest, setSelectedInterest] = useState("");
+    const interest = isCareers ? "Careers" : isValidProduct ? getInterestFromProduct(productSlug) : selectedInterest;
     const [message, setMessage] = useState("");
+    const [experience, setExperience] = useState("");
+    const [linkedin, setLinkedin] = useState("");
+    const [coverNote, setCoverNote] = useState("");
+    const [submitError, setSubmitError] = useState("");
 
     const [errors, setErrors] = useState<Record<string, string>>({});
     const activeHub = HUBS.find(h => h.id === activeHubId) || HUBS[0];
 
-    useEffect(() => {
-        if (isCareers) {
-            setInterest("Careers");
-        } else if (isValidProduct) {
-            setInterest(getInterestFromProduct(productSlug));
-        }
-    }, [productSlug, isCareers, isValidProduct]);
+
 
     const validate = () => {
-        const newErrors: Record<string, string> = {};
-
-        if (!name || name.trim().length < 2) {
-            newErrors.name = "Full name must be at least 2 characters.";
+        const nextErrors: Record<string, string> = {};
+        if (name.trim().length < 2) nextErrors.name = "Full name must be at least 2 characters.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = "Please enter a valid email address.";
+        if (isCareers) {
+            if (!/^\d{7,15}$/.test(phone.replace(/[\s()+-]/g, ""))) nextErrors.phone = "Phone number must be between 7 and 15 digits.";
+            if (!experience.trim()) nextErrors.experience = "Total experience is required.";
+            if (linkedin && !/^https?:\/\//i.test(linkedin)) nextErrors.linkedin = "Please enter a valid LinkedIn URL.";
+            if (coverNote.length > 1000) nextErrors.coverNote = "Cover note must be 1000 characters or fewer.";
+        } else {
+            if (!company.trim()) nextErrors.company = "Company name is required.";
+            if (phone && !/^\d{7,15}$/.test(phone.replace(/[\s()+-]/g, ""))) nextErrors.phone = "Phone number must be between 7 and 15 digits.";
+            if (!interest) nextErrors.interest = "Please select an interest area above.";
+            if (message.trim().length < 10) nextErrors.message = "Message must be at least 10 characters.";
         }
-
-        if (!email) {
-            newErrors.email = "Work email is required.";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            newErrors.email = "Please enter a valid email address.";
-        }
-
-        if (!company || company.trim().length === 0) {
-            newErrors.company = "Company name is required.";
-        }
-
-        if (phone && !/^\d{7,15}$/.test(phone)) {
-            newErrors.phone = "Phone number must be between 7 and 15 digits.";
-        }
-
-        if (!interest) {
-            newErrors.interest = "Please select an interest area above.";
-        }
-
-        if (!message || message.trim().length < 10) {
-            newErrors.message = "Message must be at least 10 characters.";
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        setErrors(nextErrors);
+        return Object.keys(nextErrors).length === 0;
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!validate()) return;
-
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setSubmitError("");
+        if (submitting || !validate()) return;
+        const submittedData = new FormData(event.currentTarget);
+        const resumeFile = submittedData.get("resume");
+        if (isCareers && resumeFile instanceof File && resumeFile.size > 0) {
+            const extension = resumeFile.name.toLowerCase().split(".").pop();
+            if (resumeFile.size > 4 * 1024 * 1024 || !["pdf", "doc", "docx"].includes(extension || "")) {
+                setErrors(previous => ({ ...previous, resume: resumeFile.size > 4 * 1024 * 1024 ? "Resume must be 4 MB or smaller." : "Resume must be a PDF, DOC, or DOCX file." }));
+                return;
+            }
+        }
         setSubmitting(true);
-        setTimeout(() => {
-            setSubmitting(false);
+        try {
+            const formData = submittedData;
+            formData.set("type", isCareers ? "careers" : "enquiry");
+            formData.set("product", isCareers ? "careers" : productSlug);
+            formData.set("interest", isCareers ? "Careers" : interest);
+            formData.set("roleSlug", isCareers ? (role?.slug || "") : "");
+            formData.set("roleTitle", isCareers ? roleDisplayName : "");
+            formData.set("experience", experience);
+            formData.set("linkedin", linkedin);
+            formData.set("coverNote", coverNote);
+            const response = await fetch("/api/contact", { method: "POST", body: formData });
+            const result = await response.json().catch(() => null);
+            if (!response.ok || !result?.ok) {
+                setSubmitError(isCareers
+                    ? "We couldn't send your application. Please try again, or email hr@samsanlabs.com"
+                    : "We couldn't send your message. Please try again or contact us by email.");
+                return;
+            }
             setCurrentState("submitted");
-        }, 600);
+        } catch {
+            setSubmitError(isCareers
+                ? "We couldn't send your application. Please try again, or email hr@samsanlabs.com"
+                : "We couldn't send your message. Please try again or contact us by email.");
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -286,8 +288,7 @@ function ContactPageContent() {
 
                         <Card className="tl-contact-form-card">
                             <div className="tl-contact-form-heading">
-                                <h2>{currentState === "form" ? "Schedule Technical Call" : "Inquiry Submitted"}</h2>
-                                <span>✓ Direct SLA Enabled</span>
+                                <h2>{currentState === "submitted" ? (isCareers ? "Application submitted" : "Inquiry Submitted") : (isCareers ? `Apply for ${roleDisplayName}` : "Schedule Technical Call")}</h2>
                             </div>
 
                             {currentState === "submitted" ? (
@@ -295,32 +296,22 @@ function ContactPageContent() {
                                     <span className="tl-contact-confirmation__icon" aria-hidden="true">
                                         <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" /></svg>
                                     </span>
-                                    {!isValidProduct ? <>
-                                        <h3>Thank You for Reaching Out!</h3>
-                                        <p>We&apos;ve received your technical inquiry. A senior member of the SAMSAN engineering team will get back to you at <strong>{email}</strong> within 24 hours.</p>
-                                        <Button href="/" variant="outline">Return to Home Page</Button>
+                                    {isCareers ? <>
+                                        <p>Thank you, <strong>{name}</strong>. We&apos;ve received your application for <strong>{roleDisplayName}</strong>. Our HR team will contact you if your profile matches.</p>
+                                        <div className="tl-contact-confirmation__actions">
+                                            <Button href="/careers" variant="outline" className="tl-contact-career-back">Back to Career Page</Button>
+                                            <Button href="/" variant="primary">Back to home</Button>
+                                        </div>
                                     </> : <>
-                                        <h3>Your Brochure Request Is Ready!</h3>
-                                        <p>Thank you for your interest in <strong>{productDisplayName}</strong>. Access your official brochure below.</p>
-                                        <Card className="tl-contact-brochure">
-                                            <div className="tl-contact-brochure__details">
-                                                <span className="tl-contact-brochure__icon" aria-hidden="true">
-                                                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/></svg>
-                                                </span>
-                                                <span><strong>{productDisplayName} Technical Brochure</strong><small>PDF Architecture Document · Ready</small></span>
-                                            </div>
-                                            <div className="tl-contact-brochure__actions">
-                                                <Button href={`/brochures/${productSlug}.pdf`} variant="outline" target="_blank" rel="noopener noreferrer">View brochure</Button>
-                                                <a className="tl-button tl-button--primary" href={`/brochures/${productSlug}.pdf`} download={`SAMSAN-${productDisplayName}-Brochure.pdf`}>Download brochure</a>
-                                            </div>
-                                        </Card>
-                                        <Link className="tl-contact-back-link" href="/products-and-accelerators">← Explore All Accelerators</Link>
+                                        <h3>Thank You for Reaching Out!</h3>
+                                        <p>Thank you, <strong>{name}</strong>. We&apos;ve received your message and will reply to <strong>{email}</strong> soon.</p>
+                                        <Button href="/" variant="outline">Return to Home Page</Button>
                                     </>}
                                 </div>
                             ) : <>
                                 {isCareers ? <div className="tl-contact-context" role="status">
                                     <span aria-hidden="true">🎯</span>
-                                    <p>Applying for: <strong>{roleDisplayName || "General Application"}</strong></p>
+                                    <p>You&apos;re applying for: <strong>{roleDisplayName}</strong></p>
                                 </div> : isValidProduct ? <div className="tl-contact-context" role="status">
                                     <span aria-hidden="true">📄</span>
                                     <p>Unlocking brochure for: <strong>{productDisplayName}</strong></p>
@@ -332,50 +323,88 @@ function ContactPageContent() {
                                         name="interest"
                                         value={interest}
                                         onChange={event => {
-                                            setInterest(event.target.value);
+                                            setSelectedInterest(event.target.value);
                                             if (errors.interest) setErrors(previous => ({ ...previous, interest: "" }));
                                         }}
-                                        disabled={submitting}
+                                        disabled={submitting || isCareers}
                                         aria-invalid={Boolean(errors.interest)}
                                     >
                                         <option value="">Select Interest Area / Discipline *</option>
-                                        {INTEREST_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.icon} {option.label}</option>)}
+                                        {INTEREST_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.icon} {isCareers && option.id === "Careers" ? "Careers" : option.label}</option>)}
                                     </select>
                                     {errors.interest && <span className="tl-contact-error">{errors.interest}</span>}
                                 </label>
 
-                                <form className="tl-contact-form" onSubmit={handleSubmit}>
+                                <form className="tl-contact-form" onSubmit={handleSubmit} encType="multipart/form-data">
                                     <input type="hidden" name="product" value={productSlug} />
+                                    <input type="hidden" name="type" value={isCareers ? "careers" : "enquiry"} />
+                                    <input type="hidden" name="roleSlug" value={isCareers ? (role?.slug || "") : ""} />
+                                    <input type="hidden" name="roleTitle" value={isCareers ? roleDisplayName : ""} />
+                                    <input type="hidden" name="interest" value={isCareers ? "Careers" : interest} />
+                                    <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="contact-honeypot" />
+                                    {submitError && <div className="tl-contact-submit-error" role="alert">{submitError}</div>}
                                     <div className="tl-contact-fields">
                                         <label className="tl-contact-field">
                                             <span>Full Name *</span>
-                                            <input type="text" name="name" placeholder="Full Name *" value={name} onChange={event => { setName(event.target.value); if (errors.name) setErrors(previous => ({ ...previous, name: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.name)} />
+                                            <input type="text" name="name" placeholder="Full Name *" value={name} onChange={event => { setName(event.target.value); if (errors.name) setErrors(previous => ({ ...previous, name: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.name)} required />
                                             {errors.name && <small className="tl-contact-error">{errors.name}</small>}
                                         </label>
-                                        <div className="tl-contact-fields__row">
+                                        <label className="tl-contact-field">
+                                            <span>Email *</span>
+                                            <input type="email" name="email" placeholder="Email *" value={email} onChange={event => { setEmail(event.target.value); if (errors.email) setErrors(previous => ({ ...previous, email: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.email)} required />
+                                            {errors.email && <small className="tl-contact-error">{errors.email}</small>}
+                                        </label>
+                                        {isCareers ? <>
                                             <label className="tl-contact-field">
-                                                <span>Work Email *</span>
-                                                <input type="email" name="email" placeholder="Work Email *" value={email} onChange={event => { setEmail(event.target.value); if (errors.email) setErrors(previous => ({ ...previous, email: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.email)} />
-                                                {errors.email && <small className="tl-contact-error">{errors.email}</small>}
+                                                <span>Phone *</span>
+                                                <input type="tel" name="phone" placeholder="Phone *" value={phone} onChange={event => { setPhone(event.target.value); if (errors.phone) setErrors(previous => ({ ...previous, phone: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.phone)} required />
+                                                {errors.phone && <small className="tl-contact-error">{errors.phone}</small>}
                                             </label>
+                                            <label className="tl-contact-field">
+                                                <span>Total experience in years *</span>
+                                                <input type="number" name="experience" min="0" step="0.5" placeholder="Total experience in years *" value={experience} onChange={event => { setExperience(event.target.value); if (errors.experience) setErrors(previous => ({ ...previous, experience: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.experience)} required />
+                                                {errors.experience && <small className="tl-contact-error">{errors.experience}</small>}
+                                            </label>
+                                            <label className="tl-contact-field">
+                                                <span>Current company (optional)</span>
+                                                <input type="text" name="company" placeholder="Current company (optional)" value={company} onChange={event => setCompany(event.target.value)} disabled={submitting} />
+                                            </label>
+                                            <label className="tl-contact-field">
+                                                <span>LinkedIn URL (optional)</span>
+                                                <input type="url" name="linkedin" placeholder="LinkedIn URL (optional)" value={linkedin} onChange={event => { setLinkedin(event.target.value); if (errors.linkedin) setErrors(previous => ({ ...previous, linkedin: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.linkedin)} />
+                                                {errors.linkedin && <small className="tl-contact-error">{errors.linkedin}</small>}
+                                            </label>
+                                            <label className="tl-contact-field">
+                                                <span>Cover note (optional, max 1000 characters)</span>
+                                                <textarea name="coverNote" placeholder="Cover note (optional)" rows={4} maxLength={1000} value={coverNote} onChange={event => { setCoverNote(event.target.value); if (errors.coverNote) setErrors(previous => ({ ...previous, coverNote: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.coverNote)} />
+                                                {errors.coverNote && <small className="tl-contact-error">{errors.coverNote}</small>}
+                                            </label>
+                                            <label className="tl-contact-field">
+                                                <span>Resume upload (optional; PDF, DOC or DOCX; max 4 MB)</span>
+                                                <input type="file" name="resume" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" disabled={submitting} onChange={() => { if (errors.resume) setErrors(previous => ({ ...previous, resume: "" })); }} />
+                                                {errors.resume && <small className="tl-contact-error">{errors.resume}</small>}
+                                            </label>
+                                        </> : <>
                                             <label className="tl-contact-field">
                                                 <span>Company / Org *</span>
-                                                <input type="text" name="company" placeholder="Company / Org *" value={company} onChange={event => { setCompany(event.target.value); if (errors.company) setErrors(previous => ({ ...previous, company: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.company)} />
+                                                <input type="text" name="company" placeholder="Company / Org *" value={company} onChange={event => { setCompany(event.target.value); if (errors.company) setErrors(previous => ({ ...previous, company: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.company)} required />
                                                 {errors.company && <small className="tl-contact-error">{errors.company}</small>}
                                             </label>
-                                        </div>
-                                        <label className="tl-contact-field">
-                                            <span>Phone Number (Optional)</span>
-                                            <input type="tel" name="phone" placeholder="Phone Number (Optional)" value={phone} onChange={event => { setPhone(event.target.value); if (errors.phone) setErrors(previous => ({ ...previous, phone: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.phone)} />
-                                            {errors.phone && <small className="tl-contact-error">{errors.phone}</small>}
-                                        </label>
-                                        <label className="tl-contact-field">
-                                            <span>Describe your engineering project or inquiry (minimum 10 characters) *</span>
-                                            <textarea name="message" placeholder="Describe your engineering project or inquiry (minimum 10 characters) *" rows={4} value={message} onChange={event => { setMessage(event.target.value); if (errors.message) setErrors(previous => ({ ...previous, message: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.message)} />
-                                            {errors.message && <small className="tl-contact-error">{errors.message}</small>}
-                                        </label>
+                                            <label className="tl-contact-field">
+                                                <span>Phone Number (Optional)</span>
+                                                <input type="tel" name="phone" placeholder="Phone Number (Optional)" value={phone} onChange={event => { setPhone(event.target.value); if (errors.phone) setErrors(previous => ({ ...previous, phone: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.phone)} />
+                                                {errors.phone && <small className="tl-contact-error">{errors.phone}</small>}
+                                            </label>
+                                            <label className="tl-contact-field">
+                                                <span>Describe your engineering project or inquiry (minimum 10 characters) *</span>
+                                                <textarea name="message" placeholder="Describe your engineering project or inquiry (minimum 10 characters) *" rows={4} value={message} onChange={event => { setMessage(event.target.value); if (errors.message) setErrors(previous => ({ ...previous, message: "" })); }} disabled={submitting} aria-invalid={Boolean(errors.message)} required />
+                                                {errors.message && <small className="tl-contact-error">{errors.message}</small>}
+                                            </label>
+                                        </>}
                                     </div>
-                                    <Button className="tl-contact-submit" type="submit" disabled={submitting}>{submitting ? "Processing Inquiry..." : "Schedule Technical Consultation →"}</Button>
+                                    <Button className="tl-contact-submit" type="submit" disabled={submitting}>
+                                        {submitting ? <><svg className="contact-submit-spinner" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /></svg> Sending...</> : (isCareers ? "Submit Application →" : "Schedule Technical Consultation →")}
+                                    </Button>
                                 </form>
                             </>}
                         </Card>

@@ -136,3 +136,20 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 >>>>>>> f3dbba4 (Initial commit from Create Next App)
 =======
 >>>>>>> f2d438bdbcd52a9285825a46541662390c9fbc9e
+
+## Contact form email delivery
+
+The contact and Careers forms send multipart submissions to `POST /api/contact`. Configure these eight server-only variables in `.env.local` for local development and in Vercel Project Settings → Environment Variables for each deployment environment (Production, Preview, and Development as needed). Redeploy after changing Vercel variables. Never prefix these values with `NEXT_PUBLIC_`.
+
+| Variable | Value to configure |
+| --- | --- |
+| `SMTP_HOST` | SMTP hostname from your mail provider (for example, the provider's documented SMTP host). |
+| `SMTP_PORT` | `587` when using STARTTLS (recommended default); use the provider's port if it requires another value. |
+| `SMTP_SECURE` | `false` for port 587; set `true` only when using implicit TLS on port 465. |
+| `SMTP_USER` | SMTP authentication username from the provider. |
+| `SMTP_PASS` | SMTP password or provider-issued app password/API credential. |
+| `MAIL_FROM` | A sender address verified with the SMTP provider, optionally in `SAMSAN Website <address@your-domain>` format. |
+| `MAIL_TO_CAREERS` | `india@samsanlabs.com,hr@samsanlabs.com` (both Careers recipients). |
+| `MAIL_TO_ENQUIRIES` | `info@samsanlabs.com,india@samsanlabs.com` (existing product/general enquiry recipients). |
+
+Copy `.env.example` to `.env.local` and fill the values from the organization's SMTP provider/account. The SMTP hostname, account, credential, verified sender, and enquiry recipient are account-specific and must be obtained from the authorized mail administrator; they are intentionally not guessed or committed. `.env.local` is ignored by Git. The installed `nodemailer` dependency is used by the Node.js route handler.

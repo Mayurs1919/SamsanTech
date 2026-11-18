@@ -1,112 +1,224 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { CAREER_JOBS } from "@/data/careers";
 
-// ── Email delivery ─────────────────────────────────────────────────────────
-// Set SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS in your .env.local
-// to enable real email delivery. Without them the submission is logged only.
-const smtpConfigured =
-    process.env.SMTP_HOST &&
-    process.env.SMTP_USER &&
-    process.env.SMTP_PASS;
+export const runtime = "nodejs";
 
-async function sendBrochureEmails(fields: {
-    name: string;
-    email: string;
-    company: string;
-    phone?: string;
-    message: string;
-    product: string;
-    productDisplayName: string;
-}) {
-    if (!smtpConfigured) {
-        // Graceful fallback — log in development when SMTP isn't set up yet
-        console.log("=== BROCHURE ENQUIRY (email delivery not configured) ===");
-        console.log(JSON.stringify(fields, null, 2));
-        return;
-    }
+const PRODUCT_MAP: Record<string, string> = {
+  maestro: "Maestro™",
+  twinlnk: "TwinLnk™",
+  samchat: "SamChat",
+  "automate-ai": "AutoMATE.ai",
+  "sam-sanvaad": "Sam-Sanvaad",
+  "driver-health": "Driver Health & Wellness Monitoring",
+  sdv: "Software Defined Vehicle (SDV)",
+  "stafd-in": "STAFD.IN",
+  vemeego: "Vemeego",
+  pikniknow: "PiknikNow",
+  refacto: "RefactoFlow",
+  "digital-cockpit-solution": "Digital Cockpit Solution",
+  "dms-edge": "DMS Edge",
+  cabiniq: "CabinIQ™",
+  vseva: "vSeva",
+};
 
-    const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT ?? 587),
-        secure: process.env.SMTP_SECURE === "true",
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-        },
-    });
+const requestWindows = new Map<string, { count: number; resetAt: number }>();
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT = 5;
+const MAX_RESUME_BYTES = 4 * 1024 * 1024;
 
-    const htmlBody = `
-        <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px;">
-            <h2 style="color:#0F172A;margin-bottom:4px;">📄 Brochure Enquiry — ${fields.productDisplayName}</h2>
-            <p style="color:#64748B;font-size:13px;margin-bottom:24px;">Submitted via SAMSAN Technische Labs website</p>
-            <table style="width:100%;border-collapse:collapse;">
-                <tr><td style="padding:8px 0;color:#64748B;width:140px;">Name</td><td style="padding:8px 0;font-weight:600;">${fields.name}</td></tr>
-                <tr><td style="padding:8px 0;color:#64748B;">Company</td><td style="padding:8px 0;font-weight:600;">${fields.company}</td></tr>
-                <tr><td style="padding:8px 0;color:#64748B;">Email</td><td style="padding:8px 0;"><a href="mailto:${fields.email}">${fields.email}</a></td></tr>
-                <tr><td style="padding:8px 0;color:#64748B;">Phone</td><td style="padding:8px 0;">${fields.phone || "—"}</td></tr>
-                <tr><td style="padding:8px 0;color:#64748B;">Product</td><td style="padding:8px 0;">${fields.productDisplayName}</td></tr>
-            </table>
-            <div style="margin-top:16px;padding:16px;background:#F8FAFC;border-radius:8px;">
-                <strong style="display:block;margin-bottom:8px;color:#0F172A;">Message</strong>
-                <p style="color:#334155;white-space:pre-wrap;margin:0;">${fields.message}</p>
-            </div>
-        </div>
-    `;
-
-    const mailOptions = {
-        from: `"SAMSAN Website" <${process.env.SMTP_USER}>`,
-        to: ["info@samsanlabs.com", "india@samsanlabs.com"],
-        replyTo: fields.email,
-        subject: `[Brochure Request] ${fields.productDisplayName} — ${fields.name} @ ${fields.company}`,
-        html: htmlBody,
-    };
-
-    await transporter.sendMail(mailOptions);
-    console.log(`Brochure enquiry email sent for ${fields.productDisplayName} to info@samsanlabs.com & india@samsanlabs.com`);
+function jsonError(error: string, status: number) {
+  return NextResponse.json({ ok: false, error }, { status });
 }
 
-// ── API Handler ────────────────────────────────────────────────────────────
+function escapeHtml(value: string) {
+  return value.replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[char] ?? char);
+}
+
+function field(form: FormData, name: string) {
+  const value = form.get(name);
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function validEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 254;
+}
+
+function isRateLimited(request: Request) {
+  const now = Date.now();
+  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const ip = forwarded || request.headers.get("x-real-ip") || "unknown";
+  const entry = requestWindows.get(ip);
+  if (!entry || entry.resetAt <= now) {
+    requestWindows.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return false;
+  }
+  if (entry.count >= RATE_LIMIT) return true;
+  entry.count += 1;
+  return false;
+}
+
+function istTimestamp() {
+  return new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    dateStyle: "medium",
+    timeStyle: "long",
+  }).format(new Date());
+}
+
 export async function POST(request: Request) {
-    try {
-        const body = await request.json();
-        const { name, email, company, phone, message, product, productDisplayName, type } = body;
+  const contentLength = Number(request.headers.get("content-length") || 0);
+  if (contentLength > 5 * 1024 * 1024) return jsonError("Submission is too large.", 413);
 
-        // Basic validation
-        if (!name || !email || !message) {
-            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
-        }
-
-        // Send brochure enquiry emails (to both recipients)
-        if (type === "brochure_request") {
-            await sendBrochureEmails({
-                name,
-                email,
-                company: company || "—",
-                phone,
-                message,
-                product: product || "",
-                productDisplayName: productDisplayName || product || "SAMSAN Product",
-            });
-
-            return NextResponse.json({
-                success: true,
-                message: "Brochure access granted. Your enquiry has been sent to the SAMSAN team.",
-            });
-        }
-
-        // General contact form fallback
-        console.log("General contact submission:", { name, email, company, phone, message });
-        return NextResponse.json({
-            success: true,
-            message: "Thank you for contacting SAMSAN Technische Labs Pvt. Ltd. We will reach out to you shortly.",
-        });
-    } catch (err) {
-        console.error("Error handling contact submission:", err);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  let form: FormData;
+  try {
+    if (request.headers.get("content-type")?.includes("application/json")) {
+      const json = await request.json() as Record<string, unknown>;
+      if (json.type !== "brochure_request") return jsonError("Unsupported submission format.", 400);
+      form = new FormData();
+      for (const key of ["name", "email", "company", "phone", "message", "product", "productDisplayName", "type"]) {
+        if (typeof json[key] === "string") form.set(key, json[key] as string);
+      }
+      form.set("interest", "Product brochure");
+      form.set("website", typeof json.website === "string" ? json.website : "");
+    } else {
+      form = await request.formData();
     }
+  } catch {
+    return jsonError("Invalid form submission.", 400);
+  }
+
+  // Honeypot submissions are intentionally acknowledged without sending mail.
+  if (field(form, "website")) return NextResponse.json({ ok: true });
+  if (isRateLimited(request)) return jsonError("Too many requests. Please try again later.", 429);
+
+  const name = field(form, "name");
+  const email = field(form, "email");
+  const company = field(form, "company");
+  const phone = field(form, "phone");
+  const interest = field(form, "interest");
+  const message = field(form, "message");
+  const type = field(form, "type").toLowerCase();
+  const productSlug = field(form, "product").toLowerCase();
+  const requestedRoleSlug = field(form, "roleSlug").toLowerCase();
+  const experience = field(form, "experience");
+  const linkedin = field(form, "linkedin");
+  const coverNote = field(form, "coverNote");
+  const submittedProductName = field(form, "productDisplayName");
+  const submittedRoleTitle = field(form, "roleTitle");
+  const applicationMode = type === "careers" || productSlug === "careers";
+
+  if (name.length < 2 || name.length > 120) return jsonError("Please enter your full name.", 400);
+  if (company.length > 160 || phone.length > 30 || interest.length > 120 || message.length > 5000 || type.length > 30 || productSlug.length > 100 || requestedRoleSlug.length > 100 || experience.length > 40 || linkedin.length > 500 || coverNote.length > 1000 || submittedProductName.length > 150 || submittedRoleTitle.length > 120) return jsonError("One or more fields exceed the allowed length.", 400);
+  if (!validEmail(email)) return jsonError("Please enter a valid email address.", 400);
+  const allowedInterests = new Set(["Cockpit", "SDV", "Telematics", "AI Engineering", "Staffing", "Investor Discussion", "Partnership", "Careers", "Product brochure"]);
+  if (!allowedInterests.has(interest)) return jsonError("Please select a valid interest area.", 400);
+  if (message.length > 5000) return jsonError("Message is too long.", 400);
+
+  let roleTitle = "";
+  let roleSlug = "";
+  if (applicationMode) {
+    if (!/^\d{7,15}$/.test(phone.replace(/[\s()+-]/g, ""))) return jsonError("Please enter a phone number with 7 to 15 digits.", 400);
+    if (interest !== "Careers") return jsonError("Invalid application interest.", 400);
+    if (!/^(?:\d{1,2})(?:\.\d{1,2})?$/.test(experience) || Number(experience) > 70) return jsonError("Please enter valid total experience in years.", 400);
+    if (linkedin) {
+      try {
+        const url = new URL(linkedin);
+        if (!/^https?:$/.test(url.protocol)) return jsonError("Please enter a valid LinkedIn URL.", 400);
+      } catch {
+        return jsonError("Please enter a valid LinkedIn URL.", 400);
+      }
+    }
+    const matchingRole = CAREER_JOBS.find(job => job.slug === requestedRoleSlug);
+    if (matchingRole) {
+      roleTitle = matchingRole.title;
+      roleSlug = matchingRole.slug;
+    }
+  } else {
+    if (!company) return jsonError("Please enter your company name.", 400);
+    if (phone && !/^\d{7,15}$/.test(phone.replace(/[\s()+-]/g, ""))) return jsonError("Please enter a valid phone number.", 400);
+    if (message.length < 10) return jsonError("Please add a message of at least 10 characters.", 400);
+  }
+
+  const resumeValue = form.get("resume");
+  let attachment: { filename: string; content: Buffer; contentType: string }[] | undefined;
+  if (applicationMode && resumeValue instanceof File && resumeValue.size > 0) {
+    const filename = resumeValue.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 150);
+    const extension = filename.toLowerCase().split(".").pop();
+    const allowed: Record<string, string[]> = {
+      pdf: ["application/pdf"],
+      doc: ["application/msword", "application/octet-stream"],
+      docx: ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/octet-stream"],
+    };
+    if (resumeValue.size > MAX_RESUME_BYTES) return jsonError("Resume must be 4 MB or smaller.", 400);
+    if (!extension || !allowed[extension] || (resumeValue.type && !allowed[extension].includes(resumeValue.type))) {
+      return jsonError("Resume must be a PDF, DOC, or DOCX file.", 400);
+    }
+    attachment = [{ filename, content: Buffer.from(await resumeValue.arrayBuffer()), contentType: resumeValue.type || "application/octet-stream" }];
+  } else if (applicationMode && resumeValue && typeof resumeValue !== "string") {
+    return jsonError("Invalid resume file.", 400);
+  }
+
+  const host = process.env.SMTP_HOST;
+  const port = Number(process.env.SMTP_PORT);
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASS;
+  const from = process.env.MAIL_FROM;
+  const recipients = (applicationMode ? process.env.MAIL_TO_CAREERS : process.env.MAIL_TO_ENQUIRIES)
+    ?.split(",").map(value => value.trim()).filter(Boolean);
+  const secureSetting = process.env.SMTP_SECURE;
+  if (!host || !Number.isInteger(port) || port < 1 || port > 65535 || !user || !pass || !from || !recipients?.length || !["true", "false"].includes(secureSetting || "")) {
+    console.error("CONTACT_MAIL_CONFIG_MISSING");
+    return jsonError("Email delivery is not configured.", 503);
+  }
+
+  const productName = PRODUCT_MAP[productSlug] || submittedProductName;
+  const topic = applicationMode ? "Careers Application" : (productName || interest || "General enquiry");
+  const date = istTimestamp();
+  const pageUrl = request.headers.get("referer") || `${new URL(request.url).origin}/contact`;
+  const data: Array<[string, string]> = [
+    ["Name", name], ["Email", email], ["Phone", phone || "—"],
+    ["Company", company || "—"], ["Interest", interest], ["Message", message || "—"],
+  ];
+  if (!applicationMode && productName) data.push(["Product", productName]);
+  if (applicationMode) {
+    data.push(["Role", roleTitle || "General Application"], ["Role slug", roleSlug || "—"], ["Total experience", experience], ["Current company", company || "—"], ["LinkedIn", linkedin || "—"], ["Cover note", coverNote || "—"], ["Resume", attachment?.length ? attachment[0].filename || "Attached" : "Not provided"]);
+  }
+  data.push(["Submitted (IST)", date], ["Page URL", pageUrl]);
+
+  const safeRows = data.map(([label, value]) => `<tr><th style="text-align:left;padding:8px;border:1px solid #dbe3ec">${escapeHtml(label)}</th><td style="padding:8px;border:1px solid #dbe3ec;white-space:pre-wrap">${escapeHtml(value)}</td></tr>`).join("");
+  const textBody = data.map(([label, value]) => `${label}: ${value}`).join("\n");
+  const safeSubjectName = name.replace(/[\r\n]+/g, " ");
+  const safeTopic = topic.replace(/[\r\n]+/g, " ");
+  const subject = applicationMode
+    ? `[Careers] Application: ${roleTitle || "General Application"} - ${safeSubjectName}`
+    : `[Enquiry] ${safeTopic} - ${safeSubjectName}`;
+
+  try {
+    const transporter = nodemailer.createTransport({
+      host,
+      port,
+      secure: secureSetting === "true",
+      auth: { user, pass },
+    });
+    await transporter.sendMail({
+      from,
+      to: recipients,
+      replyTo: email,
+      subject,
+      text: textBody,
+      html: `<table style="border-collapse:collapse;width:100%;font-family:Arial,sans-serif">${safeRows}</table>`,
+      attachments: attachment,
+    });
+    return NextResponse.json({ ok: true, success: true, message: "Your message has been sent." });
+  } catch {
+    console.error("CONTACT_MAIL_SEND_FAILED");
+    return jsonError("Unable to send the message right now.", 502);
+  }
 }

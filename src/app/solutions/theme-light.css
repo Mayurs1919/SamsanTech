@@ -486,7 +486,6 @@ body:has(.theme-light-corp) { background: #FFFFFF; }
 .theme-light-corp .tl-contact-form-card { padding: 32px; }
 .theme-light-corp .tl-contact-form-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
 .theme-light-corp .tl-contact-form-heading h2 { margin: 0; color: var(--navy); font-size: clamp(24px, 2.4vw, 30px); line-height: 1.2; text-wrap: balance; }
-.theme-light-corp .tl-contact-form-heading > span { color: var(--teal); font-size: 14px; font-weight: 600; }
 .theme-light-corp .tl-contact-context { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding: 16px; border: 1px solid rgba(0,95,138,.2); border-radius: 12px; color: var(--teal); background: rgba(0,95,138,.06); }
 .theme-light-corp .tl-contact-context p { margin: 0; color: var(--body); font-size: 15px; line-height: 1.5; }
 .theme-light-corp .tl-contact-context strong { color: var(--navy); }
@@ -504,22 +503,13 @@ body:has(.theme-light-corp) { background: #FFFFFF; }
 .theme-light-corp .tl-contact-field :is(input,textarea,select)[aria-invalid="true"] { border-color: #B42318; }
 .theme-light-corp .tl-contact-error { display: block; margin-top: 6px; color: #B42318; font-size: 14px; line-height: 1.4; }
 .theme-light-corp .tl-contact-submit { width: 100%; min-height: 48px; }
+.theme-light-corp .tl-contact-confirmation__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 .theme-light-corp .tl-contact-confirmation { display: flex; flex-direction: column; align-items: center; padding: 24px 12px 8px; text-align: center; }
 .theme-light-corp .tl-contact-confirmation__icon { display: grid; width: 56px; height: 56px; place-items: center; margin-bottom: 16px; border-radius: 50%; color: var(--teal); background: rgba(0,95,138,.08); }
 .theme-light-corp .tl-contact-confirmation__icon svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 .theme-light-corp .tl-contact-confirmation h3 { margin: 0 0 10px; color: var(--navy); font-size: 24px; line-height: 1.3; text-wrap: balance; }
 .theme-light-corp .tl-contact-confirmation > p { max-width: 560px; margin: 0 0 24px; color: var(--body); font-size: 16px; line-height: 1.6; }
 .theme-light-corp .tl-contact-confirmation strong { color: var(--navy); }
-.theme-light-corp .tl-contact-brochure { width: 100%; display: flex; flex-direction: column; gap: 20px; padding: 20px; background: var(--bg-alt); text-align: left; }
-.theme-light-corp .tl-contact-brochure__details { display: flex; align-items: center; gap: 14px; }
-.theme-light-corp .tl-contact-brochure__details strong, .theme-light-corp .tl-contact-brochure__details small { display: block; }
-.theme-light-corp .tl-contact-brochure__details strong { color: var(--navy); font-size: 15px; line-height: 1.4; }
-.theme-light-corp .tl-contact-brochure__details small { margin-top: 4px; color: var(--muted); font-size: 14px; }
-.theme-light-corp .tl-contact-brochure__icon { display: grid; width: 44px; height: 44px; flex: 0 0 44px; place-items: center; border-radius: 10px; color: var(--teal); background: rgba(0,95,138,.08); }
-.theme-light-corp .tl-contact-brochure__icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.theme-light-corp .tl-contact-brochure__actions { display: flex; gap: 12px; }
-.theme-light-corp .tl-contact-brochure__actions > * { flex: 1; }
-.theme-light-corp .tl-contact-back-link { margin-top: 18px; color: var(--teal); font-size: 15px; font-weight: 600; text-decoration: none; }
 .theme-light-corp .tl-contact-about { padding-block: 96px; }
 .theme-light-corp .tl-contact-about__grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: center; gap: 48px; }
 .theme-light-corp .tl-contact-about h2 { margin: 0 0 20px; color: var(--navy); font-size: clamp(32px,4vw,44px); line-height: 1.15; text-wrap: balance; }
@@ -1241,4 +1231,43 @@ body:has(.theme-light-corp) { background: #FFFFFF; }
   .theme-light-corp.home-theme *,
   .theme-light-corp.home-theme *::before,
   .theme-light-corp.home-theme *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
+.contact-theme .contact-honeypot {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.contact-theme .tl-contact-submit-error {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid #B42318;
+  border-radius: 10px;
+  color: #B42318;
+  background: #FFFFFF;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.contact-theme .contact-submit-spinner {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: -3px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-dasharray: 42;
+  stroke-dashoffset: 12;
+  animation: contact-spinner-rotate .8s linear infinite;
+}
+.contact-theme .tl-contact-career-back { min-height: 40px; padding: 8px 14px; font-size: 14px; }
+@keyframes contact-spinner-rotate { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .contact-theme .contact-submit-spinner { animation-duration: 2s; }
 }
